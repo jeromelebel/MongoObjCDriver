@@ -1,0 +1,513 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02A85F4614103D64004F3FE9 /* bson.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F1A14103D4D004F3FE9 /* bson.c */; };
+		02A85F4714103D64004F3FE9 /* encoding.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F1C14103D4D004F3FE9 /* encoding.c */; };
+		02A85F4814103D64004F3FE9 /* gridfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F1E14103D4D004F3FE9 /* gridfs.c */; };
+		02A85F4914103D64004F3FE9 /* md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2014103D4D004F3FE9 /* md5.c */; };
+		02A85F4A14103D64004F3FE9 /* mongo.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2214103D4D004F3FE9 /* mongo.c */; };
+		02A85F4B14103D64004F3FE9 /* net.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2414103D4D004F3FE9 /* net.c */; };
+		02A85F4C14103D64004F3FE9 /* numbers.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2614103D4D004F3FE9 /* numbers.c */; };
+		02A85F5114103EA6004F3FE9 /* MODServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F4F14103EA6004F3FE9 /* MODServer.h */; };
+		02A85F5214103EA6004F3FE9 /* MODServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5014103EA6004F3FE9 /* MODServer.m */; };
+		02ABA1C414103B37000417F4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C314103B37000417F4 /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		02A85F0314103D4D004F3FE9 /* .astylerc */ = {isa = PBXFileReference; lastKnownFileType = text; path = .astylerc; sourceTree = "<group>"; };
+		02A85F0414103D4D004F3FE9 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		02A85F0514103D4D004F3FE9 /* APACHE-2.0.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "APACHE-2.0.txt"; sourceTree = "<group>"; };
+		02A85F0814103D4D004F3FE9 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
+		02A85F0914103D4D004F3FE9 /* docs.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = docs.py; sourceTree = "<group>"; };
+		02A85F0C14103D4D004F3FE9 /* make.bat */ = {isa = PBXFileReference; lastKnownFileType = text; path = make.bat; sourceTree = "<group>"; };
+		02A85F0D14103D4D004F3FE9 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		02A85F0F14103D4D004F3FE9 /* bson.rst */ = {isa = PBXFileReference; lastKnownFileType = text; path = bson.rst; sourceTree = "<group>"; };
+		02A85F1014103D4D004F3FE9 /* building.rst */ = {isa = PBXFileReference; lastKnownFileType = text; path = building.rst; sourceTree = "<group>"; };
+		02A85F1114103D4D004F3FE9 /* conf.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = conf.py; sourceTree = "<group>"; };
+		02A85F1214103D4D004F3FE9 /* connections.rst */ = {isa = PBXFileReference; lastKnownFileType = text; path = connections.rst; sourceTree = "<group>"; };
+		02A85F1314103D4D004F3FE9 /* index.rst */ = {isa = PBXFileReference; lastKnownFileType = text; path = index.rst; sourceTree = "<group>"; };
+		02A85F1414103D4D004F3FE9 /* tutorial.rst */ = {isa = PBXFileReference; lastKnownFileType = text; path = tutorial.rst; sourceTree = "<group>"; };
+		02A85F1514103D4D004F3FE9 /* doxygenConfig */ = {isa = PBXFileReference; lastKnownFileType = text; path = doxygenConfig; sourceTree = "<group>"; };
+		02A85F1614103D4D004F3FE9 /* HISTORY.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = HISTORY.md; sourceTree = "<group>"; };
+		02A85F1714103D4D004F3FE9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		02A85F1814103D4D004F3FE9 /* SConstruct */ = {isa = PBXFileReference; lastKnownFileType = text; path = SConstruct; sourceTree = "<group>"; };
+		02A85F1A14103D4D004F3FE9 /* bson.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bson.c; sourceTree = "<group>"; };
+		02A85F1B14103D4D004F3FE9 /* bson.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bson.h; sourceTree = "<group>"; };
+		02A85F1C14103D4D004F3FE9 /* encoding.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = encoding.c; sourceTree = "<group>"; };
+		02A85F1D14103D4D004F3FE9 /* encoding.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = encoding.h; sourceTree = "<group>"; };
+		02A85F1E14103D4D004F3FE9 /* gridfs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = gridfs.c; sourceTree = "<group>"; };
+		02A85F1F14103D4D004F3FE9 /* gridfs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gridfs.h; sourceTree = "<group>"; };
+		02A85F2014103D4D004F3FE9 /* md5.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = md5.c; sourceTree = "<group>"; };
+		02A85F2114103D4D004F3FE9 /* md5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
+		02A85F2214103D4D004F3FE9 /* mongo.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = mongo.c; sourceTree = "<group>"; };
+		02A85F2314103D4D004F3FE9 /* mongo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mongo.h; sourceTree = "<group>"; };
+		02A85F2414103D4D004F3FE9 /* net.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = net.c; sourceTree = "<group>"; };
+		02A85F2514103D4D004F3FE9 /* net.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = net.h; sourceTree = "<group>"; };
+		02A85F2614103D4D004F3FE9 /* numbers.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = numbers.c; sourceTree = "<group>"; };
+		02A85F2914103D4E004F3FE9 /* net.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = net.c; sourceTree = "<group>"; };
+		02A85F2A14103D4E004F3FE9 /* net.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = net.h; sourceTree = "<group>"; };
+		02A85F2B14103D4E004F3FE9 /* platform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
+		02A85F2D14103D4E004F3FE9 /* auth.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = auth.c; sourceTree = "<group>"; };
+		02A85F2E14103D4E004F3FE9 /* benchmark.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = benchmark.c; sourceTree = "<group>"; };
+		02A85F2F14103D4E004F3FE9 /* bson.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bson.c; sourceTree = "<group>"; };
+		02A85F3014103D4E004F3FE9 /* bson_subobject.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bson_subobject.c; sourceTree = "<group>"; };
+		02A85F3114103D4E004F3FE9 /* count_delete.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = count_delete.c; sourceTree = "<group>"; };
+		02A85F3214103D4E004F3FE9 /* cpptest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cpptest.cpp; sourceTree = "<group>"; };
+		02A85F3314103D4E004F3FE9 /* cursors.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = cursors.c; sourceTree = "<group>"; };
+		02A85F3414103D4E004F3FE9 /* endian_swap.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = endian_swap.c; sourceTree = "<group>"; };
+		02A85F3514103D4E004F3FE9 /* errors.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = errors.c; sourceTree = "<group>"; };
+		02A85F3614103D4E004F3FE9 /* examples.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = examples.c; sourceTree = "<group>"; };
+		02A85F3714103D4E004F3FE9 /* functions.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = functions.c; sourceTree = "<group>"; };
+		02A85F3814103D4E004F3FE9 /* gridfs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = gridfs.c; sourceTree = "<group>"; };
+		02A85F3914103D4E004F3FE9 /* helpers.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = helpers.c; sourceTree = "<group>"; };
+		02A85F3A14103D4E004F3FE9 /* json.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = json.c; sourceTree = "<group>"; };
+		02A85F3B14103D4E004F3FE9 /* oid.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = oid.c; sourceTree = "<group>"; };
+		02A85F3E14103D4E004F3FE9 /* timeouts.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = timeouts.c; sourceTree = "<group>"; };
+		02A85F3F14103D4E004F3FE9 /* replica_set.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = replica_set.c; sourceTree = "<group>"; };
+		02A85F4014103D4E004F3FE9 /* resize.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = resize.c; sourceTree = "<group>"; };
+		02A85F4114103D4E004F3FE9 /* simple.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = simple.c; sourceTree = "<group>"; };
+		02A85F4214103D4E004F3FE9 /* sizes.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = sizes.c; sourceTree = "<group>"; };
+		02A85F4314103D4E004F3FE9 /* test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
+		02A85F4414103D4E004F3FE9 /* update.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = update.c; sourceTree = "<group>"; };
+		02A85F4514103D4E004F3FE9 /* validate.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = validate.c; sourceTree = "<group>"; };
+		02A85F4F14103EA6004F3FE9 /* MODServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODServer.h; sourceTree = "<group>"; };
+		02A85F5014103EA6004F3FE9 /* MODServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODServer.m; sourceTree = "<group>"; };
+		02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "mongo-objc-driver.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		02ABA1C314103B37000417F4 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		02ABA1C614103B37000417F4 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		02ABA1C714103B37000417F4 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		02ABA1C814103B37000417F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		02ABA1CB14103B37000417F4 /* mongo-objc-driver-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "mongo-objc-driver-Info.plist"; sourceTree = "<group>"; };
+		02ABA1CD14103B37000417F4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		02ABA1CF14103B37000417F4 /* mongo-objc-driver-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mongo-objc-driver-Prefix.pch"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		02ABA1BC14103B37000417F4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02ABA1C414103B37000417F4 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		02A85F0114103D4D004F3FE9 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				02A85F0214103D4D004F3FE9 /* mongo-c-driver */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		02A85F0214103D4D004F3FE9 /* mongo-c-driver */ = {
+			isa = PBXGroup;
+			children = (
+				02A85F0314103D4D004F3FE9 /* .astylerc */,
+				02A85F0414103D4D004F3FE9 /* .gitignore */,
+				02A85F0514103D4D004F3FE9 /* APACHE-2.0.txt */,
+				02A85F0614103D4D004F3FE9 /* docs */,
+				02A85F1514103D4D004F3FE9 /* doxygenConfig */,
+				02A85F1614103D4D004F3FE9 /* HISTORY.md */,
+				02A85F1714103D4D004F3FE9 /* README.md */,
+				02A85F1814103D4D004F3FE9 /* SConstruct */,
+				02A85F1914103D4D004F3FE9 /* src */,
+				02A85F2C14103D4E004F3FE9 /* test */,
+			);
+			path = "mongo-c-driver";
+			sourceTree = "<group>";
+		};
+		02A85F0614103D4D004F3FE9 /* docs */ = {
+			isa = PBXGroup;
+			children = (
+				02A85F0714103D4D004F3FE9 /* buildscripts */,
+				02A85F0A14103D4D004F3FE9 /* source */,
+			);
+			path = docs;
+			sourceTree = "<group>";
+		};
+		02A85F0714103D4D004F3FE9 /* buildscripts */ = {
+			isa = PBXGroup;
+			children = (
+				02A85F0814103D4D004F3FE9 /* __init__.py */,
+				02A85F0914103D4D004F3FE9 /* docs.py */,
+			);
+			path = buildscripts;
+			sourceTree = "<group>";
+		};
+		02A85F0A14103D4D004F3FE9 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				02A85F0B14103D4D004F3FE9 /* sphinx */,
+			);
+			path = source;
+			sourceTree = "<group>";
+		};
+		02A85F0B14103D4D004F3FE9 /* sphinx */ = {
+			isa = PBXGroup;
+			children = (
+				02A85F0C14103D4D004F3FE9 /* make.bat */,
+				02A85F0D14103D4D004F3FE9 /* Makefile */,
+				02A85F0E14103D4D004F3FE9 /* source */,
+			);
+			path = sphinx;
+			sourceTree = "<group>";
+		};
+		02A85F0E14103D4D004F3FE9 /* source */ = {
+			isa = PBXGroup;
+			children = (
+				02A85F0F14103D4D004F3FE9 /* bson.rst */,
+				02A85F1014103D4D004F3FE9 /* building.rst */,
+				02A85F1114103D4D004F3FE9 /* conf.py */,
+				02A85F1214103D4D004F3FE9 /* connections.rst */,
+				02A85F1314103D4D004F3FE9 /* index.rst */,
+				02A85F1414103D4D004F3FE9 /* tutorial.rst */,
+			);
+			path = source;
+			sourceTree = "<group>";
+		};
+		02A85F1914103D4D004F3FE9 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				02A85F1A14103D4D004F3FE9 /* bson.c */,
+				02A85F1B14103D4D004F3FE9 /* bson.h */,
+				02A85F1C14103D4D004F3FE9 /* encoding.c */,
+				02A85F1D14103D4D004F3FE9 /* encoding.h */,
+				02A85F1E14103D4D004F3FE9 /* gridfs.c */,
+				02A85F1F14103D4D004F3FE9 /* gridfs.h */,
+				02A85F2014103D4D004F3FE9 /* md5.c */,
+				02A85F2114103D4D004F3FE9 /* md5.h */,
+				02A85F2214103D4D004F3FE9 /* mongo.c */,
+				02A85F2314103D4D004F3FE9 /* mongo.h */,
+				02A85F2414103D4D004F3FE9 /* net.c */,
+				02A85F2514103D4D004F3FE9 /* net.h */,
+				02A85F2614103D4D004F3FE9 /* numbers.c */,
+				02A85F2714103D4D004F3FE9 /* platform */,
+				02A85F2B14103D4E004F3FE9 /* platform.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		02A85F2714103D4D004F3FE9 /* platform */ = {
+			isa = PBXGroup;
+			children = (
+				02A85F2814103D4E004F3FE9 /* linux */,
+			);
+			path = platform;
+			sourceTree = "<group>";
+		};
+		02A85F2814103D4E004F3FE9 /* linux */ = {
+			isa = PBXGroup;
+			children = (
+				02A85F2914103D4E004F3FE9 /* net.c */,
+				02A85F2A14103D4E004F3FE9 /* net.h */,
+			);
+			path = linux;
+			sourceTree = "<group>";
+		};
+		02A85F2C14103D4E004F3FE9 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				02A85F2D14103D4E004F3FE9 /* auth.c */,
+				02A85F2E14103D4E004F3FE9 /* benchmark.c */,
+				02A85F2F14103D4E004F3FE9 /* bson.c */,
+				02A85F3014103D4E004F3FE9 /* bson_subobject.c */,
+				02A85F3114103D4E004F3FE9 /* count_delete.c */,
+				02A85F3214103D4E004F3FE9 /* cpptest.cpp */,
+				02A85F3314103D4E004F3FE9 /* cursors.c */,
+				02A85F3414103D4E004F3FE9 /* endian_swap.c */,
+				02A85F3514103D4E004F3FE9 /* errors.c */,
+				02A85F3614103D4E004F3FE9 /* examples.c */,
+				02A85F3714103D4E004F3FE9 /* functions.c */,
+				02A85F3814103D4E004F3FE9 /* gridfs.c */,
+				02A85F3914103D4E004F3FE9 /* helpers.c */,
+				02A85F3A14103D4E004F3FE9 /* json.c */,
+				02A85F3B14103D4E004F3FE9 /* oid.c */,
+				02A85F3C14103D4E004F3FE9 /* platform */,
+				02A85F3F14103D4E004F3FE9 /* replica_set.c */,
+				02A85F4014103D4E004F3FE9 /* resize.c */,
+				02A85F4114103D4E004F3FE9 /* simple.c */,
+				02A85F4214103D4E004F3FE9 /* sizes.c */,
+				02A85F4314103D4E004F3FE9 /* test.h */,
+				02A85F4414103D4E004F3FE9 /* update.c */,
+				02A85F4514103D4E004F3FE9 /* validate.c */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
+		02A85F3C14103D4E004F3FE9 /* platform */ = {
+			isa = PBXGroup;
+			children = (
+				02A85F3D14103D4E004F3FE9 /* linux */,
+			);
+			path = platform;
+			sourceTree = "<group>";
+		};
+		02A85F3D14103D4E004F3FE9 /* linux */ = {
+			isa = PBXGroup;
+			children = (
+				02A85F3E14103D4E004F3FE9 /* timeouts.c */,
+			);
+			path = linux;
+			sourceTree = "<group>";
+		};
+		02ABA1B414103B36000417F4 = {
+			isa = PBXGroup;
+			children = (
+				02ABA1C914103B37000417F4 /* Sources */,
+				02A85F0114103D4D004F3FE9 /* Libraries */,
+				02ABA1C214103B37000417F4 /* Frameworks */,
+				02ABA1C114103B37000417F4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		02ABA1C114103B37000417F4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		02ABA1C214103B37000417F4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				02ABA1C314103B37000417F4 /* Cocoa.framework */,
+				02ABA1C514103B37000417F4 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		02ABA1C514103B37000417F4 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				02ABA1C614103B37000417F4 /* AppKit.framework */,
+				02ABA1C714103B37000417F4 /* CoreData.framework */,
+				02ABA1C814103B37000417F4 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		02ABA1C914103B37000417F4 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				02A85F4F14103EA6004F3FE9 /* MODServer.h */,
+				02A85F5014103EA6004F3FE9 /* MODServer.m */,
+				02ABA1CA14103B37000417F4 /* Supporting Files */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		02ABA1CA14103B37000417F4 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				02ABA1CB14103B37000417F4 /* mongo-objc-driver-Info.plist */,
+				02ABA1CC14103B37000417F4 /* InfoPlist.strings */,
+				02ABA1CF14103B37000417F4 /* mongo-objc-driver-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		02ABA1BD14103B37000417F4 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02A85F5114103EA6004F3FE9 /* MODServer.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		02ABA1BF14103B37000417F4 /* mongo-objc-driver */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02ABA1D514103B37000417F4 /* Build configuration list for PBXNativeTarget "mongo-objc-driver" */;
+			buildPhases = (
+				02ABA1BB14103B37000417F4 /* Sources */,
+				02ABA1BC14103B37000417F4 /* Frameworks */,
+				02ABA1BD14103B37000417F4 /* Headers */,
+				02ABA1BE14103B37000417F4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "mongo-objc-driver";
+			productName = "mongo-objc-driver";
+			productReference = 02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		02ABA1B614103B36000417F4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 02ABA1B914103B36000417F4 /* Build configuration list for PBXProject "mongo-objc-driver" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 02ABA1B414103B36000417F4;
+			productRefGroup = 02ABA1C114103B37000417F4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				02ABA1BF14103B37000417F4 /* mongo-objc-driver */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		02ABA1BE14103B37000417F4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		02ABA1BB14103B37000417F4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02A85F4614103D64004F3FE9 /* bson.c in Sources */,
+				02A85F4714103D64004F3FE9 /* encoding.c in Sources */,
+				02A85F4814103D64004F3FE9 /* gridfs.c in Sources */,
+				02A85F4914103D64004F3FE9 /* md5.c in Sources */,
+				02A85F4A14103D64004F3FE9 /* mongo.c in Sources */,
+				02A85F4B14103D64004F3FE9 /* net.c in Sources */,
+				02A85F4C14103D64004F3FE9 /* numbers.c in Sources */,
+				02A85F5214103EA6004F3FE9 /* MODServer.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		02ABA1CC14103B37000417F4 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				02ABA1CD14103B37000417F4 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		02ABA1D314103B37000417F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		02ABA1D414103B37000417F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		02ABA1D614103B37000417F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Sources/mongo-objc-driver-Prefix.pch";
+				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Debug;
+		};
+		02ABA1D714103B37000417F4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Sources/mongo-objc-driver-Prefix.pch";
+				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = framework;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		02ABA1B914103B36000417F4 /* Build configuration list for PBXProject "mongo-objc-driver" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02ABA1D314103B37000417F4 /* Debug */,
+				02ABA1D414103B37000417F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		02ABA1D514103B37000417F4 /* Build configuration list for PBXNativeTarget "mongo-objc-driver" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02ABA1D614103B37000417F4 /* Debug */,
+				02ABA1D714103B37000417F4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 02ABA1B614103B36000417F4 /* Project object */;
+}
