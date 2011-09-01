@@ -1,0 +1,3 @@
+[submodule "Libraries/mongo-c-driver"]
+	path = Libraries/mongo-c-driver
+	url = git://github.com/mongodb/mongo-c-driver.git
