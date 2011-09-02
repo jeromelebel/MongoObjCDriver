@@ -50,11 +50,13 @@ int main (int argc, const char * argv[])
     @autoreleasepool {
         MODServer *server;
         MongoDelegate *delegate;
+        const char *ip;
 
+        ip = argv[1];
         delegate = [[MongoDelegate alloc] init];
         server = [[MODServer alloc] init];
         server.delegate = delegate;
-        [server connectWithHostName:[NSString stringWithUTF8String:argv[1]] databaseName:nil userName:nil password:nil];
+        [server connectWithHostName:[NSString stringWithUTF8String:ip] databaseName:nil userName:nil password:nil];
         [server fetchDatabaseList];
         
         [[NSRunLoop mainRunLoop] run];
