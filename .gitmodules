@@ -1,0 +1,3 @@
+[submodule "Libraries/mongo-c-driver"]
+	path = Libraries/mongo-c-driver
+	url = git@github.com:fotonauts/mongo-c-driver.git
