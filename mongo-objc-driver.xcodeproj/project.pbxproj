@@ -14,10 +14,45 @@
 		02A85F4A14103D64004F3FE9 /* mongo.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2214103D4D004F3FE9 /* mongo.c */; };
 		02A85F4B14103D64004F3FE9 /* net.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2414103D4D004F3FE9 /* net.c */; };
 		02A85F4C14103D64004F3FE9 /* numbers.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2614103D4D004F3FE9 /* numbers.c */; };
-		02A85F5114103EA6004F3FE9 /* MODServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F4F14103EA6004F3FE9 /* MODServer.h */; };
+		02A85F5114103EA6004F3FE9 /* MODServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F4F14103EA6004F3FE9 /* MODServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02A85F5214103EA6004F3FE9 /* MODServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5014103EA6004F3FE9 /* MODServer.m */; };
+		02A85F5914104184004F3FE9 /* MODQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5714104184004F3FE9 /* MODQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		02A85F5A14104184004F3FE9 /* MODQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5814104184004F3FE9 /* MODQuery.m */; };
+		02A85F5D14104373004F3FE9 /* MOD_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5B14104373004F3FE9 /* MOD_internal.h */; };
+		02A85F5F1410809F004F3FE9 /* bson.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F1B14103D4D004F3FE9 /* bson.h */; };
+		02A85F60141080A2004F3FE9 /* encoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F1D14103D4D004F3FE9 /* encoding.h */; };
+		02A85F61141080A2004F3FE9 /* gridfs.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F1F14103D4D004F3FE9 /* gridfs.h */; };
+		02A85F62141080A2004F3FE9 /* md5.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F2114103D4D004F3FE9 /* md5.h */; };
+		02A85F63141080A2004F3FE9 /* mongo.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F2314103D4D004F3FE9 /* mongo.h */; };
+		02A85F64141080A2004F3FE9 /* net.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F2514103D4D004F3FE9 /* net.h */; };
+		02A85F65141080A2004F3FE9 /* platform.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F2B14103D4E004F3FE9 /* platform.h */; };
 		02ABA1C414103B37000417F4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C314103B37000417F4 /* Cocoa.framework */; };
+		02F121C01410EF5200197811 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F121BF1410EF5200197811 /* Foundation.framework */; };
+		02F121C31410EF5200197811 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F121C21410EF5200197811 /* main.m */; };
+		02F121C71410EF5200197811 /* mongo_test.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02F121C61410EF5200197811 /* mongo_test.1 */; };
+		02F121CC1410F01B00197811 /* MODServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5014103EA6004F3FE9 /* MODServer.m */; };
+		02F121CD1410F01D00197811 /* MODQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5814104184004F3FE9 /* MODQuery.m */; };
+		02F121CE1410F07200197811 /* bson.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F1A14103D4D004F3FE9 /* bson.c */; };
+		02F121CF1410F07200197811 /* encoding.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F1C14103D4D004F3FE9 /* encoding.c */; };
+		02F121D01410F07200197811 /* gridfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F1E14103D4D004F3FE9 /* gridfs.c */; };
+		02F121D11410F07200197811 /* md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2014103D4D004F3FE9 /* md5.c */; };
+		02F121D21410F07200197811 /* mongo.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2214103D4D004F3FE9 /* mongo.c */; };
+		02F121D31410F07200197811 /* net.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2414103D4D004F3FE9 /* net.c */; };
+		02F121D41410F07200197811 /* numbers.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2614103D4D004F3FE9 /* numbers.c */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		02F121BB1410EF5200197811 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				02F121C71410EF5200197811 /* mongo_test.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		02A85F0314103D4D004F3FE9 /* .astylerc */ = {isa = PBXFileReference; lastKnownFileType = text; path = .astylerc; sourceTree = "<group>"; };
@@ -78,6 +113,9 @@
 		02A85F4514103D4E004F3FE9 /* validate.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = validate.c; sourceTree = "<group>"; };
 		02A85F4F14103EA6004F3FE9 /* MODServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODServer.h; sourceTree = "<group>"; };
 		02A85F5014103EA6004F3FE9 /* MODServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODServer.m; sourceTree = "<group>"; };
+		02A85F5714104184004F3FE9 /* MODQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODQuery.h; sourceTree = "<group>"; };
+		02A85F5814104184004F3FE9 /* MODQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODQuery.m; sourceTree = "<group>"; };
+		02A85F5B14104373004F3FE9 /* MOD_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOD_internal.h; sourceTree = "<group>"; };
 		02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "mongo-objc-driver.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02ABA1C314103B37000417F4 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		02ABA1C614103B37000417F4 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -86,6 +124,11 @@
 		02ABA1CB14103B37000417F4 /* mongo-objc-driver-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "mongo-objc-driver-Info.plist"; sourceTree = "<group>"; };
 		02ABA1CD14103B37000417F4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		02ABA1CF14103B37000417F4 /* mongo-objc-driver-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mongo-objc-driver-Prefix.pch"; sourceTree = "<group>"; };
+		02F121BD1410EF5200197811 /* mongo-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mongo-test"; sourceTree = BUILT_PRODUCTS_DIR; };
+		02F121BF1410EF5200197811 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		02F121C21410EF5200197811 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		02F121C51410EF5200197811 /* mongo-test-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mongo-test-Prefix.pch"; sourceTree = "<group>"; };
+		02F121C61410EF5200197811 /* mongo_test.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = mongo_test.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +137,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				02ABA1C414103B37000417F4 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02F121BA1410EF5200197811 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02F121C01410EF5200197811 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,6 +315,7 @@
 			children = (
 				02ABA1C914103B37000417F4 /* Sources */,
 				02A85F0114103D4D004F3FE9 /* Libraries */,
+				02F121C11410EF5200197811 /* mongo-test */,
 				02ABA1C214103B37000417F4 /* Frameworks */,
 				02ABA1C114103B37000417F4 /* Products */,
 			);
@@ -273,6 +325,7 @@
 			isa = PBXGroup;
 			children = (
 				02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */,
+				02F121BD1410EF5200197811 /* mongo-test */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -281,6 +334,7 @@
 			isa = PBXGroup;
 			children = (
 				02ABA1C314103B37000417F4 /* Cocoa.framework */,
+				02F121BF1410EF5200197811 /* Foundation.framework */,
 				02ABA1C514103B37000417F4 /* Other Frameworks */,
 			);
 			name = Frameworks;
@@ -299,8 +353,11 @@
 		02ABA1C914103B37000417F4 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				02A85F5B14104373004F3FE9 /* MOD_internal.h */,
 				02A85F4F14103EA6004F3FE9 /* MODServer.h */,
 				02A85F5014103EA6004F3FE9 /* MODServer.m */,
+				02A85F5714104184004F3FE9 /* MODQuery.h */,
+				02A85F5814104184004F3FE9 /* MODQuery.m */,
 				02ABA1CA14103B37000417F4 /* Supporting Files */,
 			);
 			path = Sources;
@@ -316,6 +373,24 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		02F121C11410EF5200197811 /* mongo-test */ = {
+			isa = PBXGroup;
+			children = (
+				02F121C21410EF5200197811 /* main.m */,
+				02F121C61410EF5200197811 /* mongo_test.1 */,
+				02F121C41410EF5200197811 /* Supporting Files */,
+			);
+			path = "mongo-test";
+			sourceTree = "<group>";
+		};
+		02F121C41410EF5200197811 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				02F121C51410EF5200197811 /* mongo-test-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -324,6 +399,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				02A85F5114103EA6004F3FE9 /* MODServer.h in Headers */,
+				02A85F5914104184004F3FE9 /* MODQuery.h in Headers */,
+				02A85F5D14104373004F3FE9 /* MOD_internal.h in Headers */,
+				02A85F5F1410809F004F3FE9 /* bson.h in Headers */,
+				02A85F60141080A2004F3FE9 /* encoding.h in Headers */,
+				02A85F61141080A2004F3FE9 /* gridfs.h in Headers */,
+				02A85F62141080A2004F3FE9 /* md5.h in Headers */,
+				02A85F63141080A2004F3FE9 /* mongo.h in Headers */,
+				02A85F64141080A2004F3FE9 /* net.h in Headers */,
+				02A85F65141080A2004F3FE9 /* platform.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,6 +432,23 @@
 			productReference = 02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		02F121BC1410EF5200197811 /* mongo-test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02F121CA1410EF5200197811 /* Build configuration list for PBXNativeTarget "mongo-test" */;
+			buildPhases = (
+				02F121B91410EF5200197811 /* Sources */,
+				02F121BA1410EF5200197811 /* Frameworks */,
+				02F121BB1410EF5200197811 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "mongo-test";
+			productName = "mongo-test";
+			productReference = 02F121BD1410EF5200197811 /* mongo-test */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -369,6 +470,7 @@
 			projectRoot = "";
 			targets = (
 				02ABA1BF14103B37000417F4 /* mongo-objc-driver */,
+				02F121BC1410EF5200197811 /* mongo-test */,
 			);
 		};
 /* End PBXProject section */
@@ -396,6 +498,24 @@
 				02A85F4B14103D64004F3FE9 /* net.c in Sources */,
 				02A85F4C14103D64004F3FE9 /* numbers.c in Sources */,
 				02A85F5214103EA6004F3FE9 /* MODServer.m in Sources */,
+				02A85F5A14104184004F3FE9 /* MODQuery.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02F121B91410EF5200197811 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02F121C31410EF5200197811 /* main.m in Sources */,
+				02F121CC1410F01B00197811 /* MODServer.m in Sources */,
+				02F121CD1410F01D00197811 /* MODQuery.m in Sources */,
+				02F121CE1410F07200197811 /* bson.c in Sources */,
+				02F121CF1410F07200197811 /* encoding.c in Sources */,
+				02F121D01410F07200197811 /* gridfs.c in Sources */,
+				02F121D11410F07200197811 /* md5.c in Sources */,
+				02F121D21410F07200197811 /* mongo.c in Sources */,
+				02F121D31410F07200197811 /* net.c in Sources */,
+				02F121D41410F07200197811 /* numbers.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,6 +606,24 @@
 			};
 			name = Release;
 		};
+		02F121C81410EF5200197811 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "mongo-test/mongo-test-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		02F121C91410EF5200197811 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "mongo-test/mongo-test-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -506,6 +644,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		02F121CA1410EF5200197811 /* Build configuration list for PBXNativeTarget "mongo-test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02F121C81410EF5200197811 /* Debug */,
+				02F121C91410EF5200197811 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
