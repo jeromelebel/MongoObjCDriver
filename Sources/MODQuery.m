@@ -6,7 +6,6 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "MODQuery.h"
 #import "MOD_internal.h"
 
 @implementation MODQuery

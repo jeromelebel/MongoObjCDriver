@@ -6,14 +6,11 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "MODServer.h"
-#import "MODQuery.h"
-#import "mongo.h"
 #import "MOD_internal.h"
 
 @implementation MODServer
 
-@synthesize delegate = _delegate, connected = _connected;
+@synthesize delegate = _delegate, connected = _connected, mongo = _mongo;
 
 + (id)objectFromBsonIterator:(bson_iterator *)iterator
 {
@@ -22,6 +19,7 @@
     
     switch (bson_iterator_type(iterator)) {
         case BSON_EOO:
+            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             break;
         case BSON_DOUBLE:
             result = [NSNumber numberWithDouble:bson_iterator_double(iterator)];
@@ -60,36 +58,45 @@
             }
             break;
         case BSON_BINDATA:
+            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             break;
         case BSON_UNDEFINED:
+            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             result = nil;
             break;
         case BSON_OID:
+            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             break;
         case BSON_BOOL:
             result = [NSNumber numberWithBool:bson_iterator_bool(iterator) == true];
             break;
         case BSON_DATE:
-            result = [NSDate dateWithTimeIntervalSince1970:bson_iterator_date(iterator)];
+            result = [NSDate dateWithTimeIntervalSince1970:bson_iterator_date(iterator) / 1000];
             break;
         case BSON_NULL:
             result = [NSNull null];
             break;
         case BSON_REGEX:
+            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             break;
         case BSON_DBREF:
+            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             break;
         case BSON_CODE:
+            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             break;
         case BSON_SYMBOL:
+            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             result = [NSString stringWithUTF8String:bson_iterator_string(iterator)];
             break;
         case BSON_CODEWSCOPE:
+            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             break;
         case BSON_INT:
             result = [NSNumber numberWithInt:bson_iterator_int(iterator)];
             break;
         case BSON_TIMESTAMP:
+            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             break;
         case BSON_LONG:
             result = [NSNumber numberWithLong:bson_iterator_long(iterator)];
@@ -160,7 +167,14 @@
     BOOL result = YES;
     
     if ([userName length] > 0 && [password length] > 0) {
-        result = mongo_cmd_authenticate(_mongo, [databaseName UTF8String], [userName UTF8String], [password UTF8String]) == MONGO_OK;
+        const char *dbName;
+        
+        if ([databaseName length] == 0) {
+            dbName = [databaseName UTF8String];
+        } else {
+            dbName = "admin";
+        }
+        result = mongo_cmd_authenticate(_mongo, dbName, [userName UTF8String], [password UTF8String]) == MONGO_OK;
     }
     return result;
 }
@@ -182,10 +196,10 @@
     NSString *errorMessage;
     
     errorMessage = [query.mutableParameters objectForKey:@"errormessage"];
-    if (errorMessage && [_delegate respondsToSelector:@selector(mongoDBConnectionFailed:withMongoQuery:errorMessage:)]) {
-        [_delegate mongoDBConnectionFailed:self withMongoQuery:query errorMessage:errorMessage];
-    } else if (errorMessage == nil && [_delegate respondsToSelector:@selector(mongoDBConnectionSucceded:withMongoQuery:)]) {
-        [_delegate mongoDBConnectionSucceded:self withMongoQuery:query];
+    if (errorMessage && [_delegate respondsToSelector:@selector(mongoServerConnectionFailed:withMongoQuery:errorMessage:)]) {
+        [_delegate mongoServerConnectionFailed:self withMongoQuery:query errorMessage:errorMessage];
+    } else if (errorMessage == nil && [_delegate respondsToSelector:@selector(mongoServerConnectionSucceded:withMongoQuery:)]) {
+        [_delegate mongoServerConnectionSucceded:self withMongoQuery:query];
     }
     self.connected = (errorMessage == nil);
 }
@@ -235,13 +249,39 @@
     return query;
 }
 
+- (void)fetchServerStatusCallback:(MODQuery *)query
+{
+    NSArray *serverStatus;
+    
+    serverStatus = [query.parameters objectForKey:@"serverstatus"];
+    if ([_delegate respondsToSelector:@selector(mongoServer:serverStatusFetched:withMongoQuery:errorMessage:)]) {
+        [_delegate mongoServer:self serverStatusFetched:serverStatus withMongoQuery:query errorMessage:[query.parameters objectForKey:@"errormessage"]];
+    }
+}
+
+- (MODQuery *)fetchServerStatus
+{
+    return [self addQueryInQueue:^(MODQuery *mongoQuery){
+        bson output;
+        
+        if (mongo_simple_int_command(_mongo, "admin", "serverStatus", 1, &output) == MONGO_OK) {
+            NSDictionary *outputObjects;
+            
+            outputObjects = [[self class] objectsFromBson:&output];
+            [mongoQuery.mutableParameters setObject:outputObjects forKey:@"serverstatus"];
+            bson_destroy(&output);
+        }
+        [self mongoOperationDidFinish:mongoQuery withCallback:@selector(fetchServerStatusCallback:)];
+    }];
+}
+
 - (void)fetchDatabaseListCallback:(MODQuery *)query
 {
     NSArray *list;
     
     list = [query.parameters objectForKey:@"databaselist"];
-    if ([_delegate respondsToSelector:@selector(mongoDB:databaseListFetched:withMongoQuery:errorMessage:)]) {
-        [_delegate mongoDB:self databaseListFetched:list withMongoQuery:query errorMessage:[query.parameters objectForKey:@"errormessage"]];
+    if ([_delegate respondsToSelector:@selector(mongoServer:databaseListFetched:withMongoQuery:errorMessage:)]) {
+        [_delegate mongoServer:self databaseListFetched:list withMongoQuery:query errorMessage:[query.parameters objectForKey:@"errormessage"]];
     }
 }
 
@@ -267,13 +307,23 @@
     }];
 }
 
+- (MODDatabase *)databaseForName:(NSString *)databaseName
+{
+    MODDatabase *database;
+    
+    database = [[MODDatabase alloc] init];
+    database.server = self;
+    database.databaseName = databaseName;
+    return database;
+}
+
 - (void)fetchDatabaseStatsCallback:(MODQuery *)mongoQuery
 {
     NSArray *databaseStats;
     
     databaseStats = [mongoQuery.parameters objectForKey:@"databasestats"];
-    if ([_delegate respondsToSelector:@selector(mongoDB:databaseStatsFetched:withMongoQuery:errorMessage:)]) {
-        [_delegate mongoDB:self databaseStatsFetched:databaseStats withMongoQuery:mongoQuery errorMessage:[mongoQuery.parameters objectForKey:@"errormessage"]];
+    if ([_delegate respondsToSelector:@selector(mongoServer:databaseStatsFetched:withMongoQuery:errorMessage:)]) {
+        [_delegate mongoServer:self databaseStatsFetched:databaseStats withMongoQuery:mongoQuery errorMessage:[mongoQuery.parameters objectForKey:@"errormessage"]];
     }
 }
 
@@ -286,7 +336,6 @@
             bson output;
             
             if (mongo_simple_int_command(_mongo, [databaseName UTF8String], "dbstats", 1, &output) == MONGO_OK) {
-                bson_print(&output);
                 [mongoQuery.mutableParameters setObject:[[self class] objectsFromBson:&output] forKey:@"databasestats"];
                 bson_destroy(&output);
             }

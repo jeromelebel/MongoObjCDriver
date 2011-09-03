@@ -11,9 +11,11 @@
 #import "MODQuery.h"
 #import "MOD_internal.h"
 
-@interface MongoDelegate : NSObject<MODServerDelegate>
-- (void)mongoDBConnectionSucceded:(MODServer *)mongoDB withMongoQuery:(MODQuery *)mongoQuery;
-- (void)mongoDBConnectionFailed:(MODServer *)mongoDB withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
+MODServer *server;
+
+@interface MongoDelegate : NSObject<MODServerDelegate, MODDatabaseDelegate>
+- (void)mongoServerConnectionSucceded:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery;
+- (void)mongoServerConnectionFailed:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
 @end
 
 @implementation MongoDelegate
@@ -23,22 +25,32 @@
     NSLog(@"%@ %@", NSStringFromSelector(selector), query.parameters);
 }
 
-- (void)mongoDBConnectionSucceded:(MODServer *)mongoDB withMongoQuery:(MODQuery *)mongoQuery
+- (void)mongoServerConnectionSucceded:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery
 {
     [self logQuery:mongoQuery fromSelector:_cmd];
 }
 
-- (void)mongoDBConnectionFailed:(MODServer *)mongoDB withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage
+- (void)mongoServerConnectionFailed:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage
 {
     [self logQuery:mongoQuery fromSelector:_cmd];
 }
 
-- (void)mongoDB:(MODServer *)mongoDB databaseListFetched:(NSArray *)list withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage
+- (void)mongoServer:(MODServer *)mongoServer serverStatusFetched:(NSArray *)serverStatus withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage
 {
     [self logQuery:mongoQuery fromSelector:_cmd];
 }
 
-- (void)mongoDB:(MODServer *)mongoDB serverStatusFetched:(NSArray *)serverStatus withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage
+- (void)mongoServer:(MODServer *)mongoServer databaseListFetched:(NSArray *)list withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage
+{
+    MODDatabase *database;
+    
+    [self logQuery:mongoQuery fromSelector:_cmd];
+    database = [mongoServer databaseForName:[list objectAtIndex:0]];
+    database.delegate = self;
+    [database fetchDatabaseStats];
+}
+
+- (void)mongoDatabase:(MODDatabase *)mongoDatabase databaseStatsFetched:(NSArray *)databaseStats withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage
 {
     [self logQuery:mongoQuery fromSelector:_cmd];
 }
@@ -48,7 +60,6 @@
 int main (int argc, const char * argv[])
 {
     @autoreleasepool {
-        MODServer *server;
         MongoDelegate *delegate;
         const char *ip;
 
@@ -57,6 +68,7 @@ int main (int argc, const char * argv[])
         server = [[MODServer alloc] init];
         server.delegate = delegate;
         [server connectWithHostName:[NSString stringWithUTF8String:ip] databaseName:nil userName:nil password:nil];
+        [server fetchServerStatus];
         [server fetchDatabaseList];
         
         [[NSRunLoop mainRunLoop] run];

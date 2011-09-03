@@ -9,16 +9,26 @@
 #import <Foundation/Foundation.h>
 #import "MODServer.h"
 #import "MODQuery.h"
+#import "MODDatabase.h"
+#import "mongo.h"
 
 @interface MODServer()
 
 @property(nonatomic, readwrite, assign, getter=isConnected) BOOL connected;
+@property(nonatomic, readwrite, assign) mongo_ptr mongo;
+
++ (NSDictionary *)objectsFromBson:(bson *)bsonObject;
 
 - (BOOL)authenticateSynchronouslyWithDatabaseName:(NSString *)databaseName userName:(NSString *)user password:(NSString *)password mongoQuery:(MODQuery *)mongoQuery;
-- (BOOL)authUser:(NSString *)user 
-            pass:(NSString *)pass 
-        database:(NSString *)db;
+- (void)mongoOperationDidFinish:(MODQuery *)mongoQuery withCallback:(SEL)callbackSelector;
 - (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block;
+
+@end
+
+@interface MODDatabase()
+
+@property(nonatomic, readwrite, retain) MODServer *server;
+@property(nonatomic, readwrite, retain) NSString *databaseName;
 
 @end
 
