@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "MODServer.h"
-#import "MODQuery.h"
 #import "MODDatabase.h"
+#import "MODCollection.h"
+#import "MODQuery.h"
 #import "mongo.h"
 
 @interface MODServer()

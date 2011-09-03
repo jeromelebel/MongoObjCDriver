@@ -10,7 +10,7 @@
 
 @implementation MODServer
 
-@synthesize delegate = _delegate, connected = _connected, mongo = _mongo;
+@synthesize delegate = _delegate, connected = _connected, mongo = _mongo, userName = _userName, password = _password;
 
 + (id)objectFromBsonIterator:(bson_iterator *)iterator
 {
@@ -204,7 +204,7 @@
     self.connected = (errorMessage == nil);
 }
 
-- (MODQuery *)connectWithHostName:(NSString *)host databaseName:(NSString *)databaseName userName:(NSString *)userName password:(NSString *)password
+- (MODQuery *)connectWithHostName:(NSString *)host
 {
     MODQuery *query;
     
@@ -213,24 +213,15 @@
         
         mongo_parse_host([host UTF8String], &hostPort);
         if (mongo_connect(_mongo, hostPort.host, hostPort.port) == MONGO_OK) {
-            [self authenticateSynchronouslyWithDatabaseName:databaseName userName:userName password:password mongoQuery:mongoQuery];
+            [self authenticateSynchronouslyWithDatabaseName:nil userName:_userName password:_password mongoQuery:mongoQuery];
         }
         [self mongoOperationDidFinish:mongoQuery withCallback:@selector(connectCallback:)];
     }];
     [query.mutableParameters setObject:host forKey:@"host"];
-    if (databaseName) {
-        [query.mutableParameters setObject:databaseName forKey:@"databasename"];
-    }
-    if (userName) {
-        [query.mutableParameters setObject:userName forKey:@"username"];
-    }
-    if (password) {
-        [query.mutableParameters setObject:password forKey:@"password"];
-    }
     return query;
 }
 
-- (MODQuery *)connectWithReplicaName:(NSString *)replicaName hosts:(NSArray *)hosts databaseName:(NSString *)databaseName userName:(NSString *)userName password:(NSString *)password
+- (MODQuery *)connectWithReplicaName:(NSString *)replicaName hosts:(NSArray *)hosts
 {
     MODQuery *query;
     mongo_host_port hostPort;
@@ -242,7 +233,7 @@
     }
     query = [self addQueryInQueue:^(MODQuery *mongoQuery) {
         if (mongo_replset_connect(_mongo) == MONGO_OK) {
-            [self authenticateSynchronouslyWithDatabaseName:databaseName userName:userName password:password mongoQuery:mongoQuery];
+            [self authenticateSynchronouslyWithDatabaseName:nil userName:_userName password:_password mongoQuery:mongoQuery];
         }
         [self mongoOperationDidFinish:mongoQuery withCallback:@selector(connectCallback:)];
     }];
@@ -272,6 +263,31 @@
             bson_destroy(&output);
         }
         [self mongoOperationDidFinish:mongoQuery withCallback:@selector(fetchServerStatusCallback:)];
+    }];
+}
+
+- (void)fetchServerStatusDeltaCallback:(MODQuery *)mongoQuery
+{
+    NSDictionary *serverStatusDelta;
+    
+    serverStatusDelta = [mongoQuery.parameters objectForKey:@"serverstatusdelta"];
+    if ([_delegate respondsToSelector:@selector(mongoDB:serverStatusDeltaFetched:withMongoQuery:errorMessage:)]) {
+        [_delegate mongoServer:self serverStatusDeltaFetched:serverStatusDelta withMongoQuery:mongoQuery errorMessage:[mongoQuery.parameters objectForKey:@"errormessage"]];
+    }
+}
+
+- (MODQuery *)fetchServerStatusDelta
+{
+    return [self addQueryInQueue:^(MODQuery *mongoQuery){
+        bson output;
+        
+        if (mongo_simple_int_command(_mongo, "admin", "serverStatus", 1, &output) == MONGO_OK) {
+            NSDictionary *outputObjects;
+            
+            outputObjects = [[self class] objectsFromBson:&output];
+            bson_destroy(&output);
+        }
+        [self mongoOperationDidFinish:mongoQuery withCallback:@selector(fetchServerStatusDeltaCallback:)];
     }];
 }
 
@@ -307,6 +323,34 @@
     }];
 }
 
+- (void)dropDatabaseCallback:(MODQuery *)mongoQuery
+{
+    NSString *errorMessage;
+    
+    errorMessage = [mongoQuery.parameters objectForKey:@"errormessage"];
+    if ([_delegate respondsToSelector:@selector(mongoDB:databaseDropedWithMongoQuery:errorMessage:)]) {
+        [_delegate mongoServer:self databaseDropedWithMongoQuery:mongoQuery errorMessage:errorMessage];
+    }
+}
+
+- (MODQuery *)dropDatabaseWithName:(NSString *)databaseName
+{
+    MODQuery *query;
+    
+    query = [self addQueryInQueue:^(MODQuery *mongoQuery){
+        if ([self authenticateSynchronouslyWithDatabaseName:databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+            bson output;
+            
+            mongo_simple_int_command(_mongo, "admin", "dropDatabase", 1, &output);
+            bson_print(&output);
+            bson_destroy(&output);
+        }
+        [self mongoOperationDidFinish:mongoQuery withCallback:@selector(dropDatabaseCallback:)];
+    }];
+    [query.mutableParameters setObject:databaseName forKey:@"databasename"];
+    return query;
+}
+
 - (MODDatabase *)databaseForName:(NSString *)databaseName
 {
     MODDatabase *database;
@@ -315,41 +359,6 @@
     database.server = self;
     database.databaseName = databaseName;
     return database;
-}
-
-- (void)fetchDatabaseStatsCallback:(MODQuery *)mongoQuery
-{
-    NSArray *databaseStats;
-    
-    databaseStats = [mongoQuery.parameters objectForKey:@"databasestats"];
-    if ([_delegate respondsToSelector:@selector(mongoServer:databaseStatsFetched:withMongoQuery:errorMessage:)]) {
-        [_delegate mongoServer:self databaseStatsFetched:databaseStats withMongoQuery:mongoQuery errorMessage:[mongoQuery.parameters objectForKey:@"errormessage"]];
-    }
-}
-
-- (MODQuery *)fetchDatabaseStatsWithDatabaseName:(NSString *)databaseName userName:(NSString *)userName password:(NSString *)password
-{
-    MODQuery *query;
-    
-    query = [self addQueryInQueue:^(MODQuery *mongoQuery){
-        if ([self authenticateSynchronouslyWithDatabaseName:databaseName userName:userName password:password mongoQuery:mongoQuery]) {
-            bson output;
-            
-            if (mongo_simple_int_command(_mongo, [databaseName UTF8String], "dbstats", 1, &output) == MONGO_OK) {
-                [mongoQuery.mutableParameters setObject:[[self class] objectsFromBson:&output] forKey:@"databasestats"];
-                bson_destroy(&output);
-            }
-        }
-        [self mongoOperationDidFinish:mongoQuery withCallback:@selector(fetchDatabaseStatsCallback:)];
-    }];
-    [query.mutableParameters setObject:databaseName forKey:@"databasename"];
-    if (userName) {
-        [query.mutableParameters setObject:userName forKey:@"username"];
-    }
-    if (password) {
-        [query.mutableParameters setObject:password forKey:@"password"];
-    }
-    return query;
 }
 
 @end

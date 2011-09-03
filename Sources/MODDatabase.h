@@ -33,6 +33,7 @@
 }
 
 - (MODQuery *)fetchDatabaseStats;
+- (MODQuery *)fetchCollectionList;
 
 @property(nonatomic, readwrite, assign) id<MODDatabaseDelegate> delegate;
 @property(nonatomic, readonly, retain) MODServer *server;

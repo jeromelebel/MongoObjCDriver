@@ -54,4 +54,45 @@
     return query;
 }
 
+- (void)fetchCollectionListCallback:(MODQuery *)mongoQuery
+{
+    NSArray *collectionList;
+    
+    collectionList = [mongoQuery.parameters objectForKey:@"collectionlist"];
+    if ([_delegate respondsToSelector:@selector(mongoDatabase:collectionListFetched:withMongoQuery:errorMessage:)]) {
+        [_delegate mongoDatabase:self collectionListFetched:collectionList withMongoQuery:mongoQuery errorMessage:[mongoQuery.parameters objectForKey:@"errormessage"]];
+    }
+}
+
+- (MODQuery *)fetchCollectionList
+{
+    MODQuery *query;
+    
+    query = [self.server addQueryInQueue:^(MODQuery *mongoQuery){
+        if ([self.server authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+            char command[256];
+            mongo_cursor cursor[1];
+            NSMutableArray *collections;
+            
+            snprintf(command, sizeof(command), "%s.system.namespaces", [_databaseName UTF8String]);
+            mongo_cursor_init(cursor, self.server.mongo, command);
+            
+            collections = [[NSMutableArray alloc] init];
+            while (mongo_cursor_next(cursor) == MONGO_OK) {
+                NSString *collection;
+                
+                collection = [[[self.server class] objectsFromBson:&cursor->current] objectForKey:@"name"];
+                if ([collection rangeOfString:@"$"].location == NSNotFound) {
+                    [collections addObject:[collection substringFromIndex:[_databaseName length] + 1]];
+                }
+            }
+            [mongoQuery.mutableParameters setObject:collections forKey:@"collectionlist"];
+            mongo_cursor_destroy(cursor);
+            [collections release];
+        }
+        [self mongoOperationDidFinish:mongoQuery withCallback:@selector(fetchCollectionListCallback:)];
+    }];
+    return query;
+}
+
 @end

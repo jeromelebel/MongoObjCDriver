@@ -45,12 +45,19 @@ MODServer *server;
     MODDatabase *database;
     
     [self logQuery:mongoQuery fromSelector:_cmd];
-    database = [mongoServer databaseForName:[list objectAtIndex:0]];
+    database = [mongoServer databaseForName:[list objectAtIndex:1]];
+    NSLog(@"database: %@", database.databaseName);
     database.delegate = self;
     [database fetchDatabaseStats];
+    [database fetchCollectionList];
 }
 
 - (void)mongoDatabase:(MODDatabase *)mongoDatabase databaseStatsFetched:(NSArray *)databaseStats withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage
+{
+    [self logQuery:mongoQuery fromSelector:_cmd];
+}
+
+- (void)mongoDatabase:(MODDatabase *)mongoDatabase collectionListFetched:(NSArray *)collectionList withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage
 {
     [self logQuery:mongoQuery fromSelector:_cmd];
 }
@@ -67,7 +74,7 @@ int main (int argc, const char * argv[])
         delegate = [[MongoDelegate alloc] init];
         server = [[MODServer alloc] init];
         server.delegate = delegate;
-        [server connectWithHostName:[NSString stringWithUTF8String:ip] databaseName:nil userName:nil password:nil];
+        [server connectWithHostName:[NSString stringWithUTF8String:ip]];
         [server fetchServerStatus];
         [server fetchDatabaseList];
         

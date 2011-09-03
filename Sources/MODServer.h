@@ -17,12 +17,9 @@ typedef struct mongo                    *mongo_ptr;
 @optional
 - (void)mongoServerConnectionSucceded:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery;
 - (void)mongoServerConnectionFailed:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
-- (void)mongoServer:(MODServer *)mongoServer databaseListFetched:(NSArray *)list withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
 - (void)mongoServer:(MODServer *)mongoServer serverStatusFetched:(NSArray *)serverStatus withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
 - (void)mongoServer:(MODServer *)mongoServer serverStatusDeltaFetched:(NSDictionary *)serverStatusDelta withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
-- (void)mongoServer:(MODServer *)mongoServer databaseStatsFetched:(NSArray *)databaseStats withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
-- (void)mongoServer:(MODServer *)mongoServer collectionListFetched:(NSArray *)collectionList withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
-- (void)mongoServer:(MODServer *)mongoServer collectionStatsFetched:(NSArray *)databaseStats withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
+- (void)mongoServer:(MODServer *)mongoServer databaseListFetched:(NSArray *)list withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
 
 - (void)mongoServer:(MODServer *)mongoServer databaseDropedWithMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
 - (void)mongoServer:(MODServer *)mongoServer collectionCreatedWithMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
@@ -37,15 +34,23 @@ typedef struct mongo                    *mongo_ptr;
     BOOL                                _connected;
     id<MODServerDelegate>               _delegate;
     NSOperationQueue                    *_operationQueue;
+    NSString                            *_userName;
+    NSString                            *_password;
 }
 
-- (MODQuery *)connectWithHostName:(NSString *)host databaseName:(NSString *)databaseName userName:(NSString *)userName password:(NSString *)password;
-- (MODQuery *)connectWithReplicaName:(NSString *)name hosts:(NSArray *)hosts databaseName:(NSString *)databaseName userName:(NSString *)userName password:(NSString *)password;
+- (MODQuery *)connectWithHostName:(NSString *)host;
+- (MODQuery *)connectWithReplicaName:(NSString *)name hosts:(NSArray *)hosts;
 - (MODQuery *)fetchServerStatus;
+- (MODQuery *)fetchServerStatusDelta;
 - (MODQuery *)fetchDatabaseList;
+
+- (MODQuery *)dropDatabaseWithName:(NSString *)databaseName;
+
 - (MODDatabase *)databaseForName:(NSString *)databaseName;
 
 @property(nonatomic, readwrite, assign) id<MODServerDelegate> delegate;
 @property(nonatomic, readonly, assign, getter=isConnected) BOOL connected;
+@property(nonatomic, readwrite, retain) NSString *userName;
+@property(nonatomic, readwrite, retain) NSString *password;
 
 @end
