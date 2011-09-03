@@ -6,6 +6,8 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
+
 @class MODQuery;
 @class MODDatabase;
 @class MODServer;

@@ -26,7 +26,7 @@
 @interface MODDatabase : NSObject
 {
     id<MODDatabaseDelegate>     _delegate;
-    MODServer                   *_server;
+    MODServer                   *_mongoServer;
     NSString                    *_databaseName;
     NSString                    *_userName;
     NSString                    *_password;
@@ -36,7 +36,7 @@
 - (MODQuery *)fetchCollectionList;
 
 @property(nonatomic, readwrite, assign) id<MODDatabaseDelegate> delegate;
-@property(nonatomic, readonly, retain) MODServer *server;
+@property(nonatomic, readonly, retain) MODServer *mongoServer;
 @property(nonatomic, readonly, retain) NSString *databaseName;
 @property(nonatomic, readwrite, retain) NSString *userName;
 @property(nonatomic, readwrite, retain) NSString *password;

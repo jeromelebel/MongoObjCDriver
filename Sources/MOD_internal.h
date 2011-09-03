@@ -21,15 +21,15 @@
 + (NSDictionary *)objectsFromBson:(bson *)bsonObject;
 
 - (BOOL)authenticateSynchronouslyWithDatabaseName:(NSString *)databaseName userName:(NSString *)user password:(NSString *)password mongoQuery:(MODQuery *)mongoQuery;
-- (void)mongoOperationDidFinish:(MODQuery *)mongoQuery withCallback:(SEL)callbackSelector;
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withTarget:(id)target callback:(SEL)callbackSelector;
 - (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block;
 
 @end
 
 @interface MODDatabase()
 
-@property(nonatomic, readwrite, retain) MODServer *server;
-@property(nonatomic, readwrite, retain) NSString *databaseName;
+- (id)initWithMongoServer:(MODServer *)mongoServer databaseName:(NSString *)databaseName;
+- (BOOL)authenticateSynchronouslyWithMongoQuery:(MODQuery *)mongoQuery;
 
 @end
 

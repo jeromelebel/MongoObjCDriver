@@ -179,7 +179,7 @@
     return result;
 }
 
-- (void)mongoOperationDidFinish:(MODQuery *)mongoQuery withCallback:(SEL)callbackSelector
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withTarget:(id)target callback:(SEL)callbackSelector
 {
     [mongoQuery ends];
     if (_mongo->err != MONGO_CONN_SUCCESS) {
@@ -188,7 +188,7 @@
     if (_mongo->errstr) {
         [mongoQuery.mutableParameters setObject:[NSString stringWithUTF8String:_mongo->errstr] forKey:@"errormessage"];
     }
-    [self performSelectorOnMainThread:callbackSelector withObject:mongoQuery waitUntilDone:NO];
+    [target performSelectorOnMainThread:callbackSelector withObject:mongoQuery waitUntilDone:NO];
 }
 
 - (void)connectCallback:(MODQuery *)query
@@ -215,7 +215,7 @@
         if (mongo_connect(_mongo, hostPort.host, hostPort.port) == MONGO_OK) {
             [self authenticateSynchronouslyWithDatabaseName:nil userName:_userName password:_password mongoQuery:mongoQuery];
         }
-        [self mongoOperationDidFinish:mongoQuery withCallback:@selector(connectCallback:)];
+        [self mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(connectCallback:)];
     }];
     [query.mutableParameters setObject:host forKey:@"host"];
     return query;
@@ -235,7 +235,7 @@
         if (mongo_replset_connect(_mongo) == MONGO_OK) {
             [self authenticateSynchronouslyWithDatabaseName:nil userName:_userName password:_password mongoQuery:mongoQuery];
         }
-        [self mongoOperationDidFinish:mongoQuery withCallback:@selector(connectCallback:)];
+        [self mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(connectCallback:)];
     }];
     return query;
 }
@@ -262,7 +262,7 @@
             [mongoQuery.mutableParameters setObject:outputObjects forKey:@"serverstatus"];
             bson_destroy(&output);
         }
-        [self mongoOperationDidFinish:mongoQuery withCallback:@selector(fetchServerStatusCallback:)];
+        [self mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(fetchServerStatusCallback:)];
     }];
 }
 
@@ -287,7 +287,7 @@
             outputObjects = [[self class] objectsFromBson:&output];
             bson_destroy(&output);
         }
-        [self mongoOperationDidFinish:mongoQuery withCallback:@selector(fetchServerStatusDeltaCallback:)];
+        [self mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(fetchServerStatusDeltaCallback:)];
     }];
 }
 
@@ -319,7 +319,7 @@
             [list release];
             bson_destroy(&output);
         }
-        [self mongoOperationDidFinish:mongoQuery withCallback:@selector(fetchDatabaseListCallback:)];
+        [self mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(fetchDatabaseListCallback:)];
     }];
 }
 
@@ -345,7 +345,7 @@
             bson_print(&output);
             bson_destroy(&output);
         }
-        [self mongoOperationDidFinish:mongoQuery withCallback:@selector(dropDatabaseCallback:)];
+        [self mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(dropDatabaseCallback:)];
     }];
     [query.mutableParameters setObject:databaseName forKey:@"databasename"];
     return query;
@@ -353,12 +353,7 @@
 
 - (MODDatabase *)databaseForName:(NSString *)databaseName
 {
-    MODDatabase *database;
-    
-    database = [[MODDatabase alloc] init];
-    database.server = self;
-    database.databaseName = databaseName;
-    return database;
+    return [[[MODDatabase alloc] initWithMongoServer:self databaseName:databaseName] autorelease];
 }
 
 @end
