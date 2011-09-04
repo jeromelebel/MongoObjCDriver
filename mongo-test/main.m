@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MODServer.h"
-#import "MODQuery.h"
 #import "MOD_internal.h"
+
+bson *bson_from_json(const char *json, size_t length, int *error, size_t *totalProcessed);
 
 MODServer *server;
 
@@ -67,6 +67,18 @@ MODServer *server;
 int main (int argc, const char * argv[])
 {
     @autoreleasepool {
+        bson *result;
+        char *json;
+        int error;
+        size_t processed;
+        
+        json = "{ \"test\":1, \"zob\" :[\"xx\"] }";
+        result = bson_from_json(json, strlen(json), &error, &processed);
+        bson_print(result);
+        NSLog(@"error %d, processed %lu", error, processed);
+        NSLog(@"%@", [MODServer objectsFromBson:result]);
+        exit(0);
+        
         MongoDelegate *delegate;
         const char *ip;
 

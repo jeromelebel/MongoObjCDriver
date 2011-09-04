@@ -30,7 +30,7 @@
         case BSON_OBJECT:
             result = [NSMutableDictionary dictionary];
             bson_iterator_subiterator(iterator, &subIterator);
-            while (bson_iterator_more(&subIterator)) {
+            while (bson_iterator_next(&subIterator)) {
                 id value;
                 
                 value = [self objectFromBsonIterator:&subIterator];
@@ -41,20 +41,18 @@
                     [result setObject:value forKey:key];
                     [key release];
                 }
-                bson_iterator_next(&subIterator);
             }
             break;
         case BSON_ARRAY:
             result = [NSMutableArray array];
             bson_iterator_subiterator(iterator, &subIterator);
-            while (bson_iterator_more(&subIterator)) {
+            while (bson_iterator_next(&subIterator)) {
                 id value;
                 
                 value = [self objectFromBsonIterator:&subIterator];
                 if (value) {
                     [result addObject:value];
                 }
-                bson_iterator_next(&subIterator);
             }
             break;
         case BSON_BINDATA:
@@ -112,7 +110,7 @@
     
     result = [[NSMutableDictionary alloc] init];
     bson_iterator_init(&iterator, bsonObject);
-    while (bson_iterator_more(&iterator) != BSON_EOO) {
+    while (bson_iterator_next(&iterator) != BSON_EOO) {
         NSString *key;
         id value;
         
@@ -121,7 +119,6 @@
         if (value) {
             [result setObject:value forKey:key];
         }
-        bson_iterator_next(&iterator);
     }
     return [result autorelease];
 }

@@ -7,6 +7,206 @@
 //
 
 #import "MOD_internal.h"
+#import "json.h"
+#import "JSON_parser.h"
+
+#if 1
+typedef struct {
+    int type;
+    const char *data;
+    uint32_t length;
+} ParserDataInfo;
+
+static void * begin_structure(int nesting, int is_object, const char *key, int key_length, void *user_context)
+{
+    if (key == NULL) {
+        key = "main";
+    }
+    if (is_object) {
+        bson_append_start_object(user_context, key);
+    } else {
+        bson_append_start_array(user_context, key);
+    }
+    return user_context;
+}
+
+static int end_structure(int nesting, int is_object, const char *key, int key_length, void *structure, void *user_context)
+{
+    return 0;
+}
+
+/** callback from the parser_dom callback to create data values */
+static void * create_data(int type, const char *data, uint32_t length, void *user_context)
+{
+    ParserDataInfo *result;
+    
+    result = malloc(sizeof(*result));
+    result->type = type;
+    result->data = data;
+    result->length = length;
+    return result;
+}
+
+/** callback from the parser helper callback to append a value to an object or array value
+ * append(parent, key, key_length, val); */
+static int append(void *structure, int is_object_structure, int structure_value_count, char *key, uint32_t key_length, void *obj, void *user_context)
+{
+    ParserDataInfo *dataInfo = obj;
+    char arrayKey[32];
+    
+    if (is_object_structure == false) {
+        snprintf(arrayKey, sizeof(arrayKey), "%d", structure_value_count);
+        key = arrayKey;
+    }
+    switch (dataInfo->type) {
+        case JSON_STRING:
+            bson_append_string_n(user_context, key, dataInfo->data, dataInfo->length);
+            break;
+        case JSON_INT:
+            bson_append_long(user_context, key, atoll(dataInfo->data));
+            break;
+        case JSON_FLOAT:
+            bson_append_double(user_context, key, atof(dataInfo->data));
+            break;
+        case JSON_NULL:
+            bson_append_null(user_context, key);
+            break;
+        case JSON_TRUE:
+            bson_append_bool(user_context, key, 0);
+            break;
+        case JSON_FALSE:
+            bson_append_bool(user_context, key, 0);
+            break;
+        default:
+            break;
+    }
+    free(obj);
+    return 0;
+}
+
+bson *bson_from_json(const char *json, size_t length, int *error, size_t *totalProcessed);
+bson *bson_from_json(const char *json, size_t length, int *error, size_t *totalProcessed)
+{
+    json_parser_dom helper;
+    json_config config;
+    json_parser parser;
+    bson *bsonResult;
+    int processed;
+
+	memset(&config, 0, sizeof(json_config));
+    config.allow_c_comments = 1;
+    config.allow_yaml_comments = 1;
+    bsonResult = malloc(sizeof(bson));
+    bson_init(bsonResult);
+    json_parser_dom_init(&helper, begin_structure, end_structure, create_data, append, bsonResult);
+    json_parser_init(&parser, &config, json_parser_dom_callback, &helper);
+    json_parser_string(&parser, json, length, &processed);
+    *totalProcessed = processed;
+    bson_finish(bsonResult);
+    return bsonResult;
+}
+#else
+typedef struct {
+    bson            *bsonResult;
+    char            *key;
+} ParserContext;
+
+static int parserCallback(ParserContext* ctx, int type, const JSON_value* value)
+{
+    int result = true;
+    
+    switch (type) {
+        case JSON_T_NONE:
+            break;
+        case JSON_T_ARRAY_BEGIN:
+            bson_append_start_array(ctx->bsonResult, ctx->key);
+            break;
+        case JSON_T_ARRAY_END:
+            bson_append_finish_array(ctx->bsonResult);
+            break;
+        case JSON_T_OBJECT_BEGIN:
+            bson_append_start_object(ctx->bsonResult, ctx->key);
+            break;
+        case JSON_T_OBJECT_END:
+            bson_append_finish_object(ctx->bsonResult);
+            break;
+        case JSON_T_INTEGER:
+            bson_append_long(ctx->bsonResult, ctx->key, value->vu.integer_value);
+            break;
+        case JSON_T_FLOAT:
+            bson_append_double(ctx->bsonResult, ctx->key, value->vu.float_value);
+            break;
+        case JSON_T_NULL:
+            bson_append_null(ctx->bsonResult, ctx->key);
+            break;
+        case JSON_T_TRUE:
+            bson_append_bool(ctx->bsonResult, ctx->key, value->vu.integer_value != 0);
+            break;
+        case JSON_T_FALSE:
+            bson_append_bool(ctx->bsonResult, ctx->key, value->vu.integer_value != 0);
+            break;
+        case JSON_T_STRING:
+            bson_append_string_n(ctx->bsonResult, ctx->key, value->vu.str.value, value->vu.str.length);
+            break;
+        case JSON_T_KEY:
+            if (ctx->key) {
+                free(ctx->key);
+            }
+            ctx->key = malloc(value->vu.str.length + 1);
+            memccpy(ctx->key, value->vu.str.value, 1, value->vu.str.length + 1);
+            break;
+        case JSON_T_MAX:
+            assert(false);
+            break;
+        default:
+            break;
+    }
+    return result;
+}
+
+bson *bson_from_json(const char *json, size_t length, int *error, size_t *totalProcessed)
+{
+    ParserContext context;
+    JSON_config config;
+    struct JSON_parser_struct* parser;
+    size_t ii = 0;
+    bson *bsonResult;
+    const char *mainKey = "main";
+    
+    bsonResult = malloc(sizeof(*bsonResult));
+    bson_init(bsonResult);
+    context.bsonResult = bsonResult;
+    context.key = malloc(strlen(mainKey) + 1);
+    memccpy(context.key, mainKey, 1, strlen(mainKey));
+    
+    init_JSON_config(&config);
+    config.depth = 256;
+    config.callback = (JSON_parser_callback)&parserCallback;
+    config.callback_ctx = &context;
+    config.allow_comments = 1;
+    config.handle_floats_manually = 0;
+    
+    if (error) {
+        *error = JSON_E_NONE;
+    }
+    parser = new_JSON_parser(&config);
+    while (json[ii] != 0) {
+        if (!JSON_parser_char(parser, json[ii])) {
+            if (error) {
+                *error = JSON_parser_get_last_error(parser);
+                break;
+            }
+        }
+        ii++;
+    }
+    free(context.key);
+    if (totalProcessed) {
+        *totalProcessed = ii;
+    }
+    bson_finish(bsonResult);
+    return bsonResult;
+}
+#endif
 
 @implementation MODCollection
 

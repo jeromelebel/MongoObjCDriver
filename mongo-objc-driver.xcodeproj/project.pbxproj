@@ -22,9 +22,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		02216ED91412BE6500789BD1 /* JSON_parser.h in Headers */ = {isa = PBXBuildFile; fileRef = 02216ED71412BE6500789BD1 /* JSON_parser.h */; };
-		02216EDA1412BE6500789BD1 /* JSON_parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 02216ED81412BE6500789BD1 /* JSON_parser.c */; };
 		02216F1F1412D47800789BD1 /* json.c in Sources */ = {isa = PBXBuildFile; fileRef = 02216EEA1412D32F00789BD1 /* json.c */; };
+		02216F681413031B00789BD1 /* json.c in Sources */ = {isa = PBXBuildFile; fileRef = 02216EEA1412D32F00789BD1 /* json.c */; };
 		02688DDC14119CF50014ED51 /* MODDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 02688DDA14119CF50014ED51 /* MODDatabase.h */; };
 		02688DDD14119CF50014ED51 /* MODDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DDB14119CF50014ED51 /* MODDatabase.m */; };
 		02688DDE14119CF50014ED51 /* MODDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DDB14119CF50014ED51 /* MODDatabase.m */; };
@@ -96,8 +95,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		02216ED71412BE6500789BD1 /* JSON_parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JSON_parser.h; path = "../../../../mongo-c-driver/src/JSON_parser.h"; sourceTree = "<group>"; };
-		02216ED81412BE6500789BD1 /* JSON_parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = JSON_parser.c; path = "../../../../mongo-c-driver/src/JSON_parser.c"; sourceTree = "<group>"; };
 		02216EDE1412D32F00789BD1 /* changelog */ = {isa = PBXFileReference; lastKnownFileType = text; path = changelog; sourceTree = "<group>"; };
 		02216EDF1412D32F00789BD1 /* compat */ = {isa = PBXFileReference; lastKnownFileType = text; path = compat; sourceTree = "<group>"; };
 		02216EE01412D32F00789BD1 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
@@ -419,8 +416,6 @@
 		02A85F1914103D4D004F3FE9 /* src */ = {
 			isa = PBXGroup;
 			children = (
-				02216ED71412BE6500789BD1 /* JSON_parser.h */,
-				02216ED81412BE6500789BD1 /* JSON_parser.c */,
 				02A85F1A14103D4D004F3FE9 /* bson.c */,
 				02A85F1B14103D4D004F3FE9 /* bson.h */,
 				02A85F1C14103D4D004F3FE9 /* encoding.c */,
@@ -607,7 +602,6 @@
 				02A85F65141080A2004F3FE9 /* platform.h in Headers */,
 				02688DDC14119CF50014ED51 /* MODDatabase.h in Headers */,
 				02688DE21411C5010014ED51 /* MODCollection.h in Headers */,
-				02216ED91412BE6500789BD1 /* JSON_parser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -724,6 +718,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02216F681413031B00789BD1 /* json.c in Sources */,
 				02A85F4614103D64004F3FE9 /* bson.c in Sources */,
 				02A85F4714103D64004F3FE9 /* encoding.c in Sources */,
 				02A85F4814103D64004F3FE9 /* gridfs.c in Sources */,
@@ -735,7 +730,6 @@
 				02A85F5A14104184004F3FE9 /* MODQuery.m in Sources */,
 				02688DDD14119CF50014ED51 /* MODDatabase.m in Sources */,
 				02688DE31411C5010014ED51 /* MODCollection.m in Sources */,
-				02216EDA1412BE6500789BD1 /* JSON_parser.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -743,6 +737,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02216F1F1412D47800789BD1 /* json.c in Sources */,
 				02F121C31410EF5200197811 /* main.m in Sources */,
 				02F121CC1410F01B00197811 /* MODServer.m in Sources */,
 				02F121CD1410F01D00197811 /* MODQuery.m in Sources */,
@@ -755,7 +750,6 @@
 				02F121D41410F07200197811 /* numbers.c in Sources */,
 				02688DDE14119CF50014ED51 /* MODDatabase.m in Sources */,
 				02688DE41411C5010014ED51 /* MODCollection.m in Sources */,
-				02216F1F1412D47800789BD1 /* json.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -901,6 +895,7 @@
 				02216F181412D39200789BD1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		02ABA1B914103B36000417F4 /* Build configuration list for PBXProject "mongo-objc-driver" */ = {
 			isa = XCConfigurationList;
