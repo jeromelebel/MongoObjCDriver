@@ -8,7 +8,6 @@
 
 #import "MOD_internal.h"
 #import "json.h"
-#import "JSON_parser.h"
 
 #if 1
 typedef struct {
