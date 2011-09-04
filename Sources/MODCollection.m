@@ -90,7 +90,7 @@ bson *bson_from_json(const char *json, size_t length, int *error, size_t *totalP
     json_config config;
     json_parser parser;
     bson *bsonResult;
-    int processed;
+    uint32_t processed;
 
 	memset(&config, 0, sizeof(json_config));
     config.allow_c_comments = 1;
@@ -99,9 +99,16 @@ bson *bson_from_json(const char *json, size_t length, int *error, size_t *totalP
     bson_init(bsonResult);
     json_parser_dom_init(&helper, begin_structure, end_structure, create_data, append, bsonResult);
     json_parser_init(&parser, &config, json_parser_dom_callback, &helper);
-    json_parser_string(&parser, json, length, &processed);
+    *error = json_parser_string(&parser, json, length, &processed);
     *totalProcessed = processed;
+    json_parser_dom_free(&helper);
+    json_parser_free(&parser);
     bson_finish(bsonResult);
+    if (processed != length) {
+        bson_destroy(bsonResult);
+        free(bsonResult);
+        bsonResult = NULL;
+    }
     return bsonResult;
 }
 #else
@@ -243,12 +250,12 @@ bson *bson_from_json(const char *json, size_t length, int *error, size_t *totalP
     }
 }
 
-//- (MODQuery *)findWithQuery:(NSString *)jsonQuery fields:(NSString *)fields skip:(int)skip limit:(int)limit sort:(NSString *)sort
-//{
-//    MODQuery *query = nil;
-//    
-//    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-//        NSMutableArray *response;
+- (MODQuery *)findWithQuery:(NSString *)jsonQuery fields:(NSString *)fields skip:(int)skip limit:(int)limit sort:(NSString *)sort
+{
+    MODQuery *query = nil;
+    
+    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        NSMutableArray *response;
 //        NSString *errorMessage = nil;
 //        NSString *oid = nil;
 //        NSString *oidType = nil;
@@ -258,106 +265,127 @@ bson *bson_from_json(const char *json, size_t length, int *error, size_t *totalP
 //        NSMutableArray *oriArr = nil;
 //        NSMutableDictionary *item = nil;
 //        
-//        response = [[NSMutableArray alloc] initWithCapacity:limit];
-//            if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
-//                mongo::BSONObj queryBSON = mongo::fromjson([jsonQuery UTF8String]);
-//                mongo::BSONObj sortBSON = mongo::fromjson([sort UTF8String]);
-//                mongo::BSONObj fieldsToReturn;
-//                
-//                if ([fields length] > 0) {
-//                    NSArray *keys = [fields componentsSeparatedByString:@","];
-//                    
-//                    mongo::BSONObjBuilder builder;
-//                    for (NSString *str in keys) {
-//                        builder.append([str UTF8String], 1);
-//                    }
-//                    fieldsToReturn = builder.obj();
-//                }
-//                
-//                std::auto_ptr<mongo::DBClientCursor> cursor;
-//                if (_mongoDatabase.mongoServer.replicaConnexion) {
-//                    cursor = _mongoDatabase.mongoServer.replicaConnexion->query(std::string([_absoluteCollectionName UTF8String]), mongo::Query(queryBSON).sort(sortBSON), limit, skip, &fieldsToReturn);
-//                } else {
-//                    cursor = _mongoDatabase.mongoServer.connexion->query(std::string([_absoluteCollectionName UTF8String]), mongo::Query(queryBSON).sort(sortBSON), limit, skip, &fieldsToReturn);
-//                }
-//                while (cursor->more()) {
-//                    mongo::BSONObj b = cursor->next();
-//                    mongo::BSONElement e;
-//                    b.getObjectID (e);
-//                    
-//                    if (e.type() == mongo::jstOID) {
-//                        oidType = @"ObjectId";
-//                        [oid release];
-//                        oid = [[NSString alloc] initWithUTF8String:e.__oid().str().c_str()];
-//                    } else {
-//                        oidType = @"String";
-//                        [oid release];
-//                        oid = [[NSString alloc] initWithUTF8String:e.str().c_str()];
-//                    }
-//                    [jsonString release];
-//                    jsonString = [[NSString alloc] initWithUTF8String:b.jsonString(mongo::TenGen).c_str()];
-//                    [jsonStringb release];
-//                    jsonStringb = [[NSString alloc] initWithUTF8String:b.jsonString(mongo::TenGen, 1).c_str()];
-//                    if (jsonString == nil) {
-//                        jsonString = [@"" retain];
-//                    }
-//                    if (jsonStringb == nil) {
-//                        jsonStringb = [@"" retain];
-//                    }
-//                    [repArr release];
-//                    repArr = [[NSMutableArray alloc] initWithCapacity:4];
-//                    id regx2 = [RKRegex regexWithRegexString:@"(Date\\(\\s\\d+\\s\\))" options:RKCompileCaseless];
-//                    RKEnumerator *matchEnumerator2 = [jsonString matchEnumeratorWithRegex:regx2];
-//                    while([matchEnumerator2 nextRanges] != NULL) {
-//                        NSString *enumeratedStr=NULL;
-//                        [matchEnumerator2 getCapturesWithReferences:@"$1", &enumeratedStr, nil];
-//                        [repArr addObject:enumeratedStr];
-//                    }
-//                    [oriArr release];
-//                    oriArr = [[NSMutableArray alloc] initWithCapacity:4];
-//                    id regx = [RKRegex regexWithRegexString:@"(Date\\(\\s+\"[^^]*?\"\\s+\\))" options:RKCompileCaseless];
-//                    RKEnumerator *matchEnumerator = [jsonStringb matchEnumeratorWithRegex:regx];
-//                    while([matchEnumerator nextRanges] != NULL) {
-//                        NSString *enumeratedStr=NULL;
-//                        [matchEnumerator getCapturesWithReferences:@"$1", &enumeratedStr, nil];
-//                        [oriArr addObject:enumeratedStr];
-//                    }
-//                    for (unsigned int i=0; i<[repArr count]; i++) {
-//                        NSString *old;
-//                        
-//                        old = jsonStringb;
-//                        jsonStringb = [[jsonStringb stringByReplacingOccurrencesOfString:[oriArr objectAtIndex:i] withString:[repArr objectAtIndex:i]] retain];
-//                        [old release];
-//                    }
-//                    [item release];
-//                    item = [[NSMutableDictionary alloc] initWithCapacity:6];
-//                    [item setObject:@"_id" forKey:@"name"];
-//                    [item setObject:oidType forKey:@"type"];
-//                    [item setObject:oid forKey:@"value"];
-//                    [item setObject:jsonString forKey:@"raw"];
-//                    [item setObject:jsonStringb forKey:@"beautified"];
-//                    [item setObject:[[_mongoDatabase.mongoServer class] bsonDictWrapper:b] forKey:@"child"];
-//                    [response addObject:item];
-//                }
-//                [mongoQuery.mutableParameters setObject:response forKey:@"result"];
+        response = [[NSMutableArray alloc] initWithCapacity:limit];
+        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+            bson *bsonQuery = NULL;
+            bson *bsonSort = NULL;
+            bson bsonFields;
+            int error;
+            size_t totalProcessed;
+            
+            bsonQuery = bson_from_json([jsonQuery UTF8String], [jsonQuery length], &error, &totalProcessed);
+            if (!bsonQuery) {
+                
+            } else {
+                bsonSort = bson_from_json([sort UTF8String], [sort length], &error, &totalProcessed);
+                if (bsonSort) {
+                    
+                }
+            }
+            bson_init(&bsonFields);
+            if ([fields length] > 0) {
+                NSUInteger index = 0;
+                char indexString[128];
+                
+                for (NSString *field in [fields componentsSeparatedByString:@","]) {
+                    snprintf(indexString, sizeof(indexString), "%lu", index);
+                    bson_append_string(&bsonFields, [[field stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] UTF8String], indexString);
+                }
+                bson_finish(&bsonFields);
+            }
+//            std::auto_ptr<mongo::DBClientCursor> cursor;
+//            if (_mongoDatabase.mongoServer.replicaConnexion) {
+//                cursor = _mongoDatabase.mongoServer.replicaConnexion->query(std::string([_absoluteCollectionName UTF8String]), mongo::Query(queryBSON).sort(sortBSON), limit, skip, &fieldsToReturn);
+//            } else {
+//                cursor = _mongoDatabase.mongoServer.connexion->query(std::string([_absoluteCollectionName UTF8String]), mongo::Query(queryBSON).sort(sortBSON), limit, skip, &fieldsToReturn);
 //            }
-//        [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(findCallback:)];
-//        [response release];
+//            while (cursor->more()) {
+//                mongo::BSONObj b = cursor->next();
+//                mongo::BSONElement e;
+//                b.getObjectID (e);
+//                
+//                if (e.type() == mongo::jstOID) {
+//                    oidType = @"ObjectId";
+//                    [oid release];
+//                    oid = [[NSString alloc] initWithUTF8String:e.__oid().str().c_str()];
+//                } else {
+//                    oidType = @"String";
+//                    [oid release];
+//                    oid = [[NSString alloc] initWithUTF8String:e.str().c_str()];
+//                }
+//                [jsonString release];
+//                jsonString = [[NSString alloc] initWithUTF8String:b.jsonString(mongo::TenGen).c_str()];
+//                [jsonStringb release];
+//                jsonStringb = [[NSString alloc] initWithUTF8String:b.jsonString(mongo::TenGen, 1).c_str()];
+//                if (jsonString == nil) {
+//                    jsonString = [@"" retain];
+//                }
+//                if (jsonStringb == nil) {
+//                    jsonStringb = [@"" retain];
+//                }
+//                [repArr release];
+//                repArr = [[NSMutableArray alloc] initWithCapacity:4];
+//                id regx2 = [RKRegex regexWithRegexString:@"(Date\\(\\s\\d+\\s\\))" options:RKCompileCaseless];
+//                RKEnumerator *matchEnumerator2 = [jsonString matchEnumeratorWithRegex:regx2];
+//                while([matchEnumerator2 nextRanges] != NULL) {
+//                    NSString *enumeratedStr=NULL;
+//                    [matchEnumerator2 getCapturesWithReferences:@"$1", &enumeratedStr, nil];
+//                    [repArr addObject:enumeratedStr];
+//                }
+//                [oriArr release];
+//                oriArr = [[NSMutableArray alloc] initWithCapacity:4];
+//                id regx = [RKRegex regexWithRegexString:@"(Date\\(\\s+\"[^^]*?\"\\s+\\))" options:RKCompileCaseless];
+//                RKEnumerator *matchEnumerator = [jsonStringb matchEnumeratorWithRegex:regx];
+//                while([matchEnumerator nextRanges] != NULL) {
+//                    NSString *enumeratedStr=NULL;
+//                    [matchEnumerator getCapturesWithReferences:@"$1", &enumeratedStr, nil];
+//                    [oriArr addObject:enumeratedStr];
+//                }
+//                for (unsigned int i=0; i<[repArr count]; i++) {
+//                    NSString *old;
+//                    
+//                    old = jsonStringb;
+//                    jsonStringb = [[jsonStringb stringByReplacingOccurrencesOfString:[oriArr objectAtIndex:i] withString:[repArr objectAtIndex:i]] retain];
+//                    [old release];
+//                }
+//                [item release];
+//                item = [[NSMutableDictionary alloc] initWithCapacity:6];
+//                [item setObject:@"_id" forKey:@"name"];
+//                [item setObject:oidType forKey:@"type"];
+//                [item setObject:oid forKey:@"value"];
+//                [item setObject:jsonString forKey:@"raw"];
+//                [item setObject:jsonStringb forKey:@"beautified"];
+//                [item setObject:[[_mongoDatabase.mongoServer class] bsonDictWrapper:b] forKey:@"child"];
+//                [response addObject:item];
+//            }
+//            [mongoQuery.mutableParameters setObject:response forKey:@"result"];
+            if (bsonQuery) {
+                bson_destroy(bsonQuery);
+                free(bsonQuery);
+            }
+            if (bsonSort) {
+                bson_destroy(bsonSort);
+                free(bsonSort);
+            }
+            bson_destroy(&bsonFields);
+        }
+        [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(findCallback:)];
+        [response release];
 //        [oid release];
 //        [jsonString release];
 //        [jsonStringb release];
 //        [repArr release];
 //        [oriArr release];
 //        [item release];
-//    }];
-//    [query.mutableParameters setObject:query forKey:@"query"];
-//    [query.mutableParameters setObject:fields forKey:@"fields"];
-//    [query.mutableParameters setObject:[NSNumber numberWithInt:skip] forKey:@"skip"];
-//    [query.mutableParameters setObject:[NSNumber numberWithInt:limit] forKey:@"limit"];
-//    [query.mutableParameters setObject:sort forKey:@"sort"];
-//    [query.mutableParameters setObject:self forKey:@"collection"];
-//    return query;
-//}
+    }];
+    [query.mutableParameters setObject:query forKey:@"query"];
+    [query.mutableParameters setObject:fields forKey:@"fields"];
+    [query.mutableParameters setObject:[NSNumber numberWithInt:skip] forKey:@"skip"];
+    [query.mutableParameters setObject:[NSNumber numberWithInt:limit] forKey:@"limit"];
+    [query.mutableParameters setObject:sort forKey:@"sort"];
+    [query.mutableParameters setObject:self forKey:@"collection"];
+    return query;
+}
 
 - (void)countCallback:(MODQuery *)mongoQuery
 {
