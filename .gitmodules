@@ -3,4 +3,4 @@
 	url = git@github.com:fotonauts/mongo-c-driver.git
 [submodule "Libraries/libjson"]
 	path = Libraries/libjson
-	url = git://github.com/vincenthz/libjson.git
+	url = git@github.com:fotonauts/libjson.git
