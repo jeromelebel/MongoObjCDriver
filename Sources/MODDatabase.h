@@ -10,6 +10,7 @@
 
 @class MODServer;
 @class MODDatabase;
+@class MODCollection;
 @class MODQuery;
 
 @protocol MODDatabaseDelegate<NSObject>
@@ -34,6 +35,7 @@
 
 - (MODQuery *)fetchDatabaseStats;
 - (MODQuery *)fetchCollectionList;
+- (MODCollection *)collectionForName:(NSString *)name;
 
 @property(nonatomic, readwrite, assign) id<MODDatabaseDelegate> delegate;
 @property(nonatomic, readonly, retain) MODServer *mongoServer;

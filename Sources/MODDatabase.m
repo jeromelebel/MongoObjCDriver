@@ -116,4 +116,12 @@
     return query;
 }
 
+- (MODCollection *)collectionForName:(NSString *)name
+{
+    MODCollection *result;
+    
+    result = [[MODCollection alloc] initWithMongoDatabase:self collectionName:name];
+    return result;
+}
+
 @end

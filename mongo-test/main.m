@@ -13,7 +13,7 @@ bson *bson_from_json(const char *json, size_t length, int *error, size_t *totalP
 
 MODServer *server;
 
-@interface MongoDelegate : NSObject<MODServerDelegate, MODDatabaseDelegate>
+@interface MongoDelegate : NSObject<MODServerDelegate, MODDatabaseDelegate, MODCollectionDelegate>
 - (void)mongoServerConnectionSucceded:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery;
 - (void)mongoServerConnectionFailed:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
 @end
@@ -42,10 +42,13 @@ MODServer *server;
 
 - (void)mongoServer:(MODServer *)mongoServer databaseListFetched:(NSArray *)list withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage
 {
+    NSString *databaseName;
     MODDatabase *database;
     
     [self logQuery:mongoQuery fromSelector:_cmd];
-    database = [mongoServer databaseForName:[list objectAtIndex:1]];
+    databaseName = [list objectAtIndex:1];
+    databaseName = @"ios_support";
+    database = [mongoServer databaseForName:databaseName];
     NSLog(@"database: %@", database.databaseName);
     database.delegate = self;
     [database fetchDatabaseStats];
@@ -59,6 +62,25 @@ MODServer *server;
 
 - (void)mongoDatabase:(MODDatabase *)mongoDatabase collectionListFetched:(NSArray *)collectionList withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage
 {
+    NSString *collectionName;
+    MODCollection *collection;
+    
+    [self logQuery:mongoQuery fromSelector:_cmd];
+    collectionName = [collectionList objectAtIndex:0];
+    collectionName = @"ios_applications";
+    collection = [mongoDatabase collectionForName:collectionName];
+    collection.delegate = self;
+    [collection findWithQuery:@"{}" fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:@"{ \"_id\" : 1 }"];
+    [collection countWithQuery:@"{}"];
+}
+
+- (void)mongoCollection:(MODCollection *)collection queryResultFetched:(NSArray *)result withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage
+{
+    [self logQuery:mongoQuery fromSelector:_cmd];
+}
+
+- (void)mongoCollection:(MODCollection *)collection queryCountWithValue:(long long)value withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage
+{
     [self logQuery:mongoQuery fromSelector:_cmd];
 }
 
@@ -67,18 +89,6 @@ MODServer *server;
 int main (int argc, const char * argv[])
 {
     @autoreleasepool {
-        bson *result;
-        char *json;
-        int error;
-        size_t processed;
-        
-        json = "{ \"test\":1, \"zob\" :[\"xx\"] }";
-        result = bson_from_json(json, strlen(json), &error, &processed);
-        bson_print(result);
-        NSLog(@"error %d, processed %lu", error, processed);
-        NSLog(@"%@", [MODServer objectsFromBson:result]);
-        exit(0);
-        
         MongoDelegate *delegate;
         const char *ip;
 

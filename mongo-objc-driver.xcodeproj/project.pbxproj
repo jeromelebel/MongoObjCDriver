@@ -727,9 +727,9 @@
 				02A85F4B14103D64004F3FE9 /* net.c in Sources */,
 				02A85F4C14103D64004F3FE9 /* numbers.c in Sources */,
 				02A85F5214103EA6004F3FE9 /* MODServer.m in Sources */,
-				02A85F5A14104184004F3FE9 /* MODQuery.m in Sources */,
 				02688DDD14119CF50014ED51 /* MODDatabase.m in Sources */,
 				02688DE31411C5010014ED51 /* MODCollection.m in Sources */,
+				02A85F5A14104184004F3FE9 /* MODQuery.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
