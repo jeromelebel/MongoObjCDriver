@@ -183,22 +183,22 @@
         [mongoQuery.mutableParameters setObject:[NSNumber numberWithInt:_mongo->err] forKey:@"error"];
     }
     if (_mongo->errstr) {
-        [mongoQuery.mutableParameters setObject:[NSString stringWithUTF8String:_mongo->errstr] forKey:@"errormessage"];
+        [mongoQuery.mutableParameters setObject:[NSString stringWithUTF8String:_mongo->errstr] forKey:@"error"];
     }
     [target performSelectorOnMainThread:callbackSelector withObject:mongoQuery waitUntilDone:NO];
 }
 
 - (void)connectCallback:(MODQuery *)query
 {
-    NSString *errorMessage;
+    NSString *error;
     
-    errorMessage = [query.mutableParameters objectForKey:@"errormessage"];
-    if (errorMessage && [_delegate respondsToSelector:@selector(mongoServerConnectionFailed:withMongoQuery:errorMessage:)]) {
-        [_delegate mongoServerConnectionFailed:self withMongoQuery:query errorMessage:errorMessage];
-    } else if (errorMessage == nil && [_delegate respondsToSelector:@selector(mongoServerConnectionSucceded:withMongoQuery:)]) {
+    error = [query.mutableParameters objectForKey:@"error"];
+    if (error && [_delegate respondsToSelector:@selector(mongoServerConnectionFailed:withMongoQuery:error:)]) {
+        [_delegate mongoServerConnectionFailed:self withMongoQuery:query error:error];
+    } else if (error == nil && [_delegate respondsToSelector:@selector(mongoServerConnectionSucceded:withMongoQuery:)]) {
         [_delegate mongoServerConnectionSucceded:self withMongoQuery:query];
     }
-    self.connected = (errorMessage == nil);
+    self.connected = (error == nil);
 }
 
 - (MODQuery *)connectWithHostName:(NSString *)host
@@ -242,8 +242,8 @@
     NSArray *serverStatus;
     
     serverStatus = [query.parameters objectForKey:@"serverstatus"];
-    if ([_delegate respondsToSelector:@selector(mongoServer:serverStatusFetched:withMongoQuery:errorMessage:)]) {
-        [_delegate mongoServer:self serverStatusFetched:serverStatus withMongoQuery:query errorMessage:[query.parameters objectForKey:@"errormessage"]];
+    if ([_delegate respondsToSelector:@selector(mongoServer:serverStatusFetched:withMongoQuery:error:)]) {
+        [_delegate mongoServer:self serverStatusFetched:serverStatus withMongoQuery:query error:[query.parameters objectForKey:@"error"]];
     }
 }
 
@@ -268,8 +268,8 @@
     NSDictionary *serverStatusDelta;
     
     serverStatusDelta = [mongoQuery.parameters objectForKey:@"serverstatusdelta"];
-    if ([_delegate respondsToSelector:@selector(mongoDB:serverStatusDeltaFetched:withMongoQuery:errorMessage:)]) {
-        [_delegate mongoServer:self serverStatusDeltaFetched:serverStatusDelta withMongoQuery:mongoQuery errorMessage:[mongoQuery.parameters objectForKey:@"errormessage"]];
+    if ([_delegate respondsToSelector:@selector(mongoDB:serverStatusDeltaFetched:withMongoQuery:error:)]) {
+        [_delegate mongoServer:self serverStatusDeltaFetched:serverStatusDelta withMongoQuery:mongoQuery error:[mongoQuery.parameters objectForKey:@"error"]];
     }
 }
 
@@ -293,8 +293,8 @@
     NSArray *list;
     
     list = [query.parameters objectForKey:@"databaselist"];
-    if ([_delegate respondsToSelector:@selector(mongoServer:databaseListFetched:withMongoQuery:errorMessage:)]) {
-        [_delegate mongoServer:self databaseListFetched:list withMongoQuery:query errorMessage:[query.parameters objectForKey:@"errormessage"]];
+    if ([_delegate respondsToSelector:@selector(mongoServer:databaseListFetched:withMongoQuery:error:)]) {
+        [_delegate mongoServer:self databaseListFetched:list withMongoQuery:query error:[query.parameters objectForKey:@"error"]];
     }
 }
 
@@ -322,11 +322,11 @@
 
 - (void)dropDatabaseCallback:(MODQuery *)mongoQuery
 {
-    NSString *errorMessage;
+    NSString *error;
     
-    errorMessage = [mongoQuery.parameters objectForKey:@"errormessage"];
-    if ([_delegate respondsToSelector:@selector(mongoDB:databaseDropedWithMongoQuery:errorMessage:)]) {
-        [_delegate mongoServer:self databaseDropedWithMongoQuery:mongoQuery errorMessage:errorMessage];
+    error = [mongoQuery.parameters objectForKey:@"error"];
+    if ([_delegate respondsToSelector:@selector(mongoDB:databaseDropedWithMongoQuery:error:)]) {
+        [_delegate mongoServer:self databaseDropedWithMongoQuery:mongoQuery error:error];
     }
 }
 

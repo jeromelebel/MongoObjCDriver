@@ -40,7 +40,7 @@
         [mongoQuery.mutableParameters setObject:[NSNumber numberWithInt:self.mongoServer.mongo->err] forKey:@"error"];
     }
     if (self.mongoServer.mongo->errstr) {
-        [mongoQuery.mutableParameters setObject:[NSString stringWithUTF8String:self.mongoServer.mongo->errstr] forKey:@"errormessage"];
+        [mongoQuery.mutableParameters setObject:[NSString stringWithUTF8String:self.mongoServer.mongo->errstr] forKey:@"error"];
     }
     [self performSelectorOnMainThread:callbackSelector withObject:mongoQuery waitUntilDone:NO];
 }
@@ -52,8 +52,8 @@
     
     databaseName = [mongoQuery.parameters objectForKey:@"databasename"];
     databaseStats = [mongoQuery.parameters objectForKey:@"databasestats"];
-    if ([_delegate respondsToSelector:@selector(mongoDatabase:databaseStatsFetched:withMongoQuery:errorMessage:)]) {
-        [_delegate mongoDatabase:self databaseStatsFetched:databaseStats withMongoQuery:mongoQuery errorMessage:[mongoQuery.parameters objectForKey:@"errormessage"]];
+    if ([_delegate respondsToSelector:@selector(mongoDatabase:databaseStatsFetched:withMongoQuery:error:)]) {
+        [_delegate mongoDatabase:self databaseStatsFetched:databaseStats withMongoQuery:mongoQuery error:[mongoQuery.parameters objectForKey:@"error"]];
     }
 }
 
@@ -80,8 +80,8 @@
     NSArray *collectionList;
     
     collectionList = [mongoQuery.parameters objectForKey:@"collectionlist"];
-    if ([_delegate respondsToSelector:@selector(mongoDatabase:collectionListFetched:withMongoQuery:errorMessage:)]) {
-        [_delegate mongoDatabase:self collectionListFetched:collectionList withMongoQuery:mongoQuery errorMessage:[mongoQuery.parameters objectForKey:@"errormessage"]];
+    if ([_delegate respondsToSelector:@selector(mongoDatabase:collectionListFetched:withMongoQuery:error:)]) {
+        [_delegate mongoDatabase:self collectionListFetched:collectionList withMongoQuery:mongoQuery error:[mongoQuery.parameters objectForKey:@"error"]];
     }
 }
 

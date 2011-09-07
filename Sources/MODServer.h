@@ -18,14 +18,14 @@ typedef struct mongo                    *mongo_ptr;
 @protocol MODServerDelegate<NSObject>
 @optional
 - (void)mongoServerConnectionSucceded:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery;
-- (void)mongoServerConnectionFailed:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
-- (void)mongoServer:(MODServer *)mongoServer serverStatusFetched:(NSArray *)serverStatus withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
-- (void)mongoServer:(MODServer *)mongoServer serverStatusDeltaFetched:(NSDictionary *)serverStatusDelta withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
-- (void)mongoServer:(MODServer *)mongoServer databaseListFetched:(NSArray *)list withMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
+- (void)mongoServerConnectionFailed:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
+- (void)mongoServer:(MODServer *)mongoServer serverStatusFetched:(NSArray *)serverStatus withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
+- (void)mongoServer:(MODServer *)mongoServer serverStatusDeltaFetched:(NSDictionary *)serverStatusDelta withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
+- (void)mongoServer:(MODServer *)mongoServer databaseListFetched:(NSArray *)list withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
 
-- (void)mongoServer:(MODServer *)mongoServer databaseDropedWithMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
-- (void)mongoServer:(MODServer *)mongoServer collectionCreatedWithMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
-- (void)mongoServer:(MODServer *)mongoServer collectionDropedWithMongoQuery:(MODQuery *)mongoQuery errorMessage:(NSString *)errorMessage;
+- (void)mongoServer:(MODServer *)mongoServer databaseDropedWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
+- (void)mongoServer:(MODServer *)mongoServer collectionCreatedWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
+- (void)mongoServer:(MODServer *)mongoServer collectionDropedWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
 @end
 
 @interface MODServer : NSObject

@@ -145,12 +145,12 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 - (void)findCallback:(MODQuery *)mongoQuery
 {
     NSArray *result;
-    NSString *errorMessage;
+    NSString *error;
     
     result = [mongoQuery.parameters objectForKey:@"result"];
-    errorMessage = [mongoQuery.parameters objectForKey:@"errormessage"];
-    if ([_delegate respondsToSelector:@selector(mongoCollection:queryResultFetched:withMongoQuery:errorMessage:)]) {
-        [_delegate mongoCollection:self queryResultFetched:result withMongoQuery:mongoQuery errorMessage:errorMessage];
+    error = [mongoQuery.parameters objectForKey:@"error"];
+    if ([_delegate respondsToSelector:@selector(mongoCollection:queryResultFetched:withMongoQuery:error:)]) {
+        [_delegate mongoCollection:self queryResultFetched:result withMongoQuery:mongoQuery error:error];
     }
 }
 
@@ -238,12 +238,12 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 - (void)countCallback:(MODQuery *)mongoQuery
 {
     long long int count;
-    NSString *errorMessage;
+    NSString *error;
     
     count = [[mongoQuery.parameters objectForKey:@"count"] longLongValue];
-    errorMessage = [mongoQuery.parameters objectForKey:@"errormessage"];
-    if ([_delegate respondsToSelector:@selector(mongoCollection:queryCountWithValue:withMongoQuery:errorMessage:)]) {
-        [_delegate mongoCollection:self queryCountWithValue:count withMongoQuery:mongoQuery errorMessage:errorMessage];
+    error = [mongoQuery.parameters objectForKey:@"error"];
+    if ([_delegate respondsToSelector:@selector(mongoCollection:queryCountWithValue:withMongoQuery:error:)]) {
+        [_delegate mongoCollection:self queryCountWithValue:count withMongoQuery:mongoQuery error:error];
     }
 }
 
@@ -288,12 +288,12 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 
 - (void)updateCallback:(MODQuery *)mongoQuery
 {
-    NSString *errorMessage;
+    NSString *error;
     
     [mongoQuery ends];
-    errorMessage = [mongoQuery.parameters objectForKey:@"errormessage"];
-    if ([_delegate respondsToSelector:@selector(mongoCollection:updateDonwWithMongoQuery:errorMessage:)]) {
-        [_delegate mongoCollection:self updateDonwWithMongoQuery:mongoQuery errorMessage:errorMessage];
+    error = [mongoQuery.parameters objectForKey:@"error"];
+    if ([_delegate respondsToSelector:@selector(mongoCollection:updateDonwWithMongoQuery:error:)]) {
+        [_delegate mongoCollection:self updateDonwWithMongoQuery:mongoQuery error:error];
     }
 }
 
@@ -302,7 +302,7 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 //    MODQuery *query = nil;
 //    
 //    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-//        NSString *errorMessage;
+//        NSString *error;
 //        
 //        try {
 //            if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
@@ -315,9 +315,9 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 //                }
 //            }
 //        } catch (mongo::DBException &e) {
-//            errorMessage = [[NSString alloc] initWithUTF8String:e.what()];
-//            [mongoQuery.mutableParameters setObject:errorMessage forKey:@"errormessage"];
-//            [errorMessage release];
+//            error = [[NSString alloc] initWithUTF8String:e.what()];
+//            [mongoQuery.mutableParameters setObject:error forKey:@"error"];
+//            [error release];
 //        }
 //        [self performSelectorOnMainThread:@selector(updateCallback:) withObject:mongoQuery waitUntilDone:NO];
 //    }];
@@ -333,7 +333,7 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 //    MongoQuery *query = nil;
 //    
 //    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-//        NSString *errorMessage;
+//        NSString *error;
 //        try {
 //            if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
 //                mongo::BSONObj fields = mongo::fromjson([jsonString UTF8String]);
@@ -346,9 +346,9 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 //                }
 //            }
 //        } catch (mongo::DBException &e) {
-//            errorMessage = [[NSString alloc] initWithUTF8String:e.what()];
-//            [mongoQuery.mutableParameters setObject:errorMessage forKey:@"errormessage"];
-//            [errorMessage release];
+//            error = [[NSString alloc] initWithUTF8String:e.what()];
+//            [mongoQuery.mutableParameters setObject:error forKey:@"error"];
+//            [error release];
 //        }
 //        [self performSelectorOnMainThread:@selector(updateCallback:) withObject:mongoQuery waitUntilDone:NO];
 //    }];
