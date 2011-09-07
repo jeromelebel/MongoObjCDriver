@@ -190,7 +190,7 @@
 
 - (void)connectCallback:(MODQuery *)query
 {
-    NSString *error;
+    NSError *error;
     
     error = [query.mutableParameters objectForKey:@"error"];
     if (error && [_delegate respondsToSelector:@selector(mongoServerConnectionFailed:withMongoQuery:error:)]) {
@@ -322,7 +322,7 @@
 
 - (void)dropDatabaseCallback:(MODQuery *)mongoQuery
 {
-    NSString *error;
+    NSError *error;
     
     error = [mongoQuery.parameters objectForKey:@"error"];
     if ([_delegate respondsToSelector:@selector(mongoDB:databaseDropedWithMongoQuery:error:)]) {

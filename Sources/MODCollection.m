@@ -145,7 +145,7 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 - (void)findCallback:(MODQuery *)mongoQuery
 {
     NSArray *result;
-    NSString *error;
+    NSError *error;
     
     result = [mongoQuery.parameters objectForKey:@"result"];
     error = [mongoQuery.parameters objectForKey:@"error"];
@@ -238,7 +238,7 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 - (void)countCallback:(MODQuery *)mongoQuery
 {
     long long int count;
-    NSString *error;
+    NSError *error;
     
     count = [[mongoQuery.parameters objectForKey:@"count"] longLongValue];
     error = [mongoQuery.parameters objectForKey:@"error"];
@@ -288,7 +288,7 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 
 - (void)updateCallback:(MODQuery *)mongoQuery
 {
-    NSString *error;
+    NSError *error;
     
     [mongoQuery ends];
     error = [mongoQuery.parameters objectForKey:@"error"];
@@ -302,7 +302,7 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 //    MODQuery *query = nil;
 //    
 //    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-//        NSString *error;
+//        NSError *error;
 //        
 //        try {
 //            if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
@@ -333,7 +333,7 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 //    MongoQuery *query = nil;
 //    
 //    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-//        NSString *error;
+//        NSError *error;
 //        try {
 //            if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
 //                mongo::BSONObj fields = mongo::fromjson([jsonString UTF8String]);
