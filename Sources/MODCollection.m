@@ -169,6 +169,7 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
         if (error) {
             mongoQuery.error = error;
         }
+        [mongoQuery.mutableParameters setObject:response forKey:@"result"];
         [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(findCallback:)];
         [response release];
     }];

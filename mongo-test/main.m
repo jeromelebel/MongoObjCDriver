@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "MOD_internal.h"
 
-bson *bson_from_json(const char *json, size_t length, int *error, size_t *totalProcessed);
-
 MODServer *server;
 
 @interface MongoDelegate : NSObject<MODServerDelegate, MODDatabaseDelegate, MODCollectionDelegate>

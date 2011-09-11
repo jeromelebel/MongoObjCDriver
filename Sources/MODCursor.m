@@ -94,7 +94,7 @@
     *error = nil;
     if (!_cursor) {
         [self _startCursorWithError:error];
-        if (error == nil) {
+        if (*error == nil) {
             [_mongoCollection.mongoDatabase authenticateSynchronouslyWithError:error];
         }
     }
