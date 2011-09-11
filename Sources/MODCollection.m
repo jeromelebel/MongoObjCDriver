@@ -97,7 +97,6 @@ static int append(void *structure, int is_object_structure, int structure_value_
     return 0;
 }
 
-void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, size_t length, int *error, size_t *totalProcessed);
 void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, size_t length, int *error, size_t *totalProcessed)
 {
     json_parser_dom helper;
@@ -145,12 +144,10 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 - (void)findCallback:(MODQuery *)mongoQuery
 {
     NSArray *result;
-    NSError *error;
     
     result = [mongoQuery.parameters objectForKey:@"result"];
-    error = [mongoQuery.parameters objectForKey:@"error"];
     if ([_delegate respondsToSelector:@selector(mongoCollection:queryResultFetched:withMongoQuery:error:)]) {
-        [_delegate mongoCollection:self queryResultFetched:result withMongoQuery:mongoQuery error:error];
+        [_delegate mongoCollection:self queryResultFetched:result withMongoQuery:mongoQuery error:mongoQuery.error];
     }
 }
 
@@ -238,12 +235,10 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 - (void)countCallback:(MODQuery *)mongoQuery
 {
     long long int count;
-    NSError *error;
     
     count = [[mongoQuery.parameters objectForKey:@"count"] longLongValue];
-    error = [mongoQuery.parameters objectForKey:@"error"];
     if ([_delegate respondsToSelector:@selector(mongoCollection:queryCountWithValue:withMongoQuery:error:)]) {
-        [_delegate mongoCollection:self queryCountWithValue:count withMongoQuery:mongoQuery error:error];
+        [_delegate mongoCollection:self queryCountWithValue:count withMongoQuery:mongoQuery error:mongoQuery.error];
     }
 }
 
@@ -288,12 +283,9 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 
 - (void)updateCallback:(MODQuery *)mongoQuery
 {
-    NSError *error;
-    
     [mongoQuery ends];
-    error = [mongoQuery.parameters objectForKey:@"error"];
     if ([_delegate respondsToSelector:@selector(mongoCollection:updateDonwWithMongoQuery:error:)]) {
-        [_delegate mongoCollection:self updateDonwWithMongoQuery:mongoQuery error:error];
+        [_delegate mongoCollection:self updateDonwWithMongoQuery:mongoQuery error:mongoQuery.error];
     }
 }
 
@@ -357,5 +349,15 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 //    [query.mutableParameters setObject:self forKey:@"collection"];
 //    return query;
 //}
+
+- (mongo *)mongo
+{
+    return _mongoDatabase.mongo;
+}
+
+- (MODServer *)mongoServer
+{
+    return _mongoDatabase.mongoServer;
+}
 
 @end

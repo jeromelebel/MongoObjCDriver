@@ -32,6 +32,7 @@
 - (MODQuery *)updateWithQuery:(NSString *)query fields:(NSString *)fields upset:(BOOL)upset;
 - (MODQuery *)saveJsonString:(NSString *)jsonString withRecordId:(NSString *)recordId;
 
+@property(nonatomic, readonly, retain) MODServer *mongoServer;
 @property(nonatomic, retain, readonly) MODDatabase *mongoDatabase;
 @property(nonatomic, retain, readonly) NSString *collectionName;
 @property(nonatomic, retain, readonly) NSString *absoluteCollectionName;

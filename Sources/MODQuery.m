@@ -10,7 +10,7 @@
 
 @implementation MODQuery
 
-@synthesize parameters = _parameters, userInfo = _userInfo, startDate = _startDate, endDate = _endDate;
+@synthesize parameters = _parameters, userInfo = _userInfo, startDate = _startDate, endDate = _endDate, error = _error;
 
 - (id)init
 {

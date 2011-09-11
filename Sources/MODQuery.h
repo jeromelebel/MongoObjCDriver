@@ -17,6 +17,7 @@
 @interface MODQuery : NSObject
 {
     NSBlockOperation    *_blockOperation;
+    NSError             *_error;
     NSMutableDictionary *_userInfo;
     NSMutableDictionary *_parameters;
     NSDate              *_startDate;
@@ -27,6 +28,7 @@
 - (void)waitUntilFinished;
 - (void)addCallbackWithTarget:(id<MODQueryCallbackTarget>)target;
 
+@property (nonatomic, readonly, assign) NSError *error;
 @property (nonatomic, readonly, retain) NSDictionary *parameters;
 @property (nonatomic, readwrite, retain) NSMutableDictionary *userInfo;
 @property (nonatomic, readonly, retain) NSDate *startDate;

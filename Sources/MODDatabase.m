@@ -53,7 +53,7 @@
     databaseName = [mongoQuery.parameters objectForKey:@"databasename"];
     databaseStats = [mongoQuery.parameters objectForKey:@"databasestats"];
     if ([_delegate respondsToSelector:@selector(mongoDatabase:databaseStatsFetched:withMongoQuery:error:)]) {
-        [_delegate mongoDatabase:self databaseStatsFetched:databaseStats withMongoQuery:mongoQuery error:[mongoQuery.parameters objectForKey:@"error"]];
+        [_delegate mongoDatabase:self databaseStatsFetched:databaseStats withMongoQuery:mongoQuery error:mongoQuery.error];
     }
 }
 
@@ -81,7 +81,7 @@
     
     collectionList = [mongoQuery.parameters objectForKey:@"collectionlist"];
     if ([_delegate respondsToSelector:@selector(mongoDatabase:collectionListFetched:withMongoQuery:error:)]) {
-        [_delegate mongoDatabase:self collectionListFetched:collectionList withMongoQuery:mongoQuery error:[mongoQuery.parameters objectForKey:@"error"]];
+        [_delegate mongoDatabase:self collectionListFetched:collectionList withMongoQuery:mongoQuery error:mongoQuery.error];
     }
 }
 
@@ -122,6 +122,11 @@
     
     result = [[MODCollection alloc] initWithMongoDatabase:self collectionName:name];
     return result;
+}
+
+- (mongo *)mongo
+{
+    return _mongoServer.mongo;
 }
 
 @end
