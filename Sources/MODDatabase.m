@@ -33,6 +33,11 @@
     return [_mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery];
 }
 
+- (BOOL)authenticateSynchronouslyWithError:(NSError **)error
+{
+    return [_mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password error:error];
+}
+
 - (void)mongoOperationDidFinish:(MODQuery *)mongoQuery withCallback:(SEL)callbackSelector
 {
     [mongoQuery ends];

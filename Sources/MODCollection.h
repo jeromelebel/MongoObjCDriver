@@ -11,6 +11,7 @@
 @class MODDatabase;
 @class MODCollection;
 @class MODQuery;
+@class MODCursor;
 
 @protocol MODCollectionDelegate <NSObject>
 - (void)mongoCollection:(MODCollection *)collection queryResultFetched:(NSArray *)result withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
@@ -27,7 +28,8 @@
 
 - (id)initWithMongoDatabase:(MODDatabase *)mongoDatabase collectionName:(NSString *)collectionName;
 
-- (MODQuery *)findWithQuery:(NSString *)query fields:(NSString *)fields skip:(int)skip limit:(int)limit sort:(NSString *)sort;
+- (MODCursor *)cursorWithQuery:(NSString *)query fields:(NSArray *)fields skip:(NSUInteger)skip limit:(NSUInteger)limit sort:(NSString *)sort;
+- (MODQuery *)findWithQuery:(NSString *)query fields:(NSArray *)fields skip:(NSUInteger)skip limit:(NSUInteger)limit sort:(NSString *)sort;
 - (MODQuery *)countWithQuery:(NSString *)query;
 - (MODQuery *)updateWithQuery:(NSString *)query fields:(NSString *)fields upset:(BOOL)upset;
 - (MODQuery *)saveJsonString:(NSString *)jsonString withRecordId:(NSString *)recordId;

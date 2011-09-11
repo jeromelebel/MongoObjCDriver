@@ -25,6 +25,7 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 + (NSDictionary *)objectsFromBson:(bson *)bsonObject;
 
 - (BOOL)authenticateSynchronouslyWithDatabaseName:(NSString *)databaseName userName:(NSString *)user password:(NSString *)password mongoQuery:(MODQuery *)mongoQuery;
+- (BOOL)authenticateSynchronouslyWithDatabaseName:(NSString *)databaseName userName:(NSString *)userName password:(NSString *)password error:(NSError **)error;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withTarget:(id)target callback:(SEL)callbackSelector;
 - (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block;
 
@@ -36,6 +37,7 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 
 - (id)initWithMongoServer:(MODServer *)mongoServer databaseName:(NSString *)databaseName;
 - (BOOL)authenticateSynchronouslyWithMongoQuery:(MODQuery *)mongoQuery;
+- (BOOL)authenticateSynchronouslyWithError:(NSError **)error;
 
 @end
 
@@ -54,7 +56,7 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 @property(nonatomic, readwrite, retain) NSString * sort;
 
 - (id)initWithMongoCollection:(MODCollection *)mongoCollection;
-- (void)_startCursorWithQuery:(NSString *)query fields:(NSArray *)fields skip:(NSUInteger)skip limit:(NSUInteger)limit sort:(NSString *)sort;
+- (NSDictionary *)nextDocumentAsynchronouslyWithError:(NSError **)error;
 
 @end
 

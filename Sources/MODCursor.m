@@ -22,14 +22,22 @@
 
 - (void)dealloc
 {
-    [_query release];
-    [_fields release];
-    [_sort release];
-    [_mongoCollection release];
     if (_cursor) {
         mongo_cursor_destroy(_cursor);
         free(_cursor);
     }
+    if (_bsonQuery) {
+        bson_destroy(_bsonQuery);
+        free(_bsonQuery);
+    }
+    if (_bsonFields) {
+        bson_destroy(_bsonFields);
+        free(_bsonFields);
+    }
+    [_query release];
+    [_fields release];
+    [_sort release];
+    [_mongoCollection release];
     [super dealloc];
 }
 
@@ -78,7 +86,7 @@
     return *error == nil;
 }
 
-- (NSDictionary *)fetchNextDocumentAsynchronouslyWithError:(NSError **)error;
+- (NSDictionary *)nextDocumentAsynchronouslyWithError:(NSError **)error;
 {
     NSDictionary *result = nil;
     
@@ -86,6 +94,9 @@
     *error = nil;
     if (!_cursor) {
         [self _startCursorWithError:error];
+        if (error == nil) {
+            [_mongoCollection.mongoDatabase authenticateSynchronouslyWithError:error];
+        }
     }
     if (!*error) {
         if (mongo_cursor_next(_cursor) == MONGO_OK) {
@@ -110,7 +121,7 @@
         NSDictionary *result;
         NSError *error;
         
-        result = [self fetchNextDocumentAsynchronouslyWithError:&error];
+        result = [self nextDocumentAsynchronouslyWithError:&error];
         [mongoQuery.mutableParameters setObject:result forKey:@"nextdocument"];
         [_mongoCollection.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(fetchNextDocumentCallback:)];
     }];

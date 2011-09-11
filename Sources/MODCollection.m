@@ -151,68 +151,23 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
     }
 }
 
-- (MODQuery *)findWithQuery:(NSString *)jsonQuery fields:(NSArray *)fields skip:(int)skip limit:(int)limit sort:(NSString *)sort
+- (MODQuery *)findWithQuery:(NSString *)jsonQuery fields:(NSArray *)fields skip:(NSUInteger)skip limit:(NSUInteger)limit sort:(NSString *)sort
 {
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         NSMutableArray *response;
+        MODCursor *cursor;
+        NSDictionary *document;
+        NSError *error = nil;
         
         response = [[NSMutableArray alloc] initWithCapacity:limit];
-        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
-            bson *bsonQuery = NULL;
-            bson *bsonFields = NULL;
-            int error;
-            size_t totalProcessed;
-            mongo_cursor cursor;
-            
-            mongo_cursor_init(&cursor, _mongoDatabase.mongoServer.mongo, [_absoluteCollectionName UTF8String]);
-            
-            bsonQuery = malloc(sizeof(*bsonQuery));
-            bson_init(bsonQuery);
-            bson_from_json(bsonQuery, "$query", [jsonQuery UTF8String], [jsonQuery length], &error, &totalProcessed);
-            if (error == 0) {
-                if ([sort length] > 0) {
-                    bson_from_json(bsonQuery, "$orderby", [sort UTF8String], [sort length], &error, &totalProcessed);
-                    if (error == 0) {
-                    }
-                }
-                bson_finish(bsonQuery);
-                NSLog(@"* %@", [MODServer objectsFromBson:bsonQuery]);
-                mongo_cursor_set_query(&cursor, bsonQuery);
-            } else {
-                bson_finish(bsonQuery);
-            }
-            if ([fields count] > 0) {
-                NSUInteger index = 0;
-                char indexString[128];
-                
-                bsonFields = malloc(sizeof(*bsonFields));
-                bson_init(bsonFields);
-                for (NSString *field in fields) {
-                    snprintf(indexString, sizeof(indexString), "%lu", index);
-                    bson_append_string(bsonFields, [field UTF8String], indexString);
-                }
-                bson_finish(bsonFields);
-                mongo_cursor_set_fields(&cursor, bsonFields);
-            }
-            mongo_cursor_set_skip(&cursor, skip);
-            mongo_cursor_set_limit(&cursor, limit);
-            
-            while (mongo_cursor_next(&cursor) == MONGO_OK) {
-                [response addObject:[[_mongoDatabase.mongoServer class] objectsFromBson:&(&cursor)->current]];
-            }
-            
-            mongo_cursor_destroy(&cursor);
-            if (bsonQuery) {
-                bson_destroy(bsonQuery);
-                free(bsonQuery);
-            }
-            if (bsonFields) {
-                bson_destroy(bsonFields);
-                free(bsonFields);
-            }
-            [mongoQuery.mutableParameters setObject:response forKey:@"response"];
+        cursor = [self cursorWithQuery:jsonQuery fields:fields skip:skip limit:limit sort:sort];
+        while ((document = [cursor nextDocumentAsynchronouslyWithError:&error]) != nil) {
+            [response addObject:document];
+        }
+        if (error) {
+            mongoQuery.error = error;
         }
         [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(findCallback:)];
         [response release];
@@ -223,13 +178,26 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
     if (fields) {
         [query.mutableParameters setObject:fields forKey:@"fields"];
     }
-    [query.mutableParameters setObject:[NSNumber numberWithInt:skip] forKey:@"skip"];
-    [query.mutableParameters setObject:[NSNumber numberWithInt:limit] forKey:@"limit"];
+    [query.mutableParameters setObject:[NSNumber numberWithUnsignedInteger:skip] forKey:@"skip"];
+    [query.mutableParameters setObject:[NSNumber numberWithUnsignedInteger:limit] forKey:@"limit"];
     if (sort) {
         [query.mutableParameters setObject:sort forKey:@"sort"];
     }
     [query.mutableParameters setObject:self forKey:@"collection"];
     return query;
+}
+
+- (MODCursor *)cursorWithQuery:(NSString *)query fields:(NSArray *)fields skip:(NSUInteger)skip limit:(NSUInteger)limit sort:(NSString *)sort
+{
+    MODCursor *cursor;
+    
+    cursor = [[MODCursor alloc] initWithMongoCollection:self];
+    cursor.query = query;
+    cursor.fields = fields;
+    cursor.skip = skip;
+    cursor.limit = limit;
+    cursor.sort = sort;
+    return [cursor autorelease];
 }
 
 - (void)countCallback:(MODQuery *)mongoQuery

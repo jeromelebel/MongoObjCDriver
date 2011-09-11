@@ -28,7 +28,7 @@
 - (void)waitUntilFinished;
 - (void)addCallbackWithTarget:(id<MODQueryCallbackTarget>)target;
 
-@property (nonatomic, readonly, assign) NSError *error;
+@property (nonatomic, readonly, retain) NSError *error;
 @property (nonatomic, readonly, retain) NSDictionary *parameters;
 @property (nonatomic, readwrite, retain) NSMutableDictionary *userInfo;
 @property (nonatomic, readonly, retain) NSDate *startDate;

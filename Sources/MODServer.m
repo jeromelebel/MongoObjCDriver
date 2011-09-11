@@ -12,6 +12,60 @@
 
 @synthesize delegate = _delegate, connected = _connected, mongo = _mongo, userName = _userName, password = _password;
 
++ (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code
+{
+    NSError *error;
+    
+    if ([errorDomain isEqualToString:MODMongoErrorDomain]) {
+        NSString *description;
+        switch (code) {
+            case MONGO_CONN_SUCCESS:
+                description = @"Connection success!";
+                break;
+            case MONGO_CONN_NO_SOCKET:
+                description = @"Could not create a socket.";
+                break;
+            case MONGO_CONN_FAIL:
+                description = @"An error occured while calling connect().";
+                break;
+            case MONGO_CONN_ADDR_FAIL:
+                description = @"An error occured while calling getaddrinfo().";
+                break;
+            case MONGO_CONN_NOT_MASTER:
+                description = @"Warning: connected to a non-master node (read-only).";
+                break;
+            case MONGO_CONN_BAD_SET_NAME:
+                description = @"Given rs name doesn't match this replica set.";
+                break;
+            case MONGO_CONN_NO_PRIMARY:
+                description = @"Can't find primary in replica set. Connection closed.";
+                break;
+            case MONGO_IO_ERROR:
+                description = @"An error occurred while reading or writing on the socket.";
+                break;
+            case MONGO_READ_SIZE_ERROR:
+                description = @"The response is not the expected length.";
+                break;
+            case MONGO_COMMAND_FAILED:
+                description = @"The command returned with 'ok' value of 0.";
+                break;
+            case MONGO_BSON_INVALID:
+                description = @"BSON not valid for the specified op.";
+                break;
+            case MONGO_BSON_NOT_FINISHED:
+                description = @"BSON object has not been finished.";
+                break;
+            default:
+                description = [NSString stringWithFormat:@"Unknown error %ld", code];
+                break;
+        }
+        error = [NSError errorWithDomain:errorDomain code:code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:description, NSLocalizedDescriptionKey, nil]];
+    } else {
+        error = [NSError errorWithDomain:errorDomain code:code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithFormat:@"Unknown error %ld (%@)", code, errorDomain], NSLocalizedDescriptionKey, nil]];
+    }
+    return error;
+}
+
 + (id)objectFromBsonIterator:(bson_iterator *)iterator
 {
     id result = nil;
@@ -159,10 +213,11 @@
     return [mongoQuery autorelease];
 }
 
-- (BOOL)authenticateSynchronouslyWithDatabaseName:(NSString *)databaseName userName:(NSString *)userName password:(NSString *)password mongoQuery:(MODQuery *)mongoQuery
+- (BOOL)authenticateSynchronouslyWithDatabaseName:(NSString *)databaseName userName:(NSString *)userName password:(NSString *)password error:(NSError **)error
 {
     BOOL result = YES;
     
+    NSAssert(error != nil, @"please set error variable to get back the value");
     if ([userName length] > 0 && [password length] > 0) {
         const char *dbName;
         
@@ -172,8 +227,22 @@
             dbName = "admin";
         }
         result = mongo_cmd_authenticate(_mongo, dbName, [userName UTF8String], [password UTF8String]) == MONGO_OK;
+        if (!result) {
+            *error = [[self class] errorWithErrorDomain:MODMongoErrorDomain code:_mongo->err];
+        }
     }
     return result;
+}
+
+- (BOOL)authenticateSynchronouslyWithDatabaseName:(NSString *)databaseName userName:(NSString *)userName password:(NSString *)password mongoQuery:(MODQuery *)mongoQuery
+{
+    NSError *error = nil;
+    
+    [self authenticateSynchronouslyWithDatabaseName:databaseName userName:userName password:password error:&error];
+    if (error) {
+        mongoQuery.error = error;
+    }
+    return error == nil;
 }
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withTarget:(id)target callback:(SEL)callbackSelector

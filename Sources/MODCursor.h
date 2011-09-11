@@ -11,9 +11,7 @@
 @class MODCursor;
 
 @protocol MODCursorDelegate <NSObject>
-
 - (void)mongoCursor:(MODCursor *)cursor nextDocumentFetched:(NSArray *)result withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
-
 @end
 
 @interface MODCursor : NSObject
