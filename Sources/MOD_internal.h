@@ -15,8 +15,6 @@
 #import "mongo.h"
 #import "json.h"
 
-void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, size_t length, int *error, size_t *totalProcessed);
-
 @interface MODServer()
 
 @property(nonatomic, readwrite, assign, getter=isConnected) BOOL connected;
@@ -31,7 +29,9 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 
 @interface MODServer(utils)
 
++ (NSUInteger)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error;
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails;
++ (NSError *)errorFromMongo:(mongo_ptr)mongo;
 + (NSDictionary *)objectsFromBson:(bson *)bsonObject;
 
 @end
