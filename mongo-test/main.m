@@ -74,7 +74,9 @@ MODServer *server;
     collection.delegate = self;
     [collection findWithQuery:@"{}" fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:@"{ \"_id\" : 1 }"];
     [collection countWithQuery:@"{ \"_id\" : \"com-fotopedia-burma\" }"];
-    [collection countWithQuery:@"{}"];
+    [collection countWithQuery:nil];
+    [collection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\" : \"toto\" }", nil]];
+    [collection findWithQuery:nil fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:100 sort:nil];
 }
 
 - (void)mongoCollection:(MODCollection *)collection queryResultFetched:(NSArray *)result withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error
@@ -83,6 +85,11 @@ MODServer *server;
 }
 
 - (void)mongoCollection:(MODCollection *)collection queryCountWithValue:(long long)value withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error
+{
+    [self logQuery:mongoQuery fromSelector:_cmd];
+}
+
+- (void)mongoCollection:(MODCollection *)collection insertWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error
 {
     [self logQuery:mongoQuery fromSelector:_cmd];
 }
