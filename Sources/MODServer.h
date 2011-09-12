@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-#define MODMongoErrorDomain @"mongo"
+#define MODMongoErrorDomain @"mod.mongo"
+#define MODJsonErrorDomain @"mod.json"
 
 @class MODQuery;
 @class MODDatabase;

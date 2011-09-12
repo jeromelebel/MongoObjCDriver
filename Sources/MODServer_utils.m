@@ -9,7 +9,6 @@
 #import "MOD_internal.h"
 
 typedef struct {
-    const char *mainKey;
     bson *userBson;
 } ParserUserContext;
 
@@ -23,13 +22,12 @@ static void * begin_structure(int nesting, int is_object, const char *key, int k
 {
     ParserUserContext * userContext = void_user_context;
     
-    if (key == NULL) {
-        key = userContext->mainKey;
-    }
-    if (is_object) {
-        bson_append_start_object(userContext->userBson, key);
-    } else {
-        bson_append_start_array(userContext->userBson, key);
+    if (key != NULL) {
+        if (is_object) {
+            bson_append_start_object(userContext->userBson, key);
+        } else {
+            bson_append_start_array(userContext->userBson, key);
+        }
     }
     return userContext->userBson;
 }
@@ -38,10 +36,12 @@ static int end_structure(int nesting, int is_object, const char *key, int key_le
 {
     ParserUserContext * userContext = void_user_context;
     
-    if (is_object) {
-        bson_append_finish_object(userContext->userBson);
-    } else {
-        bson_append_finish_array(userContext->userBson);
+    if (key != NULL) {
+        if (is_object) {
+            bson_append_finish_object(userContext->userBson);
+        } else {
+            bson_append_finish_array(userContext->userBson);
+        }
     }
     return 0;
 }
@@ -96,7 +96,7 @@ static int append(void *structure, int is_object_structure, int structure_value_
     return 0;
 }
 
-void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, size_t length, int *error, size_t *totalProcessed)
+static void bson_from_json(bson *bsonResult, const char *json, int *error, size_t *totalProcessed)
 {
     json_parser_dom helper;
     json_config config;
@@ -105,13 +105,12 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
     ParserUserContext userContext;
     
     userContext.userBson = bsonResult;
-    userContext.mainKey = mainKey;
 	memset(&config, 0, sizeof(json_config));
     config.allow_c_comments = 1;
     config.allow_yaml_comments = 1;
     json_parser_dom_init(&helper, begin_structure, end_structure, create_data, append, &userContext);
     json_parser_init(&parser, &config, json_parser_dom_callback, &helper);
-    *error = json_parser_string(&parser, json, length, &processed);
+    *error = json_parser_string(&parser, json, strlen(json), &processed);
     *totalProcessed = processed;
     json_parser_dom_free(&helper);
     json_parser_free(&parser);
@@ -119,12 +118,38 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 
 @implementation MODServer(utils)
 
++ (NSUInteger)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error
+{
+    int errorCode;
+    size_t processed;
+    
+    NSAssert(error != nil, @"you need to set error, to get the error back");
+    *error = nil;
+    bson_from_json(bsonResult, [json UTF8String], &errorCode, &processed);
+    if (errorCode) {
+        NSRange range;
+        
+        range.length = 20;
+        if (processed < range.length / 2) {
+            range.location = 0;
+            range.length -= (range.length / 2) - processed;
+        } else {
+            range.location = processed - (range.length / 2);
+        }
+        if (range.location + range.length > [json length]) {
+            range.length = [json length] - range.location;
+        }
+        *error = [self errorWithErrorDomain:MODJsonErrorDomain code:errorCode descriptionDetails:[json substringWithRange:range]];
+    }
+    return processed;
+}
+
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails
 {
     NSError *error;
+    NSString *description;
     
     if ([errorDomain isEqualToString:MODMongoErrorDomain]) {
-        NSString *description;
         switch (code) {
             case MONGO_CONN_SUCCESS:
                 description = @"Connection success!";
@@ -169,7 +194,51 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
         if (descriptionDetails) {
             description = [NSString stringWithFormat:@"%@ - %@", description, descriptionDetails];
         }
-        error = [NSError errorWithDomain:errorDomain code:code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:description, NSLocalizedDescriptionKey, nil]];
+    } else if ([errorDomain isEqualToString:MODJsonErrorDomain]) {
+        switch (code) {
+            case JSON_ERROR_NO_MEMORY:
+                description = @"running out of memory";
+                break;
+            case JSON_ERROR_BAD_CHAR:
+                description = @"character < 32, except space newline tab";
+                break;
+            case JSON_ERROR_POP_EMPTY:
+                description = @"trying to pop more object/array than pushed on the stack";
+                break;
+            case JSON_ERROR_POP_UNEXPECTED_MODE:
+                description = @"trying to pop wrong type of mode. popping array in object mode, vice versa";
+                break;
+            case JSON_ERROR_NESTING_LIMIT:
+                description = @"reach nesting limit on stack";
+                break;
+            case JSON_ERROR_DATA_LIMIT:
+                description = @"reach data limit on buffer";
+                break;
+            case JSON_ERROR_COMMENT_NOT_ALLOWED:
+                description = @"comment are not allowed with current configuration";
+                break;
+            case JSON_ERROR_UNEXPECTED_CHAR:
+                description = @"unexpected char in the current parser context";
+                break;
+            case JSON_ERROR_UNICODE_MISSING_LOW_SURROGATE:
+                description = @"unicode low surrogate missing after high surrogate";
+                break;
+            case JSON_ERROR_UNICODE_UNEXPECTED_LOW_SURROGATE:
+                description = @"unicode low surrogate missing without previous high surrogate";
+                break;
+            case JSON_ERROR_COMMA_OUT_OF_STRUCTURE:
+                description = @"found a comma not in structure (array/object)";
+                break;
+            case JSON_ERROR_CALLBACK:
+                description = @"callback returns error";
+                break;
+            default:
+                description = [NSString stringWithFormat:@"Unknown error %ld", code];
+                break;
+        }
+        if (descriptionDetails) {
+            description = [NSString stringWithFormat:@"%@ - \"%@\"", description, descriptionDetails];
+        }
     } else {
         NSString *description;
         
@@ -178,9 +247,19 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
         } else {
             description = [NSString stringWithFormat:@"Unknown error %ld (%@)", code, errorDomain];
         }
-        error = [NSError errorWithDomain:errorDomain code:code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:description, NSLocalizedDescriptionKey, nil]];
     }
+    error = [NSError errorWithDomain:errorDomain code:code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:description, NSLocalizedDescriptionKey, nil]];
     return error;
+}
+
++ (NSError *)errorFromMongo:(mongo_ptr)mongo
+{
+    NSError *result = nil;
+    
+    if (mongo->err != MONGO_CONN_SUCCESS) {
+        result = [self errorWithErrorDomain:MODMongoErrorDomain code:mongo->err descriptionDetails:nil];
+    }
+    return result;
 }
 
 + (id)objectFromBsonIterator:(bson_iterator *)iterator
