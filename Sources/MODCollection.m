@@ -42,7 +42,7 @@
     }
 }
 
-- (MODQuery *)findWithQuery:(NSString *)jsonQuery fields:(NSArray *)fields skip:(NSUInteger)skip limit:(NSUInteger)limit sort:(NSString *)sort
+- (MODQuery *)findWithQuery:(NSString *)jsonQuery fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort
 {
     MODQuery *query = nil;
     
@@ -79,7 +79,7 @@
     return query;
 }
 
-- (MODCursor *)cursorWithQuery:(NSString *)query fields:(NSArray *)fields skip:(NSUInteger)skip limit:(NSUInteger)limit sort:(NSString *)sort
+- (MODCursor *)cursorWithQuery:(NSString *)query fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort
 {
     MODCursor *cursor;
     
@@ -109,34 +109,96 @@
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson *bsonQuery = NULL;
-            int error;
-            size_t totalProcessed;
-            NSNumber *response;
+            NSError *error = nil;
             uint64_t count;
             
             bsonQuery = malloc(sizeof(*bsonQuery));
             bson_init(bsonQuery);
-            bson_from_json(bsonQuery, "$query", [jsonQuery UTF8String], [jsonQuery length], &error, &totalProcessed);
-            if (error == 0) {
-                bson_finish(bsonQuery);
-            } else {
-                bson_finish(bsonQuery);
-            }
+            [[_mongoDatabase.mongoServer class] bsonFromJson:bsonQuery json:jsonQuery error:&error];
+            bson_finish(bsonQuery);
             
-            if (bsonQuery) {
-                bson_destroy(bsonQuery);
-                free(bsonQuery);
+            if (error) {
+                mongoQuery.error = error;
+            } else {
+                NSNumber *response;
+                
+                count = mongo_count(_mongoDatabase.mongo, [_mongoDatabase.databaseName UTF8String], [_collectionName UTF8String], bsonQuery);
+                response = [[NSNumber alloc] initWithUnsignedLongLong:count];
+                [mongoQuery.mutableParameters setObject:response forKey:@"count"];
+                [response release];
             }
-            count = mongo_count(_mongoDatabase.mongoServer.mongo, [_mongoDatabase.databaseName UTF8String], [_collectionName UTF8String], bsonQuery);
-            response = [[NSNumber alloc] initWithUnsignedLongLong:count];
-            [mongoQuery.mutableParameters setObject:response forKey:@"count"];
-            [response release];
+            bson_destroy(bsonQuery);
+            free(bsonQuery);
         }
         [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(findCallback:)];
     }];
     if (query) {
         [query.mutableParameters setObject:query forKey:@"query"];
     }
+    [query.mutableParameters setObject:self forKey:@"collection"];
+    return query;
+}
+
+- (void)insertCallback:(MODQuery *)mongoQuery
+{
+    if ([_delegate respondsToSelector:@selector(mongoCollection:insertWithMongoQuery:error:)]) {
+        [_delegate mongoCollection:self insertWithMongoQuery:mongoQuery error:mongoQuery.error];
+    }
+}
+
+- (MODQuery *)insertWithDocuments:(NSArray *)documents
+{
+    MODQuery *query = nil;
+    
+    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+            bson **data;
+            bson **dataCursor;
+            NSInteger countCursor;
+            NSInteger documentCount = [documents count];
+            NSError *error = nil;
+            NSInteger ii = 0;
+            
+            data = calloc(documentCount, sizeof(void *));
+            for (NSString *document in documents) {
+                data[ii] = malloc(sizeof(bson));
+                bson_init(data[ii]);
+                [[_mongoDatabase.mongoServer class] bsonFromJson:data[ii] json:document error:&error];
+                bson_finish(data[ii]);
+                ii++;
+                if (error) {
+                    break;
+                }
+            }
+            if (!error) {
+                dataCursor = data;
+                countCursor = documentCount;
+                while (countCursor > INT32_MAX) {
+                    if (mongo_insert_batch(_mongoDatabase.mongo, [_mongoDatabase.databaseName UTF8String], dataCursor, INT32_MAX) != MONGO_OK) {
+                        error = [[_mongoDatabase.mongoServer class] errorFromMongo:_mongoDatabase.mongo];
+                        break;
+                    }
+                    countCursor -= INT32_MAX;
+                    dataCursor += INT32_MAX;
+                }
+                if (!error) {
+                    if (mongo_insert_batch(_mongoDatabase.mongo, [_mongoDatabase.databaseName UTF8String], dataCursor, (int32_t)countCursor) != MONGO_OK) {
+                        error = [[_mongoDatabase.mongoServer class] errorFromMongo:_mongoDatabase.mongo];
+                    }
+                }
+            }
+            for (NSInteger ii = 0; ii < documentCount; ii++) {
+                if (data[ii]) {
+                    bson_destroy(data[ii]);
+                    free(data[ii]);
+                }
+            }
+            free(data);
+            mongoQuery.error = error;
+        }
+        [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(insertCallback:)];
+    }];
+    [query.mutableParameters setObject:documents forKey:@"documents"];
     [query.mutableParameters setObject:self forKey:@"collection"];
     return query;
 }

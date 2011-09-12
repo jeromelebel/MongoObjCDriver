@@ -17,6 +17,7 @@
 @optional
 - (void)mongoCollection:(MODCollection *)collection queryResultFetched:(NSArray *)result withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
 - (void)mongoCollection:(MODCollection *)collection queryCountWithValue:(long long)value withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
+- (void)mongoCollection:(MODCollection *)collection insertWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
 - (void)mongoCollection:(MODCollection *)collection updateDonwWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
 @end
 
@@ -29,9 +30,10 @@
 
 - (id)initWithMongoDatabase:(MODDatabase *)mongoDatabase collectionName:(NSString *)collectionName;
 
-- (MODCursor *)cursorWithQuery:(NSString *)query fields:(NSArray *)fields skip:(NSUInteger)skip limit:(NSUInteger)limit sort:(NSString *)sort;
-- (MODQuery *)findWithQuery:(NSString *)query fields:(NSArray *)fields skip:(NSUInteger)skip limit:(NSUInteger)limit sort:(NSString *)sort;
+- (MODCursor *)cursorWithQuery:(NSString *)query fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort;
+- (MODQuery *)findWithQuery:(NSString *)query fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort;
 - (MODQuery *)countWithQuery:(NSString *)query;
+- (MODQuery *)insertWithDocuments:(NSArray *)documents;
 - (MODQuery *)updateWithQuery:(NSString *)query fields:(NSString *)fields upset:(BOOL)upset;
 - (MODQuery *)saveJsonString:(NSString *)jsonString withRecordId:(NSString *)recordId;
 
