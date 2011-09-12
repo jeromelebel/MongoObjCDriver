@@ -122,7 +122,9 @@
         NSError *error;
         
         result = [self nextDocumentAsynchronouslyWithError:&error];
-        [mongoQuery.mutableParameters setObject:result forKey:@"nextdocument"];
+        if (result) {
+            [mongoQuery.mutableParameters setObject:result forKey:@"nextdocument"];
+        }
         [_mongoCollection.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(fetchNextDocumentCallback:)];
     }];
     return query;
