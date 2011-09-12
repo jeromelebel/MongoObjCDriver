@@ -53,6 +53,8 @@
 		02BDC3E7141D6073000EF755 /* MODCursor.h in Headers */ = {isa = PBXBuildFile; fileRef = 02BDC3E5141D6073000EF755 /* MODCursor.h */; };
 		02BDC3E8141D6073000EF755 /* MODCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3E6141D6073000EF755 /* MODCursor.m */; };
 		02BDC3EA141D6938000EF755 /* MODCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3E6141D6073000EF755 /* MODCursor.m */; };
+		02BDC3EC141D83A7000EF755 /* MODServer_utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3EB141D83A7000EF755 /* MODServer_utils.m */; };
+		02BDC3ED141D83A7000EF755 /* MODServer_utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3EB141D83A7000EF755 /* MODServer_utils.m */; };
 		02F121C01410EF5200197811 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F121BF1410EF5200197811 /* Foundation.framework */; };
 		02F121C31410EF5200197811 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F121C21410EF5200197811 /* main.m */; };
 		02F121C71410EF5200197811 /* mongo_test.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02F121C61410EF5200197811 /* mongo_test.1 */; };
@@ -225,6 +227,7 @@
 		02ABA1CF14103B37000417F4 /* mongo-objc-driver-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mongo-objc-driver-Prefix.pch"; sourceTree = "<group>"; };
 		02BDC3E5141D6073000EF755 /* MODCursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODCursor.h; sourceTree = "<group>"; };
 		02BDC3E6141D6073000EF755 /* MODCursor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODCursor.m; sourceTree = "<group>"; };
+		02BDC3EB141D83A7000EF755 /* MODServer_utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODServer_utils.m; sourceTree = "<group>"; };
 		02F121BD1410EF5200197811 /* mongo-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mongo-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02F121BF1410EF5200197811 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02F121C21410EF5200197811 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -549,6 +552,7 @@
 				02A85F5B14104373004F3FE9 /* MOD_internal.h */,
 				02A85F4F14103EA6004F3FE9 /* MODServer.h */,
 				02A85F5014103EA6004F3FE9 /* MODServer.m */,
+				02BDC3EB141D83A7000EF755 /* MODServer_utils.m */,
 				02688DDA14119CF50014ED51 /* MODDatabase.h */,
 				02688DDB14119CF50014ED51 /* MODDatabase.m */,
 				02688DE01411C5010014ED51 /* MODCollection.h */,
@@ -739,6 +743,7 @@
 				02688DE31411C5010014ED51 /* MODCollection.m in Sources */,
 				02A85F5A14104184004F3FE9 /* MODQuery.m in Sources */,
 				02BDC3E8141D6073000EF755 /* MODCursor.m in Sources */,
+				02BDC3EC141D83A7000EF755 /* MODServer_utils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -760,6 +765,7 @@
 				02688DDE14119CF50014ED51 /* MODDatabase.m in Sources */,
 				02688DE41411C5010014ED51 /* MODCollection.m in Sources */,
 				02BDC3EA141D6938000EF755 /* MODCursor.m in Sources */,
+				02BDC3ED141D83A7000EF755 /* MODServer_utils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

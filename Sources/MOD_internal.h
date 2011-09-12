@@ -22,12 +22,17 @@ void bson_from_json(bson *bsonResult, const char *mainKey, const char *json, siz
 @property(nonatomic, readwrite, assign, getter=isConnected) BOOL connected;
 @property(nonatomic, readwrite, assign) mongo_ptr mongo;
 
-+ (NSDictionary *)objectsFromBson:(bson *)bsonObject;
-
 - (BOOL)authenticateSynchronouslyWithDatabaseName:(NSString *)databaseName userName:(NSString *)user password:(NSString *)password mongoQuery:(MODQuery *)mongoQuery;
 - (BOOL)authenticateSynchronouslyWithDatabaseName:(NSString *)databaseName userName:(NSString *)userName password:(NSString *)password error:(NSError **)error;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withTarget:(id)target callback:(SEL)callbackSelector;
 - (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block;
+
+@end
+
+@interface MODServer(utils)
+
++ (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails;
++ (NSDictionary *)objectsFromBson:(bson *)bsonObject;
 
 @end
 
