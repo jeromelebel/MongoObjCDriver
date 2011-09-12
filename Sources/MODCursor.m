@@ -43,31 +43,28 @@
 
 - (BOOL)_startCursorWithError:(NSError **)error
 {
-    int errorValue;
-    size_t totalProcessed;
-    
     NSAssert(error != NULL, @"please give a pointer to get the error back");
     NSAssert(_cursor == NULL, @"cursor already created");
+    
     *error = nil;
     _cursor = malloc(sizeof(mongo_cursor));
     mongo_cursor_init(_cursor, _mongoCollection.mongo, [_mongoCollection.absoluteCollectionName UTF8String]);
     _bsonQuery = malloc(sizeof(bson));
     bson_init(_bsonQuery);
     
-    bson_from_json(_bsonQuery, "$query", [_query UTF8String], [_query length], &errorValue, &totalProcessed);
-    if (errorValue == 0) {
+    bson_append_start_object(_bsonQuery, "$query");
+    [[_mongoCollection.mongoServer class] bsonFromJson:_bsonQuery json:_query error:error];
+    bson_append_finish_object(_bsonQuery);
+    if (*error == nil) {
         if ([_sort length] > 0) {
-            bson_from_json(_bsonQuery, "$orderby", [_sort UTF8String], [_sort length], &errorValue, &totalProcessed);
-            if (errorValue == 0) {
-            }
+            bson_append_start_object(_bsonQuery, "$orderby");
+            [[_mongoCollection.mongoServer class] bsonFromJson:_bsonQuery json:_sort error:error];
+            bson_append_finish_object(_bsonQuery);
         }
-        bson_finish(_bsonQuery);
-        NSLog(@"* %@", [MODServer objectsFromBson:_bsonQuery]);
-        mongo_cursor_set_query(_cursor, _bsonQuery);
-    } else {
-        bson_finish(_bsonQuery);
     }
-    if ([_fields count] > 0) {
+    mongo_cursor_set_query(_cursor, _bsonQuery);
+    bson_finish(_bsonQuery);
+    if ([_fields count] > 0 && *error == nil) {
         NSUInteger index = 0;
         char indexString[128];
         
@@ -122,6 +119,7 @@
         NSError *error;
         
         result = [self nextDocumentAsynchronouslyWithError:&error];
+        mongoQuery.error = error;
         if (result) {
             [mongoQuery.mutableParameters setObject:result forKey:@"nextdocument"];
         }

@@ -22,8 +22,8 @@
     MODCollection                       *_mongoCollection;
     NSString                            *_query;
     NSArray                             *_fields;
-    NSUInteger                          _skip;
-    NSUInteger                          _limit;
+    int32_t                             _skip;
+    int32_t                             _limit;
     NSString                            *_sort;
 
     void                                *_cursor;
@@ -37,8 +37,8 @@
 @property(nonatomic, readonly, retain) MODCollection *mongoCollection;
 @property(nonatomic, readonly, retain) NSString *query;
 @property(nonatomic, readonly, retain) NSArray *fields;
-@property(nonatomic, readonly, assign) NSUInteger skip;
-@property(nonatomic, readonly, assign) NSUInteger limit;
+@property(nonatomic, readonly, assign) int32_t skip;
+@property(nonatomic, readonly, assign) int32_t limit;
 @property(nonatomic, readonly, retain) NSString * sort;
 
 @end
