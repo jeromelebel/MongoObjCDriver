@@ -114,7 +114,9 @@
             
             bsonQuery = malloc(sizeof(*bsonQuery));
             bson_init(bsonQuery);
-            [[_mongoDatabase.mongoServer class] bsonFromJson:bsonQuery json:jsonQuery error:&error];
+            if (jsonQuery) {
+                [[_mongoDatabase.mongoServer class] bsonFromJson:bsonQuery json:jsonQuery error:&error];
+            }
             bson_finish(bsonQuery);
             
             if (error) {
@@ -174,7 +176,7 @@
                 dataCursor = data;
                 countCursor = documentCount;
                 while (countCursor > INT32_MAX) {
-                    if (mongo_insert_batch(_mongoDatabase.mongo, [_mongoDatabase.databaseName UTF8String], dataCursor, INT32_MAX) != MONGO_OK) {
+                    if (mongo_insert_batch(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], dataCursor, INT32_MAX) != MONGO_OK) {
                         error = [[_mongoDatabase.mongoServer class] errorFromMongo:_mongoDatabase.mongo];
                         break;
                     }
@@ -182,7 +184,7 @@
                     dataCursor += INT32_MAX;
                 }
                 if (!error) {
-                    if (mongo_insert_batch(_mongoDatabase.mongo, [_mongoDatabase.databaseName UTF8String], dataCursor, (int32_t)countCursor) != MONGO_OK) {
+                    if (mongo_insert_batch(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], dataCursor, (int32_t)countCursor) != MONGO_OK) {
                         error = [[_mongoDatabase.mongoServer class] errorFromMongo:_mongoDatabase.mongo];
                     }
                 }
