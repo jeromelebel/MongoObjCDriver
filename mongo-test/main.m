@@ -18,9 +18,13 @@ MODServer *server;
 
 @implementation MongoDelegate
 
-- (void)logQuery:(MODQuery *)query fromSelector:(SEL)selector
+- (void)logQuery:(MODQuery *)mongoQuery fromSelector:(SEL)selector
 {
-    NSLog(@"%@ %@", NSStringFromSelector(selector), query.parameters);
+    if (mongoQuery.error) {
+        NSLog(@"********* ERROR ************");
+        NSLog(@"%@", mongoQuery.error);
+    }
+    NSLog(@"%@ %@", NSStringFromSelector(selector), mongoQuery.parameters);
 }
 
 - (void)mongoServerConnectionSucceded:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery

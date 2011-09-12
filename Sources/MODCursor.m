@@ -106,10 +106,10 @@
     return result;
 }
 
-- (void)fetchNextDocumentCallback:(MODQuery *)query
+- (void)fetchNextDocumentCallback:(MODQuery *)mongoQuery
 {
     if ([_delegate respondsToSelector:@selector(mongoCursor:nextDocumentFetched:withMongoQuery:error:)]) {
-        [_delegate mongoCursor:self nextDocumentFetched:[query.parameters objectForKey:@"nextdocument"] withMongoQuery:query error:query.error];
+        [_delegate mongoCursor:self nextDocumentFetched:[mongoQuery.parameters objectForKey:@"nextdocument"] withMongoQuery:mongoQuery error:mongoQuery.error];
     }
 }
 
