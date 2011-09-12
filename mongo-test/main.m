@@ -73,6 +73,7 @@ MODServer *server;
     collection = [mongoDatabase collectionForName:collectionName];
     collection.delegate = self;
     [collection findWithQuery:@"{}" fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:@"{ \"_id\" : 1 }"];
+    [collection countWithQuery:@"{ \"_id\" : \"com-fotopedia-burma\" }"];
     [collection countWithQuery:@"{}"];
 }
 
