@@ -9,45 +9,74 @@
 #import "MOD_internal.h"
 
 typedef struct {
-    bson *userBson;
-} ParserUserContext;
-
-typedef struct {
     int type;
     const char *data;
     uint32_t length;
 } ParserDataInfo;
 
-static void * begin_structure(int nesting, int is_object, const char *key, int key_length, void *void_user_context)
+static void process_json(const char *json, json_parser_dom *helper, int *errorCode, size_t *totalProcessed)
 {
-    ParserUserContext * userContext = void_user_context;
+    json_parser parser;
+    json_config config;
+    uint32_t processed;
+    size_t jsonToProcessLength = strlen(json);
     
-    if (key != NULL) {
-        if (is_object) {
-            bson_append_start_object(userContext->userBson, key);
-        } else {
-            bson_append_start_array(userContext->userBson, key);
+    assert(totalProcessed != nil);
+    assert(errorCode != nil);
+    *totalProcessed = 0;
+    *errorCode = 0;
+    
+	memset(&config, 0, sizeof(json_config));
+    config.allow_c_comments = 1;
+    config.allow_yaml_comments = 1;
+    json_parser_init(&parser, &config, json_parser_dom_callback, helper);
+    
+    while (jsonToProcessLength > UINT32_MAX) {
+        *errorCode = json_parser_string(&parser, json, UINT32_MAX, &processed);
+        *totalProcessed += processed;
+        jsonToProcessLength -= UINT32_MAX;
+        if (*errorCode != 0) {
+            break;
         }
     }
-    return userContext->userBson;
+    if (*errorCode == 0) {
+        *errorCode = json_parser_string(&parser, json, (uint32_t)jsonToProcessLength, &processed);
+        *totalProcessed += processed;
+    }
+    
+    json_parser_free(&parser);
 }
 
-static int end_structure(int nesting, int is_object, const char *key, int key_length, void *structure, void *void_user_context)
+static void * begin_structure_for_bson(int nesting, int is_object, void *structure, int is_object_structure, const char *key, int key_length, void *void_user_context)
 {
-    ParserUserContext * userContext = void_user_context;
+    bson *bsonResult = void_user_context;
     
     if (key != NULL) {
         if (is_object) {
-            bson_append_finish_object(userContext->userBson);
+            bson_append_start_object(bsonResult, key);
         } else {
-            bson_append_finish_array(userContext->userBson);
+            bson_append_start_array(bsonResult, key);
+        }
+    }
+    return bsonResult;
+}
+
+static int end_structure_for_bson(int nesting, int is_object, const char *key, int key_length, void *structure, void *void_user_context)
+{
+    bson *bsonResult = void_user_context;
+    
+    if (key != NULL) {
+        if (is_object) {
+            bson_append_finish_object(bsonResult);
+        } else {
+            bson_append_finish_array(bsonResult);
         }
     }
     return 0;
 }
 
 /** callback from the parser_dom callback to create data values */
-static void * create_data(int type, const char *data, uint32_t length, void *user_context)
+static void * create_data_for_bson(int type, const char *data, uint32_t length, void *user_context)
 {
     ParserDataInfo *result;
     
@@ -60,10 +89,10 @@ static void * create_data(int type, const char *data, uint32_t length, void *use
 
 /** callback from the parser helper callback to append a value to an object or array value
  * append(parent, key, key_length, val); */
-static int append(void *structure, int is_object_structure, int structure_value_count, char *key, uint32_t key_length, void *obj, void *void_user_context)
+static int append_data_for_bson(void *structure, int is_object_structure, int structure_value_count, char *key, uint32_t key_length, void *obj, void *void_user_context)
 {
     ParserDataInfo *dataInfo = obj;
-    ParserUserContext * userContext = void_user_context;
+    bson *bsonResult = void_user_context;
     char arrayKey[32];
     
     if (is_object_structure == false) {
@@ -72,22 +101,22 @@ static int append(void *structure, int is_object_structure, int structure_value_
     }
     switch (dataInfo->type) {
         case JSON_STRING:
-            bson_append_string_n(userContext->userBson, key, dataInfo->data, dataInfo->length);
+            bson_append_string_n(bsonResult, key, dataInfo->data, dataInfo->length);
             break;
         case JSON_INT:
-            bson_append_long(userContext->userBson, key, atoll(dataInfo->data));
+            bson_append_long(bsonResult, key, atoll(dataInfo->data));
             break;
         case JSON_FLOAT:
-            bson_append_double(userContext->userBson, key, atof(dataInfo->data));
+            bson_append_double(bsonResult, key, atof(dataInfo->data));
             break;
         case JSON_NULL:
-            bson_append_null(userContext->userBson, key);
+            bson_append_null(bsonResult, key);
             break;
         case JSON_TRUE:
-            bson_append_bool(userContext->userBson, key, 0);
+            bson_append_bool(bsonResult, key, 0);
             break;
         case JSON_FALSE:
-            bson_append_bool(userContext->userBson, key, 0);
+            bson_append_bool(bsonResult, key, 0);
             break;
         default:
             break;
@@ -99,26 +128,94 @@ static int append(void *structure, int is_object_structure, int structure_value_
 static void bson_from_json(bson *bsonResult, const char *json, int *error, size_t *totalProcessed)
 {
     json_parser_dom helper;
-    json_config config;
-    json_parser parser;
-    uint32_t processed;
-    ParserUserContext userContext;
     
-    userContext.userBson = bsonResult;
-	memset(&config, 0, sizeof(json_config));
-    config.allow_c_comments = 1;
-    config.allow_yaml_comments = 1;
-    json_parser_dom_init(&helper, begin_structure, end_structure, create_data, append, &userContext);
-    json_parser_init(&parser, &config, json_parser_dom_callback, &helper);
-    *error = json_parser_string(&parser, json, strlen(json), &processed);
-    *totalProcessed = processed;
+    json_parser_dom_init(&helper, begin_structure_for_bson, end_structure_for_bson, create_data_for_bson, append_data_for_bson, bsonResult);
+    process_json(json, &helper, error, totalProcessed);
     json_parser_dom_free(&helper);
-    json_parser_free(&parser);
+}
+
+static void * begin_structure_for_objects(int nesting, int is_object, void *structure, int is_object_structure, const char *key, int key_length, void *void_user_context)
+{
+    id result;
+    
+    if (key != NULL) {
+        if (is_object) {
+            result = [NSMutableDictionary dictionary];
+        } else {
+            result = [NSMutableArray array];
+        }
+        if (is_object_structure) {
+            [(NSMutableDictionary *)structure setObject:result forKey:[NSString stringWithUTF8String:key]];
+        } else {
+            [(NSMutableArray *)structure addObject:result];
+        }
+    } else {
+        result = void_user_context;
+    }
+    return result;
+}
+
+static int end_structure_for_objects(int nesting, int is_object, const char *key, int key_length, void *structure, void *void_user_context)
+{
+    return 0;
+}
+
+/** callback from the parser_dom callback to create data values */
+static void * create_data_for_objects(int type, const char *data, uint32_t length, void *user_context)
+{
+    id objectData = nil;
+    
+    switch (type) {
+        case JSON_STRING:
+            objectData = [NSString stringWithUTF8String:data];
+            break;
+        case JSON_INT:
+            objectData = [NSNumber numberWithLongLong:atoll(data)];
+            break;
+        case JSON_FLOAT:
+            objectData = [NSNumber numberWithDouble:atof(data)];
+            break;
+        case JSON_NULL:
+            objectData = [NSNull null];
+            break;
+        case JSON_TRUE:
+            objectData = [NSNumber numberWithBool:YES];
+            break;
+        case JSON_FALSE:
+            objectData = [NSNumber numberWithBool:NO];
+            break;
+        default:
+            break;
+    }
+    return objectData;
+}
+
+/** callback from the parser helper callback to append a value to an object or array value
+ * append(parent, key, key_length, val); */
+static int append_data_for_objects(void *structure, int is_object_structure, int structure_value_count, char *key, uint32_t key_length, void *obj, void *void_user_context)
+{
+    if (is_object_structure) {
+        [(NSMutableDictionary *)structure setObject:obj forKey:[NSString stringWithUTF8String:key]];
+    } else {
+        [(NSMutableArray *)structure addObject:obj];
+    }
+    return 0;
+}
+
+static id objects_from_json(const char *json, int *error, size_t *totalProcessed)
+{
+    json_parser_dom helper;
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    
+    json_parser_dom_init(&helper, begin_structure_for_objects, end_structure_for_objects, create_data_for_objects, append_data_for_objects, result);
+    process_json(json, &helper, error, totalProcessed);
+    json_parser_dom_free(&helper);
+    return result;
 }
 
 @implementation MODServer(utils)
 
-+ (NSUInteger)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error
++ (NSInteger)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error
 {
     int errorCode;
     size_t processed;
@@ -142,6 +239,33 @@ static void bson_from_json(bson *bsonResult, const char *json, int *error, size_
         *error = [self errorWithErrorDomain:MODJsonErrorDomain code:errorCode descriptionDetails:[json substringWithRange:range]];
     }
     return processed;
+}
+
++ (id)objectsFromJson:(NSString *)json error:(NSError **)error
+{
+    int errorCode;
+    id result;
+    size_t processed;
+    
+    NSAssert(error != nil, @"you need to set error, to get the error back");
+    *error = nil;
+    result = objects_from_json([json UTF8String], &errorCode, &processed);
+    if (errorCode) {
+        NSRange range;
+        
+        range.length = 20;
+        if (processed < range.length / 2) {
+            range.location = 0;
+            range.length -= (range.length / 2) - processed;
+        } else {
+            range.location = processed - (range.length / 2);
+        }
+        if (range.location + range.length > [json length]) {
+            range.length = [json length] - range.location;
+        }
+        *error = [self errorWithErrorDomain:MODJsonErrorDomain code:errorCode descriptionDetails:[json substringWithRange:range]];
+    }
+    return result;
 }
 
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails

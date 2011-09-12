@@ -29,7 +29,8 @@
 
 @interface MODServer(utils)
 
-+ (NSUInteger)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error;
++ (NSInteger)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error;
++ (id)objectsFromJson:(NSString *)json error:(NSError **)error;
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails;
 + (NSError *)errorFromMongo:(mongo_ptr)mongo;
 + (NSDictionary *)objectsFromBson:(bson *)bsonObject;
