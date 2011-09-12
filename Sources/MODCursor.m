@@ -53,12 +53,16 @@
     bson_init(_bsonQuery);
     
     bson_append_start_object(_bsonQuery, "$query");
-    [[_mongoCollection.mongoServer class] bsonFromJson:_bsonQuery json:_query error:error];
+    if (_query) {
+        [[_mongoCollection.mongoServer class] bsonFromJson:_bsonQuery json:_query error:error];
+    }
     bson_append_finish_object(_bsonQuery);
     if (*error == nil) {
         if ([_sort length] > 0) {
             bson_append_start_object(_bsonQuery, "$orderby");
-            [[_mongoCollection.mongoServer class] bsonFromJson:_bsonQuery json:_sort error:error];
+            if (_sort) {
+                [[_mongoCollection.mongoServer class] bsonFromJson:_bsonQuery json:_sort error:error];
+            }
             bson_append_finish_object(_bsonQuery);
         }
     }
