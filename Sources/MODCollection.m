@@ -212,38 +212,71 @@
     }
 }
 
-- (MODQuery *)updateWithSelector:(NSString *)selector update:(NSString *)update upsert:(BOOL)upsert multiUpdate:(BOOL)multiUpdate
+- (MODQuery *)updateWithCriteria:(NSString *)criteria update:(NSString *)update upsert:(BOOL)upsert multiUpdate:(BOOL)multiUpdate
 {
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
-            bson bsonSelector;
+            bson bsonCriteria;
             bson bsonUpdate;
             NSError *error;
             
-            bson_init(&bsonSelector);
-            [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonSelector json:selector error:&error];
-            bson_finish(&bsonSelector);
+            bson_init(&bsonCriteria);
+            [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonCriteria json:criteria error:&error];
+            bson_finish(&bsonCriteria);
             if (error == nil) {
                 bson_init(&bsonUpdate);
                 [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonUpdate json:update error:&error];
                 bson_finish(&bsonUpdate);
             }
             if (error == nil) {
-                mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonSelector, &bsonUpdate, (upsert?MONGO_UPDATE_UPSERT:0) | (multiUpdate?MONGO_UPDATE_MULTI:0));
+                mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonUpdate, (upsert?MONGO_UPDATE_UPSERT:0) | (multiUpdate?MONGO_UPDATE_MULTI:0));
             } else {
                 mongoQuery.error = error;
             }
-            bson_destroy(&bsonSelector);
+            bson_destroy(&bsonCriteria);
             bson_destroy(&bsonUpdate);
         }
         [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(updateCallback:)];
     }];
-    [query.mutableParameters setObject:selector forKey:@"selector"];
+    [query.mutableParameters setObject:criteria forKey:@"criteria"];
     [query.mutableParameters setObject:update forKey:@"update"];
     [query.mutableParameters setObject:[NSNumber numberWithBool:upsert] forKey:@"upsert"];
     [query.mutableParameters setObject:[NSNumber numberWithBool:multiUpdate] forKey:@"multiUpdate"];
+    [query.mutableParameters setObject:self forKey:@"collection"];
+    return query;
+}
+
+- (void)removeCallback:(MODQuery *)mongoQuery
+{
+    if ([_delegate respondsToSelector:@selector(mongoCollection:updateWithMongoQuery:error:)]) {
+        [_delegate mongoCollection:self updateWithMongoQuery:mongoQuery error:mongoQuery.error];
+    }
+}
+
+- (MODQuery *)removeWithCriteria:(NSString *)criteria
+{
+    MODQuery *query = nil;
+    
+    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+            bson bsonCriteria;
+            NSError *error;
+            
+            bson_init(&bsonCriteria);
+            [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonCriteria json:criteria error:&error];
+            bson_finish(&bsonCriteria);
+            if (error == nil) {
+                mongo_remove(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria);
+            } else {
+                mongoQuery.error = error;
+            }
+            bson_destroy(&bsonCriteria);
+        }
+        [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(removeCallback:)];
+    }];
+    [query.mutableParameters setObject:criteria forKey:@"criteria"];
     [query.mutableParameters setObject:self forKey:@"collection"];
     return query;
 }

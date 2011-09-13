@@ -19,6 +19,7 @@
 - (void)mongoCollection:(MODCollection *)collection queryCountWithValue:(long long)value withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
 - (void)mongoCollection:(MODCollection *)collection insertWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
 - (void)mongoCollection:(MODCollection *)collection updateWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
+- (void)mongoCollection:(MODCollection *)collection removeCallback:(MODQuery *)mongoQuery error:(NSError *)error;
 @end
 
 @interface MODCollection : NSObject
@@ -34,7 +35,8 @@
 - (MODQuery *)findWithQuery:(NSString *)query fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort;
 - (MODQuery *)countWithQuery:(NSString *)query;
 - (MODQuery *)insertWithDocuments:(NSArray *)documents;
-- (MODQuery *)updateWithSelector:(NSString *)selector update:(NSString *)update upsert:(BOOL)upsert multiUpdate:(BOOL)multiUpdate;
+- (MODQuery *)updateWithCriteria:(NSString *)criteria update:(NSString *)update upsert:(BOOL)upsert multiUpdate:(BOOL)multiUpdate;
+- (MODQuery *)removeWithCriteria:(NSString *)criteria;
 
 @property(nonatomic, readonly, retain) MODServer *mongoServer;
 @property(nonatomic, retain, readonly) MODDatabase *mongoDatabase;
