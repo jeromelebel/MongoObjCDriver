@@ -77,6 +77,7 @@ MODServer *server;
     [collection countWithQuery:nil];
     [collection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\" : \"toto\" }", nil]];
     [collection findWithQuery:nil fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:100 sort:nil];
+    [collection updateWithSelector:@"{\"_id\": \"toto\"}" update:@"{\"$inc\": {\"x\" : 1}}" upsert:NO multiUpdate:NO];
 }
 
 - (void)mongoCollection:(MODCollection *)collection queryResultFetched:(NSArray *)result withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error
@@ -90,6 +91,11 @@ MODServer *server;
 }
 
 - (void)mongoCollection:(MODCollection *)collection insertWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error
+{
+    [self logQuery:mongoQuery fromSelector:_cmd];
+}
+
+- (void)mongoCollection:(MODCollection *)collection updateWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error
 {
     [self logQuery:mongoQuery fromSelector:_cmd];
 }

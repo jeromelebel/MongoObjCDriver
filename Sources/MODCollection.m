@@ -207,72 +207,46 @@
 
 - (void)updateCallback:(MODQuery *)mongoQuery
 {
-    [mongoQuery ends];
-    if ([_delegate respondsToSelector:@selector(mongoCollection:updateDonwWithMongoQuery:error:)]) {
-        [_delegate mongoCollection:self updateDonwWithMongoQuery:mongoQuery error:mongoQuery.error];
+    if ([_delegate respondsToSelector:@selector(mongoCollection:updateWithMongoQuery:error:)]) {
+        [_delegate mongoCollection:self updateWithMongoQuery:mongoQuery error:mongoQuery.error];
     }
 }
 
-//- (MODQuery *)updateWithQuery:(NSString *)jsonQuery fields:(NSString *)fields upset:(BOOL)upset
-//{
-//    MODQuery *query = nil;
-//    
-//    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-//        NSError *error;
-//        
-//        try {
-//            if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
-//                mongo::BSONObj criticalBSON = mongo::fromjson([jsonQuery UTF8String]);
-//                mongo::BSONObj fieldsBSON = mongo::fromjson([[NSString stringWithFormat:@"{$set:%@}", fields] UTF8String]);
-//                if (_mongoDatabase.mongoServer.replicaConnexion) {
-//                    _mongoDatabase.mongoServer.replicaConnexion->update(std::string([_absoluteCollection UTF8String]), criticalBSON, fieldsBSON, (upset == YES)?true:false);
-//                }else {
-//                    _mongoDatabase.mongoServer.connexion->update(std::string([_absoluteCollection UTF8String]), criticalBSON, fieldsBSON, (upset == YES)?true:false);
-//                }
-//            }
-//        } catch (mongo::DBException &e) {
-//            error = [[NSString alloc] initWithUTF8String:e.what()];
-//            [mongoQuery.mutableParameters setObject:error forKey:@"error"];
-//            [error release];
-//        }
-//        [self performSelectorOnMainThread:@selector(updateCallback:) withObject:mongoQuery waitUntilDone:NO];
-//    }];
-//    [query.mutableParameters setObject:query forKey:@"query"];
-//    [query.mutableParameters setObject:fields forKey:@"fields"];
-//    [query.mutableParameters setObject:[NSNumber numberWithBool:upset] forKey:@"upset"];
-//    [query.mutableParameters setObject:self forKey:@"collection"];
-//    return query;
-//}
-
-//- (MODQuery *)saveJsonString:(NSString *)jsonString withRecordId:(NSString *)recordId
-//{
-//    MongoQuery *query = nil;
-//    
-//    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-//        NSError *error;
-//        try {
-//            if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
-//                mongo::BSONObj fields = mongo::fromjson([jsonString UTF8String]);
-//                mongo::BSONObj critical = mongo::fromjson([[NSString stringWithFormat:@"{\"_id\":%@}", recordId] UTF8String]);
-//                
-//                if (_mongoDatabase.mongoServer.replicaConnexion) {
-//                    _mongoDatabase.mongoServer.replicaConnexion->update(std::string([_absoluteCollection UTF8String]), critical, fields, false);
-//                }else {
-//                    _mongoDatabase.mongoServer.connexion->update(std::string([_absoluteCollection UTF8String]), critical, fields, false);
-//                }
-//            }
-//        } catch (mongo::DBException &e) {
-//            error = [[NSString alloc] initWithUTF8String:e.what()];
-//            [mongoQuery.mutableParameters setObject:error forKey:@"error"];
-//            [error release];
-//        }
-//        [self performSelectorOnMainThread:@selector(updateCallback:) withObject:mongoQuery waitUntilDone:NO];
-//    }];
-//    [query.mutableParameters setObject:jsonString forKey:@"jsonstring"];
-//    [query.mutableParameters setObject:recordId forKey:@"recordid"];
-//    [query.mutableParameters setObject:self forKey:@"collection"];
-//    return query;
-//}
+- (MODQuery *)updateWithSelector:(NSString *)selector update:(NSString *)update upsert:(BOOL)upsert multiUpdate:(BOOL)multiUpdate
+{
+    MODQuery *query = nil;
+    
+    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+            bson bsonSelector;
+            bson bsonUpdate;
+            NSError *error;
+            
+            bson_init(&bsonSelector);
+            [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonSelector json:selector error:&error];
+            bson_finish(&bsonSelector);
+            if (error == nil) {
+                bson_init(&bsonUpdate);
+                [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonUpdate json:update error:&error];
+                bson_finish(&bsonUpdate);
+            }
+            if (error == nil) {
+                mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonSelector, &bsonUpdate, (upsert?MONGO_UPDATE_UPSERT:0) | (multiUpdate?MONGO_UPDATE_MULTI:0));
+            } else {
+                mongoQuery.error = error;
+            }
+            bson_destroy(&bsonSelector);
+            bson_destroy(&bsonUpdate);
+        }
+        [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(updateCallback:)];
+    }];
+    [query.mutableParameters setObject:selector forKey:@"selector"];
+    [query.mutableParameters setObject:update forKey:@"update"];
+    [query.mutableParameters setObject:[NSNumber numberWithBool:upsert] forKey:@"upsert"];
+    [query.mutableParameters setObject:[NSNumber numberWithBool:multiUpdate] forKey:@"multiUpdate"];
+    [query.mutableParameters setObject:self forKey:@"collection"];
+    return query;
+}
 
 - (mongo *)mongo
 {
