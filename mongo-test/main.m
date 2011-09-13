@@ -78,6 +78,8 @@ MODServer *server;
     [collection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\" : \"toto\" }", nil]];
     [collection findWithQuery:nil fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:100 sort:nil];
     [collection updateWithCriteria:@"{\"_id\": \"toto\"}" update:@"{\"$inc\": {\"x\" : 1}}" upsert:NO multiUpdate:NO];
+    [collection saveWithDocument:@"{\"_id\": \"toto\", \"y\": null}"];
+    [collection findWithQuery:@"{\"_id\": \"toto\"}" fields:nil skip:1 limit:5 sort:@"{ \"_id\" : 1 }"];
     [collection removeWithCriteria:@"{\"_id\": \"toto\"}"];
 }
 

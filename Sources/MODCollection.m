@@ -225,11 +225,11 @@
             bson_init(&bsonCriteria);
             [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonCriteria json:criteria error:&error];
             bson_finish(&bsonCriteria);
+            bson_init(&bsonUpdate);
             if (error == nil) {
-                bson_init(&bsonUpdate);
                 [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonUpdate json:update error:&error];
-                bson_finish(&bsonUpdate);
             }
+            bson_finish(&bsonUpdate);
             if (error == nil) {
                 mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonUpdate, (upsert?MONGO_UPDATE_UPSERT:0) | (multiUpdate?MONGO_UPDATE_MULTI:0));
             } else {
@@ -247,6 +247,75 @@
     [query.mutableParameters setObject:self forKey:@"collection"];
     return query;
 }
+
+- (MODQuery *)saveWithDocument:(NSString *)document
+{
+    MODQuery *query = nil;
+    
+    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+            bson bsonCriteria;
+            bson bsonDocument;
+            NSError *error;
+            
+            bson_init(&bsonDocument);
+            [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonDocument json:document error:&error];
+            bson_finish(&bsonDocument);
+            bson_init(&bsonCriteria);
+            if (error == nil) {
+                bson_iterator iterator;
+                
+                bson_iterator_init(&iterator, &bsonDocument);
+                while (bson_iterator_next(&iterator)) {
+                    if (strcmp(bson_iterator_key(&iterator), "_id") == 0) {
+                        bson_timestamp_t timestamp;
+                        
+                        switch (bson_iterator_type(&iterator)) {
+                            case BSON_STRING:
+                                bson_append_string(&bsonCriteria, "_id", bson_iterator_string(&iterator));
+                                break;
+                            case BSON_DATE:
+                                bson_append_date(&bsonCriteria, "_id", bson_iterator_date(&iterator));
+                                break;
+                            case BSON_INT:
+                                bson_append_int(&bsonCriteria, "_id", bson_iterator_int(&iterator));
+                                break;
+                            case BSON_TIMESTAMP:
+                                timestamp = bson_iterator_timestamp(&iterator);
+                                bson_append_timestamp(&bsonCriteria, "_id", &timestamp);
+                                break;
+                            case BSON_LONG:
+                                bson_append_long(&bsonCriteria, "_id", bson_iterator_long(&iterator));
+                                break;
+                            case BSON_DOUBLE:
+                                bson_append_double(&bsonCriteria, "_id", bson_iterator_double(&iterator));
+                                break;
+                            case BSON_SYMBOL:
+                                bson_append_symbol(&bsonCriteria, "_id", bson_iterator_string(&iterator));
+                                break;
+                            default:
+                                error = [[_mongoDatabase.mongoServer class] errorWithErrorDomain:MODMongoErrorDomain code:MONGO_BSON_INVALID descriptionDetails:@"_id missing in document"];
+                                break;
+                        }
+                    }
+                }
+            }
+            bson_finish(&bsonCriteria);
+            if (error == nil) {
+                mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonDocument, MONGO_UPDATE_UPSERT);
+            } else {
+                mongoQuery.error = error;
+            }
+            bson_destroy(&bsonCriteria);
+            bson_destroy(&bsonDocument);
+        }
+        [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(updateCallback:)];
+    }];
+    [query.mutableParameters setObject:document forKey:@"document"];
+    [query.mutableParameters setObject:self forKey:@"collection"];
+    return query;
+}
+
 
 - (void)removeCallback:(MODQuery *)mongoQuery
 {

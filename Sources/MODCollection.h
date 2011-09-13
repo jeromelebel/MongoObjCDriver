@@ -36,6 +36,7 @@
 - (MODQuery *)countWithQuery:(NSString *)query;
 - (MODQuery *)insertWithDocuments:(NSArray *)documents;
 - (MODQuery *)updateWithCriteria:(NSString *)criteria update:(NSString *)update upsert:(BOOL)upsert multiUpdate:(BOOL)multiUpdate;
+- (MODQuery *)saveWithDocument:(NSString *)document;
 - (MODQuery *)removeWithCriteria:(NSString *)criteria;
 
 @property(nonatomic, readonly, retain) MODServer *mongoServer;
