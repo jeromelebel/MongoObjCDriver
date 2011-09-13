@@ -11,6 +11,9 @@
 
 MODServer *server;
 
+#define DATABASE_NAME_TEST @"database_test"
+#define COLLECTION_NAME_TEST @"collection_test"
+
 @interface MongoDelegate : NSObject<MODServerDelegate, MODDatabaseDelegate, MODCollectionDelegate>
 - (void)mongoServerConnectionSucceded:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery;
 - (void)mongoServerConnectionFailed:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
@@ -44,17 +47,7 @@ MODServer *server;
 
 - (void)mongoServer:(MODServer *)mongoServer databaseListFetched:(NSArray *)list withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error
 {
-    NSString *databaseName;
-    MODDatabase *database;
-    
     [self logQuery:mongoQuery fromSelector:_cmd];
-    databaseName = [list objectAtIndex:1];
-    databaseName = @"ios_support";
-    database = [mongoServer databaseForName:databaseName];
-    NSLog(@"database: %@", database.databaseName);
-    database.delegate = self;
-    [database fetchDatabaseStats];
-    [database fetchCollectionList];
 }
 
 - (void)mongoDatabase:(MODDatabase *)mongoDatabase databaseStatsFetched:(NSArray *)databaseStats withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error
@@ -64,23 +57,7 @@ MODServer *server;
 
 - (void)mongoDatabase:(MODDatabase *)mongoDatabase collectionListFetched:(NSArray *)collectionList withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error
 {
-    NSString *collectionName;
-    MODCollection *collection;
-    
     [self logQuery:mongoQuery fromSelector:_cmd];
-    collectionName = [collectionList objectAtIndex:0];
-    collectionName = @"ios_applications";
-    collection = [mongoDatabase collectionForName:collectionName];
-    collection.delegate = self;
-    [collection findWithQuery:@"{}" fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:@"{ \"_id\" : 1 }"];
-    [collection countWithQuery:@"{ \"_id\" : \"com-fotopedia-burma\" }"];
-    [collection countWithQuery:nil];
-    [collection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\" : \"toto\" }", nil]];
-    [collection findWithQuery:nil fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:100 sort:nil];
-    [collection updateWithCriteria:@"{\"_id\": \"toto\"}" update:@"{\"$inc\": {\"x\" : 1}}" upsert:NO multiUpdate:NO];
-    [collection saveWithDocument:@"{\"_id\": \"toto\", \"y\": null}"];
-    [collection findWithQuery:@"{\"_id\": \"toto\"}" fields:nil skip:1 limit:5 sort:@"{ \"_id\" : 1 }"];
-    [collection removeWithCriteria:@"{\"_id\": \"toto\"}"];
 }
 
 - (void)mongoCollection:(MODCollection *)collection queryResultFetched:(NSArray *)result withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error
@@ -108,6 +85,11 @@ MODServer *server;
     [self logQuery:mongoQuery fromSelector:_cmd];
 }
 
+- (void)mongoDatabase:(MODDatabase *)mongoDatabase collectionDropedWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error
+{
+    [self logQuery:mongoQuery fromSelector:_cmd];
+}
+
 @end
 
 int main (int argc, const char * argv[])
@@ -115,6 +97,8 @@ int main (int argc, const char * argv[])
     @autoreleasepool {
         MongoDelegate *delegate;
         const char *ip;
+        MODDatabase *mongoDatabase;
+        MODCollection *mongoCollection;
 
         ip = argv[1];
         delegate = [[MongoDelegate alloc] init];
@@ -123,6 +107,27 @@ int main (int argc, const char * argv[])
         [server connectWithHostName:[NSString stringWithUTF8String:ip]];
         [server fetchServerStatus];
         [server fetchDatabaseList];
+        
+        mongoDatabase = [server databaseForName:DATABASE_NAME_TEST];
+        NSLog(@"database: %@", mongoDatabase.databaseName);
+        mongoDatabase.delegate = delegate;
+        [mongoDatabase fetchDatabaseStats];
+        [mongoDatabase fetchCollectionList];
+        
+        mongoCollection = [mongoDatabase collectionForName:COLLECTION_NAME_TEST];
+        mongoCollection.delegate = delegate;
+        [mongoCollection findWithQuery:@"{}" fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:@"{ \"_id\" : 1 }"];
+        [mongoCollection countWithQuery:@"{ \"_id\" : \"com-fotopedia-burma\" }"];
+        [mongoCollection countWithQuery:nil];
+        [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\" : \"toto\" }", nil]];
+        [mongoCollection findWithQuery:nil fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:100 sort:nil];
+        [mongoCollection updateWithCriteria:@"{\"_id\": \"toto\"}" update:@"{\"$inc\": {\"x\" : 1}}" upsert:NO multiUpdate:NO];
+        [mongoCollection saveWithDocument:@"{\"_id\": \"toto\", \"y\": null}"];
+        [mongoCollection findWithQuery:@"{\"_id\": \"toto\"}" fields:nil skip:1 limit:5 sort:@"{ \"_id\" : 1 }"];
+        [mongoCollection removeWithCriteria:@"{\"_id\": \"toto\"}"];
+        
+        [mongoDatabase dropCollectionWithName:COLLECTION_NAME_TEST];
+        [server dropDatabaseWithName:DATABASE_NAME_TEST];
         
         [[NSRunLoop mainRunLoop] run];
     }

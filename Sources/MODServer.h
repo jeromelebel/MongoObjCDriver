@@ -27,8 +27,6 @@ typedef struct mongo                    *mongo_ptr;
 - (void)mongoServer:(MODServer *)mongoServer databaseListFetched:(NSArray *)list withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
 
 - (void)mongoServer:(MODServer *)mongoServer databaseDropedWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
-- (void)mongoServer:(MODServer *)mongoServer collectionCreatedWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
-- (void)mongoServer:(MODServer *)mongoServer collectionDropedWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
 @end
 
 @interface MODServer : NSObject
@@ -49,6 +47,7 @@ typedef struct mongo                    *mongo_ptr;
 - (MODQuery *)fetchServerStatusDelta;
 - (MODQuery *)fetchDatabaseList;
 
+- (MODQuery *)createDatabaseWithName:(NSString *)databaseName;
 - (MODQuery *)dropDatabaseWithName:(NSString *)databaseName;
 
 - (MODDatabase *)databaseForName:(NSString *)databaseName;

@@ -129,6 +129,26 @@
     return result;
 }
 
+- (void)dropCollectionCallback:(MODQuery *)mongoQuery
+{
+    if ([_delegate respondsToSelector:@selector(mongoDatabase:collectionDropedWithMongoQuery:error:)]) {
+        [_delegate mongoDatabase:self collectionDropedWithMongoQuery:mongoQuery error:mongoQuery.error];
+    }
+}
+
+- (MODQuery *)dropCollectionWithName:(NSString *)collectionName
+{
+    MODQuery *query;
+    
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
+        if ([self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+            mongo_cmd_drop_collection(self.mongoServer.mongo, [_databaseName UTF8String], [collectionName UTF8String], NULL);
+        }
+        [_mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(dropCollectionCallback:)];
+    }];
+    return query;
+}
+
 - (mongo *)mongo
 {
     return _mongoServer.mongo;

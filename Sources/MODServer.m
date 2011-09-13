@@ -224,6 +224,31 @@
     }];
 }
 
+- (void)createDatabaseCallback:(MODQuery *)mongoQuery
+{
+    if ([_delegate respondsToSelector:@selector(mongoDB:databaseCreatedWithMongoQuery:error:)]) {
+        [_delegate mongoServer:self databaseCreatedWithMongoQuery:mongoQuery error:mongoQuery.error];
+    }
+}
+
+- (MODQuery *)createDatabaseWithName:(NSString *)databaseName
+{
+    MODQuery *query;
+    
+    query = [self addQueryInQueue:^(MODQuery *mongoQuery){
+        if ([self authenticateSynchronouslyWithDatabaseName:databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+            bson output;
+            
+            mongo_simple_int_command(_mongo, "admin", "dropDatabase", 1, &output);
+            bson_print(&output);
+            bson_destroy(&output);
+        }
+        [self mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(createDatabaseCallback:)];
+    }];
+    [query.mutableParameters setObject:databaseName forKey:@"databasename"];
+    return query;
+}
+
 - (void)dropDatabaseCallback:(MODQuery *)mongoQuery
 {
     if ([_delegate respondsToSelector:@selector(mongoDB:databaseDropedWithMongoQuery:error:)]) {
@@ -239,7 +264,7 @@
         if ([self authenticateSynchronouslyWithDatabaseName:databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
             bson output;
             
-            mongo_simple_int_command(_mongo, "admin", "dropDatabase", 1, &output);
+            mongo_simple_int_command(_mongo, [databaseName UTF8String], "dropDatabase", 1, &output);
             bson_print(&output);
             bson_destroy(&output);
         }
