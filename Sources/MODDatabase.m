@@ -123,10 +123,7 @@
 
 - (MODCollection *)collectionForName:(NSString *)name
 {
-    MODCollection *result;
-    
-    result = [[MODCollection alloc] initWithMongoDatabase:self collectionName:name];
-    return result;
+    return [[[MODCollection alloc] initWithMongoDatabase:self collectionName:name] autorelease];
 }
 
 - (void)createCollectionCallback:(MODQuery *)mongoQuery

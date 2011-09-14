@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "MOD_internal.h"
 
-MODServer *server;
-
 #define DATABASE_NAME_TEST @"database_test"
 #define COLLECTION_NAME_TEST @"collection_test"
 
@@ -97,17 +95,20 @@ MODServer *server;
 
 @end
 
+MongoDelegate *delegate;
+
 int main (int argc, const char * argv[])
 {
     @autoreleasepool {
-        MongoDelegate *delegate;
         const char *ip;
+        MODServer *server;
         MODDatabase *mongoDatabase;
         MODCollection *mongoCollection;
 
         ip = argv[1];
         delegate = [[MongoDelegate alloc] init];
         server = [[MODServer alloc] init];
+        [server autorelease];
         server.delegate = delegate;
         [server connectWithHostName:[NSString stringWithUTF8String:ip]];
         [server fetchServerStatus];
@@ -135,6 +136,8 @@ int main (int argc, const char * argv[])
         [mongoDatabase dropCollectionWithName:COLLECTION_NAME_TEST];
         [server dropDatabaseWithName:DATABASE_NAME_TEST];
         
+    }
+    @autoreleasepool {
         [[NSRunLoop mainRunLoop] run];
     }
     return 0;

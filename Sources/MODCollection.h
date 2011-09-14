@@ -42,6 +42,7 @@
 @property(nonatomic, readonly, retain) MODServer *mongoServer;
 @property(nonatomic, retain, readonly) MODDatabase *mongoDatabase;
 @property(nonatomic, retain, readonly) NSString *collectionName;
+@property(nonatomic, assign, readonly) NSString *databaseName;
 @property(nonatomic, retain, readonly) NSString *absoluteCollectionName;
 @property(nonatomic, readwrite, assign) id<MODCollectionDelegate> delegate;
 

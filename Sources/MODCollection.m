@@ -135,7 +135,7 @@
         [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(findCallback:)];
     }];
     if (jsonCriteria) {
-        [query.mutableParameters setObject:query forKey:@"criteria"];
+        [query.mutableParameters setObject:jsonCriteria forKey:@"criteria"];
     }
     [query.mutableParameters setObject:self forKey:@"collection"];
     return query;
@@ -358,6 +358,11 @@
 - (MODServer *)mongoServer
 {
     return _mongoDatabase.mongoServer;
+}
+
+- (NSString *)databaseName
+{
+    return _mongoDatabase.databaseName;
 }
 
 @end

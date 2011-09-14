@@ -493,6 +493,7 @@ static id objects_from_json(const char *json, int *error, size_t *totalProcessed
         if (value) {
             [result setObject:value forKey:key];
         }
+        [key release];
     }
     return [result autorelease];
 }

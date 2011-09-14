@@ -80,13 +80,18 @@
     return error == nil;
 }
 
-- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withTarget:(id)target callback:(SEL)callbackSelector
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery
 {
     [mongoQuery ends];
     if (_mongo->err != MONGO_CONN_SUCCESS) {
         [mongoQuery.mutableParameters setObject:[[self class] errorWithErrorDomain:MODMongoErrorDomain code:_mongo->err descriptionDetails:nil] forKey:@"error"];
         _mongo->err = MONGO_CONN_SUCCESS;
     }
+}
+
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withTarget:(id)target callback:(SEL)callbackSelector
+{
+    [self mongoQueryDidFinish:mongoQuery];
     [target performSelectorOnMainThread:callbackSelector withObject:mongoQuery waitUntilDone:NO];
 }
 
