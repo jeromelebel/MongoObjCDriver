@@ -84,10 +84,8 @@
 {
     [mongoQuery ends];
     if (_mongo->err != MONGO_CONN_SUCCESS) {
-        [mongoQuery.mutableParameters setObject:[NSNumber numberWithInt:_mongo->err] forKey:@"error"];
-    }
-    if (_mongo->errstr) {
-        [mongoQuery.mutableParameters setObject:[NSString stringWithUTF8String:_mongo->errstr] forKey:@"error"];
+        [mongoQuery.mutableParameters setObject:[[self class] errorWithErrorDomain:MODMongoErrorDomain code:_mongo->err descriptionDetails:nil] forKey:@"error"];
+        _mongo->err = MONGO_CONN_SUCCESS;
     }
     [target performSelectorOnMainThread:callbackSelector withObject:mongoQuery waitUntilDone:NO];
 }

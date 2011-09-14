@@ -50,6 +50,11 @@ MODServer *server;
     [self logQuery:mongoQuery fromSelector:_cmd];
 }
 
+- (void)mongoDatabase:(MODDatabase *)mongoDatabase collectionCreatedWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error
+{
+    [self logQuery:mongoQuery fromSelector:_cmd];
+}
+
 - (void)mongoDatabase:(MODDatabase *)mongoDatabase databaseStatsFetched:(NSArray *)databaseStats withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error
 {
     [self logQuery:mongoQuery fromSelector:_cmd];
@@ -112,6 +117,7 @@ int main (int argc, const char * argv[])
         NSLog(@"database: %@", mongoDatabase.databaseName);
         mongoDatabase.delegate = delegate;
         [mongoDatabase fetchDatabaseStats];
+        [mongoDatabase createCollectionWithName:COLLECTION_NAME_TEST];
         [mongoDatabase fetchCollectionList];
         
         mongoCollection = [mongoDatabase collectionForName:COLLECTION_NAME_TEST];

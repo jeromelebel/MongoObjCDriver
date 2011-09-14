@@ -19,6 +19,7 @@
 - (void)mongoDatabase:(MODDatabase *)mongoDatabase collectionListFetched:(NSArray *)collectionList withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
 - (void)mongoDatabase:(MODDatabase *)mongoDatabase collectionStatsFetched:(NSArray *)databaseStats withMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
 
+- (void)mongoDatabase:(MODDatabase *)mongoDatabase collectionCreatedWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
 - (void)mongoDatabase:(MODDatabase *)mongoDatabase collectionDropedWithMongoQuery:(MODQuery *)mongoQuery error:(NSError *)error;
 @end
 
@@ -33,8 +34,11 @@
 
 - (MODQuery *)fetchDatabaseStats;
 - (MODQuery *)fetchCollectionList;
-- (MODCollection *)collectionForName:(NSString *)name;
+
+- (MODQuery *)createCollectionWithName:(NSString *)collectionName;
 - (MODQuery *)dropCollectionWithName:(NSString *)name;
+
+- (MODCollection *)collectionForName:(NSString *)name;
 
 @property(nonatomic, readwrite, assign) id<MODDatabaseDelegate> delegate;
 @property(nonatomic, readonly, retain) MODServer *mongoServer;
