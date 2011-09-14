@@ -28,7 +28,6 @@
     [_mongoDatabase release];
     [_absoluteCollectionName release];
     [_collectionName release];
-    [_absoluteCollectionName release];
     [super dealloc];
 }
 
