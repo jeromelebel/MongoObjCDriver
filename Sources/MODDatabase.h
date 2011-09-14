@@ -13,34 +13,22 @@
 @class MODCollection;
 @class MODQuery;
 
-@protocol MODDatabaseDelegate<NSObject>
-@optional
-- (void)mongoDatabase:(MODDatabase *)mongoDatabase databaseStatsFetched:(NSArray *)databaseStats withMongoQuery:(MODQuery *)mongoQuery;
-- (void)mongoDatabase:(MODDatabase *)mongoDatabase collectionListFetched:(NSArray *)collectionList withMongoQuery:(MODQuery *)mongoQuery;
-- (void)mongoDatabase:(MODDatabase *)mongoDatabase collectionStatsFetched:(NSArray *)databaseStats withMongoQuery:(MODQuery *)mongoQuery;
-
-- (void)mongoDatabase:(MODDatabase *)mongoDatabase collectionCreatedWithMongoQuery:(MODQuery *)mongoQuery;
-- (void)mongoDatabase:(MODDatabase *)mongoDatabase collectionDropedWithMongoQuery:(MODQuery *)mongoQuery;
-@end
-
 @interface MODDatabase : NSObject
 {
-    id<MODDatabaseDelegate>     _delegate;
     MODServer                   *_mongoServer;
     NSString                    *_databaseName;
     NSString                    *_userName;
     NSString                    *_password;
 }
 
-- (MODQuery *)fetchDatabaseStats;
-- (MODQuery *)fetchCollectionList;
+- (MODQuery *)fetchDatabaseStatsWithCallback:(void (^)(NSDictionary *databaseStats, MODQuery *mongoQuery))callback;
+- (MODQuery *)fetchCollectionListWithCallback:(void (^)(NSArray *collectionList, MODQuery *mongoQuery))callback;
 
-- (MODQuery *)createCollectionWithName:(NSString *)collectionName;
-- (MODQuery *)dropCollectionWithName:(NSString *)name;
+- (MODQuery *)createCollectionWithName:(NSString *)collectionName callback:(void (^)(MODQuery *mongoQuery))callback;
+- (MODQuery *)dropCollectionWithName:(NSString *)collectionName callback:(void (^)(MODQuery *mongoQuery))callback;
 
 - (MODCollection *)collectionForName:(NSString *)name;
 
-@property(nonatomic, readwrite, assign) id<MODDatabaseDelegate> delegate;
 @property(nonatomic, readonly, retain) MODServer *mongoServer;
 @property(nonatomic, readonly, retain) NSString *databaseName;
 @property(nonatomic, readwrite, retain) NSString *userName;
