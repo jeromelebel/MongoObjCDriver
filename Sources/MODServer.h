@@ -18,40 +18,27 @@
 typedef struct mongo_replset            *mongo_replset_ptr;
 typedef struct mongo                    *mongo_ptr;
 
-@protocol MODServerDelegate<NSObject>
-@optional
-- (void)mongoServerConnectionSucceded:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery;
-- (void)mongoServerConnectionFailed:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery;
-- (void)mongoServer:(MODServer *)mongoServer serverStatusFetched:(NSArray *)serverStatus withMongoQuery:(MODQuery *)mongoQuery;
-- (void)mongoServer:(MODServer *)mongoServer serverStatusDeltaFetched:(NSDictionary *)serverStatusDelta withMongoQuery:(MODQuery *)mongoQuery;
-- (void)mongoServer:(MODServer *)mongoServer databaseListFetched:(NSArray *)list withMongoQuery:(MODQuery *)mongoQuery;
-
-- (void)mongoServer:(MODServer *)mongoServer databaseDropedWithMongoQuery:(MODQuery *)mongoQuery;
-@end
-
 @interface MODServer : NSObject
 {
     mongo_replset_ptr                   _replicaSet;
     mongo_ptr                           _mongo;
     
     BOOL                                _connected;
-    id<MODServerDelegate>               _delegate;
     NSOperationQueue                    *_operationQueue;
     NSString                            *_userName;
     NSString                            *_password;
 }
 
-- (MODQuery *)connectWithHostName:(NSString *)host;
-- (MODQuery *)connectWithReplicaName:(NSString *)name hosts:(NSArray *)hosts;
-- (MODQuery *)fetchServerStatus;
-- (MODQuery *)fetchServerStatusDelta;
-- (MODQuery *)fetchDatabaseList;
+- (MODQuery *)connectWithHostName:(NSString *)host callback:(void (^)(BOOL connected, MODQuery *mongoQuery))callback;
+- (MODQuery *)connectWithReplicaName:(NSString *)name hosts:(NSArray *)hosts callback:(void (^)(BOOL connected, MODQuery *mongoQuery))callback;
+- (MODQuery *)fetchServerStatusWithCallback:(void (^)(NSDictionary *serverStatus, MODQuery *mongoQuery))callback;
+//- (MODQuery *)fetchServerStatusDelta;
+- (MODQuery *)fetchDatabaseListWithCallback:(void (^)(NSArray *list, MODQuery *mongoQuery))callback;
 
-- (MODQuery *)dropDatabaseWithName:(NSString *)databaseName;
+- (MODQuery *)dropDatabaseWithName:(NSString *)databaseName callback:(void (^)(MODQuery *mongoQuery))callback;
 
 - (MODDatabase *)databaseForName:(NSString *)databaseName;
 
-@property(nonatomic, readwrite, assign) id<MODServerDelegate> delegate;
 @property(nonatomic, readonly, assign, getter=isConnected) BOOL connected;
 @property(nonatomic, readwrite, retain) NSString *userName;
 @property(nonatomic, readwrite, retain) NSString *password;

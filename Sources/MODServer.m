@@ -10,7 +10,7 @@
 
 @implementation MODServer
 
-@synthesize delegate = _delegate, connected = _connected, mongo = _mongo, userName = _userName, password = _password;
+@synthesize connected = _connected, mongo = _mongo, userName = _userName, password = _password;
 
 - (id)init
 {
@@ -95,20 +95,13 @@
     [target performSelectorOnMainThread:callbackSelector withObject:mongoQuery waitUntilDone:NO];
 }
 
-- (void)connectCallback:(MODQuery *)mongoQuery
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock
 {
-    NSError *error;
-    
-    error = mongoQuery.error;
-    if (error && [_delegate respondsToSelector:@selector(mongoServerConnectionFailed:withMongoQuery:)]) {
-        [_delegate mongoServerConnectionFailed:self withMongoQuery:mongoQuery];
-    } else if (error == nil && [_delegate respondsToSelector:@selector(mongoServerConnectionSucceded:withMongoQuery:)]) {
-        [_delegate mongoServerConnectionSucceded:self withMongoQuery:mongoQuery];
-    }
-    self.connected = (error == nil);
+    [self mongoQueryDidFinish:mongoQuery];
+    dispatch_async(dispatch_get_main_queue(), callbackBlock);
 }
 
-- (MODQuery *)connectWithHostName:(NSString *)host
+- (MODQuery *)connectWithHostName:(NSString *)host callback:(void (^)(BOOL connected, MODQuery *mongoQuery))callback
 {
     MODQuery *query;
     
@@ -119,13 +112,15 @@
         if (mongo_connect(_mongo, hostPort.host, hostPort.port) == MONGO_OK) {
             [self authenticateSynchronouslyWithDatabaseName:nil userName:_userName password:_password mongoQuery:mongoQuery];
         }
-        [self mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(connectCallback:)];
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+            callback(mongoQuery.error == nil, mongoQuery);
+        }];
     }];
     [query.mutableParameters setObject:host forKey:@"host"];
     return query;
 }
 
-- (MODQuery *)connectWithReplicaName:(NSString *)replicaName hosts:(NSArray *)hosts
+- (MODQuery *)connectWithReplicaName:(NSString *)replicaName hosts:(NSArray *)hosts callback:(void (^)(BOOL connected, MODQuery *mongoQuery))callback
 {
     MODQuery *query;
     mongo_host_port hostPort;
@@ -139,79 +134,63 @@
         if (mongo_replset_connect(_mongo) == MONGO_OK) {
             [self authenticateSynchronouslyWithDatabaseName:nil userName:_userName password:_password mongoQuery:mongoQuery];
         }
-        [self mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(connectCallback:)];
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+            callback(mongoQuery.error == nil, mongoQuery);
+        }];
     }];
+    [query.mutableParameters setObject:replicaName forKey:@"replicaname"];
+    [query.mutableParameters setObject:hosts forKey:@"hosts"];
     return query;
 }
 
-- (void)fetchServerStatusCallback:(MODQuery *)mongoQuery
-{
-    NSArray *serverStatus;
-    
-    serverStatus = [mongoQuery.parameters objectForKey:@"serverstatus"];
-    if ([_delegate respondsToSelector:@selector(mongoServer:serverStatusFetched:withMongoQuery:)]) {
-        [_delegate mongoServer:self serverStatusFetched:serverStatus withMongoQuery:mongoQuery];
-    }
-}
-
-- (MODQuery *)fetchServerStatus
+- (MODQuery *)fetchServerStatusWithCallback:(void (^)(NSDictionary *serverStatus, MODQuery *mongoQuery))callback
 {
     return [self addQueryInQueue:^(MODQuery *mongoQuery){
         bson output;
+        NSDictionary *outputObjects = nil;
         
         if (mongo_simple_int_command(_mongo, "admin", "serverStatus", 1, &output) == MONGO_OK) {
-            NSDictionary *outputObjects;
-            
             outputObjects = [[self class] objectsFromBson:&output];
             [mongoQuery.mutableParameters setObject:outputObjects forKey:@"serverstatus"];
-            bson_destroy(&output);
         }
-        [self mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(fetchServerStatusCallback:)];
+        bson_destroy(&output);
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+            callback(outputObjects, mongoQuery);
+        }];
     }];
 }
 
-- (void)fetchServerStatusDeltaCallback:(MODQuery *)mongoQuery
-{
-    NSDictionary *serverStatusDelta;
-    
-    serverStatusDelta = [mongoQuery.parameters objectForKey:@"serverstatusdelta"];
-    if ([_delegate respondsToSelector:@selector(mongoDB:serverStatusDeltaFetched:withMongoQuery:)]) {
-        [_delegate mongoServer:self serverStatusDeltaFetched:serverStatusDelta withMongoQuery:mongoQuery];
-    }
-}
+//- (void)fetchServerStatusDeltaCallback:(MODQuery *)mongoQuery
+//{
+//    NSDictionary *serverStatusDelta;
+//    
+//    serverStatusDelta = [mongoQuery.parameters objectForKey:@"serverstatusdelta"];
+//    if ([_delegate respondsToSelector:@selector(mongoDB:serverStatusDeltaFetched:withMongoQuery:)]) {
+//        [_delegate mongoServer:self serverStatusDeltaFetched:serverStatusDelta withMongoQuery:mongoQuery];
+//    }
+//}
+//
+//- (MODQuery *)fetchServerStatusDelta
+//{
+//    return [self addQueryInQueue:^(MODQuery *mongoQuery){
+//        NSDictionary *outputObjects;
+//        bson output;
+//        
+//        if (mongo_simple_int_command(_mongo, "admin", "serverStatus", 1, &output) == MONGO_OK) {
+//            outputObjects = [[self class] objectsFromBson:&output];
+//        }
+//        bson_destroy(&output);
+//        [self mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(fetchServerStatusDeltaCallback:)];
+//    }];
+//}
 
-- (MODQuery *)fetchServerStatusDelta
-{
-    return [self addQueryInQueue:^(MODQuery *mongoQuery){
-        bson output;
-        
-        if (mongo_simple_int_command(_mongo, "admin", "serverStatus", 1, &output) == MONGO_OK) {
-            NSDictionary *outputObjects;
-            
-            outputObjects = [[self class] objectsFromBson:&output];
-            bson_destroy(&output);
-        }
-        [self mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(fetchServerStatusDeltaCallback:)];
-    }];
-}
-
-- (void)fetchDatabaseListCallback:(MODQuery *)mongoQuery
-{
-    NSArray *list;
-    
-    list = [mongoQuery.parameters objectForKey:@"databaselist"];
-    if ([_delegate respondsToSelector:@selector(mongoServer:databaseListFetched:withMongoQuery:)]) {
-        [_delegate mongoServer:self databaseListFetched:list withMongoQuery:mongoQuery];
-    }
-}
-
-- (MODQuery *)fetchDatabaseList
+- (MODQuery *)fetchDatabaseListWithCallback:(void (^)(NSArray *list, MODQuery *mongoQuery))callback;
 {
     return [self addQueryInQueue:^(MODQuery *mongoQuery) {
         bson output;
+        NSMutableArray *list = nil;
         
         if (mongo_simple_int_command(_mongo, "admin", "listDatabases", 1, &output) == MONGO_OK) {
-            NSMutableArray *list;
             NSDictionary *outputObjects;
             
             outputObjects = [[self class] objectsFromBson:&output];
@@ -220,21 +199,16 @@
                 [list addObject:[element objectForKey:@"name"]];
             }
             [mongoQuery.mutableParameters setObject:list forKey:@"databaselist"];
-            [list release];
             bson_destroy(&output);
         }
-        [self mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(fetchDatabaseListCallback:)];
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+            callback(list, mongoQuery);
+        }];
+        [list release];
     }];
 }
 
-- (void)dropDatabaseCallback:(MODQuery *)mongoQuery
-{
-    if ([_delegate respondsToSelector:@selector(mongoDB:databaseDropedWithMongoQuery:)]) {
-        [_delegate mongoServer:self databaseDropedWithMongoQuery:mongoQuery];
-    }
-}
-
-- (MODQuery *)dropDatabaseWithName:(NSString *)databaseName
+- (MODQuery *)dropDatabaseWithName:(NSString *)databaseName callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query;
     
@@ -242,7 +216,9 @@
         if ([self authenticateSynchronouslyWithDatabaseName:databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
             mongo_cmd_drop_db(_mongo, [databaseName UTF8String]);
         }
-        [self mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(dropDatabaseCallback:)];
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+            callback(mongoQuery);
+        }];
     }];
     [query.mutableParameters setObject:databaseName forKey:@"databasename"];
     return query;

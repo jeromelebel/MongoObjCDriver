@@ -12,9 +12,7 @@
 #define DATABASE_NAME_TEST @"database_test"
 #define COLLECTION_NAME_TEST @"collection_test"
 
-@interface MongoDelegate : NSObject<MODServerDelegate, MODDatabaseDelegate, MODCollectionDelegate>
-- (void)mongoServerConnectionSucceded:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery;
-- (void)mongoServerConnectionFailed:(MODServer *)mongoServer withMongoQuery:(MODQuery *)mongoQuery;
+@interface MongoDelegate : NSObject<MODDatabaseDelegate, MODCollectionDelegate>
 @end
 
 @implementation MongoDelegate
@@ -38,7 +36,7 @@
     [self logQuery:mongoQuery fromSelector:_cmd];
 }
 
-- (void)mongoServer:(MODServer *)mongoServer serverStatusFetched:(NSArray *)serverStatus withMongoQuery:(MODQuery *)mongoQuery
+- (void)mongoServer:(MODServer *)mongoServer serverStatusFetched:(NSDictionary *)serverStatus withMongoQuery:(MODQuery *)mongoQuery
 {
     [self logQuery:mongoQuery fromSelector:_cmd];
 }
@@ -93,6 +91,11 @@
     [self logQuery:mongoQuery fromSelector:_cmd];
 }
 
+- (void)mongoServer:(MODServer *)mongoServer databaseDropedWithMongoQuery:(MODQuery *)mongoQuery
+{
+    [self logQuery:mongoQuery fromSelector:_cmd];
+}
+
 @end
 
 MongoDelegate *delegate;
@@ -109,13 +112,21 @@ int main (int argc, const char * argv[])
         delegate = [[MongoDelegate alloc] init];
         server = [[MODServer alloc] init];
         [server autorelease];
-        server.delegate = delegate;
-        [server connectWithHostName:[NSString stringWithUTF8String:ip]];
-        [server fetchServerStatus];
-        [server fetchDatabaseList];
+        [server connectWithHostName:[NSString stringWithUTF8String:ip] callback:^(BOOL connected, MODQuery *mongoQuery) {
+            if (connected) {
+                [delegate mongoServerConnectionSucceded:server withMongoQuery:mongoQuery];
+            } else {
+                [delegate mongoServerConnectionFailed:server withMongoQuery:mongoQuery];
+            }
+        }];
+        [server fetchServerStatusWithCallback:^(NSDictionary *serverStatus, MODQuery *mongoQuery) {
+            [delegate mongoServer:server serverStatusFetched:serverStatus withMongoQuery:mongoQuery];
+        }];
+        [server fetchDatabaseListWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
+            [delegate mongoServer:server databaseListFetched:list withMongoQuery:mongoQuery];
+        }];
         
         mongoDatabase = [server databaseForName:DATABASE_NAME_TEST];
-        NSLog(@"database: %@", mongoDatabase.databaseName);
         mongoDatabase.delegate = delegate;
         [mongoDatabase fetchDatabaseStats];
         [mongoDatabase createCollectionWithName:COLLECTION_NAME_TEST];
@@ -134,7 +145,9 @@ int main (int argc, const char * argv[])
         [mongoCollection removeWithCriteria:@"{\"_id\": \"toto\"}"];
         
         [mongoDatabase dropCollectionWithName:COLLECTION_NAME_TEST];
-        [server dropDatabaseWithName:DATABASE_NAME_TEST];
+        [server dropDatabaseWithName:DATABASE_NAME_TEST callback:^(MODQuery *mongoQuery) {
+            [delegate mongoServer:server databaseDropedWithMongoQuery:mongoQuery];
+        }];
         
     }
     @autoreleasepool {
