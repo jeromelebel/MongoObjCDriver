@@ -64,6 +64,7 @@
             callback(stats, mongoQuery);
         }];
     }];
+    [query.mutableParameters setObject:@"fetchdatabasestats" forKey:@"command"];
     return query;
 }
 
@@ -98,6 +99,7 @@
         }];
         [collections release];
     }];
+    [query.mutableParameters setObject:@"fetchcollectionlist" forKey:@"command"];
     return query;
 }
 
@@ -118,6 +120,8 @@
             callback(mongoQuery);
         }];
     }];
+    [query.mutableParameters setObject:@"createcollection" forKey:@"command"];
+    [query.mutableParameters setObject:collectionName forKey:@"collectionname"];
     return query;
 }
 
@@ -133,6 +137,7 @@
             callback(mongoQuery);
         }];
     }];
+    [query.mutableParameters setObject:@"dropcollection" forKey:@"command"];
     [query.mutableParameters setObject:collectionName forKey:@"collectionname"];
     return query;
 }

@@ -117,7 +117,8 @@
             callback(mongoQuery.error == nil, mongoQuery);
         }];
     }];
-    [query.mutableParameters setObject:host forKey:@"host"];
+    [query.mutableParameters setObject:@"connecttohost" forKey:@"command"];
+    [query.mutableParameters setObject:host forKey:@"hostname"];
     return query;
 }
 
@@ -139,6 +140,7 @@
             callback(mongoQuery.error == nil, mongoQuery);
         }];
     }];
+    [query.mutableParameters setObject:@"connecttoreplica" forKey:@"command"];
     [query.mutableParameters setObject:replicaName forKey:@"replicaname"];
     [query.mutableParameters setObject:hosts forKey:@"hosts"];
     return query;
@@ -146,7 +148,9 @@
 
 - (MODQuery *)fetchServerStatusWithCallback:(void (^)(NSDictionary *serverStatus, MODQuery *mongoQuery))callback
 {
-    return [self addQueryInQueue:^(MODQuery *mongoQuery){
+    MODQuery *query;
+    
+    query = [self addQueryInQueue:^(MODQuery *mongoQuery){
         bson output;
         NSDictionary *outputObjects = nil;
         
@@ -159,6 +163,8 @@
             callback(outputObjects, mongoQuery);
         }];
     }];
+    [query.mutableParameters setObject:@"fetchserverstatus" forKey:@"command"];
+    return query;
 }
 
 //- (void)fetchServerStatusDeltaCallback:(MODQuery *)mongoQuery
@@ -187,7 +193,9 @@
 
 - (MODQuery *)fetchDatabaseListWithCallback:(void (^)(NSArray *list, MODQuery *mongoQuery))callback;
 {
-    return [self addQueryInQueue:^(MODQuery *mongoQuery) {
+    MODQuery *query;
+    
+    query = [self addQueryInQueue:^(MODQuery *mongoQuery) {
         bson output;
         NSMutableArray *list = nil;
         
@@ -207,6 +215,8 @@
         }];
         [list release];
     }];
+    [query.mutableParameters setObject:@"fetchdatabaselist" forKey:@"command"];
+    return query;
 }
 
 - (MODQuery *)dropDatabaseWithName:(NSString *)databaseName callback:(void (^)(MODQuery *mongoQuery))callback
@@ -221,6 +231,7 @@
             callback(mongoQuery);
         }];
     }];
+    [query.mutableParameters setObject:@"dropdatabase" forKey:@"command"];
     [query.mutableParameters setObject:databaseName forKey:@"databasename"];
     return query;
 }
