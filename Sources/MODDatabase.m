@@ -163,6 +163,7 @@
         }
         [_mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(dropCollectionCallback:)];
     }];
+    [query.mutableParameters setObject:collectionName forKey:@"collectionname"];
     return query;
 }
 
