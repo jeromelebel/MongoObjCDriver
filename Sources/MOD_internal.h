@@ -45,6 +45,7 @@
 - (id)initWithMongoServer:(MODServer *)mongoServer databaseName:(NSString *)databaseName;
 - (BOOL)authenticateSynchronouslyWithMongoQuery:(MODQuery *)mongoQuery;
 - (BOOL)authenticateSynchronouslyWithError:(NSError **)error;
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock;
 
 @end
 

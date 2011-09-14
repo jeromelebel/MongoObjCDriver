@@ -11,7 +11,7 @@
 
 @implementation MODCollection
 
-@synthesize mongoDatabase = _mongoDatabase, collectionName = _collectionName, absoluteCollectionName = _absoluteCollectionName, delegate = _delegate;
+@synthesize mongoDatabase = _mongoDatabase, collectionName = _collectionName, absoluteCollectionName = _absoluteCollectionName;
 
 - (id)initWithMongoDatabase:(MODDatabase *)mongoDatabase collectionName:(NSString *)collectionName
 {
@@ -31,37 +31,35 @@
     [super dealloc];
 }
 
-- (void)findCallback:(MODQuery *)mongoQuery
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock
 {
-    NSArray *result;
-    
-    result = [mongoQuery.parameters objectForKey:@"result"];
-    if ([_delegate respondsToSelector:@selector(mongoCollection:queryResultFetched:withMongoQuery:)]) {
-        [_delegate mongoCollection:self queryResultFetched:result withMongoQuery:mongoQuery];
-    }
+    [mongoQuery.mutableParameters setObject:self forKey:@"collection"];
+    [_mongoDatabase mongoQueryDidFinish:mongoQuery withCallbackBlock:callbackBlock];
 }
 
-- (MODQuery *)findWithCriteria:(NSString *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort
+- (MODQuery *)findWithCriteria:(NSString *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort callback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        NSMutableArray *response;
+        NSMutableArray *documents;
         MODCursor *cursor;
         NSDictionary *document;
         NSError *error = nil;
         
-        response = [[NSMutableArray alloc] initWithCapacity:limit];
+        documents = [[NSMutableArray alloc] initWithCapacity:limit];
         cursor = [self cursorWithCriteria:jsonCriteria fields:fields skip:skip limit:limit sort:sort];
         while ((document = [cursor nextDocumentAsynchronouslyWithError:&error]) != nil) {
-            [response addObject:document];
+            [documents addObject:document];
         }
         if (error) {
             mongoQuery.error = error;
         }
-        [mongoQuery.mutableParameters setObject:response forKey:@"result"];
-        [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(findCallback:)];
-        [response release];
+        [mongoQuery.mutableParameters setObject:documents forKey:@"documents"];
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^() {
+            callback(documents, mongoQuery);
+        }];
+        [documents release];
     }];
     if (jsonCriteria) {
         [query.mutableParameters setObject:jsonCriteria forKey:@"criteria"];
@@ -69,12 +67,12 @@
     if (fields) {
         [query.mutableParameters setObject:fields forKey:@"fields"];
     }
+    [query.mutableParameters setObject:@"finddocuments" forKey:@"command"];
     [query.mutableParameters setObject:[NSNumber numberWithUnsignedInteger:skip] forKey:@"skip"];
     [query.mutableParameters setObject:[NSNumber numberWithUnsignedInteger:limit] forKey:@"limit"];
     if (sort) {
         [query.mutableParameters setObject:sort forKey:@"sort"];
     }
-    [query.mutableParameters setObject:self forKey:@"collection"];
     return query;
 }
 
@@ -91,25 +89,16 @@
     return [cursor autorelease];
 }
 
-- (void)countCallback:(MODQuery *)mongoQuery
-{
-    long long int count;
-    
-    count = [[mongoQuery.parameters objectForKey:@"count"] longLongValue];
-    if ([_delegate respondsToSelector:@selector(mongoCollection:queryCountWithValue:withMongoQuery:)]) {
-        [_delegate mongoCollection:self queryCountWithValue:count withMongoQuery:mongoQuery];
-    }
-}
-
-- (MODQuery *)countWithCriteria:(NSString *)jsonCriteria
+- (MODQuery *)countWithCriteria:(NSString *)jsonCriteria callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        int64_t count;
+        
         if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson *bsonQuery = NULL;
             NSError *error = nil;
-            uint64_t count;
             
             bsonQuery = malloc(sizeof(*bsonQuery));
             bson_init(bsonQuery);
@@ -131,23 +120,18 @@
             bson_destroy(bsonQuery);
             free(bsonQuery);
         }
-        [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(findCallback:)];
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^() {
+            callback(count, mongoQuery);
+        }];
     }];
+    [query.mutableParameters setObject:@"countdocuments" forKey:@"command"];
     if (jsonCriteria) {
         [query.mutableParameters setObject:jsonCriteria forKey:@"criteria"];
     }
-    [query.mutableParameters setObject:self forKey:@"collection"];
     return query;
 }
 
-- (void)insertCallback:(MODQuery *)mongoQuery
-{
-    if ([_delegate respondsToSelector:@selector(mongoCollection:insertWithMongoQuery:)]) {
-        [_delegate mongoCollection:self insertWithMongoQuery:mongoQuery];
-    }
-}
-
-- (MODQuery *)insertWithDocuments:(NSArray *)documents
+- (MODQuery *)insertWithDocuments:(NSArray *)documents callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -197,21 +181,16 @@
             free(data);
             mongoQuery.error = error;
         }
-        [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(insertCallback:)];
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^() {
+            callback(mongoQuery);
+        }];
     }];
+    [query.mutableParameters setObject:@"insertdocuments" forKey:@"command"];
     [query.mutableParameters setObject:documents forKey:@"documents"];
-    [query.mutableParameters setObject:self forKey:@"collection"];
     return query;
 }
 
-- (void)updateCallback:(MODQuery *)mongoQuery
-{
-    if ([_delegate respondsToSelector:@selector(mongoCollection:updateWithMongoQuery:)]) {
-        [_delegate mongoCollection:self updateWithMongoQuery:mongoQuery];
-    }
-}
-
-- (MODQuery *)updateWithCriteria:(NSString *)criteria update:(NSString *)update upsert:(BOOL)upsert multiUpdate:(BOOL)multiUpdate
+- (MODQuery *)updateWithCriteria:(NSString *)jsonCriteria update:(NSString *)update upsert:(BOOL)upsert multiUpdate:(BOOL)multiUpdate callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -222,7 +201,9 @@
             NSError *error;
             
             bson_init(&bsonCriteria);
-            [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonCriteria json:criteria error:&error];
+            if (jsonCriteria) {
+                [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonCriteria json:jsonCriteria error:&error];
+            }
             bson_finish(&bsonCriteria);
             bson_init(&bsonUpdate);
             if (error == nil) {
@@ -237,17 +218,21 @@
             bson_destroy(&bsonCriteria);
             bson_destroy(&bsonUpdate);
         }
-        [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(updateCallback:)];
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^() {
+            callback(mongoQuery);
+        }];
     }];
-    [query.mutableParameters setObject:criteria forKey:@"criteria"];
+    [query.mutableParameters setObject:@"updatedocuments" forKey:@"command"];
+    if (jsonCriteria) {
+        [query.mutableParameters setObject:jsonCriteria forKey:@"criteria"];
+    }
     [query.mutableParameters setObject:update forKey:@"update"];
     [query.mutableParameters setObject:[NSNumber numberWithBool:upsert] forKey:@"upsert"];
     [query.mutableParameters setObject:[NSNumber numberWithBool:multiUpdate] forKey:@"multiUpdate"];
-    [query.mutableParameters setObject:self forKey:@"collection"];
     return query;
 }
 
-- (MODQuery *)saveWithDocument:(NSString *)document
+- (MODQuery *)saveWithDocument:(NSString *)document callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -308,22 +293,16 @@
             bson_destroy(&bsonCriteria);
             bson_destroy(&bsonDocument);
         }
-        [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(updateCallback:)];
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^() {
+            callback(mongoQuery);
+        }];
     }];
+    [query.mutableParameters setObject:@"savedocuments" forKey:@"command"];
     [query.mutableParameters setObject:document forKey:@"document"];
-    [query.mutableParameters setObject:self forKey:@"collection"];
     return query;
 }
 
-
-- (void)removeCallback:(MODQuery *)mongoQuery
-{
-    if ([_delegate respondsToSelector:@selector(mongoCollection:updateWithMongoQuery:)]) {
-        [_delegate mongoCollection:self updateWithMongoQuery:mongoQuery];
-    }
-}
-
-- (MODQuery *)removeWithCriteria:(NSString *)criteria
+- (MODQuery *)removeWithCriteria:(NSString *)criteria callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -333,7 +312,9 @@
             NSError *error;
             
             bson_init(&bsonCriteria);
-            [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonCriteria json:criteria error:&error];
+            if (criteria) {
+                [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonCriteria json:criteria error:&error];
+            }
             bson_finish(&bsonCriteria);
             if (error == nil) {
                 mongo_remove(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria);
@@ -342,10 +323,14 @@
             }
             bson_destroy(&bsonCriteria);
         }
-        [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(removeCallback:)];
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^() {
+            callback(mongoQuery);
+        }];
     }];
-    [query.mutableParameters setObject:criteria forKey:@"criteria"];
-    [query.mutableParameters setObject:self forKey:@"collection"];
+    [query.mutableParameters setObject:@"removedocuments" forKey:@"command"];
+    if (criteria) {
+        [query.mutableParameters setObject:criteria forKey:@"criteria"];
+    }
     return query;
 }
 
