@@ -47,7 +47,6 @@ typedef struct mongo                    *mongo_ptr;
 - (MODQuery *)fetchServerStatusDelta;
 - (MODQuery *)fetchDatabaseList;
 
-- (MODQuery *)createDatabaseWithName:(NSString *)databaseName;
 - (MODQuery *)dropDatabaseWithName:(NSString *)databaseName;
 
 - (MODDatabase *)databaseForName:(NSString *)databaseName;

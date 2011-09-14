@@ -31,9 +31,9 @@
 
 - (id)initWithMongoDatabase:(MODDatabase *)mongoDatabase collectionName:(NSString *)collectionName;
 
-- (MODCursor *)cursorWithQuery:(NSString *)query fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort;
-- (MODQuery *)findWithQuery:(NSString *)query fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort;
-- (MODQuery *)countWithQuery:(NSString *)query;
+- (MODCursor *)cursorWithCriteria:(NSString *)criteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort;
+- (MODQuery *)findWithCriteria:(NSString *)criteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort;
+- (MODQuery *)countWithCriteria:(NSString *)criteria;
 - (MODQuery *)insertWithDocuments:(NSArray *)documents;
 - (MODQuery *)updateWithCriteria:(NSString *)criteria update:(NSString *)update upsert:(BOOL)upsert multiUpdate:(BOOL)multiUpdate;
 - (MODQuery *)saveWithDocument:(NSString *)document;

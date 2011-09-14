@@ -42,7 +42,7 @@
     }
 }
 
-- (MODQuery *)findWithQuery:(NSString *)jsonQuery fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort
+- (MODQuery *)findWithCriteria:(NSString *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort
 {
     MODQuery *query = nil;
     
@@ -53,7 +53,7 @@
         NSError *error = nil;
         
         response = [[NSMutableArray alloc] initWithCapacity:limit];
-        cursor = [self cursorWithQuery:jsonQuery fields:fields skip:skip limit:limit sort:sort];
+        cursor = [self cursorWithCriteria:jsonCriteria fields:fields skip:skip limit:limit sort:sort];
         while ((document = [cursor nextDocumentAsynchronouslyWithError:&error]) != nil) {
             [response addObject:document];
         }
@@ -64,8 +64,8 @@
         [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(findCallback:)];
         [response release];
     }];
-    if (query) {
-        [query.mutableParameters setObject:query forKey:@"query"];
+    if (jsonCriteria) {
+        [query.mutableParameters setObject:jsonCriteria forKey:@"criteria"];
     }
     if (fields) {
         [query.mutableParameters setObject:fields forKey:@"fields"];
@@ -79,7 +79,7 @@
     return query;
 }
 
-- (MODCursor *)cursorWithQuery:(NSString *)query fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort
+- (MODCursor *)cursorWithCriteria:(NSString *)query fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort
 {
     MODCursor *cursor;
     
@@ -102,7 +102,7 @@
     }
 }
 
-- (MODQuery *)countWithQuery:(NSString *)jsonQuery
+- (MODQuery *)countWithCriteria:(NSString *)jsonCriteria
 {
     MODQuery *query = nil;
     
@@ -114,8 +114,8 @@
             
             bsonQuery = malloc(sizeof(*bsonQuery));
             bson_init(bsonQuery);
-            if (jsonQuery) {
-                [[_mongoDatabase.mongoServer class] bsonFromJson:bsonQuery json:jsonQuery error:&error];
+            if (jsonCriteria) {
+                [[_mongoDatabase.mongoServer class] bsonFromJson:bsonQuery json:jsonCriteria error:&error];
             }
             bson_finish(bsonQuery);
             
@@ -134,8 +134,8 @@
         }
         [_mongoDatabase.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(findCallback:)];
     }];
-    if (query) {
-        [query.mutableParameters setObject:query forKey:@"query"];
+    if (jsonCriteria) {
+        [query.mutableParameters setObject:query forKey:@"criteria"];
     }
     [query.mutableParameters setObject:self forKey:@"collection"];
     return query;

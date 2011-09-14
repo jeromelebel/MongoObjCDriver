@@ -122,14 +122,14 @@ int main (int argc, const char * argv[])
         
         mongoCollection = [mongoDatabase collectionForName:COLLECTION_NAME_TEST];
         mongoCollection.delegate = delegate;
-        [mongoCollection findWithQuery:@"{}" fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:@"{ \"_id\" : 1 }"];
-        [mongoCollection countWithQuery:@"{ \"_id\" : \"com-fotopedia-burma\" }"];
-        [mongoCollection countWithQuery:nil];
+        [mongoCollection findWithCriteria:@"{}" fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:@"{ \"_id\" : 1 }"];
+        [mongoCollection countWithCriteria:@"{ \"_id\" : \"com-fotopedia-burma\" }"];
+        [mongoCollection countWithCriteria:nil];
         [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\" : \"toto\" }", nil]];
-        [mongoCollection findWithQuery:nil fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:100 sort:nil];
+        [mongoCollection findWithCriteria:nil fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:100 sort:nil];
         [mongoCollection updateWithCriteria:@"{\"_id\": \"toto\"}" update:@"{\"$inc\": {\"x\" : 1}}" upsert:NO multiUpdate:NO];
         [mongoCollection saveWithDocument:@"{\"_id\": \"toto\", \"y\": null}"];
-        [mongoCollection findWithQuery:@"{\"_id\": \"toto\"}" fields:nil skip:1 limit:5 sort:@"{ \"_id\" : 1 }"];
+        [mongoCollection findWithCriteria:@"{\"_id\": \"toto\"}" fields:nil skip:1 limit:5 sort:@"{ \"_id\" : 1 }"];
         [mongoCollection removeWithCriteria:@"{\"_id\": \"toto\"}"];
         
         [mongoDatabase dropCollectionWithName:COLLECTION_NAME_TEST];
