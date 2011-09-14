@@ -57,8 +57,8 @@
     
     databaseName = [mongoQuery.parameters objectForKey:@"databasename"];
     databaseStats = [mongoQuery.parameters objectForKey:@"databasestats"];
-    if ([_delegate respondsToSelector:@selector(mongoDatabase:databaseStatsFetched:withMongoQuery:error:)]) {
-        [_delegate mongoDatabase:self databaseStatsFetched:databaseStats withMongoQuery:mongoQuery error:mongoQuery.error];
+    if ([_delegate respondsToSelector:@selector(mongoDatabase:databaseStatsFetched:withMongoQuery:)]) {
+        [_delegate mongoDatabase:self databaseStatsFetched:databaseStats withMongoQuery:mongoQuery];
     }
 }
 
@@ -85,8 +85,8 @@
     NSArray *collectionList;
     
     collectionList = [mongoQuery.parameters objectForKey:@"collectionlist"];
-    if ([_delegate respondsToSelector:@selector(mongoDatabase:collectionListFetched:withMongoQuery:error:)]) {
-        [_delegate mongoDatabase:self collectionListFetched:collectionList withMongoQuery:mongoQuery error:mongoQuery.error];
+    if ([_delegate respondsToSelector:@selector(mongoDatabase:collectionListFetched:withMongoQuery:)]) {
+        [_delegate mongoDatabase:self collectionListFetched:collectionList withMongoQuery:mongoQuery];
     }
 }
 
@@ -131,8 +131,8 @@
 
 - (void)createCollectionCallback:(MODQuery *)mongoQuery
 {
-    if ([_delegate respondsToSelector:@selector(mongoDatabase:collectionCreatedWithMongoQuery:error:)]) {
-        [_delegate mongoDatabase:self collectionCreatedWithMongoQuery:mongoQuery error:mongoQuery.error];
+    if ([_delegate respondsToSelector:@selector(mongoDatabase:collectionCreatedWithMongoQuery:)]) {
+        [_delegate mongoDatabase:self collectionCreatedWithMongoQuery:mongoQuery];
     }
 }
 
@@ -151,8 +151,8 @@
 
 - (void)dropCollectionCallback:(MODQuery *)mongoQuery
 {
-    if ([_delegate respondsToSelector:@selector(mongoDatabase:collectionDropedWithMongoQuery:error:)]) {
-        [_delegate mongoDatabase:self collectionDropedWithMongoQuery:mongoQuery error:mongoQuery.error];
+    if ([_delegate respondsToSelector:@selector(mongoDatabase:collectionDropedWithMongoQuery:)]) {
+        [_delegate mongoDatabase:self collectionDropedWithMongoQuery:mongoQuery];
     }
 }
 

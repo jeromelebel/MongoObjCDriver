@@ -109,8 +109,8 @@
 
 - (void)fetchNextDocumentCallback:(MODQuery *)mongoQuery
 {
-    if ([_delegate respondsToSelector:@selector(mongoCursor:nextDocumentFetched:withMongoQuery:error:)]) {
-        [_delegate mongoCursor:self nextDocumentFetched:[mongoQuery.parameters objectForKey:@"nextdocument"] withMongoQuery:mongoQuery error:mongoQuery.error];
+    if ([_delegate respondsToSelector:@selector(mongoCursor:nextDocumentFetched:withMongoQuery:)]) {
+        [_delegate mongoCursor:self nextDocumentFetched:[mongoQuery.parameters objectForKey:@"nextdocument"] withMongoQuery:mongoQuery];
     }
 }
 

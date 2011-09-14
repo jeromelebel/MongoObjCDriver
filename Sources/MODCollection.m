@@ -37,8 +37,8 @@
     NSArray *result;
     
     result = [mongoQuery.parameters objectForKey:@"result"];
-    if ([_delegate respondsToSelector:@selector(mongoCollection:queryResultFetched:withMongoQuery:error:)]) {
-        [_delegate mongoCollection:self queryResultFetched:result withMongoQuery:mongoQuery error:mongoQuery.error];
+    if ([_delegate respondsToSelector:@selector(mongoCollection:queryResultFetched:withMongoQuery:)]) {
+        [_delegate mongoCollection:self queryResultFetched:result withMongoQuery:mongoQuery];
     }
 }
 
@@ -97,8 +97,8 @@
     long long int count;
     
     count = [[mongoQuery.parameters objectForKey:@"count"] longLongValue];
-    if ([_delegate respondsToSelector:@selector(mongoCollection:queryCountWithValue:withMongoQuery:error:)]) {
-        [_delegate mongoCollection:self queryCountWithValue:count withMongoQuery:mongoQuery error:mongoQuery.error];
+    if ([_delegate respondsToSelector:@selector(mongoCollection:queryCountWithValue:withMongoQuery:)]) {
+        [_delegate mongoCollection:self queryCountWithValue:count withMongoQuery:mongoQuery];
     }
 }
 
@@ -143,8 +143,8 @@
 
 - (void)insertCallback:(MODQuery *)mongoQuery
 {
-    if ([_delegate respondsToSelector:@selector(mongoCollection:insertWithMongoQuery:error:)]) {
-        [_delegate mongoCollection:self insertWithMongoQuery:mongoQuery error:mongoQuery.error];
+    if ([_delegate respondsToSelector:@selector(mongoCollection:insertWithMongoQuery:)]) {
+        [_delegate mongoCollection:self insertWithMongoQuery:mongoQuery];
     }
 }
 
@@ -207,8 +207,8 @@
 
 - (void)updateCallback:(MODQuery *)mongoQuery
 {
-    if ([_delegate respondsToSelector:@selector(mongoCollection:updateWithMongoQuery:error:)]) {
-        [_delegate mongoCollection:self updateWithMongoQuery:mongoQuery error:mongoQuery.error];
+    if ([_delegate respondsToSelector:@selector(mongoCollection:updateWithMongoQuery:)]) {
+        [_delegate mongoCollection:self updateWithMongoQuery:mongoQuery];
     }
 }
 
@@ -319,8 +319,8 @@
 
 - (void)removeCallback:(MODQuery *)mongoQuery
 {
-    if ([_delegate respondsToSelector:@selector(mongoCollection:updateWithMongoQuery:error:)]) {
-        [_delegate mongoCollection:self updateWithMongoQuery:mongoQuery error:mongoQuery.error];
+    if ([_delegate respondsToSelector:@selector(mongoCollection:updateWithMongoQuery:)]) {
+        [_delegate mongoCollection:self updateWithMongoQuery:mongoQuery];
     }
 }
 

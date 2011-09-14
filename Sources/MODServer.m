@@ -95,8 +95,8 @@
     NSError *error;
     
     error = mongoQuery.error;
-    if (error && [_delegate respondsToSelector:@selector(mongoServerConnectionFailed:withMongoQuery:error:)]) {
-        [_delegate mongoServerConnectionFailed:self withMongoQuery:mongoQuery error:error];
+    if (error && [_delegate respondsToSelector:@selector(mongoServerConnectionFailed:withMongoQuery:)]) {
+        [_delegate mongoServerConnectionFailed:self withMongoQuery:mongoQuery];
     } else if (error == nil && [_delegate respondsToSelector:@selector(mongoServerConnectionSucceded:withMongoQuery:)]) {
         [_delegate mongoServerConnectionSucceded:self withMongoQuery:mongoQuery];
     }
@@ -144,8 +144,8 @@
     NSArray *serverStatus;
     
     serverStatus = [mongoQuery.parameters objectForKey:@"serverstatus"];
-    if ([_delegate respondsToSelector:@selector(mongoServer:serverStatusFetched:withMongoQuery:error:)]) {
-        [_delegate mongoServer:self serverStatusFetched:serverStatus withMongoQuery:mongoQuery error:mongoQuery.error];
+    if ([_delegate respondsToSelector:@selector(mongoServer:serverStatusFetched:withMongoQuery:)]) {
+        [_delegate mongoServer:self serverStatusFetched:serverStatus withMongoQuery:mongoQuery];
     }
 }
 
@@ -170,8 +170,8 @@
     NSDictionary *serverStatusDelta;
     
     serverStatusDelta = [mongoQuery.parameters objectForKey:@"serverstatusdelta"];
-    if ([_delegate respondsToSelector:@selector(mongoDB:serverStatusDeltaFetched:withMongoQuery:error:)]) {
-        [_delegate mongoServer:self serverStatusDeltaFetched:serverStatusDelta withMongoQuery:mongoQuery error:mongoQuery.error];
+    if ([_delegate respondsToSelector:@selector(mongoDB:serverStatusDeltaFetched:withMongoQuery:)]) {
+        [_delegate mongoServer:self serverStatusDeltaFetched:serverStatusDelta withMongoQuery:mongoQuery];
     }
 }
 
@@ -195,8 +195,8 @@
     NSArray *list;
     
     list = [mongoQuery.parameters objectForKey:@"databaselist"];
-    if ([_delegate respondsToSelector:@selector(mongoServer:databaseListFetched:withMongoQuery:error:)]) {
-        [_delegate mongoServer:self databaseListFetched:list withMongoQuery:mongoQuery error:mongoQuery.error];
+    if ([_delegate respondsToSelector:@selector(mongoServer:databaseListFetched:withMongoQuery:)]) {
+        [_delegate mongoServer:self databaseListFetched:list withMongoQuery:mongoQuery];
     }
 }
 
@@ -224,8 +224,8 @@
 
 - (void)dropDatabaseCallback:(MODQuery *)mongoQuery
 {
-    if ([_delegate respondsToSelector:@selector(mongoDB:databaseDropedWithMongoQuery:error:)]) {
-        [_delegate mongoServer:self databaseDropedWithMongoQuery:mongoQuery error:mongoQuery.error];
+    if ([_delegate respondsToSelector:@selector(mongoDB:databaseDropedWithMongoQuery:)]) {
+        [_delegate mongoServer:self databaseDropedWithMongoQuery:mongoQuery];
     }
 }
 
