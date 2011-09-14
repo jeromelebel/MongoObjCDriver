@@ -263,7 +263,7 @@ static id objects_from_json(const char *json, int *error, size_t *totalProcessed
         if (range.location + range.length > [json length]) {
             range.length = [json length] - range.location;
         }
-        *error = [self errorWithErrorDomain:MODJsonErrorDomain code:errorCode descriptionDetails:[json substringWithRange:range]];
+        *error = [self errorWithErrorDomain:MODJsonErrorDomain code:errorCode descriptionDetails:[NSString stringWithFormat:@"%@ (position: %ld)", [json substringWithRange:range], processed]];
     }
     return result;
 }
