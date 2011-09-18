@@ -99,7 +99,9 @@
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock
 {
     [self mongoQueryDidFinish:mongoQuery];
-    dispatch_async(dispatch_get_main_queue(), callbackBlock);
+    if (callbackBlock) {
+        dispatch_async(dispatch_get_main_queue(), callbackBlock);
+    }
 }
 
 - (MODQuery *)connectWithHostName:(NSString *)host callback:(void (^)(BOOL connected, MODQuery *mongoQuery))callback
