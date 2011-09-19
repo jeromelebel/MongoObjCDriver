@@ -56,7 +56,7 @@
             mongoQuery.error = error;
         }
         [mongoQuery.mutableParameters setObject:documents forKey:@"documents"];
-        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^() {
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback(documents, mongoQuery);
         }];
         [documents release];
@@ -120,7 +120,7 @@
             bson_destroy(bsonQuery);
             free(bsonQuery);
         }
-        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^() {
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback(count, mongoQuery);
         }];
     }];
@@ -181,7 +181,7 @@
             free(data);
             mongoQuery.error = error;
         }
-        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^() {
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback(mongoQuery);
         }];
     }];
@@ -218,7 +218,7 @@
             bson_destroy(&bsonCriteria);
             bson_destroy(&bsonUpdate);
         }
-        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^() {
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback(mongoQuery);
         }];
     }];
@@ -293,7 +293,7 @@
             bson_destroy(&bsonCriteria);
             bson_destroy(&bsonDocument);
         }
-        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^() {
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback(mongoQuery);
         }];
     }];
@@ -323,7 +323,7 @@
             }
             bson_destroy(&bsonCriteria);
         }
-        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^() {
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback(mongoQuery);
         }];
     }];
