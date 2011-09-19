@@ -458,8 +458,8 @@ static id objects_from_json(const char *json, int *error, size_t *totalProcessed
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             break;
         case BSON_SYMBOL:
-            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             result = [NSString stringWithUTF8String:bson_iterator_string(iterator)];
+            NSLog(@"*********************** %d %d %@", bson_iterator_type(iterator), __LINE__, result);
             break;
         case BSON_CODEWSCOPE:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
