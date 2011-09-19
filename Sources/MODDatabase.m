@@ -61,7 +61,9 @@
             }
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-            callback(stats, mongoQuery);
+            if (callback) {
+                callback(stats, mongoQuery);
+            }
         }];
     }];
     [query.mutableParameters setObject:@"fetchdatabasestats" forKey:@"command"];
@@ -95,7 +97,9 @@
             mongo_cursor_destroy(cursor);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-            callback(collections, mongoQuery);
+            if (callback) {
+                callback(collections, mongoQuery);
+            }
         }];
         [collections release];
     }];
@@ -117,7 +121,9 @@
             mongo_cmd_create_collection(self.mongoServer.mongo, [_databaseName UTF8String], [collectionName UTF8String]);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-            callback(mongoQuery);
+            if (callback) {
+                callback(mongoQuery);
+            }
         }];
     }];
     [query.mutableParameters setObject:@"createcollection" forKey:@"command"];
@@ -134,7 +140,9 @@
             mongo_cmd_drop_collection(self.mongoServer.mongo, [_databaseName UTF8String], [collectionName UTF8String]);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-            callback(mongoQuery);
+            if (callback) {
+                callback(mongoQuery);
+            }
         }];
     }];
     [query.mutableParameters setObject:@"dropcollection" forKey:@"command"];
