@@ -53,6 +53,8 @@
 
 @property(nonatomic, readonly, assign) mongo_ptr mongo;
 
+- (id)initWithMongoDatabase:(MODDatabase *)mongoDatabase collectionName:(NSString *)collectionName;
+
 @end
 
 @interface MODCursor()

@@ -37,6 +37,29 @@
     [_mongoDatabase mongoQueryDidFinish:mongoQuery withCallbackBlock:callbackBlock];
 }
 
+- (MODQuery *)fetchDatabaseStatsWithCallback:(void (^)(NSDictionary *stats, MODQuery *mongoQuery))callback
+{
+    MODQuery *query = nil;
+    
+    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        NSDictionary *stats = nil;
+        
+        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+            bson output;
+            
+            if (mongo_simple_str_command(_mongoDatabase.mongo, [_mongoDatabase.databaseName UTF8String], "collstats", [_collectionName UTF8String], &output) == MONGO_OK) {
+                stats = [[self.mongoServer class] objectsFromBson:&output];
+                [mongoQuery.mutableParameters setObject:stats forKey:@"collectionstats"];
+                bson_destroy(&output);
+            }
+        }
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+            callback(stats, mongoQuery);
+        }];
+    }];
+    return query;
+}
+
 - (MODQuery *)findWithCriteria:(NSString *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort callback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
