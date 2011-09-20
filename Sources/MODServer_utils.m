@@ -11,7 +11,7 @@
 typedef struct {
     int type;
     const char *data;
-    uint32_t length;
+    size_t length;
 } ParserDataInfo;
 
 static void process_json(const char *json, json_parser_dom *helper, int *errorCode, size_t *totalProcessed)
@@ -47,7 +47,7 @@ static void process_json(const char *json, json_parser_dom *helper, int *errorCo
     json_parser_free(&parser);
 }
 
-static void * begin_structure_for_bson(int nesting, int is_object, void *structure, int is_object_structure, const char *key, int key_length, void *void_user_context)
+static void * begin_structure_for_bson(int nesting, int is_object, void *structure, int is_object_structure, const char *key, size_t key_length, void *void_user_context)
 {
     bson *bsonResult = void_user_context;
     
@@ -61,7 +61,7 @@ static void * begin_structure_for_bson(int nesting, int is_object, void *structu
     return bsonResult;
 }
 
-static int end_structure_for_bson(int nesting, int is_object, const char *key, int key_length, void *structure, void *void_user_context)
+static int end_structure_for_bson(int nesting, int is_object, const char *key, size_t key_length, void *structure, void *void_user_context)
 {
     bson *bsonResult = void_user_context;
     
@@ -76,7 +76,7 @@ static int end_structure_for_bson(int nesting, int is_object, const char *key, i
 }
 
 /** callback from the parser_dom callback to create data values */
-static void * create_data_for_bson(int type, const char *data, uint32_t length, void *user_context)
+static void * create_data_for_bson(int type, const char *data, size_t length, void *user_context)
 {
     ParserDataInfo *result;
     
@@ -89,7 +89,7 @@ static void * create_data_for_bson(int type, const char *data, uint32_t length, 
 
 /** callback from the parser helper callback to append a value to an object or array value
  * append(parent, key, key_length, val); */
-static int append_data_for_bson(void *structure, int is_object_structure, int structure_value_count, char *key, uint32_t key_length, void *obj, void *void_user_context)
+static int append_data_for_bson(void *structure, int is_object_structure, int structure_value_count, char *key, size_t key_length, void *obj, void *void_user_context)
 {
     ParserDataInfo *dataInfo = obj;
     bson *bsonResult = void_user_context;
@@ -134,7 +134,7 @@ static void bson_from_json(bson *bsonResult, const char *json, int *error, size_
     json_parser_dom_free(&helper);
 }
 
-static void * begin_structure_for_objects(int nesting, int is_object, void *structure, int is_object_structure, const char *key, int key_length, void *void_user_context)
+static void * begin_structure_for_objects(int nesting, int is_object, void *structure, int is_object_structure, const char *key, size_t key_length, void *void_user_context)
 {
     id result;
     
@@ -155,13 +155,13 @@ static void * begin_structure_for_objects(int nesting, int is_object, void *stru
     return result;
 }
 
-static int end_structure_for_objects(int nesting, int is_object, const char *key, int key_length, void *structure, void *void_user_context)
+static int end_structure_for_objects(int nesting, int is_object, const char *key, size_t key_length, void *structure, void *void_user_context)
 {
     return 0;
 }
 
 /** callback from the parser_dom callback to create data values */
-static void * create_data_for_objects(int type, const char *data, uint32_t length, void *user_context)
+static void * create_data_for_objects(int type, const char *data, size_t length, void *user_context)
 {
     id objectData = nil;
     
@@ -192,7 +192,7 @@ static void * create_data_for_objects(int type, const char *data, uint32_t lengt
 
 /** callback from the parser helper callback to append a value to an object or array value
  * append(parent, key, key_length, val); */
-static int append_data_for_objects(void *structure, int is_object_structure, int structure_value_count, char *key, uint32_t key_length, void *obj, void *void_user_context)
+static int append_data_for_objects(void *structure, int is_object_structure, int structure_value_count, char *key, size_t key_length, void *obj, void *void_user_context)
 {
     if (is_object_structure) {
         [(NSMutableDictionary *)structure setObject:obj forKey:[NSString stringWithUTF8String:key]];
@@ -458,8 +458,8 @@ static id objects_from_json(const char *json, int *error, size_t *totalProcessed
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             break;
         case BSON_SYMBOL:
+            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             result = [NSString stringWithUTF8String:bson_iterator_string(iterator)];
-            NSLog(@"*********************** %d %d %@", bson_iterator_type(iterator), __LINE__, result);
             break;
         case BSON_CODEWSCOPE:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
