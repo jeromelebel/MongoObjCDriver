@@ -61,8 +61,8 @@
 
 @property(nonatomic, readwrite, retain) NSString *query;
 @property(nonatomic, readwrite, retain) NSArray *fields;
-@property(nonatomic, readwrite, assign) NSUInteger skip;
-@property(nonatomic, readwrite, assign) NSUInteger limit;
+@property(nonatomic, readwrite, assign) int32_t skip;
+@property(nonatomic, readwrite, assign) int32_t limit;
 @property(nonatomic, readwrite, retain) NSString * sort;
 
 - (id)initWithMongoCollection:(MODCollection *)mongoCollection;
