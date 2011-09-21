@@ -12,6 +12,7 @@
 #import "MODCollection.h"
 #import "MODCursor.h"
 #import "MODQuery.h"
+#import "MODObjectId.h"
 #import "mongo.h"
 #import "json.h"
 
@@ -80,5 +81,11 @@
 @property (nonatomic, readwrite, retain) NSMutableDictionary *mutableParameters;
 @property (nonatomic, readwrite, assign) NSBlockOperation *blockOperation;
 @property (nonatomic, readwrite, retain) NSError *error;
+
+@end
+
+@interface MODObjectId()
+
+- (id)initWithOid:(bson_oid_t *)oid;
 
 @end

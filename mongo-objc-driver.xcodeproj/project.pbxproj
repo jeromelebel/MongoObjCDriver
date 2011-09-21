@@ -49,6 +49,9 @@
 		02A85F63141080A2004F3FE9 /* mongo.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F2314103D4D004F3FE9 /* mongo.h */; };
 		02A85F64141080A2004F3FE9 /* net.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F2514103D4D004F3FE9 /* net.h */; };
 		02A85F65141080A2004F3FE9 /* platform.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F2B14103D4E004F3FE9 /* platform.h */; };
+		02AB057614296F9000B7CD19 /* MODObjectId.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB057414296F9000B7CD19 /* MODObjectId.h */; };
+		02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
+		02AB057814296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
 		02ABA1C414103B37000417F4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C314103B37000417F4 /* Cocoa.framework */; };
 		02BDC3E7141D6073000EF755 /* MODCursor.h in Headers */ = {isa = PBXBuildFile; fileRef = 02BDC3E5141D6073000EF755 /* MODCursor.h */; };
 		02BDC3E8141D6073000EF755 /* MODCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3E6141D6073000EF755 /* MODCursor.m */; };
@@ -217,6 +220,8 @@
 		02A85F5714104184004F3FE9 /* MODQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODQuery.h; sourceTree = "<group>"; };
 		02A85F5814104184004F3FE9 /* MODQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODQuery.m; sourceTree = "<group>"; };
 		02A85F5B14104373004F3FE9 /* MOD_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOD_internal.h; sourceTree = "<group>"; };
+		02AB057414296F9000B7CD19 /* MODObjectId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODObjectId.h; sourceTree = "<group>"; };
+		02AB057514296F9000B7CD19 /* MODObjectId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODObjectId.m; sourceTree = "<group>"; };
 		02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "mongo-objc-driver.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02ABA1C314103B37000417F4 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		02ABA1C614103B37000417F4 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -561,6 +566,8 @@
 				02BDC3E6141D6073000EF755 /* MODCursor.m */,
 				02A85F5714104184004F3FE9 /* MODQuery.h */,
 				02A85F5814104184004F3FE9 /* MODQuery.m */,
+				02AB057414296F9000B7CD19 /* MODObjectId.h */,
+				02AB057514296F9000B7CD19 /* MODObjectId.m */,
 				02ABA1CA14103B37000417F4 /* Supporting Files */,
 			);
 			path = Sources;
@@ -614,6 +621,7 @@
 				02688DDC14119CF50014ED51 /* MODDatabase.h in Headers */,
 				02688DE21411C5010014ED51 /* MODCollection.h in Headers */,
 				02BDC3E7141D6073000EF755 /* MODCursor.h in Headers */,
+				02AB057614296F9000B7CD19 /* MODObjectId.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -744,6 +752,7 @@
 				02A85F5A14104184004F3FE9 /* MODQuery.m in Sources */,
 				02BDC3E8141D6073000EF755 /* MODCursor.m in Sources */,
 				02BDC3EC141D83A7000EF755 /* MODServer_utils.m in Sources */,
+				02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -766,6 +775,7 @@
 				02688DE41411C5010014ED51 /* MODCollection.m in Sources */,
 				02BDC3EA141D6938000EF755 /* MODCursor.m in Sources */,
 				02BDC3ED141D83A7000EF755 /* MODServer_utils.m in Sources */,
+				02AB057814296F9000B7CD19 /* MODObjectId.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -437,7 +437,7 @@ static id objects_from_json(const char *json, int *error, size_t *totalProcessed
             result = nil;
             break;
         case BSON_OID:
-            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+            result = [[MODObjectId alloc] initWithOid:bson_iterator_oid(iterator)];
             break;
         case BSON_BOOL:
             result = [NSNumber numberWithBool:bson_iterator_bool(iterator) == true];
