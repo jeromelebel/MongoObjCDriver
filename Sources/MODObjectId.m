@@ -14,10 +14,10 @@
 - (id)initWithOid:(bson_oid_t *)oid
 {
     NSAssert(sizeof(bson_oid_t) == sizeof(data), @"problem with types");
-    return [self initWithBytes:(char *)oid];
+    return [self initWithBytes:(const unsigned char *)oid];
 }
 
-- (id)initWithBytes:(const char *)bytes
+- (id)initWithBytes:(const unsigned char *)bytes
 {
     if (self = [self init]) {
         memcpy((char *)data, bytes, sizeof(data));
@@ -25,7 +25,7 @@
     return self;
 }
 
-- (const char *)bytes
+- (const unsigned char *)bytes
 {
     return data;
 }
@@ -33,6 +33,24 @@
 - (NSString *)description
 {
     return [[NSData dataWithBytes:data length:sizeof(data)] description];
+}
+
+- (NSString *)stringValue
+{
+    NSMutableString *result;
+    NSUInteger ii, count;
+    
+    result = [NSMutableString string];
+    count = sizeof(data);
+    for (ii = 0; ii < count; ii++) {
+        [result appendFormat:@"%0.2X", data[ii]];
+    }
+    return result;
+}
+
+- (NSString *)jsonValue
+{
+    return [NSString stringWithFormat:@"ObjectId(\"%@\")", [self stringValue]];
 }
 
 @end
