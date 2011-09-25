@@ -68,6 +68,9 @@ int main (int argc, const char * argv[])
         [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\" : \"toto\" }", nil] callback:^(MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
         }];
+        [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\" : \"toto1\" }", @"{ \"_id\" : { \"$oid\" : \"123456789012345678901234\" } }", nil] callback:^(MODQuery *mongoQuery) {
+            logMongoQuery(mongoQuery);
+        }];
         [mongoCollection findWithCriteria:nil fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:100 sort:nil callback:^(NSArray *documents, MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
         }];
@@ -80,6 +83,7 @@ int main (int argc, const char * argv[])
         [mongoCollection findWithCriteria:@"{\"_id\": \"toto\"}" fields:nil skip:1 limit:5 sort:@"{ \"_id\" : 1 }" callback:^(NSArray *documents, MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
         }];
+#if 0
         [mongoCollection removeWithCriteria:@"{\"_id\": \"toto\"}" callback:^(MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
         }];
@@ -90,7 +94,7 @@ int main (int argc, const char * argv[])
         [server dropDatabaseWithName:DATABASE_NAME_TEST callback:^(MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
         }];
-        
+#endif
     }
     @autoreleasepool {
         [[NSRunLoop mainRunLoop] run];

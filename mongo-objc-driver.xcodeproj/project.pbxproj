@@ -30,6 +30,12 @@
 		02688DE21411C5010014ED51 /* MODCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 02688DE01411C5010014ED51 /* MODCollection.h */; };
 		02688DE31411C5010014ED51 /* MODCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DE11411C5010014ED51 /* MODCollection.m */; };
 		02688DE41411C5010014ED51 /* MODCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DE11411C5010014ED51 /* MODCollection.m */; };
+		0272D1BF142D48AF000091A4 /* MODJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 0272D1BD142D48AE000091A4 /* MODJsonParser.h */; };
+		0272D1C0142D48AF000091A4 /* MODJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0272D1BE142D48AF000091A4 /* MODJsonParser.m */; };
+		0272D1C2142D5A5C000091A4 /* MODJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0272D1BE142D48AF000091A4 /* MODJsonParser.m */; };
+		028CE605142E10BE0099B1F7 /* MODTimestamp.h in Headers */ = {isa = PBXBuildFile; fileRef = 028CE603142E10BE0099B1F7 /* MODTimestamp.h */; };
+		028CE606142E10BE0099B1F7 /* MODTimestamp.m in Sources */ = {isa = PBXBuildFile; fileRef = 028CE604142E10BE0099B1F7 /* MODTimestamp.m */; };
+		028CE608142E4A1A0099B1F7 /* MODTimestamp.m in Sources */ = {isa = PBXBuildFile; fileRef = 028CE604142E10BE0099B1F7 /* MODTimestamp.m */; };
 		02A85F4614103D64004F3FE9 /* bson.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F1A14103D4D004F3FE9 /* bson.c */; };
 		02A85F4714103D64004F3FE9 /* encoding.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F1C14103D4D004F3FE9 /* encoding.c */; };
 		02A85F4814103D64004F3FE9 /* gridfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F1E14103D4D004F3FE9 /* gridfs.c */; };
@@ -159,6 +165,10 @@
 		02688DDB14119CF50014ED51 /* MODDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODDatabase.m; sourceTree = "<group>"; };
 		02688DE01411C5010014ED51 /* MODCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODCollection.h; sourceTree = "<group>"; };
 		02688DE11411C5010014ED51 /* MODCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODCollection.m; sourceTree = "<group>"; };
+		0272D1BD142D48AE000091A4 /* MODJsonParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODJsonParser.h; sourceTree = "<group>"; };
+		0272D1BE142D48AF000091A4 /* MODJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODJsonParser.m; sourceTree = "<group>"; };
+		028CE603142E10BE0099B1F7 /* MODTimestamp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODTimestamp.h; sourceTree = "<group>"; };
+		028CE604142E10BE0099B1F7 /* MODTimestamp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODTimestamp.m; sourceTree = "<group>"; };
 		02A85F0314103D4D004F3FE9 /* .astylerc */ = {isa = PBXFileReference; lastKnownFileType = text; path = .astylerc; sourceTree = "<group>"; };
 		02A85F0414103D4D004F3FE9 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		02A85F0514103D4D004F3FE9 /* APACHE-2.0.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "APACHE-2.0.txt"; sourceTree = "<group>"; };
@@ -568,6 +578,10 @@
 				02A85F5814104184004F3FE9 /* MODQuery.m */,
 				02AB057414296F9000B7CD19 /* MODObjectId.h */,
 				02AB057514296F9000B7CD19 /* MODObjectId.m */,
+				028CE603142E10BE0099B1F7 /* MODTimestamp.h */,
+				028CE604142E10BE0099B1F7 /* MODTimestamp.m */,
+				0272D1BD142D48AE000091A4 /* MODJsonParser.h */,
+				0272D1BE142D48AF000091A4 /* MODJsonParser.m */,
 				02ABA1CA14103B37000417F4 /* Supporting Files */,
 			);
 			path = Sources;
@@ -622,6 +636,8 @@
 				02688DE21411C5010014ED51 /* MODCollection.h in Headers */,
 				02BDC3E7141D6073000EF755 /* MODCursor.h in Headers */,
 				02AB057614296F9000B7CD19 /* MODObjectId.h in Headers */,
+				0272D1BF142D48AF000091A4 /* MODJsonParser.h in Headers */,
+				028CE605142E10BE0099B1F7 /* MODTimestamp.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -753,6 +769,8 @@
 				02BDC3E8141D6073000EF755 /* MODCursor.m in Sources */,
 				02BDC3EC141D83A7000EF755 /* MODServer_utils.m in Sources */,
 				02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */,
+				0272D1C0142D48AF000091A4 /* MODJsonParser.m in Sources */,
+				028CE606142E10BE0099B1F7 /* MODTimestamp.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -776,6 +794,8 @@
 				02BDC3EA141D6938000EF755 /* MODCursor.m in Sources */,
 				02BDC3ED141D83A7000EF755 /* MODServer_utils.m in Sources */,
 				02AB057814296F9000B7CD19 /* MODObjectId.m in Sources */,
+				0272D1C2142D5A5C000091A4 /* MODJsonParser.m in Sources */,
+				028CE608142E4A1A0099B1F7 /* MODTimestamp.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

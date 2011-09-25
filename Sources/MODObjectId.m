@@ -50,7 +50,7 @@
 
 - (NSString *)jsonValue
 {
-    return [NSString stringWithFormat:@"ObjectId(\"%@\")", [self stringValue]];
+    return [NSString stringWithFormat:@"{ \"$oid\" : \"%@\" }", [self stringValue]];
 }
 
 @end

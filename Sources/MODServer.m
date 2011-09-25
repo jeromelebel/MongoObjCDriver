@@ -98,6 +98,9 @@
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock
 {
+    if (![mongoQuery.parameters objectForKey:@"command"]) {
+        NSLog(@"done with %@", [mongoQuery.parameters objectForKey:@"command"]);
+    }
     [self mongoQueryDidFinish:mongoQuery];
     if (callbackBlock) {
         dispatch_async(dispatch_get_main_queue(), callbackBlock);

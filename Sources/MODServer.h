@@ -10,6 +10,11 @@
 
 #define MODMongoErrorDomain @"mod.mongo"
 #define MODJsonErrorDomain @"mod.json"
+#define MODJsonParserErrorDomain @"mod.jsonparser"
+
+enum {
+    JSON_PARSER_ERROR_EXPECTED_END
+};
 
 @class MODQuery;
 @class MODDatabase;

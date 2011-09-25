@@ -53,7 +53,7 @@
     bson_init(_bsonQuery);
     
     bson_append_start_object(_bsonQuery, "$query");
-    if (_query) {
+    if (_query && [_query  length] > 0) {
         [[_mongoCollection.mongoServer class] bsonFromJson:_bsonQuery json:_query error:error];
     }
     bson_append_finish_object(_bsonQuery);

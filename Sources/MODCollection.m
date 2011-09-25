@@ -57,6 +57,7 @@
             callback(stats, mongoQuery);
         }];
     }];
+    [query.mutableParameters setObject:@"databasestats" forKey:@"command"];
     return query;
 }
 
@@ -117,7 +118,7 @@
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        int64_t count;
+        int64_t count = 0;
         
         if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson *bsonQuery = NULL;
@@ -125,7 +126,7 @@
             
             bsonQuery = malloc(sizeof(*bsonQuery));
             bson_init(bsonQuery);
-            if (jsonCriteria) {
+            if (jsonCriteria && [jsonCriteria length] > 0) {
                 [[_mongoDatabase.mongoServer class] bsonFromJson:bsonQuery json:jsonCriteria error:&error];
             }
             bson_finish(bsonQuery);
@@ -221,7 +222,7 @@
         if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson bsonCriteria;
             bson bsonUpdate;
-            NSError *error;
+            NSError *error = nil;
             
             bson_init(&bsonCriteria);
             if (jsonCriteria) {
@@ -263,7 +264,7 @@
         if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson bsonCriteria;
             bson bsonDocument;
-            NSError *error;
+            NSError *error = nil;
             
             bson_init(&bsonDocument);
             [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonDocument json:document error:&error];
@@ -304,6 +305,7 @@
                                 error = [[_mongoDatabase.mongoServer class] errorWithErrorDomain:MODMongoErrorDomain code:MONGO_BSON_INVALID descriptionDetails:@"_id missing in document"];
                                 break;
                         }
+                        break;
                     }
                 }
             }
@@ -332,7 +334,7 @@
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson bsonCriteria;
-            NSError *error;
+            NSError *error = nil;
             
             bson_init(&bsonCriteria);
             if (criteria) {

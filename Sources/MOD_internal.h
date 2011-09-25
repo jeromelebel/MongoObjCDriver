@@ -13,6 +13,8 @@
 #import "MODCursor.h"
 #import "MODQuery.h"
 #import "MODObjectId.h"
+#import "MODJsonParser.h"
+#import "MODTimestamp.h"
 #import "mongo.h"
 #import "json.h"
 
@@ -88,4 +90,12 @@
 
 - (id)initWithOid:(bson_oid_t *)oid;
 
+@end
+
+
+@interface MODJsonToBsonParser : MODJsonParser<MODJsonParserProtocol>
+{
+    bson *_bson;
+}
+- (void)setBson:(bson *)bson;
 @end
