@@ -16,12 +16,14 @@
 - (BOOL)closeDictionaryWithStructure:(void *)openedStructure;
 - (BOOL)closeArrayWithStructure:(void *)openedStructure;
 - (BOOL)appendTimestampWithTValue:(int)tValue iValue:(int)iValue key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
+- (BOOL)appendDate:(int64_t)date withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
 - (BOOL)appendObjectId:(void *)objectId length:(size_t)length withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
 - (BOOL)appendString:(const char *)stringValue withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
 - (BOOL)appendLongLong:(long long)integer withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
 - (BOOL)appendDouble:(double)doubleValue withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
 - (BOOL)appendNullWithKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
 - (BOOL)appendBool:(BOOL)boolValue withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
+- (BOOL)appendRegexWithPattern:(const char *)pattern options:(const char *)options key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
 
 @end
 

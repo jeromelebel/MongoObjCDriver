@@ -83,7 +83,6 @@ int main (int argc, const char * argv[])
         [mongoCollection findWithCriteria:@"{\"_id\": \"toto\"}" fields:nil skip:1 limit:5 sort:@"{ \"_id\" : 1 }" callback:^(NSArray *documents, MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
         }];
-#if 0
         [mongoCollection removeWithCriteria:@"{\"_id\": \"toto\"}" callback:^(MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
         }];
@@ -94,7 +93,6 @@ int main (int argc, const char * argv[])
         [server dropDatabaseWithName:DATABASE_NAME_TEST callback:^(MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
         }];
-#endif
     }
     @autoreleasepool {
         [[NSRunLoop mainRunLoop] run];

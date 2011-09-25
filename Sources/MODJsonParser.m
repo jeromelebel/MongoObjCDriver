@@ -25,6 +25,7 @@ typedef struct {
         enum {
             NO_BSON_TYPE,
             TIMESTAMP_BSON_TYPE,
+            REGEX_BSON_TYPE,
         } bsonType;
         struct {
             BOOL hasTValue;
@@ -33,6 +34,10 @@ typedef struct {
             int32_t iValue;
             BOOL closeOne;
         } timestampBson;
+        struct {
+            char *pattern;
+            char *options;
+        } regexBson;
     } pendingBsonValue;
     
 } JsonParserContext;
@@ -42,6 +47,17 @@ typedef struct {
     const char *data;
     size_t length;
 } ParserDataInfo;
+
+static char *copyString(const char *string)
+{
+    char *result;
+    size_t stringLength;
+    
+    stringLength = strlen(string);
+    result = malloc(stringLength + 1);
+    strncpy(result, string, stringLength);
+    return result;
+}
 
 static unsigned char convertCharToByte(char my_char, BOOL *isValid)
 {
@@ -103,6 +119,12 @@ static void clear_pending_value(JsonParserContext *context, BOOL shouldSkipNextE
     if (context->pendingBsonValue.objectKeyToCreate) {
         free(context->pendingBsonValue.objectKeyToCreate);
     }
+    if (context->pendingBsonValue.regexBson.pattern) {
+        free(context->pendingBsonValue.regexBson.pattern);
+    }
+    if (context->pendingBsonValue.regexBson.options) {
+        free(context->pendingBsonValue.regexBson.options);
+    }
     bzero(&(context->pendingBsonValue), sizeof(context->pendingBsonValue));
     context->pendingBsonValue.bsonType = NO_BSON_TYPE;
     context->shouldSkipNextEndStructure = shouldSkipNextEndStructure;
@@ -143,8 +165,7 @@ static void * begin_structure_for_bson(int nesting, int is_object, void *structu
         } else {
             if (create_waiting_structure_if_needed(context)) {
                 context->pendingBsonValue.isObject = is_object;
-                context->pendingBsonValue.objectKeyToCreate = malloc(key_length + 1);
-                strncpy(context->pendingBsonValue.objectKeyToCreate, key, key_length);
+                context->pendingBsonValue.objectKeyToCreate = copyString(key);
                 result = context->target;
             } else {
                 result = NULL;
@@ -237,11 +258,27 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
         if (dataInfo->length == sizeof(bson_oid_t) * 2) {
             bson_oid_t oid;
             
-            if (convertStringToData(dataInfo->data, &oid, sizeof(bson_oid_t)) == sizeof(bson_oid_t)) {
-                appendObjectId:length:withKey:previousStructure:previousStructureDictionary:
+            if (convertStringToData(dataInfo->data, &oid, sizeof(bson_oid_t)) == sizeof(bson_oid_t) && context->pendingBsonValue.bsonType == NO_BSON_TYPE && dataInfo->type == JSON_STRING) {
                 result = [context->target appendObjectId:&oid length:sizeof(oid) withKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStructure previousStructureDictionary:context->latestStructureObject]?0:1;
                 clear_pending_value(context, YES);
             }
+        }
+    } else if (strcmp(key, "$regex") == 0 || strcmp(key, "$options") == 0) {
+        if (strcmp(key, "$regex") == 0 && !context->pendingBsonValue.regexBson.pattern && dataInfo->type == JSON_STRING && (context->pendingBsonValue.bsonType == REGEX_BSON_TYPE || context->pendingBsonValue.bsonType == NO_BSON_TYPE)) {
+            context->pendingBsonValue.bsonType = REGEX_BSON_TYPE;
+            context->pendingBsonValue.regexBson.pattern = copyString(dataInfo->data);
+        } else if (strcmp(key, "$options") == 0 && !context->pendingBsonValue.regexBson.options && dataInfo->type == JSON_STRING && (context->pendingBsonValue.bsonType == REGEX_BSON_TYPE || context->pendingBsonValue.bsonType == NO_BSON_TYPE)) {
+            context->pendingBsonValue.bsonType = REGEX_BSON_TYPE;
+            context->pendingBsonValue.regexBson.options = copyString(dataInfo->data);
+        }
+        if (context->pendingBsonValue.regexBson.pattern && context->pendingBsonValue.regexBson.options && context->pendingBsonValue.bsonType == REGEX_BSON_TYPE) {
+            result = [context->target appendRegexWithPattern:context->pendingBsonValue.regexBson.pattern options:context->pendingBsonValue.regexBson.options key:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStructure previousStructureDictionary:context->latestStructureObject]?0:1;
+            clear_pending_value(context, YES);
+        }
+    } else if (strcmp(key, "$date") == 0) {
+        if (dataInfo->type == JSON_INT || dataInfo->type == JSON_FLOAT) {
+            result = [context->target appendDate:atof(dataInfo->data) withKey:key previousStructure:context->latestStructure previousStructureDictionary:context->latestStructureObject]?0:1;
+            clear_pending_value(context, YES);
         }
     } else {
         switch (context->pendingBsonValue.bsonType) {
@@ -293,6 +330,9 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
                         result = context->pendingBsonValue.timestampBson.hasTValue?0:1;
                     }
                 }
+                break;
+            case REGEX_BSON_TYPE:
+                // error
                 break;
         }
     }
@@ -435,6 +475,23 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     return YES;
 }
 
+- (BOOL)appendDate:(int64_t)date withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+{
+    bson_append_date(_bson, key, date);
+    return YES;
+}
+
+- (BOOL)appendRegexWithPattern:(const char *)pattern options:(const char *)options key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+{
+    BOOL result = NO;
+    
+    if (pattern && options) {
+        bson_append_regex(_bson, key, pattern, options);
+        result = YES;
+    }
+    return result;
+}
+
 @end
 
 @implementation MODJsonToObjectParser
@@ -497,8 +554,9 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
 {
     MODTimestamp *ts;
     
-    ts = [[[MODTimestamp alloc] initWithTValue:tValue iValue:iValue] autorelease];
+    ts = [[MODTimestamp alloc] initWithTValue:tValue iValue:iValue];
     [self addObject:ts toStructure:structure isDictionary:isDictionary withKey:key];
+    [ts release];
     return YES;
 }
 
@@ -508,8 +566,9 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     BOOL result = NO;
     
     if (length == sizeof(bson_oid_t)) {
-        object = [[[MODObjectId alloc] initWithOid:objectId] autorelease];
+        object = [[MODObjectId alloc] initWithOid:objectId];
         [self addObject:object toStructure:structure isDictionary:isDictionary withKey:key];
+        [object release];
         result = YES;
     }
     return result;
@@ -519,8 +578,9 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
 {
     NSString *object;
     
-    object = [[[NSString alloc] initWithUTF8String:stringValue] autorelease];
+    object = [[NSString alloc] initWithUTF8String:stringValue];
     [self addObject:object toStructure:structure isDictionary:isDictionary withKey:key];
+    [object release];
     return YES;
 }
 
@@ -528,8 +588,9 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
 {
     NSNumber *object;
     
-    object = [[[NSNumber alloc] initWithLongLong:integerValue] autorelease];
+    object = [[NSNumber alloc] initWithLongLong:integerValue];
     [self addObject:object toStructure:structure isDictionary:isDictionary withKey:key];
+    [object release];
     return YES;
 }
 
@@ -537,8 +598,9 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
 {
     NSNumber *object;
     
-    object = [[[NSNumber alloc] initWithDouble:doubleValue] autorelease];
+    object = [[NSNumber alloc] initWithDouble:doubleValue];
     [self addObject:object toStructure:structure isDictionary:isDictionary withKey:key];
+    [object release];
     return YES;
 }
 
@@ -546,8 +608,19 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
 {
     NSNumber *object;
     
-    object = [[[NSNumber alloc] initWithBool:boolValue] autorelease];
+    object = [[NSNumber alloc] initWithBool:boolValue];
     [self addObject:object toStructure:structure isDictionary:isDictionary withKey:key];
+    [object release];
+    return YES;
+}
+
+- (BOOL)appendDate:(int64_t)date withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+{
+    NSDate *object;
+    
+    object = [[NSDate alloc] initWithTimeIntervalSince1970:date / 1000.0];
+    [self addObject:object toStructure:structure isDictionary:isDictionary withKey:key];
+    [object release];
     return YES;
 }
 
@@ -555,6 +628,27 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
 {
     [self addObject:[NSNull null] toStructure:structure isDictionary:isDictionary withKey:key];
     return YES;
+}
+
+- (BOOL)appendRegexWithPattern:(const char *)pattern options:(const char *)options key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+{
+    BOOL result = NO;
+    
+    if (pattern && options) {
+        MODDataRegex *dataRegex;
+        NSString *patternString;
+        NSString *optionsString;
+        
+        patternString = [[NSString alloc] initWithUTF8String:pattern];
+        optionsString = [[NSString alloc] initWithUTF8String:options];
+        dataRegex = [[MODDataRegex alloc] initWithPattern:patternString options:optionsString];
+        [self addObject:dataRegex toStructure:structure isDictionary:isDictionary withKey:key];
+        [patternString release];
+        [optionsString release];
+        [dataRegex release];
+        result = YES;
+    }
+    return result;
 }
 
 @end

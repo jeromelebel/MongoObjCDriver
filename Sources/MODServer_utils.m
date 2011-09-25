@@ -225,7 +225,13 @@
             result = [NSNull null];
             break;
         case BSON_REGEX:
-            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+            {
+                NSString *pattern = [[NSString alloc] initWithUTF8String:bson_iterator_regex(iterator)];
+                NSString *options = [[NSString alloc] initWithUTF8String:bson_iterator_regex_opts(iterator)];
+                result = [[[MODDataRegex alloc] initWithPattern:pattern options:options] autorelease];
+                [pattern release];
+                [options release];
+            }
             break;
         case BSON_DBREF:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
@@ -244,7 +250,11 @@
             result = [NSNumber numberWithInt:bson_iterator_int(iterator)];
             break;
         case BSON_TIMESTAMP:
-            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+            {
+                bson_timestamp_t ts;
+                bson_iterator_timestamp(iterator);
+                result = [[[MODTimestamp alloc] initWithTValue:ts.t iValue:ts.i] autorelease];
+            }
             break;
         case BSON_LONG:
             result = [NSNumber numberWithLong:bson_iterator_long(iterator)];

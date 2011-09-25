@@ -15,6 +15,7 @@
 #import "MODObjectId.h"
 #import "MODJsonParser.h"
 #import "MODTimestamp.h"
+#import "MODDataRegex.h"
 #import "mongo.h"
 #import "json.h"
 
