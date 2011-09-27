@@ -17,6 +17,7 @@
 {
     MODDatabase                         *_mongoDatabase;
     NSString                            *_absoluteCollectionName;
+    NSString                            *_collectionName;
 }
 
 - (MODQuery *)fetchDatabaseStatsWithCallback:(void (^)(NSDictionary *stats, MODQuery *mongoQuery))callback;

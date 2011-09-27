@@ -10,6 +10,4 @@
 
 @interface MODJsonGenerator : NSObject
 
-//- (NSString *)json
-
 @end
