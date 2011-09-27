@@ -172,30 +172,6 @@
     return query;
 }
 
-//- (void)fetchServerStatusDeltaCallback:(MODQuery *)mongoQuery
-//{
-//    NSDictionary *serverStatusDelta;
-//    
-//    serverStatusDelta = [mongoQuery.parameters objectForKey:@"serverstatusdelta"];
-//    if ([_delegate respondsToSelector:@selector(mongoDB:serverStatusDeltaFetched:withMongoQuery:)]) {
-//        [_delegate mongoServer:self serverStatusDeltaFetched:serverStatusDelta withMongoQuery:mongoQuery];
-//    }
-//}
-//
-//- (MODQuery *)fetchServerStatusDelta
-//{
-//    return [self addQueryInQueue:^(MODQuery *mongoQuery){
-//        NSDictionary *outputObjects;
-//        bson output;
-//        
-//        if (mongo_simple_int_command(_mongo, "admin", "serverStatus", 1, &output) == MONGO_OK) {
-//            outputObjects = [[self class] objectsFromBson:&output];
-//        }
-//        bson_destroy(&output);
-//        [self mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(fetchServerStatusDeltaCallback:)];
-//    }];
-//}
-
 - (MODQuery *)fetchDatabaseListWithCallback:(void (^)(NSArray *list, MODQuery *mongoQuery))callback;
 {
     MODQuery *query;
