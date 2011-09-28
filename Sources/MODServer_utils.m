@@ -233,7 +233,7 @@
             }
             break;
         case BSON_LONG:
-            result = [NSNumber numberWithLong:bson_iterator_long(iterator)];
+            result = [NSNumber numberWithLongLong:bson_iterator_long(iterator)];
             break;
     }
     return result;
@@ -258,6 +258,66 @@
         [key release];
     }
     return [result autorelease];
+}
+
++ (void)appendValue:(id)value key:(NSString *)key toBson:(bson *)bson
+{
+    const char *keyString = [key UTF8String];
+    
+    if ([value isKindOfClass:[NSNull class]]) {
+        bson_append_null(bson, keyString);
+    } else if ([value isKindOfClass:[NSString class]]) {
+        bson_append_string(bson, keyString, [value UTF8String]);
+    } else if ([value isKindOfClass:[NSDictionary class]]) {
+        bson_append_start_object(bson, keyString);
+        [self appendObject:value toBson:bson];
+        bson_append_finish_object(bson);
+    } else if ([value isKindOfClass:[NSArray class]]) {
+        size_t ii = 0;
+        
+        bson_append_start_array(bson, keyString);
+        for (id arrayValue in value) {
+            NSString *arrayKey;
+            
+            arrayKey = [[NSString alloc] initWithFormat:@"%ld", ii];
+            [self appendValue:arrayValue key:arrayKey toBson:bson];
+            [arrayKey release];
+        }
+        bson_append_finish_array(bson);
+    } else if ([value isKindOfClass:[MODObjectId class]]) {
+        bson_append_oid(bson, keyString, [value bsonObjectId]);
+    } else if ([value isKindOfClass:[MODTimestamp class]]) {
+        bson_append_regex(bson, keyString, [[value pattern] UTF8String], [[(MODDataRegex *)value options] UTF8String]);
+    } else if ([value isKindOfClass:[MODTimestamp class]]) {
+        bson_timestamp_t ts;
+        
+        [value getBsonTimestamp:&ts];
+        bson_append_timestamp(bson, keyString, &ts);
+    } else if ([value isKindOfClass:[NSNumber class]]) {
+        if (strcmp([value objCType], @encode(BOOL)) == 0) {
+            bson_append_bool(bson, keyString, [value boolValue]);
+        } else if (strcmp([value objCType], @encode(int8_t)) == 0
+                   || strcmp([value objCType], @encode(uint8_t)) == 0
+                   || strcmp([value objCType], @encode(int32_t)) == 0) {
+            bson_append_int(bson, keyString, [value intValue]);
+        } else if (strcmp([value objCType], @encode(float)) == 0
+                   || strcmp([value objCType], @encode(double)) == 0) {
+            bson_append_double(bson, keyString, [value doubleValue]);
+        } else {
+            bson_append_long(bson, keyString, [value longLongValue]);
+        }
+    } else if ([value isKindOfClass:[NSDate class]]) {
+        bson_append_date(bson, keyString, [value timeIntervalSince1970] * 1000);
+    }
+}
+
++ (void)appendObject:(NSDictionary *)object toBson:(bson *)bson
+{
+    for (NSString *key in [object allKeys]) {
+        id value = [object objectForKey:key];
+        
+        [self appendValue:value key:key toBson:bson];
+    }
 }
 
 @end

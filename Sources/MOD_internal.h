@@ -29,6 +29,7 @@
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails;
 + (NSError *)errorFromMongo:(mongo_ptr)mongo;
 + (NSDictionary *)objectFromBson:(bson *)bsonObject;
++ (void)appendObject:(NSDictionary *)object toBson:(bson *)bson;
 
 @end
 
@@ -52,7 +53,6 @@
 @end
 
 @interface MODCursor()
-
 @property(nonatomic, readwrite, retain) NSString *query;
 @property(nonatomic, readwrite, retain) NSArray *fields;
 @property(nonatomic, readwrite, assign) int32_t skip;
@@ -63,11 +63,9 @@
 
 - (id)initWithMongoCollection:(MODCollection *)mongoCollection;
 - (NSDictionary *)nextDocumentAsynchronouslyWithError:(NSError **)error;
-
 @end
 
 @interface MODQuery()
-
 - (void)starts;
 - (void)ends;
 - (void)removeBlockOperation;
@@ -76,15 +74,16 @@
 @property (nonatomic, readwrite, retain) NSMutableDictionary *mutableParameters;
 @property (nonatomic, readwrite, assign) NSBlockOperation *blockOperation;
 @property (nonatomic, readwrite, retain) NSError *error;
-
 @end
 
 @interface MODObjectId()
-
 - (id)initWithOid:(bson_oid_t *)oid;
-
+- (bson_oid_t *)bsonObjectId;
 @end
 
+@interface MODTimestamp()
+- (void)getBsonTimestamp:(bson_timestamp_t *)ts;
+@end
 
 @interface MODJsonToBsonParser : MODJsonParser<MODJsonParserProtocol>
 {

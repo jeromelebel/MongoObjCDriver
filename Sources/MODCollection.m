@@ -206,7 +206,7 @@
                 if ([document isKindOfClass:[NSString class]]) {
                     [MODJsonToBsonParser bsonFromJson:data[ii] json:document error:&error];
                 } else if ([document isKindOfClass:[NSDictionary class]]) {
-                    [MODJsonToBsonParser bsonFromJson:data[ii] json:document error:&error];
+                    [[_mongoDatabase.mongoServer class] appendObject:document toBson:data[ii]];
                 }
                 bson_finish(data[ii]);
                 ii++;
@@ -241,7 +241,9 @@
             mongoQuery.error = error;
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-            callback(mongoQuery);
+            if (callback) {
+                callback(mongoQuery);
+            }
         }];
     }];
     [query.mutableParameters setObject:@"insertdocuments" forKey:@"command"];

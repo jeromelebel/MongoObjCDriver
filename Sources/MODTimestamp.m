@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "MODTimestamp.h"
+#import "MOD_internal.h"
 
 @implementation MODTimestamp
 
@@ -22,6 +22,12 @@
 - (NSString *)jsonValue
 {
     return [NSString stringWithFormat:@"{ \"$timestamp\" : [ %d, %d ] }", _tValue, _iValue];
+}
+
+- (void)getBsonTimestamp:(bson_timestamp_t *)ts
+{
+    ts->i = _iValue;
+    ts->t = _tValue;
 }
 
 @end

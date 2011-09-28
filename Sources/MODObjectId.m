@@ -30,6 +30,11 @@
     return data;
 }
 
+- (bson_oid_t *)bsonObjectId
+{
+    return (bson_oid_t *)data;
+}
+
 - (NSString *)description
 {
     return [[NSData dataWithBytes:data length:sizeof(data)] description];
