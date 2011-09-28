@@ -34,7 +34,6 @@
 
 @interface MODServer(utils)
 
-+ (NSInteger)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error;
 + (id)objectsFromJson:(NSString *)json error:(NSError **)error;
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails;
 + (NSError *)errorFromMongo:(mongo_ptr)mongo;
@@ -100,5 +99,6 @@
 {
     bson *_bson;
 }
++ (NSInteger)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error;
 - (void)setBson:(bson *)bson;
 @end

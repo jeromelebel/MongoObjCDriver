@@ -158,7 +158,7 @@
             bsonQuery = malloc(sizeof(*bsonQuery));
             bson_init(bsonQuery);
             if (jsonCriteria && [jsonCriteria length] > 0) {
-                [[_mongoDatabase.mongoServer class] bsonFromJson:bsonQuery json:jsonCriteria error:&error];
+                [MODJsonToBsonParser bsonFromJson:bsonQuery json:jsonCriteria error:&error];
             }
             bson_finish(bsonQuery);
             
@@ -200,10 +200,14 @@
             NSInteger ii = 0;
             
             data = calloc(documentCount, sizeof(void *));
-            for (NSString *document in documents) {
+            for (id document in documents) {
                 data[ii] = malloc(sizeof(bson));
                 bson_init(data[ii]);
-                [[_mongoDatabase.mongoServer class] bsonFromJson:data[ii] json:document error:&error];
+                if ([document isKindOfClass:[NSString class]]) {
+                    [MODJsonToBsonParser bsonFromJson:data[ii] json:document error:&error];
+                } else if ([document isKindOfClass:[NSDictionary class]]) {
+                    [MODJsonToBsonParser bsonFromJson:data[ii] json:document error:&error];
+                }
                 bson_finish(data[ii]);
                 ii++;
                 if (error) {
@@ -257,14 +261,14 @@
             
             bson_init(&bsonCriteria);
             if (jsonCriteria && [jsonCriteria length] > 0) {
-                [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonCriteria json:jsonCriteria error:&error];
+                [MODJsonToBsonParser bsonFromJson:&bsonCriteria json:jsonCriteria error:&error];
             } else {
                 error = [MODServer errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:@""];
             }
             bson_finish(&bsonCriteria);
             bson_init(&bsonUpdate);
             if (error == nil && update && [update length] > 0) {
-                [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonUpdate json:update error:&error];
+                [MODJsonToBsonParser bsonFromJson:&bsonUpdate json:update error:&error];
             } else if (error == nil && (!update || [update length] > 0)) {
                 error = [MODServer errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:@""];
             }
@@ -302,7 +306,7 @@
             NSError *error = nil;
             
             bson_init(&bsonDocument);
-            [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonDocument json:document error:&error];
+            [MODJsonToBsonParser bsonFromJson:&bsonDocument json:document error:&error];
             bson_finish(&bsonDocument);
             bson_init(&bsonCriteria);
             if (error == nil) {
@@ -373,7 +377,7 @@
             
             bson_init(&bsonCriteria);
             if (criteria && [criteria length] > 0) {
-                [[_mongoDatabase.mongoServer class] bsonFromJson:&bsonCriteria json:criteria error:&error];
+                [MODJsonToBsonParser bsonFromJson:&bsonCriteria json:criteria error:&error];
             } else {
                 error = [MODServer errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:@""];
             }

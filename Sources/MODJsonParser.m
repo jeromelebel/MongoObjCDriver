@@ -395,6 +395,18 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
 
 @implementation MODJsonToBsonParser
 
++ (NSInteger)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error
+{
+    MODJsonToBsonParser *parser;
+    NSInteger result;
+    
+    parser = [[self alloc] init];
+    [parser setBson:bsonResult];
+    result = [parser parseJsonWithString:json withError:error];
+    [parser release];
+    return result;
+}
+
 - (void)setBson:(bson *)bson
 {
     _bson = bson;
