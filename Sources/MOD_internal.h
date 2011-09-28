@@ -7,15 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MODServer.h"
-#import "MODDatabase.h"
-#import "MODCollection.h"
-#import "MODCursor.h"
-#import "MODQuery.h"
-#import "MODObjectId.h"
-#import "MODJsonParser.h"
-#import "MODTimestamp.h"
-#import "MODDataRegex.h"
+#import "MOD_public.h"
 #import "mongo.h"
 #import "json.h"
 

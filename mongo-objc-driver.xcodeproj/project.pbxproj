@@ -24,6 +24,7 @@
 /* Begin PBXBuildFile section */
 		02216F1F1412D47800789BD1 /* json.c in Sources */ = {isa = PBXBuildFile; fileRef = 02216EEA1412D32F00789BD1 /* json.c */; };
 		02216F681413031B00789BD1 /* json.c in Sources */ = {isa = PBXBuildFile; fileRef = 02216EEA1412D32F00789BD1 /* json.c */; };
+		02411AB51432B8FA00A5FFCA /* MOD_public.h in Headers */ = {isa = PBXBuildFile; fileRef = 02411AB41432B8F900A5FFCA /* MOD_public.h */; };
 		02688DDC14119CF50014ED51 /* MODDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 02688DDA14119CF50014ED51 /* MODDatabase.h */; };
 		02688DDD14119CF50014ED51 /* MODDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DDB14119CF50014ED51 /* MODDatabase.m */; };
 		02688DDE14119CF50014ED51 /* MODDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DDB14119CF50014ED51 /* MODDatabase.m */; };
@@ -167,6 +168,7 @@
 		02216F121412D32F00789BD1 /* multiobj.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = multiobj.json; sourceTree = "<group>"; };
 		02216F131412D32F00789BD1 /* yaml-comment.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "yaml-comment.json"; sourceTree = "<group>"; };
 		02216F141412D32F00789BD1 /* runtest */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = runtest; sourceTree = "<group>"; };
+		02411AB41432B8F900A5FFCA /* MOD_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOD_public.h; sourceTree = "<group>"; };
 		02688DDA14119CF50014ED51 /* MODDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODDatabase.h; sourceTree = "<group>"; };
 		02688DDB14119CF50014ED51 /* MODDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODDatabase.m; sourceTree = "<group>"; };
 		02688DE01411C5010014ED51 /* MODCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODCollection.h; sourceTree = "<group>"; };
@@ -575,6 +577,7 @@
 			isa = PBXGroup;
 			children = (
 				02A85F5B14104373004F3FE9 /* MOD_internal.h */,
+				02411AB41432B8F900A5FFCA /* MOD_public.h */,
 				02A85F4F14103EA6004F3FE9 /* MODServer.h */,
 				02A85F5014103EA6004F3FE9 /* MODServer.m */,
 				02BDC3EB141D83A7000EF755 /* MODServer_utils.m */,
@@ -654,6 +657,7 @@
 				028CE605142E10BE0099B1F7 /* MODTimestamp.h in Headers */,
 				02CF87E9142F8AA3000C4C7F /* MODDataRegex.h in Headers */,
 				02CF87F2142FA66D000C4C7F /* MODJsonGenerator.h in Headers */,
+				02411AB51432B8FA00A5FFCA /* MOD_public.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
