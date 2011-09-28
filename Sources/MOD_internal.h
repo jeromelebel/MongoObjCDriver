@@ -68,6 +68,8 @@
 @property(nonatomic, readwrite, assign) int32_t skip;
 @property(nonatomic, readwrite, assign) int32_t limit;
 @property(nonatomic, readwrite, retain) NSString * sort;
+@property(nonatomic, readwrite, assign) void *cursor;
+@property(nonatomic, readwrite, assign) BOOL donotReleaseCursor;
 
 - (id)initWithMongoCollection:(MODCollection *)mongoCollection;
 - (NSDictionary *)nextDocumentAsynchronouslyWithError:(NSError **)error;

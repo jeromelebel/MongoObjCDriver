@@ -26,6 +26,7 @@
     int32_t                             _limit;
     NSString                            *_sort;
 
+    BOOL                                _donotReleaseCursor;
     void                                *_cursor;
     void                                *_bsonQuery;
     void                                *_bsonFields;

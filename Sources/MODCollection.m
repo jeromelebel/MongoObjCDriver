@@ -61,6 +61,37 @@
     return query;
 }
 
+- (MODQuery *)indexListWithcallback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback
+{
+    MODQuery *query = nil;
+    
+    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        NSMutableArray *documents;
+        MODCursor *cursor;
+        NSDictionary *document;
+        NSError *error = nil;
+        
+        documents = [[NSMutableArray alloc] init];
+        cursor = [[MODCursor alloc] initWithMongoCollection:self];
+        cursor.cursor = mongo_index_list(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], 50);
+        cursor.donotReleaseCursor = YES;
+        while ((document = [cursor nextDocumentAsynchronouslyWithError:&error]) != nil) {
+            [documents addObject:document];
+        }
+        if (error) {
+            mongoQuery.error = error;
+        }
+        [mongoQuery.mutableParameters setObject:documents forKey:@"documents"];
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+            callback(documents, mongoQuery);
+        }];
+        [documents release];
+        [cursor release];
+    }];
+    [query.mutableParameters setObject:@"indexlist" forKey:@"command"];
+    return query;
+}
+
 - (MODQuery *)findWithCriteria:(NSString *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort callback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;

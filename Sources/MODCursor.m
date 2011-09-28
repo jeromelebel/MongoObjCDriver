@@ -10,7 +10,7 @@
 
 @implementation MODCursor
 
-@synthesize delegate = _delegate, mongoCollection = _mongoCollection, query = _query, fields = _fields, skip = _skip, limit = _limit, sort = _sort;
+@synthesize delegate = _delegate, mongoCollection = _mongoCollection, query = _query, fields = _fields, skip = _skip, limit = _limit, sort = _sort, cursor = _cursor, donotReleaseCursor = _donotReleaseCursor;
 
 - (id)initWithMongoCollection:(MODCollection *)mongoCollection
 {
@@ -22,7 +22,7 @@
 
 - (void)dealloc
 {
-    if (_cursor) {
+    if (_cursor && !_donotReleaseCursor) {
         mongo_cursor_destroy(_cursor);
         free(_cursor);
     }
@@ -66,8 +66,8 @@
             bson_append_finish_object(_bsonQuery);
         }
     }
-    mongo_cursor_set_query(_cursor, _bsonQuery);
     bson_finish(_bsonQuery);
+    mongo_cursor_set_query(_cursor, _bsonQuery);
     if ([_fields count] > 0 && *error == nil) {
         NSUInteger index = 0;
         char indexString[128];
