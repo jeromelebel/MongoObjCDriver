@@ -39,6 +39,7 @@
     NSMutableDictionary *_mainObject;
 }
 
++ (id)objectsFromJson:(NSString *)json error:(NSError **)error;
 - (id)objects;
 
 @end

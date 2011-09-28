@@ -508,6 +508,18 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
 
 @implementation MODJsonToObjectParser
 
++ (id)objectsFromJson:(NSString *)json error:(NSError **)error
+{
+    id objects;
+    MODJsonToObjectParser *parser;
+    
+    parser = [[MODJsonToObjectParser alloc] init];
+    [parser parseJsonWithString:json withError:error];
+    objects = [[parser objects] retain];
+    [parser release];
+    return [objects autorelease];
+}
+
 - (void *)mainDictionary
 {
     if (!_mainObject) {

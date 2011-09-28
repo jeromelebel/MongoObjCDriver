@@ -10,30 +10,6 @@
 
 @implementation MODServer(utils)
 
-+ (NSInteger)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error
-{
-    MODJsonToBsonParser *parser;
-    NSInteger result;
-    
-    parser = [[MODJsonToBsonParser alloc] init];
-    [parser setBson:bsonResult];
-    result = [parser parseJsonWithString:json withError:error];
-    [parser release];
-    return result;
-}
-
-+ (id)objectsFromJson:(NSString *)json error:(NSError **)error
-{
-    id objects;
-    MODJsonToObjectParser *parser;
-    
-    parser = [[MODJsonToObjectParser alloc] init];
-    [parser parseJsonWithString:json withError:error];
-    objects = [[parser objects] retain];
-    [parser release];
-    return [objects autorelease];
-}
-
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails
 {
     NSError *error;
@@ -263,7 +239,7 @@
     return result;
 }
 
-+ (NSDictionary *)objectsFromBson:(bson *)bsonObject
++ (NSDictionary *)objectFromBson:(bson *)bsonObject
 {
     bson_iterator iterator;
     NSMutableDictionary *result;

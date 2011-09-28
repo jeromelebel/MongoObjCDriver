@@ -48,7 +48,7 @@
             bson output;
             
             if (mongo_simple_str_command(_mongoDatabase.mongo, [_mongoDatabase.databaseName UTF8String], "collstats", [_collectionName UTF8String], &output) == MONGO_OK) {
-                stats = [[self.mongoServer class] objectsFromBson:&output];
+                stats = [[self.mongoServer class] objectFromBson:&output];
                 [mongoQuery.mutableParameters setObject:stats forKey:@"collectionstats"];
                 bson_destroy(&output);
             }

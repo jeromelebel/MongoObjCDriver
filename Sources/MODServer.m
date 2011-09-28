@@ -200,7 +200,7 @@
         NSDictionary *outputObjects = nil;
         
         if (mongo_simple_int_command(_mongo, "admin", "serverStatus", 1, &output) == MONGO_OK) {
-            outputObjects = [[self class] objectsFromBson:&output];
+            outputObjects = [[self class] objectFromBson:&output];
             [mongoQuery.mutableParameters setObject:outputObjects forKey:@"serverstatus"];
         }
         bson_destroy(&output);
@@ -223,7 +223,7 @@
         if (mongo_simple_int_command(_mongo, "admin", "listDatabases", 1, &output) == MONGO_OK) {
             NSDictionary *outputObjects;
             
-            outputObjects = [[self class] objectsFromBson:&output];
+            outputObjects = [[self class] objectFromBson:&output];
             list = [[NSMutableArray alloc] init];
             for(NSDictionary *element in [outputObjects objectForKey:@"databases"]) {
                 [list addObject:[element objectForKey:@"name"]];

@@ -101,7 +101,7 @@
     }
     if (!*error) {
         if (mongo_cursor_next(_cursor) == MONGO_OK) {
-            result = [[_mongoCollection.mongoServer class] objectsFromBson:&(((mongo_cursor *)_cursor)->current)];
+            result = [[_mongoCollection.mongoServer class] objectFromBson:&(((mongo_cursor *)_cursor)->current)];
         }
     }
     return result;
