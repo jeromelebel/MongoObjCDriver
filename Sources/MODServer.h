@@ -34,10 +34,11 @@ typedef struct mongo                    *mongo_ptr;
     NSString                            *_password;
 }
 
+- (void)copyWithCallback:(void (^)(MODServer *copyServer, MODQuery *mongoQuery))callback;
+
 - (MODQuery *)connectWithHostName:(NSString *)host callback:(void (^)(BOOL connected, MODQuery *mongoQuery))callback;
 - (MODQuery *)connectWithReplicaName:(NSString *)name hosts:(NSArray *)hosts callback:(void (^)(BOOL connected, MODQuery *mongoQuery))callback;
 - (MODQuery *)fetchServerStatusWithCallback:(void (^)(NSDictionary *serverStatus, MODQuery *mongoQuery))callback;
-//- (MODQuery *)fetchServerStatusDelta;
 - (MODQuery *)fetchDatabaseListWithCallback:(void (^)(NSArray *list, MODQuery *mongoQuery))callback;
 
 - (MODQuery *)dropDatabaseWithName:(NSString *)databaseName callback:(void (^)(MODQuery *mongoQuery))callback;

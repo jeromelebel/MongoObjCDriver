@@ -31,6 +31,46 @@
     [super dealloc];
 }
 
+- (void)copyWithCallback:(void (^)(MODServer *copyServer, MODQuery *mongoQuery))callback
+{
+    MODServer *copy;
+    
+    copy = [[MODServer alloc] init];
+    copy.userName = self.userName;
+    copy.password = self.password;
+    if (_mongo->replset) {
+        NSString *replicaName;
+        NSMutableArray *hosts;
+        mongo_host_port *hostPort;
+        
+        replicaName = [[NSString alloc] initWithUTF8String:_mongo->replset->name];
+        hosts = [[NSMutableArray alloc] init];
+        hostPort = _mongo->replset->seeds;
+        while (hostPort != NULL) {
+            NSString *hostName;
+            
+            hostName = [[NSString alloc] initWithFormat:@"%s:%d", hostPort->host, hostPort->port];
+            [hosts addObject:hostName];
+            [hostName release];
+            hostPort = hostPort->next;
+        }
+        [copy connectWithReplicaName:replicaName hosts:hosts callback:^(BOOL connected, MODQuery *mongoQuery) {
+            callback(copy, mongoQuery);
+        }];
+        [replicaName release];
+        [hosts release];
+    } else {
+        NSString *hostName;
+        
+        hostName = [[NSString alloc] initWithFormat:@"%s:%d", _mongo->primary->host, _mongo->primary->port];
+        [copy connectWithHostName:hostName callback:^(BOOL connected, MODQuery *mongoQuery) {
+            callback(copy, mongoQuery);
+        }];
+        [hostName release];
+    }
+    [copy release];
+}
+
 - (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block
 {
     MODQuery *mongoQuery;
