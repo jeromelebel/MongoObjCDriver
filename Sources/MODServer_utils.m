@@ -308,6 +308,10 @@
         }
     } else if ([value isKindOfClass:[NSDate class]]) {
         bson_append_date(bson, keyString, [value timeIntervalSince1970] * 1000);
+    } else if ([value isKindOfClass:[NSData class]]) {
+        bson_append_binary(bson, keyString, BSON_BIN_BINARY, [value bytes], [value length]);
+    } else if ([value isKindOfClass:[MODDataBinary class]]) {
+        bson_append_binary(bson, keyString, [value binaryType], [[value data] bytes], [[value data] length]);
     }
 }
 

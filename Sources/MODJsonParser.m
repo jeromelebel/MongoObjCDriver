@@ -26,6 +26,7 @@ typedef struct {
             NO_BSON_TYPE,
             TIMESTAMP_BSON_TYPE,
             REGEX_BSON_TYPE,
+            JSON_DATA_BINARY_TYPE,
         } bsonType;
         struct {
             BOOL hasTValue;
@@ -38,6 +39,12 @@ typedef struct {
             char *pattern;
             char *options;
         } regexBson;
+        struct {
+            char *binary;
+            size_t length;
+            BOOL hasBinaryType;
+            char binaryType;
+        } dataBinary;
     } pendingBsonValue;
     
 } JsonParserContext;
@@ -125,6 +132,9 @@ static void clear_pending_value(JsonParserContext *context, BOOL shouldSkipNextE
     if (context->pendingBsonValue.regexBson.options) {
         free(context->pendingBsonValue.regexBson.options);
     }
+    if (context->pendingBsonValue.dataBinary.binary) {
+        free(context->pendingBsonValue.dataBinary.binary);
+    }
     bzero(&(context->pendingBsonValue), sizeof(context->pendingBsonValue));
     context->pendingBsonValue.bsonType = NO_BSON_TYPE;
     context->shouldSkipNextEndStructure = shouldSkipNextEndStructure;
@@ -155,7 +165,9 @@ static void * begin_structure_for_bson(int nesting, int is_object, void *structu
     
     my_debug();
     if (key != NULL) {
-        if (strcmp(key, "$timestamp") == 0) {
+        if (context->shouldSkipNextEndStructure) {
+            result = NULL;
+        } else if (strcmp(key, "$timestamp") == 0) {
             if (context->pendingBsonValue.bsonType == NO_BSON_TYPE) {
                 context->pendingBsonValue.bsonType = TIMESTAMP_BSON_TYPE;
                 result = context->target;
@@ -254,7 +266,9 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
         snprintf(arrayKey, sizeof(arrayKey), "%d", structure_value_count);
         key = arrayKey;
     }
-    if (strcmp(key, "$oid") == 0) {
+    if (context->shouldSkipNextEndStructure) {
+        // error
+    } else if (strcmp(key, "$oid") == 0) {
         if (dataInfo->length == sizeof(bson_oid_t) * 2) {
             bson_oid_t oid;
             
@@ -278,6 +292,19 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     } else if (strcmp(key, "$date") == 0) {
         if (dataInfo->type == JSON_INT || dataInfo->type == JSON_FLOAT) {
             result = [context->target appendDate:atof(dataInfo->data) withKey:key previousStructure:context->latestStructure previousStructureDictionary:context->latestStructureObject]?0:1;
+            clear_pending_value(context, YES);
+        }
+    } else if (strcmp(key, "$data_binary") == 0 || strcmp(key, "$type") == 0) {
+        if (strcmp(key, "$data_binary") == 0 && !context->pendingBsonValue.dataBinary.binary && dataInfo->type == JSON_DATA_BINARY_TYPE && (context->pendingBsonValue.bsonType == JSON_DATA_BINARY_TYPE || context->pendingBsonValue.bsonType == NO_BSON_TYPE)) {
+            context->pendingBsonValue.dataBinary.binary = malloc(dataInfo->length);
+            memcpy(context->pendingBsonValue.dataBinary.binary, dataInfo->data, dataInfo->length);
+            context->pendingBsonValue.dataBinary.length = dataInfo->length;
+        } else if (strcmp(key, "$type") == 0 && !context->pendingBsonValue.dataBinary.hasBinaryType && dataInfo->type == JSON_DATA_BINARY_TYPE && (context->pendingBsonValue.bsonType == JSON_DATA_BINARY_TYPE || context->pendingBsonValue.bsonType == NO_BSON_TYPE)) {
+            context->pendingBsonValue.dataBinary.hasBinaryType = YES;
+            context->pendingBsonValue.dataBinary.binaryType = atoi(dataInfo->data);
+        }
+        if (context->pendingBsonValue.dataBinary.binary && context->pendingBsonValue.dataBinary.hasBinaryType) {
+            result = [context->target appendDataBinary:context->pendingBsonValue.dataBinary.binary withLength:context->pendingBsonValue.dataBinary.length binaryType:context->pendingBsonValue.dataBinary.binaryType key:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStructure previousStructureDictionary:context->latestStructureObject]?0:1;
             clear_pending_value(context, YES);
         }
     } else {
@@ -332,6 +359,7 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
                 }
                 break;
             case REGEX_BSON_TYPE:
+            case JSON_DATA_BINARY_TYPE:
                 // error
                 break;
         }
@@ -504,6 +532,12 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     return result;
 }
 
+- (BOOL)appendDataBinary:(const char *)binary withLength:(NSUInteger)length binaryType:(char)binaryType key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+{
+    bson_append_binary(_bson, key, binaryType, binary, length);
+    return YES;
+}
+
 @end
 
 @implementation MODJsonToObjectParser
@@ -673,6 +707,16 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
         result = YES;
     }
     return result;
+}
+
+- (BOOL)appendDataBinary:(const char *)binary withLength:(NSUInteger)length binaryType:(char)binaryType key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+{
+    MODDataBinary *object;
+    
+    object = [[MODDataBinary alloc] initWithBytes:binary length:length binaryType:binaryType];
+    [self addObject:object toStructure:structure isDictionary:isDictionary withKey:key];
+    [object release];
+    return YES;
 }
 
 @end

@@ -15,3 +15,4 @@
 #import "MODObjectId.h"
 #import "MODDataRegex.h"
 #import "MODJsonParser.h"
+#import "MODDataBinary.h"
