@@ -1,5 +1,5 @@
 //
-//  MODDataRef.m
+//  MODDBRef.m
 //  MongoHub
 //
 //  Created by Jérôme Lebel on 29/09/11.
@@ -8,7 +8,7 @@
 
 #import "MOD_internal.h"
 
-@implementation MODDataRef
+@implementation MODDBRef
 
 @synthesize refValue = _refValue;
 

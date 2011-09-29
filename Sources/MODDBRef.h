@@ -1,5 +1,5 @@
 //
-//  MODDataRef.h
+//  MODDBRef.h
 //  MongoHub
 //
 //  Created by Jérôme Lebel on 29/09/11.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MODDataRef : NSObject
+@interface MODDBRef : NSObject
 {
     NSString *_refValue;
     unsigned char _idValue[12];
