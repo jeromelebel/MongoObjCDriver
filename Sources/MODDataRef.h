@@ -15,8 +15,9 @@
 }
 
 - (id)initWithRefValue:(NSString *)refValue idValue:(const unsigned char[12])idValue;
-
 - (const unsigned char *)idValue;
+- (NSString *)tengenString;
+- (NSString *)jsonValue;
 
 @property(nonatomic, readonly, retain) NSString *refValue;
 

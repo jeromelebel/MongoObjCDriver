@@ -210,10 +210,7 @@
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             break;
         case BSON_DBREF:
-        {
-            NSString refName = [[NSString alloc] initWithUTF8String:bson_iterator_regex_opts
-            result = [[[MODDataRef alloc] initWithRefValue:idValue:] autorelease];
-        }
+            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             break;
         case BSON_CODE:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);

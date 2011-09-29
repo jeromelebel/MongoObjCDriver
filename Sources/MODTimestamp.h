@@ -15,6 +15,8 @@
 }
 
 - (id)initWithTValue:(int)tValue iValue:(int)iValue;
+- (NSString *)tengenString;
+- (NSString *)jsonValue;
 
 @property(nonatomic, readonly, assign) int tValue;
 @property(nonatomic, readonly, assign) int iValue;

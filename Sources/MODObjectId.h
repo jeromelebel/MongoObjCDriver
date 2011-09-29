@@ -15,5 +15,6 @@
 - (id)initWithBytes:(const unsigned char[12])bytes;
 - (const unsigned char *)bytes;
 - (NSString *)stringValue;
+- (NSString *)tengenString;
 - (NSString *)jsonValue;
 @end
