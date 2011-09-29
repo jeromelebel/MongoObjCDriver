@@ -693,13 +693,13 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     BOOL result = NO;
     
     if (pattern && options) {
-        MODDataRegex *dataRegex;
+        MODRegex *dataRegex;
         NSString *patternString;
         NSString *optionsString;
         
         patternString = [[NSString alloc] initWithUTF8String:pattern];
         optionsString = [[NSString alloc] initWithUTF8String:options];
-        dataRegex = [[MODDataRegex alloc] initWithPattern:patternString options:optionsString];
+        dataRegex = [[MODRegex alloc] initWithPattern:patternString options:optionsString];
         [self addObject:dataRegex toStructure:structure isDictionary:isDictionary withKey:key];
         [patternString release];
         [optionsString release];

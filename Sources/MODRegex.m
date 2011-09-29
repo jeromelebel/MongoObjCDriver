@@ -1,14 +1,14 @@
 //
-//  MODDataRegex.m
+//  MODRegex.m
 //  mongo-objc-driver
 //
 //  Created by Jérôme Lebel on 25/09/11.
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "MODDataRegex.h"
+#import "MODRegex.h"
 
-@implementation MODDataRegex
+@implementation MODRegex
 
 - (id)initWithPattern:(NSString *)pattern options:(NSString *)options
 {
@@ -49,7 +49,7 @@
 - (BOOL)isEqual:(id)object
 {
     if ([object isKindOfClass:[self class]]) {
-        return [[object pattern] isEqual:_pattern] && [[(MODDataRegex *)object options] isEqual:_options];
+        return [[object pattern] isEqual:_pattern] && [[(MODRegex *)object options] isEqual:_options];
     }
     return NO;
 }

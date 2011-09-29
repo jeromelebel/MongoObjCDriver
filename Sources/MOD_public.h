@@ -13,7 +13,7 @@
 #import "MODQuery.h"
 #import "MODTimestamp.h"
 #import "MODObjectId.h"
-#import "MODDataRegex.h"
+#import "MODRegex.h"
 #import "MODJsonParser.h"
 #import "MODDataBinary.h"
 #import "MODDataRef.h"

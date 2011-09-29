@@ -1,5 +1,5 @@
 //
-//  MODDataRegex.h
+//  MODRegex.h
 //  mongo-objc-driver
 //
 //  Created by Jérôme Lebel on 25/09/11.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MODDataRegex : NSObject
+@interface MODRegex : NSObject
 {
     NSString *_pattern;
     NSString *_options;

@@ -287,7 +287,7 @@
     } else if ([value isKindOfClass:[MODObjectId class]]) {
         bson_append_oid(bson, keyString, [value bsonObjectId]);
     } else if ([value isKindOfClass:[MODTimestamp class]]) {
-        bson_append_regex(bson, keyString, [[value pattern] UTF8String], [[(MODDataRegex *)value options] UTF8String]);
+        bson_append_regex(bson, keyString, [[value pattern] UTF8String], [[(MODRegex *)value options] UTF8String]);
     } else if ([value isKindOfClass:[MODTimestamp class]]) {
         bson_timestamp_t ts;
         
