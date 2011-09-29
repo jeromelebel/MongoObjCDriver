@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "MODRegex.h"
+#import "MOD_internal.h"
 
 @implementation MODRegex
 
@@ -38,12 +38,12 @@
 
 - (NSString *)tengenString
 {
-    return [NSString stringWithFormat:@"/%@/%@", _pattern, _options];
+    return [NSString stringWithFormat:@"/%@/%@", [MODServer escapeSlashesForString:_pattern], [MODServer escapeSlashesForString:_options]];
 }
 
 - (NSString *)jsonValue
 {
-    return [NSString stringWithFormat:@"{ \"$regex\" : \"%@\", \"$options\" : \"%@\" ] }", _pattern, _options];
+    return [NSString stringWithFormat:@"{ \"$regex\" : \"%@\", \"$options\" : \"%@\" ] }", [MODServer escapeQuotesForString:_pattern], [MODServer escapeQuotesForString:_options]];
 }
 
 - (BOOL)isEqual:(id)object

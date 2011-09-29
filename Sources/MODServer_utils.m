@@ -8,7 +8,7 @@
 
 #import "MOD_internal.h"
 
-@implementation MODServer(utils)
+@implementation MODServer(utils_internal)
 
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails
 {
@@ -322,6 +322,186 @@
         
         [self appendValue:value key:key toBson:bson];
     }
+}
+
+@end
+
+static void convertValueToJson(NSMutableString *result, int indent, id value, NSString *key, BOOL pretty);
+
+static void addIdent(NSMutableString *result, int indent)
+{
+    int ii = 0;
+    
+    while (ii < indent) {
+        [result appendString:@"  "];
+        ii++;
+    }
+}
+
+static void convertDictionaryToJson(NSMutableString *result, int indent, NSDictionary *value, BOOL pretty)
+{
+    BOOL first = YES;
+    
+    [result appendString:@"{"];
+    if (pretty) {
+        [result appendString:@"\n"];
+    }
+    for (NSString *key in [[value allKeys] sortedArrayUsingSelector:@selector(compare:)]) {
+        if (first) {
+            first = NO;
+        } else {
+            [result appendString:@",\n"];
+        }
+        convertValueToJson(result, indent + 1, [value objectForKey:key], key, pretty);
+    }
+    if (pretty) {
+        [result appendString:@"\n"];
+        addIdent(result, indent);
+    }
+    [result appendString:@"}"];
+}
+
+static void convertArrayToJson(NSMutableString *result, int indent, NSArray *value, BOOL pretty)
+{
+    BOOL first = YES;
+    
+    [result appendString:@"["];
+    if (pretty) {
+        [result appendString:@"\n"];
+    }
+    for (id arrayValue in value) {
+        if (first) {
+            first = NO;
+        } else {
+            [result appendString:@",\n"];
+        }
+        convertValueToJson(result, indent + 1, arrayValue, nil, pretty);
+    }
+    if (pretty) {
+        [result appendString:@"\n"];
+        addIdent(result, indent);
+    }
+    [result appendString:@"]"];
+}
+
+static void convertValueToJson(NSMutableString *result, int indent, id value, NSString *key, BOOL pretty)
+{
+    if (pretty) {
+        addIdent(result, indent);
+    }
+    if (key) {
+        [result appendString:@"\""];
+        [result appendString:[MODServer escapeQuotesForString:key]];
+        [result appendString:@"\": "];
+    }
+    if ([value isKindOfClass:[NSString class]]) {
+        [result appendString:@"\""];
+        [result appendString:[MODServer escapeQuotesForString:value]];
+        [result appendString:@"\""];
+    } else if ([value isKindOfClass:[NSDate class]]) {
+        [result appendFormat:@"%f", [value timeIntervalSince1970] * 1000];
+    } else if ([value isKindOfClass:[NSNull class]]) {
+        [result appendString:@"null"];
+    } else if ([value isKindOfClass:[NSDictionary class]]) {
+        convertDictionaryToJson(result, indent, value, pretty);
+    } else if ([value isKindOfClass:[NSArray class]]) {
+        convertArrayToJson(result, indent, value, pretty);
+    } else if ([value isKindOfClass:[NSNumber class]]) {
+        if (strcmp([value objCType], @encode(BOOL)) == 0) {
+            if ([value boolValue]) {
+                [result appendString:@"true"];
+            } else {
+                [result appendString:@"false"];
+            }
+        } else {
+            [result appendString:[value description]];
+        }
+    } else if ([value isKindOfClass:[MODObjectId class]]) {
+        [result appendString:[value jsonValue]];
+    } else if ([value isKindOfClass:[MODRegex class]]) {
+        [result appendString:[value jsonValue]];
+    } else if ([value isKindOfClass:[MODTimestamp class]]) {
+        [result appendString:[value jsonValue]];
+    } else if ([value isKindOfClass:[MODBinary class]]) {
+        [result appendString:[value jsonValue]];
+    } else if ([value isKindOfClass:[MODDBRef class]]) {
+        [result appendString:[value jsonValue]];
+    }
+}
+
+@implementation MODServer(utils)
+
++ (NSString *)convertObjectToJson:(NSDictionary *)object pretty:(BOOL)pretty
+{
+    NSMutableString *result;
+    
+    result = [NSMutableString string];
+    convertDictionaryToJson(result, 0, object, pretty);
+    return result;
+}
+
++ (NSString *)escapeQuotesForString:(NSString *)string
+{
+    NSMutableString *result;
+    NSUInteger ii = 0, count = [string length];
+    
+    result = [string mutableCopy];
+    while (ii < count) {
+        if ([result characterAtIndex:ii] == '"' || [result characterAtIndex:ii] == '\\') {
+            [result insertString:@"\\" atIndex:ii];
+            ii++;
+            count++;
+        } else if ([result characterAtIndex:ii] == '\n') {
+            [result deleteCharactersInRange:NSMakeRange(ii, 1)];
+            [result insertString:@"\\n" atIndex:ii];
+            ii++;
+            count++;
+        } else if ([result characterAtIndex:ii] == '\r') {
+            [result deleteCharactersInRange:NSMakeRange(ii, 1)];
+            [result insertString:@"\\r" atIndex:ii];
+            ii++;
+            count++;
+        } else if ([result characterAtIndex:ii] == '\t') {
+            [result deleteCharactersInRange:NSMakeRange(ii, 1)];
+            [result insertString:@"\\t" atIndex:ii];
+            ii++;
+            count++;
+        }
+        ii++;
+    }
+    return [result autorelease];
+}
+
++ (NSString *)escapeSlashesForString:(NSString *)string
+{
+    NSMutableString *result;
+    NSUInteger ii = 0, count = [string length];
+    
+    result = [string mutableCopy];
+    while (ii < count) {
+        if ([result characterAtIndex:ii] == '/' || [result characterAtIndex:ii] == '\\') {
+            [result insertString:@"\\" atIndex:ii];
+            ii++;
+            count++;
+        } else if ([result characterAtIndex:ii] == '\n') {
+            [result deleteCharactersInRange:NSMakeRange(ii, 1)];
+            [result insertString:@"\\n" atIndex:ii];
+            ii++;
+            count++;
+        } else if ([result characterAtIndex:ii] == '\r') {
+            [result deleteCharactersInRange:NSMakeRange(ii, 1)];
+            [result insertString:@"\\r" atIndex:ii];
+            ii++;
+            count++;
+        } else if ([result characterAtIndex:ii] == '\t') {
+            [result deleteCharactersInRange:NSMakeRange(ii, 1)];
+            [result insertString:@"\\t" atIndex:ii];
+            ii++;
+            count++;
+        }
+        ii++;
+    }
+    return [result autorelease];
 }
 
 @end

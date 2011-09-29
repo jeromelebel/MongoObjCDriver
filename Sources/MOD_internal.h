@@ -24,7 +24,7 @@
 
 @end
 
-@interface MODServer(utils)
+@interface MODServer(utils_internal)
 
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails;
 + (NSError *)errorFromMongo:(mongo_ptr)mongo;

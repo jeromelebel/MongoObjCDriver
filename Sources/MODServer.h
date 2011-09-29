@@ -50,3 +50,9 @@ typedef struct mongo                    *mongo_ptr;
 @property(nonatomic, readwrite, retain) NSString *password;
 
 @end
+
+@interface MODServer(utils)
++ (NSString *)escapeQuotesForString:(NSString *)string;
++ (NSString *)escapeSlashesForString:(NSString *)string;
++ (NSString *)convertObjectToJson:(NSDictionary *)object pretty:(BOOL)pretty;
+@end
