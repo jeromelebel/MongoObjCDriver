@@ -16,4 +16,7 @@
 
 - (id)initWithTValue:(int)tValue iValue:(int)iValue;
 
+@property(nonatomic, readonly, assign) int tValue;
+@property(nonatomic, readonly, assign) int iValue;
+
 @end

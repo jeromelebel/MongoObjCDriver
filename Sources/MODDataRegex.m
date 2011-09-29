@@ -36,9 +36,22 @@
     return _options;
 }
 
+- (NSString *)tengenString
+{
+    return [NSString stringWithFormat:@"/%@/%@", _pattern, _options];
+}
+
 - (NSString *)jsonValue
 {
     return [NSString stringWithFormat:@"{ \"$regex\" : \"%@\", \"$options\" : \"%@\" ] }", _pattern, _options];
+}
+
+- (BOOL)isEqual:(id)object
+{
+    if ([object isKindOfClass:[self class]]) {
+        return [[object pattern] isEqual:_pattern] && [[(MODDataRegex *)object options] isEqual:_options];
+    }
+    return NO;
 }
 
 @end

@@ -13,31 +13,31 @@
 
 - (id)initWithOid:(bson_oid_t *)oid
 {
-    NSAssert(sizeof(bson_oid_t) == sizeof(data), @"problem with types");
+    NSAssert(sizeof(bson_oid_t) == sizeof(_bytes), @"problem with types");
     return [self initWithBytes:(const unsigned char *)oid];
 }
 
-- (id)initWithBytes:(const unsigned char *)bytes
+- (id)initWithBytes:(const unsigned char[12])bytes
 {
     if (self = [self init]) {
-        memcpy((char *)data, bytes, sizeof(data));
+        memcpy((char *)_bytes, bytes, sizeof(_bytes));
     }
     return self;
 }
 
 - (const unsigned char *)bytes
 {
-    return data;
+    return _bytes;
 }
 
 - (bson_oid_t *)bsonObjectId
 {
-    return (bson_oid_t *)data;
+    return (bson_oid_t *)_bytes;
 }
 
-- (NSString *)description
+- (NSString *)tengenString
 {
-    return [[NSData dataWithBytes:data length:sizeof(data)] description];
+    return [NSString stringWithFormat:@"ObjectId(\"%@\")", [self stringValue]];
 }
 
 - (NSString *)stringValue
@@ -46,9 +46,9 @@
     NSUInteger ii, count;
     
     result = [NSMutableString string];
-    count = sizeof(data);
+    count = sizeof(_bytes);
     for (ii = 0; ii < count; ii++) {
-        [result appendFormat:@"%0.2X", data[ii]];
+        [result appendFormat:@"%0.2X", _bytes[ii]];
     }
     return result;
 }
@@ -56,6 +56,14 @@
 - (NSString *)jsonValue
 {
     return [NSString stringWithFormat:@"{ \"$oid\" : \"%@\" }", [self stringValue]];
+}
+
+- (BOOL)isEqual:(id)object
+{
+    if ([object isKindOfClass:[self class]]) {
+        return memcmp(_bytes, [object bytes], sizeof(_bytes));
+    }
+    return NO;
 }
 
 @end

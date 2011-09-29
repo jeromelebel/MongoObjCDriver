@@ -10,6 +10,8 @@
 
 @implementation MODTimestamp
 
+@synthesize tValue = _tValue, iValue = _iValue;
+
 - (id)initWithTValue:(int)tValue iValue:(int)iValue
 {
     if (self = [self init]) {
@@ -17,6 +19,11 @@
         _tValue = tValue;
     }
     return self;
+}
+
+- (NSString *)tengenString
+{
+    return [NSString stringWithFormat:@"Timestamp(%d, %d)", _tValue, _iValue];
 }
 
 - (NSString *)jsonValue
@@ -28,6 +35,14 @@
 {
     ts->i = _iValue;
     ts->t = _tValue;
+}
+
+- (BOOL)isEqual:(id)object
+{
+    if ([object isKindOfClass:[self class]]) {
+        return _tValue == [object tValue] && _iValue == [object iValue];
+    }
+    return NO;
 }
 
 @end

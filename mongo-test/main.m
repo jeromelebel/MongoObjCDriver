@@ -23,6 +23,33 @@ void logMongoQuery(MODQuery *mongoQuery)
     NSLog(@"%@", mongoQuery.parameters);
 }
 
+static void testTypes(void)
+{
+    NSMutableDictionary *document;
+    MODDataBinary *binary;
+    NSData *data;
+    bson myBson;
+    
+    document = [[NSMutableDictionary alloc] init];
+    
+    data = [[NSData alloc] initWithBytes:"1234567890" length:10];
+    binary = [[MODDataBinary alloc] initWithData:data binaryType:0];
+    [document setObject:binary forKey:@"binary"];
+    [data release];
+    [binary release];
+    
+    bson_init(&myBson);
+    [MODServer appendObject:document toBson:&myBson];
+    bson_finish(&myBson);
+    
+    if (![document isEqualTo:[MODServer objectFromBson:&myBson]]) {
+        NSLog(@"********* ERROR ************");
+    }
+    
+    bson_destroy(&myBson);
+    [document release];
+}
+
 int main (int argc, const char * argv[])
 {
     @autoreleasepool {
@@ -31,6 +58,7 @@ int main (int argc, const char * argv[])
         MODDatabase *mongoDatabase;
         MODCollection *mongoCollection;
 
+        testTypes();
         ip = argv[1];
         server = [[MODServer alloc] init];
         [server autorelease];

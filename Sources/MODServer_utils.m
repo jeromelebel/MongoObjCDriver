@@ -182,7 +182,13 @@
             }
             break;
         case BSON_BINDATA:
-            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+            {
+                NSData *data;
+                
+                data = [[NSData alloc] initWithBytes:bson_iterator_bin_data(iterator) length:bson_iterator_bin_len(iterator)];
+                result = [[[MODDataBinary alloc] initWithData:data binaryType:bson_iterator_bin_type(iterator)] autorelease];
+                [data release];
+            }
             break;
         case BSON_UNDEFINED:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
@@ -201,16 +207,13 @@
             result = [NSNull null];
             break;
         case BSON_REGEX:
-            {
-                NSString *pattern = [[NSString alloc] initWithUTF8String:bson_iterator_regex(iterator)];
-                NSString *options = [[NSString alloc] initWithUTF8String:bson_iterator_regex_opts(iterator)];
-                result = [[[MODDataRegex alloc] initWithPattern:pattern options:options] autorelease];
-                [pattern release];
-                [options release];
-            }
+            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             break;
         case BSON_DBREF:
-            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+        {
+            NSString refName = [[NSString alloc] initWithUTF8String:bson_iterator_regex_opts
+            result = [[[MODDataRef alloc] initWithRefValue:idValue:] autorelease];
+        }
             break;
         case BSON_CODE:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);

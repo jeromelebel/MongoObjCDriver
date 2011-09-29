@@ -10,9 +10,9 @@
 
 @interface MODObjectId : NSObject
 {
-    const unsigned char data[12];
+    const unsigned char _bytes[12];
 }
-- (id)initWithBytes:(const unsigned char *)bytes;
+- (id)initWithBytes:(const unsigned char[12])bytes;
 - (const unsigned char *)bytes;
 - (NSString *)stringValue;
 - (NSString *)jsonValue;
