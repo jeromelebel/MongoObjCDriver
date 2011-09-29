@@ -711,9 +711,9 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
 
 - (BOOL)appendDataBinary:(const char *)binary withLength:(NSUInteger)length binaryType:(char)binaryType key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
 {
-    MODDataBinary *object;
+    MODBinary *object;
     
-    object = [[MODDataBinary alloc] initWithBytes:binary length:length binaryType:binaryType];
+    object = [[MODBinary alloc] initWithBytes:binary length:length binaryType:binaryType];
     [self addObject:object toStructure:structure isDictionary:isDictionary withKey:key];
     [object release];
     return YES;

@@ -1,5 +1,5 @@
 //
-//  MODDataBinary.h
+//  MODBinary.h
 //  mongo-objc-driver
 //
 //  Created by Jérôme Lebel on 28/09/11.
@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MODDataBinary : NSObject
+@interface MODBinary : NSObject
 {
     NSData *_data;
     char _binaryType;

@@ -15,5 +15,5 @@
 #import "MODObjectId.h"
 #import "MODRegex.h"
 #import "MODJsonParser.h"
-#import "MODDataBinary.h"
+#import "MODBinary.h"
 #import "MODDataRef.h"

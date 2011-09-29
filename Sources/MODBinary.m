@@ -1,5 +1,5 @@
 //
-//  MODDataBinary.m
+//  MODBinary.m
 //  mongo-objc-driver
 //
 //  Created by Jérôme Lebel on 28/09/11.
@@ -8,7 +8,7 @@
 
 #import "MOD_internal.h"
 
-@implementation MODDataBinary
+@implementation MODBinary
 
 @synthesize data = _data, binaryType = _binaryType;
 

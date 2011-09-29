@@ -26,14 +26,14 @@ void logMongoQuery(MODQuery *mongoQuery)
 static void testTypes(void)
 {
     NSMutableDictionary *document;
-    MODDataBinary *binary;
+    MODBinary *binary;
     NSData *data;
     bson myBson;
     
     document = [[NSMutableDictionary alloc] init];
     
     data = [[NSData alloc] initWithBytes:"1234567890" length:10];
-    binary = [[MODDataBinary alloc] initWithData:data binaryType:0];
+    binary = [[MODBinary alloc] initWithData:data binaryType:0];
     [document setObject:binary forKey:@"binary"];
     [data release];
     [binary release];

@@ -186,7 +186,7 @@
                 NSData *data;
                 
                 data = [[NSData alloc] initWithBytes:bson_iterator_bin_data(iterator) length:bson_iterator_bin_len(iterator)];
-                result = [[[MODDataBinary alloc] initWithData:data binaryType:bson_iterator_bin_type(iterator)] autorelease];
+                result = [[[MODBinary alloc] initWithData:data binaryType:bson_iterator_bin_type(iterator)] autorelease];
                 [data release];
             }
             break;
@@ -310,7 +310,7 @@
         bson_append_date(bson, keyString, [value timeIntervalSince1970] * 1000);
     } else if ([value isKindOfClass:[NSData class]]) {
         bson_append_binary(bson, keyString, BSON_BIN_BINARY, [value bytes], [value length]);
-    } else if ([value isKindOfClass:[MODDataBinary class]]) {
+    } else if ([value isKindOfClass:[MODBinary class]]) {
         bson_append_binary(bson, keyString, [value binaryType], [[value data] bytes], [[value data] length]);
     }
 }
