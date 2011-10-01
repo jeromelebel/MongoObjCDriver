@@ -70,10 +70,12 @@
         MODCursor *cursor;
         NSDictionary *document;
         NSError *error = nil;
+        long long indexCount;
         
+        indexCount = mongo_index_count(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String]);
         documents = [[NSMutableArray alloc] init];
         cursor = [[MODCursor alloc] initWithMongoCollection:self];
-        cursor.cursor = mongo_index_list(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], 50);
+        cursor.cursor = mongo_index_list(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], 0, indexCount);
         cursor.donotReleaseCursor = YES;
         while ((document = [cursor nextDocumentAsynchronouslyWithError:&error]) != nil) {
             [documents addObject:document];
