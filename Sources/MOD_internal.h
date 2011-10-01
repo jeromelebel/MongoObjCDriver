@@ -12,7 +12,6 @@
 #import "json.h"
 
 @interface MODServer()
-
 @property(nonatomic, readwrite, assign, getter=isConnected) BOOL connected;
 @property(nonatomic, readwrite, assign) mongo_ptr mongo;
 
@@ -21,35 +20,29 @@
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withTarget:(id)target callback:(SEL)callbackSelector;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock;
 - (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block;
-
 @end
 
 @interface MODServer(utils_internal)
-
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails;
 + (NSError *)errorFromMongo:(mongo_ptr)mongo;
 + (NSDictionary *)objectFromBson:(bson *)bsonObject;
 + (void)appendObject:(NSDictionary *)object toBson:(bson *)bson;
-
 @end
 
 @interface MODDatabase()
-
 @property(nonatomic, readonly, assign) mongo_ptr mongo;
 
 - (id)initWithMongoServer:(MODServer *)mongoServer databaseName:(NSString *)databaseName;
 - (BOOL)authenticateSynchronouslyWithMongoQuery:(MODQuery *)mongoQuery;
 - (BOOL)authenticateSynchronouslyWithError:(NSError **)error;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock;
-
 @end
 
 @interface MODCollection()
-
 @property(nonatomic, readonly, assign) mongo_ptr mongo;
 
 - (id)initWithMongoDatabase:(MODDatabase *)mongoDatabase collectionName:(NSString *)collectionName;
-
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock;
 @end
 
 @interface MODCursor()
