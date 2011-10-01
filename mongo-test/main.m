@@ -20,6 +20,7 @@ void logMongoQuery(MODQuery *mongoQuery)
         NSLog(@"********* ERROR ************");
         NSLog(@"%@", mongoQuery.error);
     }
+    assert(mongoQuery.error == nil);
     NSLog(@"%@", mongoQuery.parameters);
 }
 
@@ -61,7 +62,6 @@ int main (int argc, const char * argv[])
         testTypes();
         ip = argv[1];
         server = [[MODServer alloc] init];
-        [server autorelease];
         [server connectWithHostName:[NSString stringWithUTF8String:ip] callback:^(BOOL connected, MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
         }];
@@ -120,7 +120,9 @@ int main (int argc, const char * argv[])
         }];
         [server dropDatabaseWithName:DATABASE_NAME_TEST callback:^(MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
+            exit(0);
         }];
+        [server release];
     }
     @autoreleasepool {
         [[NSRunLoop mainRunLoop] run];
