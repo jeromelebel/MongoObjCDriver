@@ -41,6 +41,12 @@
     [super dealloc];
 }
 
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock
+{
+    [mongoQuery.mutableParameters setObject:self forKey:@"cursor"];
+    [_mongoCollection mongoQueryDidFinish:mongoQuery withCallbackBlock:callbackBlock];
+}
+
 - (BOOL)_startCursorWithError:(NSError **)error
 {
     NSAssert(error != NULL, @"please give a pointer to get the error back");
@@ -128,6 +134,38 @@
             [mongoQuery.mutableParameters setObject:result forKey:@"nextdocument"];
         }
         [_mongoCollection.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(fetchNextDocumentCallback:)];
+    }];
+    return query;
+}
+
+- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(NSDictionary *document))documentCallback endCallback:(void (^)(MODQuery *mongoQuery))endCallback
+{
+    MODQuery *query = nil;
+    
+    query = [_mongoCollection.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        NSDictionary *document;
+        NSError *error;
+        
+        [mongoQuery.mutableParameters setObject:self forKey:@"cursor"];
+        do {
+            document = [self nextDocumentAsynchronouslyWithError:&error];
+            mongoQuery.error = error;
+            if (document) {
+                [mongoQuery.mutableParameters setObject:document forKey:@"document"];
+            } else {
+                break;
+            }
+            if (documentCallback) {
+                dispatch_async(dispatch_get_main_queue(), ^(void) {
+                    documentCallback(document);
+                });
+            }
+        } while (YES);
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+            if (endCallback) {
+                endCallback(mongoQuery);
+            }
+        }];
     }];
     return query;
 }
