@@ -31,6 +31,11 @@
     return [NSString stringWithFormat:@"{ \"$timestamp\" : [ %d, %d ] }", _tValue, _iValue];
 }
 
+- (NSDate *)dateValue
+{
+    return [NSDate dateWithTimeIntervalSince1970:_tValue];
+}
+
 - (void)getBsonTimestamp:(bson_timestamp_t *)ts
 {
     ts->i = _iValue;
