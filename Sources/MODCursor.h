@@ -10,15 +10,8 @@
 
 @class MODCursor;
 
-@protocol MODCursorDelegate <NSObject>
-@optional
-- (void)mongoCursor:(MODCursor *)cursor nextDocumentFetched:(NSArray *)result withMongoQuery:(MODQuery *)mongoQuery;
-@end
-
 @interface MODCursor : NSObject
 {
-    id<MODCursorDelegate>               _delegate;
-    
     MODCollection                       *_mongoCollection;
     NSString                            *_query;
     NSArray                             *_fields;
@@ -30,16 +23,18 @@
     void                                *_cursor;
     void                                *_bsonQuery;
     void                                *_bsonFields;
+    
+    BOOL                                _tailable;
 }
 
-- (MODQuery *)fetchNextDocument;
+- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, NSDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback;
 
-@property(nonatomic, readwrite, assign) id<MODCursorDelegate> delegate;
 @property(nonatomic, readonly, retain) MODCollection *mongoCollection;
 @property(nonatomic, readonly, retain) NSString *query;
 @property(nonatomic, readonly, retain) NSArray *fields;
 @property(nonatomic, readonly, assign) int32_t skip;
 @property(nonatomic, readonly, assign) int32_t limit;
 @property(nonatomic, readonly, retain) NSString * sort;
+@property(nonatomic, readwrite, assign) BOOL tailable;
 
 @end

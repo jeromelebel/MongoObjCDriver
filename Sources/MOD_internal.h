@@ -11,6 +11,10 @@
 #import "mongo.h"
 #import "json.h"
 
+enum {
+    JSON_PARSER_ERROR_EXPECTED_END
+};
+
 @interface MODServer()
 @property(nonatomic, readwrite, assign, getter=isConnected) BOOL connected;
 @property(nonatomic, readwrite, assign) mongo_ptr mongo;

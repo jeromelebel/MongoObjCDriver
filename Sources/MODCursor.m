@@ -10,7 +10,7 @@
 
 @implementation MODCursor
 
-@synthesize delegate = _delegate, mongoCollection = _mongoCollection, query = _query, fields = _fields, skip = _skip, limit = _limit, sort = _sort, cursor = _cursor, donotReleaseCursor = _donotReleaseCursor;
+@synthesize mongoCollection = _mongoCollection, query = _query, fields = _fields, skip = _skip, limit = _limit, sort = _sort, cursor = _cursor, donotReleaseCursor = _donotReleaseCursor, tailable = _tailable;
 
 - (id)initWithMongoCollection:(MODCollection *)mongoCollection
 {
@@ -49,6 +49,7 @@
 
 - (BOOL)_startCursorWithError:(NSError **)error
 {
+    int options = MONGO_AWAIT_DATA;
     NSAssert(error != NULL, @"please give a pointer to get the error back");
     NSAssert(_cursor == NULL, @"cursor already created");
     
@@ -89,6 +90,10 @@
     }
     mongo_cursor_set_skip(_cursor, _skip);
     mongo_cursor_set_limit(_cursor, _limit);
+    if (_tailable) {
+        options |= MONGO_TAILABLE;
+    }
+    mongo_cursor_set_options(_cursor, options);
     
     return *error == nil;
 }
@@ -113,57 +118,35 @@
     return result;
 }
 
-- (void)fetchNextDocumentCallback:(MODQuery *)mongoQuery
-{
-    if ([_delegate respondsToSelector:@selector(mongoCursor:nextDocumentFetched:withMongoQuery:)]) {
-        [_delegate mongoCursor:self nextDocumentFetched:[mongoQuery.parameters objectForKey:@"nextdocument"] withMongoQuery:mongoQuery];
-    }
-}
-
-- (MODQuery *)fetchNextDocument
-{
-    MODQuery *query = nil;
-    
-    query = [_mongoCollection.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        NSDictionary *result;
-        NSError *error;
-        
-        result = [self nextDocumentAsynchronouslyWithError:&error];
-        mongoQuery.error = error;
-        if (result) {
-            [mongoQuery.mutableParameters setObject:result forKey:@"nextdocument"];
-        }
-        [_mongoCollection.mongoServer mongoQueryDidFinish:mongoQuery withTarget:self callback:@selector(fetchNextDocumentCallback:)];
-    }];
-    return query;
-}
-
-- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(NSDictionary *document))documentCallback endCallback:(void (^)(MODQuery *mongoQuery))endCallback
+- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, NSDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback
 {
     MODQuery *query = nil;
     
     query = [_mongoCollection.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         NSDictionary *document;
         NSError *error;
+        uint64_t documentCount = 0;
+        BOOL cursorStopped = NO;
         
         [mongoQuery.mutableParameters setObject:self forKey:@"cursor"];
-        do {
+        while (!cursorStopped) {
+            documentCount++;
             document = [self nextDocumentAsynchronouslyWithError:&error];
             mongoQuery.error = error;
-            if (document) {
-                [mongoQuery.mutableParameters setObject:document forKey:@"document"];
-            } else {
+            if (!document) {
                 break;
             }
             if (documentCallback) {
-                dispatch_async(dispatch_get_main_queue(), ^(void) {
-                    documentCallback(document);
+                BOOL *cursorStoppedPtr = &cursorStopped;
+                
+                dispatch_sync(dispatch_get_main_queue(), ^(void) {
+                    *cursorStoppedPtr = !documentCallback(documentCount, document);
                 });
             }
-        } while (YES);
+        };
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             if (endCallback) {
-                endCallback(mongoQuery);
+                endCallback(documentCount, cursorStopped, mongoQuery);
             }
         }];
     }];
