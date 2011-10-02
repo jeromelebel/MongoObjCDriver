@@ -178,7 +178,9 @@
             free(bsonQuery);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-            callback(count, mongoQuery);
+            if (callback) {
+                callback(count, mongoQuery);
+            }
         }];
     }];
     [query.mutableParameters setObject:@"countdocuments" forKey:@"command"];
