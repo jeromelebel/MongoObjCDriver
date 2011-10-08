@@ -113,6 +113,14 @@
     if (!*error) {
         if (mongo_cursor_next(_cursor) == MONGO_OK) {
             result = [[_mongoCollection.mongoServer class] objectFromBson:&(((mongo_cursor *)_cursor)->current)];
+        } else if (((mongo_cursor *)_cursor)->err != MONGO_CURSOR_EXHAUSTED) {
+            NSString *details = nil;
+            
+            if (_mongoCollection.mongoServer.mongo->lasterrstr) {
+                details = [[NSString alloc] initWithUTF8String:_mongoCollection.mongoServer.mongo->lasterrstr];
+            }
+            *error = [[_mongoCollection.mongoServer class] errorWithErrorDomain:MODMongoCursorErrorDomain code:((mongo_cursor *)_cursor)->err descriptionDetails:details];
+            [details release];
         }
     }
     return result;
