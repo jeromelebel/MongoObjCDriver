@@ -125,7 +125,7 @@
     [mongoQuery.mutableParameters setObject:self forKey:@"mongoserver"];
     [mongoQuery ends];
     if (_mongo->err != MONGO_CONN_SUCCESS) {
-        [mongoQuery.mutableParameters setObject:[[self class] errorWithErrorDomain:MODMongoErrorDomain code:_mongo->err descriptionDetails:nil] forKey:@"error"];
+        mongoQuery.error = [[self class] errorWithErrorDomain:MODMongoErrorDomain code:_mongo->err descriptionDetails:nil];
         _mongo->err = MONGO_CONN_SUCCESS;
     }
 }
