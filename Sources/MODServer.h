@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #define MODMongoErrorDomain @"mod.mongo"
+#define MODMongoCursorErrorDomain @"mod.mongocursor"
 #define MODJsonErrorDomain @"mod.json"
 #define MODJsonParserErrorDomain @"mod.jsonparser"
 

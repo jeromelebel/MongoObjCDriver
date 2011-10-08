@@ -54,7 +54,6 @@
                 description = @"BSON object has not been finished.";
                 break;
             default:
-                description = [NSString stringWithFormat:@"Unknown error %ld", code];
                 break;
         }
         if (descriptionDetails) {
@@ -99,7 +98,6 @@
                 description = @"callback returns error";
                 break;
             default:
-                description = [NSString stringWithFormat:@"Unknown error %ld", code];
                 break;
         }
         if (descriptionDetails) {
@@ -111,7 +109,32 @@
                 description = @"json end is unexpected";
                 break;
             default:
-                description = [NSString stringWithFormat:@"Unknown error %ld", code];
+                break;
+        }
+        if (descriptionDetails) {
+            description = [NSString stringWithFormat:@"%@ - \"%@\"", description, descriptionDetails];
+        }
+    } else if ([errorDomain isEqualToString:MODMongoCursorErrorDomain]) {
+        switch (code) {
+            case MONGO_CURSOR_EXHAUSTED:
+                description = @"The cursor has no more results.";
+                break;
+            case MONGO_CURSOR_INVALID:
+                description = @"The cursor has timed out or is not recognized.";
+                break;
+            case MONGO_CURSOR_PENDING:
+                description = @"Tailable cursor still alive but no data.";
+                break;
+            case MONGO_CURSOR_QUERY_FAIL:
+                description = @"The server returned an '$err' object, indicating query failure.";
+                break;
+            case MONGO_CURSOR_BSON_ERROR:
+                description = @"Something is wrong with the BSON provided.";
+                break;
+            case MONGO_CURSOR_OVERFLOW:
+                description = @"the message to send is too long";
+                break;
+            default:
                 break;
         }
         if (descriptionDetails) {
@@ -123,6 +146,9 @@
         } else {
             description = [NSString stringWithFormat:@"Unknown error %ld (%@)", code, errorDomain];
         }
+    }
+    if (!description) {
+        description = [NSString stringWithFormat:@"Unknown error %ld - %@", code, errorDomain];
     }
     error = [NSError errorWithDomain:errorDomain code:code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:description, NSLocalizedDescriptionKey, nil]];
     return error;
