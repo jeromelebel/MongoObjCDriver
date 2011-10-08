@@ -131,6 +131,26 @@
     return query;
 }
 
+- (MODQuery *)createCappedCollectionWithName:(NSString *)collectionName capSize:(int64_t)capSize callback:(void (^)(MODQuery *mongoQuery))callback
+{
+    MODQuery *query;
+    
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
+        if ([self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+            mongo_cmd_create_capped_collection(self.mongoServer.mongo, [_databaseName UTF8String], [collectionName UTF8String], capSize);
+        }
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+            if (callback) {
+                callback(mongoQuery);
+            }
+        }];
+    }];
+    [query.mutableParameters setObject:@"createcappedcollection" forKey:@"command"];
+    [query.mutableParameters setObject:collectionName forKey:@"collectionname"];
+    [query.mutableParameters setObject:[NSNumber numberWithLongLong:capSize] forKey:@"capsize"];
+    return query;
+}
+
 - (MODQuery *)dropCollectionWithName:(NSString *)collectionName callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query;
