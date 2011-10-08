@@ -20,8 +20,8 @@ void logMongoQuery(MODQuery *mongoQuery)
         NSLog(@"********* ERROR ************");
         NSLog(@"%@", mongoQuery.error);
     }
-    assert(mongoQuery.error == nil);
     NSLog(@"%@", mongoQuery.parameters);
+    assert(mongoQuery.error == nil);
 }
 
 static void testTypes(void)
@@ -58,6 +58,7 @@ int main (int argc, const char * argv[])
         MODServer *server;
         MODDatabase *mongoDatabase;
         MODCollection *mongoCollection;
+        MODCursor *cursor;
 
         testTypes();
         ip = argv[1];
@@ -87,10 +88,12 @@ int main (int argc, const char * argv[])
         [mongoCollection findWithCriteria:@"{}" fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:@"{ \"_id\" : 1 }" callback:^(NSArray *documents, MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
         }];
-        [mongoCollection countWithCriteria:@"{ \"_id\" : \"com-fotopedia-burma\" }" callback:^(int64_t count, MODQuery *mongoQuery) {
+        [mongoCollection countWithCriteria:@"{ \"_id\" : \"xxx\" }" callback:^(int64_t count, MODQuery *mongoQuery) {
+            assert(count == 0);
             logMongoQuery(mongoQuery);
         }];
         [mongoCollection countWithCriteria:nil callback:^(int64_t count, MODQuery *mongoQuery) {
+            assert(count == 0);
             logMongoQuery(mongoQuery);
         }];
         [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\" : \"toto\" }", nil] callback:^(MODQuery *mongoQuery) {
@@ -99,8 +102,29 @@ int main (int argc, const char * argv[])
         [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\" : \"toto1\" }", @"{ \"_id\" : { \"$oid\" : \"123456789012345678901234\" } }", nil] callback:^(MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
         }];
-        [mongoCollection findWithCriteria:nil fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:100 sort:nil callback:^(NSArray *documents, MODQuery *mongoQuery) {
+        [mongoCollection countWithCriteria:nil callback:^(int64_t count, MODQuery *mongoQuery) {
+            assert(count == 3);
             logMongoQuery(mongoQuery);
+        }];
+        [mongoCollection countWithCriteria:@"{ \"_id\" : \"toto\" }" callback:^(int64_t count, MODQuery *mongoQuery) {
+            assert(count == 1);
+            logMongoQuery(mongoQuery);
+        }];
+        [mongoCollection findWithCriteria:nil fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:100 sort:nil callback:^(NSArray *documents, MODQuery *mongoQuery) {
+            assert([documents count] == 2);
+            logMongoQuery(mongoQuery);
+        }];
+        [mongoCollection findWithCriteria:nil fields:nil skip:0 limit:0 sort:nil callback:^(NSArray *documents, MODQuery *mongoQuery) {
+            assert([documents count] == 3);
+            logMongoQuery(mongoQuery);
+        }];
+        cursor = [mongoCollection cursorWithCriteria:nil fields:nil skip:0 limit:0 sort:nil];
+        [cursor forEachDocumentWithCallbackDocumentCallback:^(uint64_t index, NSDictionary *document) {
+            NSLog(@"++++ %@", document);
+            return YES;
+        } endCallback:^(uint64_t count, BOOL stopped, MODQuery *query) {
+            NSLog(@"++++ ");
+            logMongoQuery(query);
         }];
         [mongoCollection updateWithCriteria:@"{\"_id\": \"toto\"}" update:@"{\"$inc\": {\"x\" : 1}}" upsert:NO multiUpdate:NO callback:^(MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
@@ -120,6 +144,7 @@ int main (int argc, const char * argv[])
         }];
         [server dropDatabaseWithName:DATABASE_NAME_TEST callback:^(MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
+            NSLog(@"Everything is cool");
             exit(0);
         }];
         [server release];
