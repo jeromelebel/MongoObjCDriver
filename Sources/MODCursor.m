@@ -158,6 +158,7 @@
             }
         }];
     }];
+    [query.mutableParameters setObject:@"eachdocument" forKey:@"command"];
     return query;
 }
 
