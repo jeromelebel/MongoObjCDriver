@@ -27,6 +27,7 @@ typedef struct mongo                    *mongo_ptr;
     
     BOOL                                _connected;
     NSOperationQueue                    *_operationQueue;
+    NSString                            *_authDatabase;
     NSString                            *_userName;
     NSString                            *_password;
 }
@@ -45,6 +46,7 @@ typedef struct mongo                    *mongo_ptr;
 @property(nonatomic, readonly, assign, getter=isConnected) BOOL connected;
 @property(nonatomic, readwrite, retain) NSString *userName;
 @property(nonatomic, readwrite, retain) NSString *password;
+@property(nonatomic, readwrite, retain) NSString *authDatabase;
 
 @end
 

@@ -10,7 +10,7 @@
 
 @implementation MODServer
 
-@synthesize connected = _connected, mongo = _mongo, userName = _userName, password = _password;
+@synthesize connected = _connected, mongo = _mongo, userName = _userName, password = _password, authDatabase = _authDatabase;
 
 - (id)init
 {
@@ -156,7 +156,7 @@
         
         mongo_parse_host([host UTF8String], &hostPort);
         if (mongo_connect(_mongo, hostPort.host, hostPort.port) == MONGO_OK) {
-            [self authenticateSynchronouslyWithDatabaseName:nil userName:_userName password:_password mongoQuery:mongoQuery];
+            [self authenticateSynchronouslyWithDatabaseName:_authDatabase userName:_userName password:_password mongoQuery:mongoQuery];
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback(mongoQuery.error == nil, mongoQuery);
@@ -179,7 +179,7 @@
     }
     query = [self addQueryInQueue:^(MODQuery *mongoQuery) {
         if (mongo_replset_connect(_mongo) == MONGO_OK) {
-            [self authenticateSynchronouslyWithDatabaseName:nil userName:_userName password:_password mongoQuery:mongoQuery];
+            [self authenticateSynchronouslyWithDatabaseName:_authDatabase userName:_userName password:_password mongoQuery:mongoQuery];
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback(mongoQuery.error == nil, mongoQuery);
