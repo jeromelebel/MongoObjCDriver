@@ -767,7 +767,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "module_name=\"mongo-c-driver\"\nmodule_owner=\"fotonauts\"\nmodule_branch=\"master\"\nmodule_path=\"Libraries/${module_name}\"\n\nfiles=`ls \"${module_path}\" 2> /dev/null`\nif [ \"${files}\" = \"\" ] ; then\nif [ -d .git ] ; then\ngit submodule update --init\ncd \"${module_path}\"\ngit branch --track \"${module_branch}\" \"origin/${module_branch}\"\ngit checkout \"${module_branch}\"\nelse\ncd \"${module_path}\"\ncurl -o \"${module_name}.zip\" -L \"https://nodeload.github.com/${module_owner}/${module_name}/zipball/${module_branch}\"\nunzip \"${module_name}.zip\"\nrm \"${module_name}.zip\"\nmodule_unzip_dir=`ls`\ncd \"${module_unzip_dir}\"\nmv * ..\ncd ..\nrmdir \"${module_unzip_dir}\"\nfi\nfi\n";
+			shellScript = "module_name=\"mongo-c-driver\"\nmodule_owner=\"fotonauts\"\nmodule_branch=\"master\"\nmodule_path=\"Libraries/${module_name}\"\n\nfiles=`ls \"${module_path}\" 2> /dev/null`\nif [ \"${files}\" = \"\" ] ; then\n  if [ -d .git ] ; then\n    echo \"\"\n  else\n    cd \"${module_path}\"\n    curl -o \"${module_name}.zip\" -L \"https://nodeload.github.com/${module_owner}/${module_name}/zipball/${module_branch}\"\n    unzip \"${module_name}.zip\"\n    rm \"${module_name}.zip\"\n    module_unzip_dir=`ls`\n    cd \"${module_unzip_dir}\"\n    mv * ..\n    cd ..\n    rm -fr \"${module_unzip_dir}\"\n  fi\nfi\n";
 		};
 		02216F1A1412D3CB00789BD1 /* libjson */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -781,7 +781,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "module_name=\"libjson\"\nmodule_owner=\"fotonauts\"\nmodule_branch=\"master\"\nmodule_path=\"Libraries/${module_name}\"\n\nfiles=`ls \"${module_path}\" 2> /dev/null`\nif [ \"${files}\" = \"\" ] ; then\nif [ -d .git ] ; then\ngit submodule update --init\ncd \"${module_path}\"\necho \"git branch --track ${module_branch} origin/${module_branch}\"\ngit branch --track \"${module_branch}\" \"origin/${module_branch}\"\ngit checkout \"${module_branch}\"\nelse\ncd \"${module_path}\"\ncurl -o \"${module_name}.zip\" -L \"https://nodeload.github.com/${module_owner}/${module_name}/zipball/${module_branch}\"\nunzip \"${module_name}.zip\"\nrm \"${module_name}.zip\"\nmodule_unzip_dir=`ls`\ncd \"${module_unzip_dir}\"\nmv * ..\ncd ..\nrmdir \"${module_unzip_dir}\"\nfi\nfi\n";
+			shellScript = "module_name=\"libjson\"\nmodule_owner=\"fotonauts\"\nmodule_branch=\"master\"\nmodule_path=\"Libraries/${module_name}\"\n\nfiles=`ls \"${module_path}\" 2> /dev/null`\nif [ \"${files}\" = \"\" ] ; then\n  if [ -d .git ] ; then\n    echo \"\"\n  else\n    cd \"${module_path}\"\n    curl -o \"${module_name}.zip\" -L \"https://nodeload.github.com/${module_owner}/${module_name}/zipball/${module_branch}\"\n    unzip \"${module_name}.zip\"\n    rm \"${module_name}.zip\"\n    module_unzip_dir=`ls`\n    cd \"${module_unzip_dir}\"\n    mv * ..\n    cd ..\n    rm -fr \"${module_unzip_dir}\"\n  fi\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
