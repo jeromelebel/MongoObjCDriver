@@ -82,7 +82,7 @@
         _bsonFields = malloc(sizeof(bson));
         bson_init(_bsonFields);
         for (NSString *field in _fields) {
-            snprintf(indexString, sizeof(indexString), "%lu", index);
+            snprintf(indexString, sizeof(indexString), "%lu", (unsigned long)index);
             bson_append_string(_bsonFields, [field UTF8String], indexString);
         }
         bson_finish(_bsonFields);
