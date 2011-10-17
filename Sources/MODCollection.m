@@ -370,7 +370,7 @@
     return query;
 }
 
-- (MODQuery *)removeWithCriteria:(NSString *)criteria callback:(void (^)(MODQuery *mongoQuery))callback
+- (MODQuery *)removeWithCriteria:(id)criteria callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -380,8 +380,10 @@
             NSError *error = nil;
             
             bson_init(&bsonCriteria);
-            if (criteria && [criteria length] > 0) {
+            if (criteria && [criteria isKindOfClass:[NSString class]] && [criteria length] > 0) {
                 [MODJsonToBsonParser bsonFromJson:&bsonCriteria json:criteria error:&error];
+            } else if (criteria) {
+                [[_mongoDatabase.mongoServer class] appendObject:criteria toBson:&bsonCriteria];
             } else {
                 error = [MODServer errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:@""];
             }

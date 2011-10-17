@@ -25,6 +25,11 @@
     return self;
 }
 
+- (id)copyWithZone:(NSZone *)zone
+{
+    return [self retain];
+}
+
 - (const unsigned char *)bytes
 {
     return _bytes;
