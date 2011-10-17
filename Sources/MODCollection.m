@@ -406,6 +406,36 @@
     return query;
 }
 
+- (MODQuery *)ensureIndex:(id)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback
+{
+    MODQuery *query = nil;
+    
+    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+            bson index;
+            bson output;
+            NSError *error = nil;
+            
+            bson_init(&index);
+            if ([indexDocument isKindOfClass:[NSString class]]) {
+                [MODJsonToBsonParser bsonFromJson:&index json:indexDocument error:&error];
+            } else {
+                [[_mongoDatabase.mongoServer class] appendObject:indexDocument toBson:&index];
+            }
+            bson_finish(&index);
+            mongo_create_index(_mongoDatabase.mongo, [_mongoDatabase.databaseName UTF8String], &index, 0, &output);
+            bson_destroy(&index);
+            bson_destroy(&output);
+        }
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+            callback(mongoQuery);
+        }];
+    }];
+    [query.mutableParameters setObject:@"ensureindex" forKey:@"command"];
+    [query.mutableParameters setObject:indexDocument forKey:@"index"];
+    return query;
+}
+
 - (MODQuery *)dropIndex:(id)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
@@ -414,14 +444,12 @@
         if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson index;
             NSError *error = nil;
-            id indexDocumentBlock = indexDocument;
             
-            if ([indexDocumentBlock isKindOfClass:[NSString class]]) {
-                indexDocumentBlock = [MODJsonToObjectParser objectsFromJson:indexDocumentBlock error:&error];
-            }
             bson_init(&index);
-            for (NSString *key in [[indexDocumentBlock objectForKey:@"key"] allKeys]) {
-                bson_append_int(&index, [key UTF8String], [[[indexDocumentBlock objectForKey:@"key"] objectForKey:key] intValue]);
+            if ([indexDocument isKindOfClass:[NSString class]]) {
+                [MODJsonToBsonParser bsonFromJson:&index json:indexDocument error:&error];
+            } else {
+                [[_mongoDatabase.mongoServer class] appendObject:indexDocument toBson:&index];
             }
             bson_finish(&index);
             if (error == nil) {
