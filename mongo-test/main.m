@@ -51,6 +51,36 @@ static void testTypes(void)
     [document release];
 }
 
+static void testObjects(NSString *json, id shouldEqual)
+{
+    NSError *error;
+    id objects;
+    
+    objects = [MODJsonToObjectParser objectsFromJson:json error:&error];
+    if (error) {
+        NSLog(@"***** parsing errors for:");
+        NSLog(@"%@", json);
+        NSLog(@"%@", error);
+    } else if (![objects isEqual:shouldEqual]) {
+        NSLog(@"***** wrong result for:");
+        NSLog(@"%@", json);
+        NSLog(@"received: %@", objects);
+        for (NSString *key in [objects allKeys]) {
+            if (![[objects objectForKey:key] isEqual:[shouldEqual objectForKey:key]]) {
+                NSLog(@"different value for %@", key);
+            }
+        }
+    }
+    assert(error == nil);
+    assert([objects isEqual:shouldEqual]);
+}
+
+static void testJson()
+{
+    testObjects(@"{\"_id\" : \"x\", \"toto\" : [ { \"1\" : 2 } ]}", [NSDictionary dictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil]);
+    testObjects(@"{\"_id\" : \"x\", \"toto\" : [ { \"1\" : 2 }, { \"2\" : true } ]}", [NSDictionary dictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"2", nil], nil], @"toto", nil]);
+}
+
 int main (int argc, const char * argv[])
 {
     @autoreleasepool {
@@ -61,6 +91,7 @@ int main (int argc, const char * argv[])
         MODCursor *cursor;
 
         testTypes();
+        testJson();
         ip = argv[1];
         server = [[MODServer alloc] init];
         [server connectWithHostName:[NSString stringWithUTF8String:ip] callback:^(BOOL connected, MODQuery *mongoQuery) {
