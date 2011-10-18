@@ -411,7 +411,7 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
     return (enum mongo_index_opts)option;
 }
 
-- (MODQuery *)ensureIndex:(id)indexDocument name:(NSString *)name options:(enum MOD_INDEX_OPTIONS)options callback:(void (^)(MODQuery *mongoQuery))callback
+- (MODQuery *)createIndex:(id)indexDocument name:(NSString *)name options:(enum MOD_INDEX_OPTIONS)options callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     NSMutableString *defaultName = nil;
@@ -452,7 +452,7 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
             callback(mongoQuery);
         }];
     }];
-    [query.mutableParameters setObject:@"ensureindex" forKey:@"command"];
+    [query.mutableParameters setObject:@"createindex" forKey:@"command"];
     [query.mutableParameters setObject:indexDocument forKey:@"index"];
     [query.mutableParameters setObject:[NSNumber numberWithInt:options] forKey:@"options"];
     [query.mutableParameters setObject:name forKey:@"name"];
