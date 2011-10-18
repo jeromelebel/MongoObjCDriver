@@ -13,6 +13,13 @@
 @class MODQuery;
 @class MODCursor;
 
+enum MOD_INDEX_OPTIONS {
+    MOD_INDEX_OPTIONS_UNIQUE = ( 1<<0 ),
+    MOD_INDEX_OPTIONS_DROP_DUPS = ( 1<<2 ),
+    MOD_INDEX_OPTIONS_BACKGROUND = ( 1<<3 ),
+    MOD_INDEX_OPTIONS_SPARSE = ( 1<<4 )
+};
+
 @interface MODCollection : NSObject
 {
     MODDatabase                         *_mongoDatabase;
@@ -30,7 +37,7 @@
 - (MODQuery *)saveWithDocument:(NSString *)document callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)removeWithCriteria:(id)jsonCriteria callback:(void (^)(MODQuery *mongoQuery))callback;
 
-- (MODQuery *)ensureIndex:(id)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback;
+- (MODQuery *)ensureIndex:(id)indexDocument name:(NSString *)name options:(enum MOD_INDEX_OPTIONS)options callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)dropIndex:(id)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback;
 
 @property(nonatomic, readonly, retain) MODServer *mongoServer;

@@ -406,10 +406,31 @@
     return query;
 }
 
-- (MODQuery *)ensureIndex:(id)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback
+static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
+{
+    return (enum mongo_index_opts)option;
+}
+
+- (MODQuery *)ensureIndex:(id)indexDocument name:(NSString *)name options:(enum MOD_INDEX_OPTIONS)options callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
+    NSMutableString *defaultName = nil;
     
+    if (!name) {
+        NSDictionary *objects;
+        
+        if ([indexDocument isKindOfClass:[NSString class]]) {
+            objects = [MODJsonToObjectParser objectsFromJson:indexDocument error:NULL];
+        } else {
+            objects = indexDocument;
+        }
+        defaultName = [[NSMutableString alloc] init];
+        for (NSString *key in [objects allKeys]) {
+            [defaultName appendString:key];
+            [defaultName appendString:@"_"];
+        }
+        name = defaultName;
+    }
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson index;
@@ -423,7 +444,7 @@
                 [[_mongoDatabase.mongoServer class] appendObject:indexDocument toBson:&index];
             }
             bson_finish(&index);
-            mongo_create_index(_mongoDatabase.mongo, [_mongoDatabase.databaseName UTF8String], &index, 0, &output);
+            mongo_create_index(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], [name UTF8String], &index, convertIndexOptions(options), &output);
             bson_destroy(&index);
             bson_destroy(&output);
         }
@@ -433,6 +454,9 @@
     }];
     [query.mutableParameters setObject:@"ensureindex" forKey:@"command"];
     [query.mutableParameters setObject:indexDocument forKey:@"index"];
+    [query.mutableParameters setObject:[NSNumber numberWithInt:options] forKey:@"options"];
+    [query.mutableParameters setObject:name forKey:@"name"];
+    [defaultName release];
     return query;
 }
 
@@ -453,7 +477,7 @@
             }
             bson_finish(&index);
             if (error == nil) {
-                mongo_drop_indexes(_mongoDatabase.mongo, [_mongoDatabase.databaseName UTF8String], [_absoluteCollectionName UTF8String], &index);
+                mongo_drop_indexes(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &index);
             } else {
                 mongoQuery.error = error;
             }
