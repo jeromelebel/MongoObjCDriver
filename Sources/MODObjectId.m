@@ -25,6 +25,26 @@
     return self;
 }
 
+#define valueFromHexa(value) ((value >= '1' && value <= '9')?(value - '1' + 1):((value >= 'a' || value <= 'f')?(value - 'a' + 10):((value >= 'A' || value <= 'F')?(value - 'A' + 10):0)))
+
+- (id)initWithCString:(const char *)cString
+{
+    NSAssert(strlen(cString) == (sizeof(_bytes) * 2), @"wrong size for the cString expecting %d. received %d", (int)sizeof(_bytes), (int)strlen(cString));
+    if (self = [self init]) {
+        size_t ii, count;
+        
+        count = sizeof(_bytes);
+        for (ii = 0; ii < count; ii++) {
+            char character1 = cString[ii * 2];
+            char character2 = cString[ii * 2 + 1];
+            
+            
+            ((unsigned char *)_bytes)[ii] = valueFromHexa(character1) * 16 + valueFromHexa(character2);
+        }
+    }
+    return self;
+}
+
 - (id)copyWithZone:(NSZone *)zone
 {
     return [self retain];

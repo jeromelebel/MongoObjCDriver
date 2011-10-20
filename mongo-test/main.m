@@ -79,6 +79,7 @@ static void testJson()
 {
     testObjects(@"{\"_id\" : \"x\", \"toto\" : [ { \"1\" : 2 } ]}", [NSDictionary dictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil]);
     testObjects(@"{\"_id\" : \"x\", \"toto\" : [ { \"1\" : 2 }, { \"2\" : true } ]}", [NSDictionary dictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"2", nil], nil], @"toto", nil]);
+    testObjects(@"{\"_id\": { \"$oid\" : \"4E9807F88157F608B4000002\" }, \"type\": \"Activity\"}", [NSDictionary dictionaryWithObjectsAndKeys:[[[MODObjectId alloc] initWithCString:"4E9807F88157F608B4000002"] autorelease], @"_id", @"Activity", @"type", nil]);
 }
 
 int main (int argc, const char * argv[])
@@ -92,6 +93,10 @@ int main (int argc, const char * argv[])
 
         testTypes();
         testJson();
+        if (argc != 2) {
+            NSLog(@"need to put the ip a of a mongo server as a parameter, so we can test the objective-c driver");
+            exit(1);
+        }
         ip = argv[1];
         server = [[MODServer alloc] init];
         [server connectWithHostName:[NSString stringWithUTF8String:ip] callback:^(BOOL connected, MODQuery *mongoQuery) {

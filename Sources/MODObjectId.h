@@ -13,6 +13,7 @@
     const unsigned char _bytes[12];
 }
 - (id)initWithBytes:(const unsigned char[12])bytes;
+- (id)initWithCString:(const char *)bytes;
 - (const unsigned char *)bytes;
 - (NSString *)stringValue;
 - (NSString *)tengenString;
