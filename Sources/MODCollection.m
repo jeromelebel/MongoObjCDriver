@@ -344,6 +344,9 @@
                             case BSON_SYMBOL:
                                 bson_append_symbol(&bsonCriteria, "_id", bson_iterator_string(&iterator));
                                 break;
+                            case BSON_OID:
+                                bson_append_oid(&bsonCriteria, "_id", bson_iterator_oid(&iterator));
+                                break;
                             default:
                                 error = [[_mongoDatabase.mongoServer class] errorWithErrorDomain:MODMongoErrorDomain code:MONGO_BSON_INVALID descriptionDetails:@"_id missing in document"];
                                 break;
