@@ -244,6 +244,8 @@ static int end_structure_for_bson(int nesting, int is_object, const char *key, s
         } else if (!context->shouldSkipNextEndStructure) {
             result = [context->target closeArrayWithStructure:context->latestStack->structure]?0:1;
             popStack(context);
+        } else if (context->shouldSkipNextEndStructure) {
+            context->shouldSkipNextEndStructure = NO;
         }
     }
     return result;
