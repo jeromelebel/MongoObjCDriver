@@ -39,6 +39,7 @@ enum MOD_INDEX_OPTIONS {
 
 - (MODQuery *)createIndex:(id)indexDocument name:(NSString *)name options:(enum MOD_INDEX_OPTIONS)options callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)dropIndex:(id)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback;
+- (MODQuery *)reIndexWithCallback:(void (^)(MODQuery *mongoQuery))callback;
 
 @property(nonatomic, readonly, retain) MODServer *mongoServer;
 @property(nonatomic, retain, readonly) MODDatabase *mongoDatabase;

@@ -495,6 +495,22 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
     return query;
 }
 
+- (MODQuery *)reIndexWithCallback:(void (^)(MODQuery *mongoQuery))callback
+{
+    MODQuery *query = nil;
+    
+    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+            mongo_reindex(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String]);
+        }
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+            callback(mongoQuery);
+        }];
+    }];
+    [query.mutableParameters setObject:@"reindex" forKey:@"command"];
+    return query;
+}
+
 - (mongo *)mongo
 {
     return _mongoDatabase.mongo;
