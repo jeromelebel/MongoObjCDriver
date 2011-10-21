@@ -239,9 +239,11 @@ static int end_structure_for_bson(int nesting, int is_object, const char *key, s
         } else if (context->pendingBsonValue.bsonType != NO_BSON_TYPE) {
             result = 1;
         } else if (is_object && !context->shouldSkipNextEndStructure) {
+            create_waiting_structure_if_needed(context);
             result = [context->target closeDictionaryWithStructure:context->latestStack->structure]?0:1;
             popStack(context);
         } else if (!context->shouldSkipNextEndStructure) {
+            create_waiting_structure_if_needed(context);
             result = [context->target closeArrayWithStructure:context->latestStack->structure]?0:1;
             popStack(context);
         } else if (context->shouldSkipNextEndStructure) {

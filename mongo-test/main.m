@@ -70,6 +70,8 @@ static void testObjects(NSString *json, id shouldEqual)
                 NSLog(@"different value for %@", key);
             }
         }
+    } else {
+        NSLog(@"OK: %@", json);
     }
     assert(error == nil);
     assert([objects isEqual:shouldEqual]);
@@ -80,6 +82,7 @@ static void testJson()
     testObjects(@"{\"_id\" : \"x\", \"toto\" : [ { \"1\" : 2 } ]}", [NSDictionary dictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil]);
     testObjects(@"{\"_id\" : \"x\", \"toto\" : [ { \"1\" : 2 }, { \"2\" : true } ]}", [NSDictionary dictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"2", nil], nil], @"toto", nil]);
     testObjects(@"{\"_id\": { \"$oid\" : \"4E9807F88157F608B4000002\" }, \"type\": \"Activity\"}", [NSDictionary dictionaryWithObjectsAndKeys:[[[MODObjectId alloc] initWithCString:"4E9807F88157F608B4000002"] autorelease], @"_id", @"Activity", @"type", nil]);
+    testObjects(@"{\"empty_array\" : [], \"type\": \"Activity\"}", [NSDictionary dictionaryWithObjectsAndKeys:[NSArray array], @"empty_array", @"Activity", @"type", nil]);
 }
 
 int main (int argc, const char * argv[])
