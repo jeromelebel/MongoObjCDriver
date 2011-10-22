@@ -212,10 +212,15 @@ static void * begin_structure_for_bson(int nesting, int is_object, void *structu
                 result = NULL;
             }
         }
-    } else {
+    } else if (nesting == 0) {
         result = context->target;
-        assert(is_object == 1);
-        pushStack(context, [context->target mainDictionary], YES);
+        if (is_object) {
+            [context->target startMainDictionary];
+        } else {
+            [context->target startMainArray];
+        }
+        result = [context->target mainObject];
+        pushStack(context, [context->target mainObject], is_object == 1);
     }
     return result;
 }
@@ -249,6 +254,13 @@ static int end_structure_for_bson(int nesting, int is_object, const char *key, s
         } else if (context->shouldSkipNextEndStructure) {
             context->shouldSkipNextEndStructure = NO;
         }
+    } else if (nesting == 0) {
+        if (is_object) {
+            [context->target finishMainDictionary];
+        } else {
+            [context->target finishMainArray];
+        }
+        popStack(context);
     }
     return result;
 }
@@ -477,9 +489,35 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     _bson = bson;
 }
 
-- (void *)mainDictionary
+- (void *)mainObject
 {
     return _bson;
+}
+
+- (void)startMainDictionary
+{
+    
+}
+
+- (void)finishMainDictionary
+{
+    
+}
+
+- (void)startMainArray
+{
+    _isMainObjectArray = YES;
+    bson_append_start_array(_bson, "array");
+}
+
+- (void)finishMainArray
+{
+    bson_append_finish_array(_bson);
+}
+
+- (BOOL)isMainObjectArray
+{
+    return _isMainObjectArray;
 }
 
 - (void *)openDictionaryWithPreviousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary key:(const char *)key
@@ -641,22 +679,38 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     
     parser = [[MODJsonToObjectParser alloc] init];
     [parser parseJsonWithString:json withError:error];
-    objects = [[parser objects] retain];
+    objects = [(id)[parser mainObject] retain];
     [parser release];
     return [objects autorelease];
 }
 
-- (void *)mainDictionary
+- (void *)mainObject
 {
-    if (!_mainObject) {
-        _mainObject = [[NSMutableDictionary alloc] init];
-    }
     return _mainObject;
 }
 
-- (id)objects
+- (void)startMainDictionary
 {
-    return _mainObject;
+    _mainObject = [[NSMutableDictionary alloc] init];
+}
+
+- (void)startMainArray
+{
+    _mainObject = [[NSMutableArray alloc] init];
+    _isMainObjectArray = YES;
+}
+
+- (void)finishMainDictionary
+{
+}
+
+- (void)finishMainArray
+{
+}
+
+- (BOOL)isMainObjectArray
+{
+    return _isMainObjectArray;
 }
 
 - (BOOL)addObject:(id)object toStructure:(id)structure isDictionary:(BOOL)isDictionary withKey:(const char *)key
@@ -664,7 +718,7 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     BOOL result = YES;
     
     if (!structure) {
-        structure = [self mainDictionary];
+        structure = [self mainObject];
     }
     if (key == NULL && isDictionary) {
         result = NO;

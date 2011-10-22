@@ -10,7 +10,12 @@
 
 @protocol MODJsonParserProtocol <NSObject>
 
-- (void *)mainDictionary;
+- (void)startMainDictionary;
+- (void)startMainArray;
+- (void)finishMainDictionary;
+- (void)finishMainArray;
+- (BOOL)isMainObjectArray;
+- (void *)mainObject;
 - (void *)openDictionaryWithPreviousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary key:(const char *)key;
 - (void *)openArrayWithPreviousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary key:(const char *)key;
 - (BOOL)closeDictionaryWithStructure:(void *)openedStructure;
@@ -37,10 +42,10 @@
 
 @interface MODJsonToObjectParser : MODJsonParser<MODJsonParserProtocol>
 {
-    NSMutableDictionary *_mainObject;
+    id _mainObject;
+    BOOL _isMainObjectArray;
 }
 
 + (id)objectsFromJson:(NSString *)json error:(NSError **)error;
-- (id)objects;
 
 @end

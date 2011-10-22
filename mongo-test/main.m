@@ -64,10 +64,13 @@ static void testObjects(NSString *json, id shouldEqual)
     } else if (![objects isEqual:shouldEqual]) {
         NSLog(@"***** wrong result for:");
         NSLog(@"%@", json);
+        NSLog(@"expecting: %@", shouldEqual);
         NSLog(@"received: %@", objects);
-        for (NSString *key in [objects allKeys]) {
-            if (![[objects objectForKey:key] isEqual:[shouldEqual objectForKey:key]]) {
-                NSLog(@"different value for %@", key);
+        if ([objects isKindOfClass:[NSDictionary class]]) {
+            for (NSString *key in [objects allKeys]) {
+                if (![[objects objectForKey:key] isEqual:[shouldEqual objectForKey:key]]) {
+                    NSLog(@"different value for %@", key);
+                }
             }
         }
     } else {
@@ -84,6 +87,7 @@ static void testJson()
     testObjects(@"{\"_id\": { \"$oid\" : \"4E9807F88157F608B4000002\" }, \"type\": \"Activity\"}", [NSDictionary dictionaryWithObjectsAndKeys:[[[MODObjectId alloc] initWithCString:"4E9807F88157F608B4000002"] autorelease], @"_id", @"Activity", @"type", nil]);
     testObjects(@"{\"toto\": 1, \"empty_array\" : [], \"type\": \"Activity\"}", [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"toto", [NSArray array], @"empty_array", @"Activity", @"type", nil]);
     testObjects(@"{\"toto\": 1, \"empty_hash\" : {}, \"type\": \"Activity\"}", [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"toto", [NSDictionary dictionary], @"empty_hash", @"Activity", @"type", nil]);
+    testObjects(@"[ { \"hello\" : \"1\" }, { \"zob\": \"2\" } ]", [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"1", @"hello", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"2", @"zob", nil], nil]);
 }
 
 int main (int argc, const char * argv[])
