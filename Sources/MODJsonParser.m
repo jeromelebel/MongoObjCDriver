@@ -684,6 +684,12 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     return [objects autorelease];
 }
 
+- (void)dealloc
+{
+    [_mainObject release];
+    [super dealloc];
+}
+
 - (void *)mainObject
 {
     return _mainObject;
