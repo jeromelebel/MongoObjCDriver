@@ -511,7 +511,7 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
     return query;
 }
 
-- (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction reduceFunction:(NSString *)reduceFunction query:(id)mapReduceQuery sort:(id)sort limit:(int64_t)limit output:(id)output keepTemp:(BOOL)keepTemp finalizeFunction:(NSString *)finalizeFunction scope:(id)scope jsmode:(BOOL)jsmode verbose:(BOOL)verbose
+- (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction reduceFunction:(NSString *)reduceFunction query:(id)mapReduceQuery sort:(id)sort limit:(int64_t)limit output:(id)output keepTemp:(BOOL)keepTemp finalizeFunction:(NSString *)finalizeFunction scope:(id)scope jsmode:(BOOL)jsmode verbose:(BOOL)verbose callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -559,9 +559,7 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
             }
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-            if (mongoQuery.error) {
-                NSRunAlertPanel(@"Error", [mongoQuery.error localizedDescription], @"OK", nil, nil);
-            }
+            callback(mongoQuery);
         }];
     }];
     [query.mutableParameters setObject:@"reindex" forKey:@"command"];
