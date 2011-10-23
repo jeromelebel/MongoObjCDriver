@@ -511,6 +511,63 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
     return query;
 }
 
+- (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction reduceFunction:(NSString *)reduceFunction query:(id)mapReduceQuery sort:(id)sort limit:(int64_t)limit output:(id)output keepTemp:(BOOL)keepTemp finalizeFunction:(NSString *)finalizeFunction scope:(id)scope jsmode:(BOOL)jsmode verbose:(BOOL)verbose
+{
+    MODQuery *query = nil;
+    
+    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+            bson bsonQuery;
+            bson bsonSort;
+            bson bsonOutput;
+            bson bsonScope;
+            bson bsonResult;
+            NSError *error = nil;
+            
+            bson_init(&bsonQuery);
+            if (mapReduceQuery && [mapReduceQuery length] > 0) {
+                [MODJsonToBsonParser bsonFromJson:&bsonQuery json:mapReduceQuery error:&error];
+            }
+            bson_finish(&bsonQuery);
+            if (!error) {
+                bson_init(&bsonSort);
+                if (sort) {
+                    [MODJsonToBsonParser bsonFromJson:&bsonSort json:sort error:&error];
+                }
+                bson_finish(&bsonSort);
+            }
+            if (!error) {
+                bson_init(&bsonOutput);
+                if (output) {
+                    [MODJsonToBsonParser bsonFromJson:&bsonOutput json:output error:&error];
+                }
+                bson_finish(&bsonOutput);
+            }
+            if (!error) {
+                bson_init(&bsonScope);
+                if (scope) {
+                    [MODJsonToBsonParser bsonFromJson:&bsonScope json:scope error:&error];
+                }
+                bson_finish(&bsonScope);
+            }
+            if (!error) {
+                bson_init(&bsonResult);
+                mongo_map_reduce(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], [mapFunction UTF8String], [reduceFunction UTF8String], &bsonQuery, &bsonSort, limit, &bsonOutput, keepTemp?1:0, [finalizeFunction UTF8String], &bsonScope, jsmode?1:0, verbose?1:0, &bsonResult);
+                NSLog(@"%@", [MODServer objectFromBson:&bsonResult]);
+            } else {
+                mongoQuery.error = error;
+            }
+        }
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+            if (mongoQuery.error) {
+                NSRunAlertPanel(@"Error", [mongoQuery.error localizedDescription], @"OK", nil, nil);
+            }
+        }];
+    }];
+    [query.mutableParameters setObject:@"reindex" forKey:@"command"];
+    return query;
+}
+
 - (mongo *)mongo
 {
     return _mongoDatabase.mongo;
