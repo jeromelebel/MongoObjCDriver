@@ -94,6 +94,9 @@
             case JSON_ERROR_COMMA_OUT_OF_STRUCTURE:
                 description = @"found a comma not in structure (array/object)";
                 break;
+            case JSON_ERROR_END_OF_STRUCTURE_OUT_OF_STRUCTURE:
+                description = @"found end of structure out of structure (array/object)";
+                break;
             case JSON_ERROR_CALLBACK:
                 description = @"callback returns error";
                 break;
