@@ -82,6 +82,7 @@ static void testObjects(NSString *json, id shouldEqual)
 
 static void testJson()
 {
+    testObjects(@"{\"toto\": {\"$regex\":\"value\"}, \"regexp\" : {\"$regex\":\"value\", \"$options\":\"x\"} }", [NSDictionary dictionaryWithObjectsAndKeys:[[[MODRegex alloc] initWithPattern:@"value" options:nil] autorelease], @"toto", [[[MODRegex alloc] initWithPattern:@"value" options:@"x"] autorelease], @"regexp", nil]);
     testObjects(@"{\"_id\" : \"x\", \"toto\" : [ { \"1\" : 2 } ]}", [NSDictionary dictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil]);
     testObjects(@"{\"_id\" : \"x\", \"toto\" : [ { \"1\" : 2 }, { \"2\" : true } ]}", [NSDictionary dictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"2", nil], nil], @"toto", nil]);
     testObjects(@"{\"_id\": { \"$oid\" : \"4E9807F88157F608B4000002\" }, \"type\": \"Activity\"}", [NSDictionary dictionaryWithObjectsAndKeys:[[[MODObjectId alloc] initWithCString:"4E9807F88157F608B4000002"] autorelease], @"_id", @"Activity", @"type", nil]);

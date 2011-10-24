@@ -14,7 +14,11 @@
 {
     if (self = [self init]) {
         _pattern = [pattern retain];
-        _options = [options retain];
+        if (options) {
+            _options = [options retain];
+        } else {
+            _options = [@"" retain];
+        }
     }
     return self;
 }

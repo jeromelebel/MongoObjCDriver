@@ -232,7 +232,11 @@ static int end_structure_for_bson(int nesting, int is_object, const char *key, s
     
     my_debug();
     if (key != NULL || nesting != 0) {
-        if (context->pendingBsonValue.bsonType == TIMESTAMP_BSON_TYPE) {
+        if (context->pendingBsonValue.regexBson.pattern && context->pendingBsonValue.bsonType == REGEX_BSON_TYPE) {
+            result = [context->target appendRegexWithPattern:context->pendingBsonValue.regexBson.pattern options:context->pendingBsonValue.regexBson.options key:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary]?0:1;
+            clear_pending_value(context, YES);
+            context->shouldSkipNextEndStructure = NO;
+        } else if (context->pendingBsonValue.bsonType == TIMESTAMP_BSON_TYPE) {
             if (!context->pendingBsonValue.timestampBson.hasIValue || !context->pendingBsonValue.timestampBson.hasTValue) {
                 result = 1;
             } else if (!context->pendingBsonValue.timestampBson.closeOne) {
@@ -261,6 +265,7 @@ static int end_structure_for_bson(int nesting, int is_object, const char *key, s
             [context->target finishMainArray];
         }
         popStack(context);
+        result = (context->latestStack == NULL)?0:1;
     }
     return result;
 }
@@ -330,13 +335,11 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
         if (strcmp(key, "$regex") == 0 && !context->pendingBsonValue.regexBson.pattern && dataInfo->type == JSON_STRING && (context->pendingBsonValue.bsonType == REGEX_BSON_TYPE || context->pendingBsonValue.bsonType == NO_BSON_TYPE)) {
             context->pendingBsonValue.bsonType = REGEX_BSON_TYPE;
             context->pendingBsonValue.regexBson.pattern = copyString(dataInfo->data);
+            result = 0;
         } else if (strcmp(key, "$options") == 0 && !context->pendingBsonValue.regexBson.options && dataInfo->type == JSON_STRING && (context->pendingBsonValue.bsonType == REGEX_BSON_TYPE || context->pendingBsonValue.bsonType == NO_BSON_TYPE)) {
             context->pendingBsonValue.bsonType = REGEX_BSON_TYPE;
             context->pendingBsonValue.regexBson.options = copyString(dataInfo->data);
-        }
-        if (context->pendingBsonValue.regexBson.pattern && context->pendingBsonValue.regexBson.options && context->pendingBsonValue.bsonType == REGEX_BSON_TYPE) {
-            result = [context->target appendRegexWithPattern:context->pendingBsonValue.regexBson.pattern options:context->pendingBsonValue.regexBson.options key:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary]?0:1;
-            clear_pending_value(context, YES);
+            result = 0;
         }
     } else if (strcmp(key, "$date") == 0) {
         if (dataInfo->type == JSON_INT || dataInfo->type == JSON_FLOAT) {
@@ -650,7 +653,10 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
 {
     BOOL result = NO;
     
-    if (pattern && options && (key != NULL || !isDictionary)) {
+    if (pattern && (key != NULL || !isDictionary)) {
+        if (!options) {
+            options = "";
+        }
         bson_append_regex(_bson, key, pattern, options);
         result = YES;
     }
@@ -863,13 +869,17 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
 {
     BOOL result = NO;
     
-    if (pattern && options) {
+    if (pattern) {
         MODRegex *dataRegex;
         NSString *patternString;
         NSString *optionsString;
         
         patternString = [[NSString alloc] initWithUTF8String:pattern];
-        optionsString = [[NSString alloc] initWithUTF8String:options];
+        if (options) {
+            optionsString = [[NSString alloc] initWithUTF8String:options];
+        } else {
+            optionsString = [@"" retain];
+        }
         dataRegex = [[MODRegex alloc] initWithPattern:patternString options:optionsString];
         result = [self addObject:dataRegex toStructure:structure isDictionary:isDictionary withKey:key];
         [patternString release];
