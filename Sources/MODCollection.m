@@ -37,14 +37,14 @@
     [_mongoDatabase mongoQueryDidFinish:mongoQuery withCallbackBlock:callbackBlock];
 }
 
-- (MODQuery *)fetchDatabaseStatsWithCallback:(void (^)(NSDictionary *stats, MODQuery *mongoQuery))callback
+- (MODQuery *)fetchCollectionStatsWithCallback:(void (^)(NSDictionary *stats, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         NSDictionary *stats = nil;
         
-        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson output;
             
             if (mongo_simple_str_command(_mongoDatabase.mongo, [_mongoDatabase.databaseName UTF8String], "collstats", [_collectionName UTF8String], &output) == MONGO_OK) {
@@ -66,27 +66,29 @@
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        NSMutableArray *documents;
-        MODCursor *cursor;
-        NSDictionary *document;
-        NSError *error = nil;
-        
-        documents = [[NSMutableArray alloc] init];
-        cursor = [[MODCursor alloc] initWithMongoCollection:self];
-        cursor.cursor = mongo_index_list(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], 0, 0);
-        cursor.donotReleaseCursor = YES;
-        while ((document = [cursor nextDocumentAsynchronouslyWithError:&error]) != nil) {
-            [documents addObject:document];
+        if (!mongoQuery.canceled) {
+            NSMutableArray *documents;
+            MODCursor *cursor;
+            NSDictionary *document;
+            NSError *error = nil;
+            
+            documents = [[NSMutableArray alloc] init];
+            cursor = [[MODCursor alloc] initWithMongoCollection:self];
+            cursor.cursor = mongo_index_list(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], 0, 0);
+            cursor.donotReleaseCursor = YES;
+            while ((document = [cursor nextDocumentAsynchronouslyWithError:&error]) != nil) {
+                [documents addObject:document];
+            }
+            if (error) {
+                mongoQuery.error = error;
+            }
+            [mongoQuery.mutableParameters setObject:documents forKey:@"documents"];
+            [documents release];
+            [cursor release];
         }
-        if (error) {
-            mongoQuery.error = error;
-        }
-        [mongoQuery.mutableParameters setObject:documents forKey:@"documents"];
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-            callback(documents, mongoQuery);
+            callback([mongoQuery.mutableParameters objectForKey:@"documents"], mongoQuery);
         }];
-        [documents release];
-        [cursor release];
     }];
     [query.mutableParameters setObject:@"indexlist" forKey:@"command"];
     return query;
@@ -97,24 +99,26 @@
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        NSMutableArray *documents;
-        MODCursor *cursor;
-        NSDictionary *document;
-        NSError *error = nil;
-        
-        documents = [[NSMutableArray alloc] initWithCapacity:limit];
-        cursor = [self cursorWithCriteria:jsonCriteria fields:fields skip:skip limit:limit sort:sort];
-        while ((document = [cursor nextDocumentAsynchronouslyWithError:&error]) != nil) {
-            [documents addObject:document];
+        if (!mongoQuery.canceled) {
+            NSMutableArray *documents;
+            MODCursor *cursor;
+            NSDictionary *document;
+            NSError *error = nil;
+            
+            documents = [[NSMutableArray alloc] initWithCapacity:limit];
+            cursor = [self cursorWithCriteria:jsonCriteria fields:fields skip:skip limit:limit sort:sort];
+            while ((document = [cursor nextDocumentAsynchronouslyWithError:&error]) != nil) {
+                [documents addObject:document];
+            }
+            if (error) {
+                mongoQuery.error = error;
+            }
+            [mongoQuery.mutableParameters setObject:documents forKey:@"documents"];
+            [documents release];
         }
-        if (error) {
-            mongoQuery.error = error;
-        }
-        [mongoQuery.mutableParameters setObject:documents forKey:@"documents"];
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-            callback(documents, mongoQuery);
+            callback([mongoQuery.mutableParameters objectForKey:@"documents"], mongoQuery);
         }];
-        [documents release];
     }];
     if (jsonCriteria) {
         [query.mutableParameters setObject:jsonCriteria forKey:@"criteria"];
@@ -151,7 +155,7 @@
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         int64_t count = 0;
         
-        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson *bsonQuery = NULL;
             NSError *error = nil;
             
@@ -193,7 +197,7 @@
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson **data;
             bson **dataCursor;
             NSInteger countCursor;
@@ -258,7 +262,7 @@
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson bsonCriteria;
             bson bsonUpdate;
             NSError *error = nil;
@@ -304,7 +308,7 @@
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson bsonCriteria;
             bson bsonDocument;
             NSError *error = nil;
@@ -378,7 +382,7 @@
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson bsonCriteria;
             NSError *error = nil;
             
@@ -435,7 +439,7 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
         name = defaultName;
     }
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson index;
             bson output;
             NSError *error = nil;
@@ -468,7 +472,7 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson index;
             NSError *error = nil;
             
@@ -500,7 +504,7 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             mongo_reindex(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String]);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
@@ -516,7 +520,7 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if ([_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson bsonQuery;
             bson bsonSort;
             bson bsonOutput;

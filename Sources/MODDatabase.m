@@ -51,7 +51,7 @@
     query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
         NSDictionary *stats = nil;
         
-        if ([self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
             bson output;
             
             if (mongo_simple_int_command(self.mongoServer.mongo, [_databaseName UTF8String], "dbstats", 1, &output) == MONGO_OK) {
@@ -77,7 +77,7 @@
     query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
         NSMutableArray *collections = nil;
         
-        if ([self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
             char command[256];
             mongo_cursor cursor[1];
             
@@ -117,7 +117,7 @@
     MODQuery *query;
     
     query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
-        if ([self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
             mongo_cmd_create_collection(self.mongoServer.mongo, [_databaseName UTF8String], [collectionName UTF8String]);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
@@ -136,7 +136,7 @@
     MODQuery *query;
     
     query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
-        if ([self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
             mongo_cmd_create_capped_collection(self.mongoServer.mongo, [_databaseName UTF8String], [collectionName UTF8String], capSize);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
@@ -156,7 +156,7 @@
     MODQuery *query;
     
     query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
-        if ([self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
             mongo_cmd_drop_collection(self.mongoServer.mongo, [_databaseName UTF8String], [collectionName UTF8String]);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {

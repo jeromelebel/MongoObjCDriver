@@ -27,7 +27,7 @@ enum MOD_INDEX_OPTIONS {
     NSString                            *_collectionName;
 }
 
-- (MODQuery *)fetchDatabaseStatsWithCallback:(void (^)(NSDictionary *stats, MODQuery *mongoQuery))callback;
+- (MODQuery *)fetchCollectionStatsWithCallback:(void (^)(NSDictionary *stats, MODQuery *mongoQuery))callback;
 - (MODCursor *)cursorWithCriteria:(NSString *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort;
 - (MODQuery *)indexListWithcallback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback;
 - (MODQuery *)findWithCriteria:(NSString *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort callback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback;

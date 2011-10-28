@@ -131,27 +131,30 @@
     MODQuery *query = nil;
     
     query = [_mongoCollection.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        NSDictionary *document;
-        NSError *error;
         uint64_t documentCount = 0;
         BOOL cursorStopped = NO;
         
-        [mongoQuery.mutableParameters setObject:self forKey:@"cursor"];
-        while (!cursorStopped) {
-            documentCount++;
-            document = [self nextDocumentAsynchronouslyWithError:&error];
-            mongoQuery.error = error;
-            if (!document) {
-                break;
-            }
-            if (documentCallback) {
-                BOOL *cursorStoppedPtr = &cursorStopped;
-                
-                dispatch_sync(dispatch_get_main_queue(), ^(void) {
-                    *cursorStoppedPtr = !documentCallback(documentCount, document);
-                });
-            }
-        };
+        if (!mongoQuery.canceled) {
+            NSDictionary *document;
+            NSError *error;
+            
+            [mongoQuery.mutableParameters setObject:self forKey:@"cursor"];
+            while (!cursorStopped) {
+                documentCount++;
+                document = [self nextDocumentAsynchronouslyWithError:&error];
+                mongoQuery.error = error;
+                if (!document) {
+                    break;
+                }
+                if (documentCallback) {
+                    BOOL *cursorStoppedPtr = &cursorStopped;
+                    
+                    dispatch_sync(dispatch_get_main_queue(), ^(void) {
+                        *cursorStoppedPtr = !documentCallback(documentCount, document);
+                    });
+                }
+            };
+        }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             if (endCallback) {
                 endCallback(documentCount, cursorStopped, mongoQuery);

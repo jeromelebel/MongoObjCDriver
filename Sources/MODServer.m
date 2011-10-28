@@ -155,11 +155,11 @@
         mongo_host_port hostPort;
         
         mongo_parse_host([host UTF8String], &hostPort);
-        if (mongo_connect(_mongo, hostPort.host, hostPort.port) == MONGO_OK) {
+        if (!mongoQuery.canceled && mongo_connect(_mongo, hostPort.host, hostPort.port) == MONGO_OK) {
             [self authenticateSynchronouslyWithDatabaseName:_authDatabase userName:_userName password:_password mongoQuery:mongoQuery];
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-            callback(mongoQuery.error == nil, mongoQuery);
+            callback(mongoQuery.error == nil && !mongoQuery.canceled, mongoQuery);
         }];
     }];
     [query.mutableParameters setObject:@"connecttohost" forKey:@"command"];
@@ -178,11 +178,11 @@
         mongo_replset_add_seed(_mongo, hostPort.host, hostPort.port);
     }
     query = [self addQueryInQueue:^(MODQuery *mongoQuery) {
-        if (mongo_replset_connect(_mongo) == MONGO_OK) {
+        if (!mongoQuery.canceled && mongo_replset_connect(_mongo) == MONGO_OK) {
             [self authenticateSynchronouslyWithDatabaseName:_authDatabase userName:_userName password:_password mongoQuery:mongoQuery];
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-            callback(mongoQuery.error == nil, mongoQuery);
+            callback(mongoQuery.error == nil && !mongoQuery.canceled, mongoQuery);
         }];
     }];
     [query.mutableParameters setObject:@"connecttoreplica" forKey:@"command"];
@@ -199,7 +199,7 @@
         bson output;
         NSDictionary *outputObjects = nil;
         
-        if (mongo_simple_int_command(_mongo, "admin", "serverStatus", 1, &output) == MONGO_OK) {
+        if (!mongoQuery.canceled && mongo_simple_int_command(_mongo, "admin", "serverStatus", 1, &output) == MONGO_OK) {
             outputObjects = [[self class] objectFromBson:&output];
             [mongoQuery.mutableParameters setObject:outputObjects forKey:@"serverstatus"];
         }
@@ -220,7 +220,7 @@
         bson output;
         NSMutableArray *list = nil;
         
-        if (mongo_simple_int_command(_mongo, "admin", "listDatabases", 1, &output) == MONGO_OK) {
+        if (!mongoQuery.canceled && mongo_simple_int_command(_mongo, "admin", "listDatabases", 1, &output) == MONGO_OK) {
             NSDictionary *outputObjects;
             
             outputObjects = [[self class] objectFromBson:&output];
@@ -245,7 +245,7 @@
     MODQuery *query;
     
     query = [self addQueryInQueue:^(MODQuery *mongoQuery){
-        if ([self authenticateSynchronouslyWithDatabaseName:databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [self authenticateSynchronouslyWithDatabaseName:databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
             mongo_cmd_drop_db(_mongo, [databaseName UTF8String]);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {

@@ -10,7 +10,7 @@
 
 @implementation MODQuery
 
-@synthesize parameters = _parameters, userInfo = _userInfo, startDate = _startDate, endDate = _endDate, error = _error;
+@synthesize parameters = _parameters, userInfo = _userInfo, startDate = _startDate, endDate = _endDate, error = _error, canceled = _canceled;
 
 - (id)init
 {
@@ -31,6 +31,11 @@
     [_userInfo release];
     [_callbackTargets release];
     [super dealloc];
+}
+
+- (void)cancel
+{
+    _canceled = YES;
 }
 
 - (NSMutableDictionary *)mutableParameters

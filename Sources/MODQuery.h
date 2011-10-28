@@ -23,10 +23,12 @@
     NSDate              *_startDate;
     NSDate              *_endDate;
     NSMutableArray      *_callbackTargets;
+    BOOL                _canceled;
 }
 
 - (void)waitUntilFinished;
 - (void)addCallbackWithTarget:(id<MODQueryCallbackTarget>)target;
+- (void)cancel;
 
 @property (nonatomic, readonly, retain) NSError *error;
 @property (nonatomic, readonly, retain) NSDictionary *parameters;
@@ -34,5 +36,6 @@
 @property (nonatomic, readonly, retain) NSDate *startDate;
 @property (nonatomic, readonly, retain) NSDate *endDate;
 @property (nonatomic, readonly, assign) NSTimeInterval duration;
+@property (nonatomic, readonly, assign) BOOL canceled;
 
 @end
