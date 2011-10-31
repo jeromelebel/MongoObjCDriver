@@ -52,6 +52,11 @@
 
 - (NSString *)jsonValue
 {
+    return [self jsonValueWithPretty:YES];
+}
+
+- (NSString *)jsonValueWithPretty:(BOOL)pretty
+{
     char *bufferString;
     const unsigned char *bytes;
     NSString *result;
@@ -63,7 +68,11 @@
         snprintf(bufferString + (ii * 2), 3, "%0.2X", bytes[ii]);
     }
     bufferString[(ii * 2) + 1] = 0;
-    result = [NSString stringWithFormat:@"{ \"$ref\" : \"%@\", \"$id\" : \"%s\" }", _refValue, bufferString];
+    if (pretty) {
+        result = [NSString stringWithFormat:@"{ \"$ref\" : \"%@\", \"$id\" : \"%s\" }", _refValue, bufferString];
+    } else {
+        result = [NSString stringWithFormat:@"{\"$ref\":\"%@\",\"$id\":\"%s\"}", _refValue, bufferString];
+    }
     free(bufferString);
     return result;
 }

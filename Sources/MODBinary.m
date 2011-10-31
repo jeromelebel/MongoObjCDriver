@@ -33,6 +33,11 @@
 
 - (NSString *)jsonValue
 {
+    return [self jsonValueWithPretty:YES];
+}
+
+- (NSString *)jsonValueWithPretty:(BOOL)pretty
+{
     char *bufferString;
     const unsigned char *bytes;
     NSString *result;
@@ -45,7 +50,11 @@
         snprintf(bufferString + (ii * 2), 3, "%0.2X", bytes[ii]);
     }
     bufferString[(ii * 2) + 1] = 0;
-    result = [NSString stringWithFormat:@"{ \"$binary\" : \"%s\", \"$type\" : \"%d\" }", bufferString, (int)_binaryType];
+    if (pretty) {
+        result = [NSString stringWithFormat:@"{ \"$binary\" : \"%s\", \"$type\" : \"%d\" }", bufferString, (int)_binaryType];
+    } else {
+        result = [NSString stringWithFormat:@"{\"$binary\":\"%s\",\"$type\":\"%d\"}", bufferString, (int)_binaryType];
+    }
     free(bufferString);
     return result;
 }

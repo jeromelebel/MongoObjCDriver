@@ -18,4 +18,5 @@
 - (NSString *)stringValue;
 - (NSString *)tengenString;
 - (NSString *)jsonValue;
+- (NSString *)jsonValueWithPretty:(BOOL)pretty;
 @end

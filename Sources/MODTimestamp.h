@@ -17,6 +17,7 @@
 - (id)initWithTValue:(int)tValue iValue:(int)iValue;
 - (NSString *)tengenString;
 - (NSString *)jsonValue;
+- (NSString *)jsonValueWithPretty:(BOOL)pretty;
 - (NSDate *)dateValue;
 
 @property(nonatomic, readonly, assign) int tValue;

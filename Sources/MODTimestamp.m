@@ -28,7 +28,16 @@
 
 - (NSString *)jsonValue
 {
-    return [NSString stringWithFormat:@"{ \"$timestamp\" : [ %d, %d ] }", _tValue, _iValue];
+    return [self jsonValueWithPretty:YES];
+}
+
+- (NSString *)jsonValueWithPretty:(BOOL)pretty
+{
+    if (pretty) {
+        return [NSString stringWithFormat:@"{ \"$timestamp\" : [ %d, %d ] }", _tValue, _iValue];
+    } else {
+        return [NSString stringWithFormat:@"{\"$timestamp\":[%d,%d]}", _tValue, _iValue];
+    }
 }
 
 - (NSDate *)dateValue

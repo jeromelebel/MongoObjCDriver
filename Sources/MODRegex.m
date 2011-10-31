@@ -47,7 +47,20 @@
 
 - (NSString *)jsonValue
 {
-    return [NSString stringWithFormat:@"{ \"$regex\" : \"%@\", \"$options\" : \"%@\" ] }", [MODServer escapeQuotesForString:_pattern], [MODServer escapeQuotesForString:_options]];
+    return [self jsonValueWithPretty:YES];
+}
+
+- (NSString *)jsonValueWithPretty:(BOOL)pretty
+{
+    if (pretty && _options && [_options length] > 0) {
+        return [NSString stringWithFormat:@"{ \"$regex\": \"%@\", \"$options\": \"%@\" }", [MODServer escapeQuotesForString:_pattern], [MODServer escapeQuotesForString:_options]];
+    } else if (pretty) {
+        return [NSString stringWithFormat:@"{ \"$regex\": \"%@\" }", [MODServer escapeQuotesForString:_pattern]];
+    } else if (_options && [_options length] > 0) {
+        return [NSString stringWithFormat:@"{\"$regex\":\"%@\",\"$options\":\"%@\"}", [MODServer escapeQuotesForString:_pattern], [MODServer escapeQuotesForString:_options]];
+    } else {
+        return [NSString stringWithFormat:@"{\"$regex\":\"%@\"}", [MODServer escapeQuotesForString:_pattern]];
+    }
 }
 
 - (BOOL)isEqual:(id)object
