@@ -213,7 +213,6 @@ static void * begin_structure_for_bson(int nesting, int is_object, void *structu
             }
         }
     } else if (nesting == 0) {
-        result = context->target;
         if (is_object) {
             [context->target startMainDictionary];
         } else {
