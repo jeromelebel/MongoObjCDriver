@@ -13,7 +13,7 @@
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails
 {
     NSError *error;
-    NSString *description;
+    NSString *description = nil;
     
     if ([errorDomain isEqualToString:MODMongoErrorDomain]) {
         switch (code) {
@@ -54,6 +54,7 @@
                 description = @"BSON object has not been finished.";
                 break;
             default:
+                description = @"";
                 break;
         }
         if (descriptionDetails) {
@@ -101,6 +102,7 @@
                 description = @"callback returns error";
                 break;
             default:
+                description = @"";
                 break;
         }
         if (descriptionDetails) {
@@ -138,6 +140,7 @@
                 description = @"the message to send is too long";
                 break;
             default:
+                description = @"";
                 break;
         }
         if (descriptionDetails) {
@@ -257,7 +260,8 @@
         case BSON_TIMESTAMP:
             {
                 bson_timestamp_t ts;
-                bson_iterator_timestamp(iterator);
+                
+                ts = bson_iterator_timestamp(iterator);
                 result = [[[MODTimestamp alloc] initWithTValue:ts.t iValue:ts.i] autorelease];
             }
             break;
