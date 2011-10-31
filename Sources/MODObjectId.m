@@ -25,7 +25,7 @@
     return self;
 }
 
-#define valueFromHexa(value) ((value >= '1' && value <= '9')?(value - '1' + 1):((value >= 'a' || value <= 'f')?(value - 'a' + 10):((value >= 'A' || value <= 'F')?(value - 'A' + 10):0)))
+#define valueFromHexa(value) ((value >= '1' && value <= '9')?(value - '1' + 1):((value >= 'a' && value <= 'f')?(value - 'a' + 10):((value >= 'A' && value <= 'F')?(value - 'A' + 10):0)))
 
 - (id)initWithCString:(const char *)cString
 {
@@ -35,9 +35,8 @@
         
         count = sizeof(_bytes);
         for (ii = 0; ii < count; ii++) {
-            char character1 = cString[ii * 2];
-            char character2 = cString[ii * 2 + 1];
-            
+            unsigned char character1 = cString[ii * 2];
+            unsigned char character2 = cString[ii * 2 + 1];
             
             ((unsigned char *)_bytes)[ii] = valueFromHexa(character1) * 16 + valueFromHexa(character2);
         }
@@ -80,13 +79,22 @@
 
 - (NSString *)jsonValue
 {
-    return [NSString stringWithFormat:@"{ \"$oid\" : \"%@\" }", [self stringValue]];
+    return [self jsonValueWithPretty:YES];
+}
+
+- (NSString *)jsonValueWithPretty:(BOOL)pretty
+{
+    if (pretty) {
+        return [NSString stringWithFormat:@"{ \"$oid\" : \"%@\" }", [self stringValue]];
+    } else {
+        return [NSString stringWithFormat:@"{\"$oid\":\"%@\"}", [self stringValue]];
+    }
 }
 
 - (BOOL)isEqual:(id)object
 {
     if ([object isKindOfClass:[self class]]) {
-        return memcmp(_bytes, [object bytes], sizeof(_bytes));
+        return memcmp(_bytes, [object bytes], sizeof(_bytes)) == 0;
     }
     return NO;
 }
