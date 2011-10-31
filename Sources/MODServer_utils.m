@@ -319,7 +319,7 @@
         bson_append_finish_array(bson);
     } else if ([value isKindOfClass:[MODObjectId class]]) {
         bson_append_oid(bson, keyString, [value bsonObjectId]);
-    } else if ([value isKindOfClass:[MODTimestamp class]]) {
+    } else if ([value isKindOfClass:[MODRegex class]]) {
         bson_append_regex(bson, keyString, [[value pattern] UTF8String], [[(MODRegex *)value options] UTF8String]);
     } else if ([value isKindOfClass:[MODTimestamp class]]) {
         bson_timestamp_t ts;
@@ -379,11 +379,13 @@ static void convertDictionaryToJson(NSMutableString *result, int indent, NSDicti
     if (pretty) {
         [result appendString:@"\n"];
     }
-    for (NSString *key in [[value allKeys] sortedArrayUsingSelector:@selector(compare:)]) {
+    for (NSString *key in [[value allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]) {
         if (first) {
             first = NO;
-        } else {
+        } else if (pretty) {
             [result appendString:@",\n"];
+        } else {
+            [result appendString:@","];
         }
         convertValueToJson(result, indent + 1, [value objectForKey:key], key, pretty);
     }
@@ -405,8 +407,10 @@ static void convertArrayToJson(NSMutableString *result, int indent, NSArray *val
     for (id arrayValue in value) {
         if (first) {
             first = NO;
-        } else {
+        } else if (pretty) {
             [result appendString:@",\n"];
+        } else {
+            [result appendString:@","];
         }
         convertValueToJson(result, indent + 1, arrayValue, nil, pretty);
     }
@@ -425,7 +429,11 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     if (key) {
         [result appendString:@"\""];
         [result appendString:[MODServer escapeQuotesForString:key]];
-        [result appendString:@"\": "];
+        if (pretty) {
+            [result appendString:@"\": "];
+        } else {
+            [result appendString:@"\":"];
+        }
     }
     if ([value isKindOfClass:[NSString class]]) {
         [result appendString:@"\""];
@@ -450,15 +458,15 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
             [result appendString:[value description]];
         }
     } else if ([value isKindOfClass:[MODObjectId class]]) {
-        [result appendString:[value jsonValue]];
+        [result appendString:[value jsonValueWithPretty:pretty]];
     } else if ([value isKindOfClass:[MODRegex class]]) {
-        [result appendString:[value jsonValue]];
+        [result appendString:[value jsonValueWithPretty:pretty]];
     } else if ([value isKindOfClass:[MODTimestamp class]]) {
-        [result appendString:[value jsonValue]];
+        [result appendString:[value jsonValueWithPretty:pretty]];
     } else if ([value isKindOfClass:[MODBinary class]]) {
-        [result appendString:[value jsonValue]];
+        [result appendString:[value jsonValueWithPretty:pretty]];
     } else if ([value isKindOfClass:[MODDBRef class]]) {
-        [result appendString:[value jsonValue]];
+        [result appendString:[value jsonValueWithPretty:pretty]];
     }
 }
 
