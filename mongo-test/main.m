@@ -112,6 +112,7 @@ static void testJson()
     testObjects(@"{\"empty_hash\":{},\"toto\":1,\"type\":\"Activity\"}", [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"toto", [NSDictionary dictionary], @"empty_hash", @"Activity", @"type", nil]);
     testObjects(@"[{\"hello\":\"1\"},{\"zob\":\"2\"}]", [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"1", @"hello", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"2", @"zob", nil], nil]);
     testObjects(@"{\"timestamp\":{\"$timestamp\":[1,2]}}", [NSDictionary dictionaryWithObjectsAndKeys:[[[MODTimestamp alloc] initWithTValue:1 iValue:2] autorelease], @"timestamp", nil]);
+    testObjects(@"{\"mydate\":{\"$date\":1320066612000.000000}}", [NSDictionary dictionaryWithObjectsAndKeys:[[[NSDate alloc] initWithTimeIntervalSince1970:1320066612] autorelease], @"mydate", nil]);
 }
 
 int main (int argc, const char * argv[])

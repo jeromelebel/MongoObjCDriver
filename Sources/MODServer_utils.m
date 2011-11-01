@@ -440,7 +440,11 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         [result appendString:[MODServer escapeQuotesForString:value]];
         [result appendString:@"\""];
     } else if ([value isKindOfClass:[NSDate class]]) {
-        [result appendFormat:@"%f", [value timeIntervalSince1970] * 1000];
+        if (pretty) {
+            [result appendFormat:@"{ \"$date\": %f }", [value timeIntervalSince1970] * 1000];
+        } else {
+            [result appendFormat:@"{\"$date\":%f}", [value timeIntervalSince1970] * 1000];
+        }
     } else if ([value isKindOfClass:[NSNull class]]) {
         [result appendString:@"null"];
     } else if ([value isKindOfClass:[NSDictionary class]]) {

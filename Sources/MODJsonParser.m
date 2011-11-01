@@ -342,7 +342,7 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
         }
     } else if (strcmp(key, "$date") == 0) {
         if (dataInfo->type == JSON_INT || dataInfo->type == JSON_FLOAT) {
-            result = [context->target appendDate:atof(dataInfo->data) withKey:key previousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary]?0:1;
+            result = [context->target appendDate:atof(dataInfo->data) withKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary]?0:1;
             clear_pending_value(context, YES);
         }
     } else if (strcmp(key, "$data_binary") == 0 || strcmp(key, "$type") == 0) {
