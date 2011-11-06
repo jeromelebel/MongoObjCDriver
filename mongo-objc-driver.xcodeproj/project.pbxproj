@@ -139,7 +139,6 @@
 		02216EEC1412D32F00789BD1 /* jsonlint.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = jsonlint.c; sourceTree = "<group>"; };
 		02216EED1412D32F00789BD1 /* libjson.pc.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = libjson.pc.in; sourceTree = "<group>"; };
 		02216EEE1412D32F00789BD1 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		02216EEF1412D32F00789BD1 /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		02216EF21412D32F00789BD1 /* empty.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = empty.json; sourceTree = "<group>"; };
 		02216EF31412D32F00789BD1 /* esc0.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = esc0.json; sourceTree = "<group>"; };
 		02216EF41412D32F00789BD1 /* esc1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = esc1.json; sourceTree = "<group>"; };
@@ -257,7 +256,6 @@
 		02ABA1C814103B37000417F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02ABA1CB14103B37000417F4 /* mongo-objc-driver-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "mongo-objc-driver-Info.plist"; sourceTree = "<group>"; };
 		02ABA1CD14103B37000417F4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		02ABA1CF14103B37000417F4 /* mongo-objc-driver-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mongo-objc-driver-Prefix.pch"; sourceTree = "<group>"; };
 		02BDC3E5141D6073000EF755 /* MODCursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODCursor.h; sourceTree = "<group>"; };
 		02BDC3E6141D6073000EF755 /* MODCursor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODCursor.m; sourceTree = "<group>"; };
 		02BDC3EB141D83A7000EF755 /* MODServer_utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODServer_utils.m; sourceTree = "<group>"; };
@@ -302,7 +300,6 @@
 				02216EEC1412D32F00789BD1 /* jsonlint.c */,
 				02216EED1412D32F00789BD1 /* libjson.pc.in */,
 				02216EEE1412D32F00789BD1 /* Makefile */,
-				02216EEF1412D32F00789BD1 /* README */,
 				02216EF01412D32F00789BD1 /* tests */,
 			);
 			path = libjson;
@@ -623,7 +620,6 @@
 			children = (
 				02ABA1CB14103B37000417F4 /* mongo-objc-driver-Info.plist */,
 				02ABA1CC14103B37000417F4 /* InfoPlist.strings */,
-				02ABA1CF14103B37000417F4 /* mongo-objc-driver-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -937,8 +933,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Sources/mongo-objc-driver-Prefix.pch";
 				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
@@ -951,8 +945,6 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Sources/mongo-objc-driver-Prefix.pch";
 				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
@@ -962,8 +954,6 @@
 		02F121C81410EF5200197811 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "mongo-test/mongo-test-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -971,8 +961,6 @@
 		02F121C91410EF5200197811 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "mongo-test/mongo-test-Prefix.pch";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
