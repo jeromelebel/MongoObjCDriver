@@ -266,7 +266,6 @@
 		02F121BD1410EF5200197811 /* mongo-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mongo-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02F121BF1410EF5200197811 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02F121C21410EF5200197811 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		02F121C51410EF5200197811 /* mongo-test-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mongo-test-Prefix.pch"; sourceTree = "<group>"; };
 		02F121C61410EF5200197811 /* mongo_test.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = mongo_test.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -637,7 +636,6 @@
 		02F121C41410EF5200197811 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				02F121C51410EF5200197811 /* mongo-test-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
