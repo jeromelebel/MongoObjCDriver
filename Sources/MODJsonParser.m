@@ -25,8 +25,12 @@ typedef struct {
     BOOL shouldSkipNextEndStructure;
     bson *bsonResult;
     struct {
+        enum {
+            NO_STRUCTURE,
+            ARRAY_STRUCTURE,
+            OBJECT_STRUCTURE
+        } structureWaiting;
         char *objectKeyToCreate;
-        BOOL isObject;
         enum {
             NO_BSON_TYPE,
             TIMESTAMP_BSON_TYPE,
@@ -62,12 +66,14 @@ typedef struct {
 
 static char *copyString(const char *string)
 {
-    char *result;
+    char *result = NULL;
     size_t stringLength;
     
-    stringLength = strlen(string);
-    result = malloc(stringLength + 1);
-    strncpy(result, string, stringLength + 1);
+    if (string) {
+        stringLength = strlen(string);
+        result = malloc(stringLength + 1);
+        strncpy(result, string, stringLength + 1);
+    }
     return result;
 }
 
@@ -141,6 +147,7 @@ static void clear_pending_value(JsonParserContext *context, BOOL shouldSkipNextE
         free(context->pendingBsonValue.dataBinary.binary);
     }
     bzero(&(context->pendingBsonValue), sizeof(context->pendingBsonValue));
+    context->pendingBsonValue.structureWaiting = NO_STRUCTURE;
     context->pendingBsonValue.bsonType = NO_BSON_TYPE;
     context->shouldSkipNextEndStructure = shouldSkipNextEndStructure;
 }
@@ -172,15 +179,15 @@ static BOOL create_waiting_structure_if_needed(JsonParserContext *context)
     BOOL result = YES;
     
     my_debug();
-    if (context->pendingBsonValue.objectKeyToCreate) {
+    if (context->pendingBsonValue.structureWaiting != NO_STRUCTURE) {
         void *structure;
         
-        if (context->pendingBsonValue.isObject) {
-            structure = [context->target openDictionaryWithPreviousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary key:context->pendingBsonValue.objectKeyToCreate];
+        if (context->pendingBsonValue.structureWaiting == OBJECT_STRUCTURE) {
+            structure = [context->target openDictionaryWithPreviousStructure:context->latestStack->structure key:context->pendingBsonValue.objectKeyToCreate];
         } else {
-            structure = [context->target openArrayWithPreviousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary key:context->pendingBsonValue.objectKeyToCreate];
+            structure = [context->target openArrayWithPreviousStructure:context->latestStack->structure key:context->pendingBsonValue.objectKeyToCreate];
         }
-        pushStack(context, structure, context->pendingBsonValue.isObject);
+        pushStack(context, structure, context->pendingBsonValue.structureWaiting == OBJECT_STRUCTURE);
         clear_pending_value(context, NO);
         result = structure != NULL;
     }
@@ -205,8 +212,8 @@ static void * begin_structure_for_bson(int nesting, int is_object, void *structu
             }
         } else {
             if (create_waiting_structure_if_needed(context)) {
-                context->pendingBsonValue.isObject = is_object;
-                context->pendingBsonValue.objectKeyToCreate = copyString(key?key:"");
+                context->pendingBsonValue.structureWaiting = is_object?OBJECT_STRUCTURE:ARRAY_STRUCTURE;
+                context->pendingBsonValue.objectKeyToCreate = copyString(key);
                 result = context->target;
             } else {
                 result = NULL;
@@ -232,7 +239,7 @@ static int end_structure_for_bson(int nesting, int is_object, const char *key, s
     my_debug();
     if (key != NULL || nesting != 0) {
         if (context->pendingBsonValue.regexBson.pattern && context->pendingBsonValue.bsonType == REGEX_BSON_TYPE) {
-            result = [context->target appendRegexWithPattern:context->pendingBsonValue.regexBson.pattern options:context->pendingBsonValue.regexBson.options key:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary]?0:1;
+            result = [context->target appendRegexWithPattern:context->pendingBsonValue.regexBson.pattern options:context->pendingBsonValue.regexBson.options key:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure]?0:1;
             clear_pending_value(context, YES);
             context->shouldSkipNextEndStructure = NO;
         } else if (context->pendingBsonValue.bsonType == TIMESTAMP_BSON_TYPE) {
@@ -241,7 +248,7 @@ static int end_structure_for_bson(int nesting, int is_object, const char *key, s
             } else if (!context->pendingBsonValue.timestampBson.closeOne) {
                 context->pendingBsonValue.timestampBson.closeOne = YES;
             } else {
-                result = [context->target appendTimestampWithTValue:context->pendingBsonValue.timestampBson.tValue iValue:context->pendingBsonValue.timestampBson.iValue key:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary]?0:1;
+                result = [context->target appendTimestampWithTValue:context->pendingBsonValue.timestampBson.tValue iValue:context->pendingBsonValue.timestampBson.iValue key:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure]?0:1;
                 clear_pending_value(context, YES);
             }
         } else if (context->pendingBsonValue.bsonType != NO_BSON_TYPE) {
@@ -307,30 +314,25 @@ static size_t convertStringToData(const char * string, void *data, size_t length
 
 /** callback from the parser helper callback to append a value to an object or array value
  * append(parent, key, key_length, val); */
-static int append_data_for_bson(void *structure, int is_object_structure, int structure_value_count, char *key, size_t key_length, void *obj, void *void_user_context)
+static int append_data_for_bson(void *structure, char *key, size_t key_length, void *obj, void *void_user_context)
 {
     ParserDataInfo *dataInfo = obj;
     JsonParserContext *context = void_user_context;
-    char arrayKey[32];
     int result = 1;
     
     my_debug();
-    if (is_object_structure == false) {
-        snprintf(arrayKey, sizeof(arrayKey), "%d", structure_value_count);
-        key = arrayKey;
-    }
     if (context->shouldSkipNextEndStructure) {
         // error
-    } else if (strcmp(key, "$oid") == 0) {
+    } else if (key != NULL && strcmp(key, "$oid") == 0) {
         if (dataInfo->length == sizeof(bson_oid_t) * 2) {
             bson_oid_t oid;
             
             if (convertStringToData(dataInfo->data, &oid, sizeof(bson_oid_t)) == sizeof(bson_oid_t) && context->pendingBsonValue.bsonType == NO_BSON_TYPE && dataInfo->type == JSON_STRING) {
-                result = [context->target appendObjectId:&oid length:sizeof(oid) withKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary]?0:1;
+                result = [context->target appendObjectId:&oid length:sizeof(oid) withKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure]?0:1;
                 clear_pending_value(context, YES);
             }
         }
-    } else if (strcmp(key, "$regex") == 0 || strcmp(key, "$options") == 0) {
+    } else if (key != NULL && (strcmp(key, "$regex") == 0 || strcmp(key, "$options") == 0)) {
         if (strcmp(key, "$regex") == 0 && !context->pendingBsonValue.regexBson.pattern && dataInfo->type == JSON_STRING && (context->pendingBsonValue.bsonType == REGEX_BSON_TYPE || context->pendingBsonValue.bsonType == NO_BSON_TYPE)) {
             context->pendingBsonValue.bsonType = REGEX_BSON_TYPE;
             context->pendingBsonValue.regexBson.pattern = copyString(dataInfo->data);
@@ -340,12 +342,12 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
             context->pendingBsonValue.regexBson.options = copyString(dataInfo->data);
             result = 0;
         }
-    } else if (strcmp(key, "$date") == 0) {
+    } else if (key != NULL && strcmp(key, "$date") == 0) {
         if (dataInfo->type == JSON_INT || dataInfo->type == JSON_FLOAT) {
-            result = [context->target appendDate:atof(dataInfo->data) withKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary]?0:1;
+            result = [context->target appendDate:atof(dataInfo->data) withKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure]?0:1;
             clear_pending_value(context, YES);
         }
-    } else if (strcmp(key, "$data_binary") == 0 || strcmp(key, "$type") == 0) {
+    } else if (key != NULL && (strcmp(key, "$data_binary") == 0 || strcmp(key, "$type") == 0)) {
         if (strcmp(key, "$data_binary") == 0 && !context->pendingBsonValue.dataBinary.binary && dataInfo->type == JSON_DATA_BINARY_TYPE && (context->pendingBsonValue.bsonType == JSON_DATA_BINARY_TYPE || context->pendingBsonValue.bsonType == NO_BSON_TYPE)) {
             context->pendingBsonValue.dataBinary.binary = malloc(dataInfo->length);
             memcpy(context->pendingBsonValue.dataBinary.binary, dataInfo->data, dataInfo->length);
@@ -355,7 +357,7 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
             context->pendingBsonValue.dataBinary.binaryType = atoi(dataInfo->data);
         }
         if (context->pendingBsonValue.dataBinary.binary && context->pendingBsonValue.dataBinary.hasBinaryType) {
-            result = [context->target appendDataBinary:context->pendingBsonValue.dataBinary.binary withLength:context->pendingBsonValue.dataBinary.length binaryType:context->pendingBsonValue.dataBinary.binaryType key:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary]?0:1;
+            result = [context->target appendDataBinary:context->pendingBsonValue.dataBinary.binary withLength:context->pendingBsonValue.dataBinary.length binaryType:context->pendingBsonValue.dataBinary.binaryType key:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure]?0:1;
             clear_pending_value(context, YES);
         }
     } else {
@@ -364,32 +366,32 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
                 switch (dataInfo->type) {
                     case JSON_STRING:
                         if (create_waiting_structure_if_needed(context)) {
-                            result = [context->target appendString:dataInfo->data withKey:key previousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary]?0:1;
+                            result = [context->target appendString:dataInfo->data withKey:key previousStructure:context->latestStack->structure]?0:1;
                         }
                         break;
                     case JSON_INT:
                         if (create_waiting_structure_if_needed(context)) {
-                            result = [context->target appendLongLong:atoll(dataInfo->data) withKey:key previousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary]?0:1;
+                            result = [context->target appendLongLong:atoll(dataInfo->data) withKey:key previousStructure:context->latestStack->structure]?0:1;
                         }
                         break;
                     case JSON_FLOAT:
                         if (create_waiting_structure_if_needed(context)) {
-                            result = [context->target appendDouble:atof(dataInfo->data) withKey:key previousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary]?0:1;
+                            result = [context->target appendDouble:atof(dataInfo->data) withKey:key previousStructure:context->latestStack->structure]?0:1;
                         }
                         break;
                     case JSON_NULL:
                         if (create_waiting_structure_if_needed(context)) {
-                            result = [context->target appendNullWithKey:key previousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary]?0:1;
+                            result = [context->target appendNullWithKey:key previousStructure:context->latestStack->structure]?0:1;
                         }
                         break;
                     case JSON_TRUE:
                         if (create_waiting_structure_if_needed(context)) {
-                            result = [context->target appendBool:YES withKey:key previousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary]?0:1;
+                            result = [context->target appendBool:YES withKey:key previousStructure:context->latestStack->structure]?0:1;
                         }
                         break;
                     case JSON_FALSE:
                         if (create_waiting_structure_if_needed(context)) {
-                            result = [context->target appendBool:NO withKey:key previousStructure:context->latestStack->structure previousStructureDictionary:context->latestStack->isDictionary]?0:1;
+                            result = [context->target appendBool:NO withKey:key previousStructure:context->latestStack->structure]?0:1;
                         }
                         break;
                     default:
@@ -522,7 +524,7 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     return _isMainObjectArray;
 }
 
-- (void *)openDictionaryWithPreviousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary key:(const char *)key
+- (void *)openDictionaryWithPreviousStructure:(void *)structure key:(const char *)key
 {
     void *result = NULL;
     
@@ -533,7 +535,7 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     return result;
 }
 
-- (void *)openArrayWithPreviousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary key:(const char *)key
+- (void *)openArrayWithPreviousStructure:(void *)structure key:(const char *)key
 {
     void *result = NULL;
     
@@ -556,103 +558,63 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     return YES;
 }
 
-- (BOOL)appendTimestampWithTValue:(int)tValue iValue:(int)iValue key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendTimestampWithTValue:(int)tValue iValue:(int)iValue key:(const char *)key previousStructure:(void *)structure
 {
-    BOOL result = NO;
+    bson_timestamp_t ts;
     
-    if (key != NULL || !isDictionary) {
-        bson_timestamp_t ts;
-        
-        ts.t = tValue;
-        ts.i = iValue;
-        bson_append_timestamp(_bson, key, &ts);
-        result = YES;
-    }
-    return result;
+    ts.t = tValue;
+    ts.i = iValue;
+    bson_append_timestamp(_bson, key, &ts);
+    return YES;
 }
 
-- (BOOL)appendObjectId:(void *)objectId length:(size_t)length withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendObjectId:(void *)objectId length:(size_t)length withKey:(const char *)key previousStructure:(void *)structure
 {
-    BOOL result = NO;
-    
-    if (key != NULL || !isDictionary) {
-        bson_append_oid(_bson, key, objectId);
-        result = YES;
-    }
-    return result;
+    bson_append_oid(_bson, key, objectId);
+    return YES;
 }
 
-- (BOOL)appendString:(const char *)stringValue withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendString:(const char *)stringValue withKey:(const char *)key previousStructure:(void *)structure
 {
-    BOOL result = NO;
-    
-    if (key != NULL || !isDictionary) {
-        bson_append_string(_bson, key, stringValue);
-        result = YES;
-    }
-    return result;
+    bson_append_string(_bson, key, stringValue);
+    return YES;
 }
 
-- (BOOL)appendLongLong:(long long)integer withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendLongLong:(long long)integer withKey:(const char *)key previousStructure:(void *)structure
 {
-    BOOL result = NO;
-    
-    if (key != NULL || !isDictionary) {
-        bson_append_long(_bson, key, integer);
-        result = YES;
-    }
-    return result;
+    bson_append_long(_bson, key, integer);
+    return YES;
 }
 
-- (BOOL)appendDouble:(double)doubleValue withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendDouble:(double)doubleValue withKey:(const char *)key previousStructure:(void *)structure
 {
-    BOOL result = NO;
-    
-    if (key != NULL || !isDictionary) {
-        bson_append_double(_bson, key, doubleValue);
-        result = YES;
-    }
-    return result;
+    bson_append_double(_bson, key, doubleValue);
+    return YES;
 }
 
-- (BOOL)appendNullWithKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendNullWithKey:(const char *)key previousStructure:(void *)structure
 {
-    BOOL result = NO;
-    
-    if (key != NULL || !isDictionary) {
-        bson_append_null(_bson, key);
-        result = YES;
-    }
-    return result;
+    bson_append_null(_bson, key);
+    return YES;
 }
 
-- (BOOL)appendBool:(BOOL)boolValue withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendBool:(BOOL)boolValue withKey:(const char *)key previousStructure:(void *)structure
 {
-    BOOL result = NO;
-    
-    if (key != NULL || !isDictionary) {
-        bson_append_bool(_bson, key, YES?1:0);
-        result = YES;
-    }
-    return result;
+    bson_append_bool(_bson, key, YES?1:0);
+    return YES;
 }
 
-- (BOOL)appendDate:(int64_t)date withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendDate:(int64_t)date withKey:(const char *)key previousStructure:(void *)structure
 {
-    BOOL result = NO;
-    
-    if (key != NULL || !isDictionary) {
-        bson_append_date(_bson, key, date);
-        result = YES;
-    }
-    return result;
+    bson_append_date(_bson, key, date);
+    return YES;
 }
 
-- (BOOL)appendRegexWithPattern:(const char *)pattern options:(const char *)options key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendRegexWithPattern:(const char *)pattern options:(const char *)options key:(const char *)key previousStructure:(void *)structure
 {
     BOOL result = NO;
     
-    if (pattern && (key != NULL || !isDictionary)) {
+    if (pattern) {
         if (!options) {
             options = "";
         }
@@ -662,15 +624,10 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     return result;
 }
 
-- (BOOL)appendDataBinary:(const char *)binary withLength:(NSUInteger)length binaryType:(char)binaryType key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendDataBinary:(const char *)binary withLength:(NSUInteger)length binaryType:(char)binaryType key:(const char *)key previousStructure:(void *)structure
 {
-    BOOL result = NO;
-    
-    if (key != NULL || !isDictionary) {
-        bson_append_binary(_bson, key, binaryType, binary, length);
-        result = YES;
-    }
-    return result;
+    bson_append_binary(_bson, key, binaryType, binary, length);
+    return YES;
 }
 
 @end
@@ -724,16 +681,14 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     return _isMainObjectArray;
 }
 
-- (BOOL)addObject:(id)object toStructure:(id)structure isDictionary:(BOOL)isDictionary withKey:(const char *)key
+- (BOOL)addObject:(id)object toStructure:(id)structure withKey:(const char *)key
 {
     BOOL result = YES;
     
     if (!structure) {
         structure = [self mainObject];
     }
-    if (key == NULL && isDictionary) {
-        result = NO;
-    } else if (isDictionary) {
+    if (key != NULL) {
         NSString *stringKey;
         
         stringKey = [[NSString alloc] initWithUTF8String:key];
@@ -748,23 +703,23 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     return result;
 }
 
-- (void *)openDictionaryWithPreviousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary key:(const char *)key
+- (void *)openDictionaryWithPreviousStructure:(void *)structure key:(const char *)key
 {
     NSMutableDictionary *result;
     
     result = [NSMutableDictionary dictionary];
-    if (![self addObject:result toStructure:structure isDictionary:isDictionary withKey:key]) {
+    if (![self addObject:result toStructure:structure withKey:key]) {
         result = nil;
     }
     return result;
 }
 
-- (void *)openArrayWithPreviousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary key:(const char *)key
+- (void *)openArrayWithPreviousStructure:(void *)structure key:(const char *)key
 {
     NSMutableArray *result;
     
     result = [NSMutableArray array];
-    if (![self addObject:result toStructure:structure isDictionary:isDictionary withKey:key]) {
+    if (![self addObject:result toStructure:structure withKey:key]) {
         result = nil;
     }
     return result;
@@ -780,91 +735,91 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     return YES;
 }
 
-- (BOOL)appendTimestampWithTValue:(int)tValue iValue:(int)iValue key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendTimestampWithTValue:(int)tValue iValue:(int)iValue key:(const char *)key previousStructure:(void *)structure
 {
     MODTimestamp *ts;
     BOOL result;
     
     ts = [[MODTimestamp alloc] initWithTValue:tValue iValue:iValue];
-    result = [self addObject:ts toStructure:structure isDictionary:isDictionary withKey:key];
+    result = [self addObject:ts toStructure:structure withKey:key];
     [ts release];
     return result;
 }
 
-- (BOOL)appendObjectId:(void *)objectId length:(size_t)length withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendObjectId:(void *)objectId length:(size_t)length withKey:(const char *)key previousStructure:(void *)structure
 {
     MODObjectId *object;
     BOOL result = NO;
     
     if (length == sizeof(bson_oid_t)) {
         object = [[MODObjectId alloc] initWithOid:objectId];
-        result = [self addObject:object toStructure:structure isDictionary:isDictionary withKey:key];
+        result = [self addObject:object toStructure:structure withKey:key];
         [object release];
     }
     return result;
 }
 
-- (BOOL)appendString:(const char *)stringValue withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendString:(const char *)stringValue withKey:(const char *)key previousStructure:(void *)structure
 {
     NSString *object;
     BOOL result;
     
     object = [[NSString alloc] initWithUTF8String:stringValue];
-    result = [self addObject:object toStructure:structure isDictionary:isDictionary withKey:key];
+    result = [self addObject:object toStructure:structure withKey:key];
     [object release];
     return result;
 }
 
-- (BOOL)appendLongLong:(long long)integerValue withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendLongLong:(long long)integerValue withKey:(const char *)key previousStructure:(void *)structure
 {
     NSNumber *object;
     BOOL result;
     
     object = [[NSNumber alloc] initWithLongLong:integerValue];
-    result = [self addObject:object toStructure:structure isDictionary:isDictionary withKey:key];
+    result = [self addObject:object toStructure:structure withKey:key];
     [object release];
     return result;
 }
 
-- (BOOL)appendDouble:(double)doubleValue withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendDouble:(double)doubleValue withKey:(const char *)key previousStructure:(void *)structure
 {
     NSNumber *object;
     BOOL result;
 
     object = [[NSNumber alloc] initWithDouble:doubleValue];
-    result = [self addObject:object toStructure:structure isDictionary:isDictionary withKey:key];
+    result = [self addObject:object toStructure:structure withKey:key];
     [object release];
     return result;
 }
 
-- (BOOL)appendBool:(BOOL)boolValue withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendBool:(BOOL)boolValue withKey:(const char *)key previousStructure:(void *)structure
 {
     NSNumber *object;
     BOOL result;
     
     object = [[NSNumber alloc] initWithBool:boolValue];
-    result = [self addObject:object toStructure:structure isDictionary:isDictionary withKey:key];
+    result = [self addObject:object toStructure:structure withKey:key];
     [object release];
     return result;
 }
 
-- (BOOL)appendDate:(int64_t)date withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendDate:(int64_t)date withKey:(const char *)key previousStructure:(void *)structure
 {
     NSDate *object;
     BOOL result;
     
     object = [[NSDate alloc] initWithTimeIntervalSince1970:date / 1000.0];
-    result = [self addObject:object toStructure:structure isDictionary:isDictionary withKey:key];
+    result = [self addObject:object toStructure:structure withKey:key];
     [object release];
     return result;
 }
 
-- (BOOL)appendNullWithKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendNullWithKey:(const char *)key previousStructure:(void *)structure
 {
-    return [self addObject:[NSNull null] toStructure:structure isDictionary:isDictionary withKey:key];
+    return [self addObject:[NSNull null] toStructure:structure withKey:key];
 }
 
-- (BOOL)appendRegexWithPattern:(const char *)pattern options:(const char *)options key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendRegexWithPattern:(const char *)pattern options:(const char *)options key:(const char *)key previousStructure:(void *)structure
 {
     BOOL result = NO;
     
@@ -880,7 +835,7 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
             optionsString = [@"" retain];
         }
         dataRegex = [[MODRegex alloc] initWithPattern:patternString options:optionsString];
-        result = [self addObject:dataRegex toStructure:structure isDictionary:isDictionary withKey:key];
+        result = [self addObject:dataRegex toStructure:structure withKey:key];
         [patternString release];
         [optionsString release];
         [dataRegex release];
@@ -888,13 +843,13 @@ static int append_data_for_bson(void *structure, int is_object_structure, int st
     return result;
 }
 
-- (BOOL)appendDataBinary:(const char *)binary withLength:(NSUInteger)length binaryType:(char)binaryType key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary
+- (BOOL)appendDataBinary:(const char *)binary withLength:(NSUInteger)length binaryType:(char)binaryType key:(const char *)key previousStructure:(void *)structure
 {
     MODBinary *object;
     BOOL result;
     
     object = [[MODBinary alloc] initWithBytes:binary length:length binaryType:binaryType];
-    result = [self addObject:object toStructure:structure isDictionary:isDictionary withKey:key];
+    result = [self addObject:object toStructure:structure withKey:key];
     [object release];
     return result;
 }

@@ -16,20 +16,20 @@
 - (void)finishMainArray;
 - (BOOL)isMainObjectArray;
 - (void *)mainObject;
-- (void *)openDictionaryWithPreviousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary key:(const char *)key;
-- (void *)openArrayWithPreviousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary key:(const char *)key;
+- (void *)openDictionaryWithPreviousStructure:(void *)structure key:(const char *)key;
+- (void *)openArrayWithPreviousStructure:(void *)structure key:(const char *)key;
 - (BOOL)closeDictionaryWithStructure:(void *)openedStructure;
 - (BOOL)closeArrayWithStructure:(void *)openedStructure;
-- (BOOL)appendTimestampWithTValue:(int)tValue iValue:(int)iValue key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
-- (BOOL)appendDate:(int64_t)date withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
-- (BOOL)appendObjectId:(void *)objectId length:(size_t)length withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
-- (BOOL)appendString:(const char *)stringValue withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
-- (BOOL)appendLongLong:(long long)integer withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
-- (BOOL)appendDouble:(double)doubleValue withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
-- (BOOL)appendNullWithKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
-- (BOOL)appendBool:(BOOL)boolValue withKey:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
-- (BOOL)appendRegexWithPattern:(const char *)pattern options:(const char *)options key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
-- (BOOL)appendDataBinary:(const char *)binary withLength:(NSUInteger)length binaryType:(char)binaryType key:(const char *)key previousStructure:(void *)structure previousStructureDictionary:(BOOL)isDictionary;
+- (BOOL)appendTimestampWithTValue:(int)tValue iValue:(int)iValue key:(const char *)key previousStructure:(void *)structure;
+- (BOOL)appendDate:(int64_t)date withKey:(const char *)key previousStructure:(void *)structure;
+- (BOOL)appendObjectId:(void *)objectId length:(size_t)length withKey:(const char *)key previousStructure:(void *)structure;
+- (BOOL)appendString:(const char *)stringValue withKey:(const char *)key previousStructure:(void *)structure;
+- (BOOL)appendLongLong:(long long)integer withKey:(const char *)key previousStructure:(void *)structure;
+- (BOOL)appendDouble:(double)doubleValue withKey:(const char *)key previousStructure:(void *)structure;
+- (BOOL)appendNullWithKey:(const char *)key previousStructure:(void *)structure;
+- (BOOL)appendBool:(BOOL)boolValue withKey:(const char *)key previousStructure:(void *)structure;
+- (BOOL)appendRegexWithPattern:(const char *)pattern options:(const char *)options key:(const char *)key previousStructure:(void *)structure;
+- (BOOL)appendDataBinary:(const char *)binary withLength:(NSUInteger)length binaryType:(char)binaryType key:(const char *)key previousStructure:(void *)structure;
 
 @end
 
