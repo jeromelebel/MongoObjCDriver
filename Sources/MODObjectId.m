@@ -72,7 +72,7 @@
     result = [NSMutableString string];
     count = sizeof(_bytes);
     for (ii = 0; ii < count; ii++) {
-        [result appendFormat:@"%0.2X", _bytes[ii]];
+        [result appendFormat:@"%.2X", _bytes[ii]];
     }
     return result;
 }

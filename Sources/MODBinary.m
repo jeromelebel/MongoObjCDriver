@@ -47,7 +47,7 @@
     bufferString = malloc(([_data length] * 2) + 1);
     count = [_data length];
     for(ii = 0; ii < count; ii++) {
-        snprintf(bufferString + (ii * 2), 3, "%0.2X", bytes[ii]);
+        snprintf(bufferString + (ii * 2), 3, "%.2X", bytes[ii]);
     }
     bufferString[(ii * 2) + 1] = 0;
     if (pretty) {

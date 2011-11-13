@@ -42,7 +42,7 @@
     count = sizeof(_idValue);
     bufferString = malloc((count * 2) + 1);
     for(ii = 0; ii < count; ii++) {
-        snprintf(bufferString + (ii * 2), 3, "%0.2X", bytes[ii]);
+        snprintf(bufferString + (ii * 2), 3, "%.2X", bytes[ii]);
     }
     bufferString[(ii * 2) + 1] = 0;
     result = [NSString stringWithFormat:@"Dbref(\"%@\", \"%@\")", _refValue, bufferString];
@@ -65,7 +65,7 @@
     count = sizeof(_idValue);
     bufferString = malloc((count * 2) + 1);
     for(ii = 0; ii < count; ii++) {
-        snprintf(bufferString + (ii * 2), 3, "%0.2X", bytes[ii]);
+        snprintf(bufferString + (ii * 2), 3, "%.2X", bytes[ii]);
     }
     bufferString[(ii * 2) + 1] = 0;
     if (pretty) {
