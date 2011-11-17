@@ -96,7 +96,7 @@
     if ([userName length] > 0 && [password length] > 0) {
         const char *dbName;
         
-        if ([databaseName length] == 0) {
+        if ([databaseName length] != 0) {
             dbName = [databaseName UTF8String];
         } else {
             dbName = "admin";
