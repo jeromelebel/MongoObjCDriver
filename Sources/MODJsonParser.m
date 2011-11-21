@@ -96,42 +96,6 @@ static unsigned char convertCharToByte(char my_char, BOOL *isValid)
     return result;
 }
 
-static BOOL process_json(const char *json, json_parser_dom *helper, int *errorCode, size_t *totalProcessed)
-{
-    json_parser parser;
-    json_config config;
-    uint32_t processed;
-    size_t jsonToProcessLength = strlen(json);
-    BOOL result;
-    
-    assert(totalProcessed != nil);
-    assert(errorCode != nil);
-    *totalProcessed = 0;
-    *errorCode = 0;
-    
-	memset(&config, 0, sizeof(json_config));
-    config.allow_c_comments = 1;
-    config.allow_yaml_comments = 1;
-    json_parser_init(&parser, &config, json_parser_dom_callback, helper);
-    
-    while (jsonToProcessLength > UINT32_MAX) {
-        *errorCode = json_parser_string(&parser, json, UINT32_MAX, &processed);
-        *totalProcessed += processed;
-        jsonToProcessLength -= UINT32_MAX;
-        if (*errorCode != 0) {
-            break;
-        }
-    }
-    if (*errorCode == 0) {
-        *errorCode = json_parser_string(&parser, json, (uint32_t)jsonToProcessLength, &processed);
-        *totalProcessed += processed;
-    }
-    
-    result = json_parser_is_done(&parser)?YES:NO;
-    json_parser_free(&parser);
-    return result;
-}
-
 static void clear_pending_value(JsonParserContext *context, BOOL shouldSkipNextEndStructure)
 {
     if (context->pendingBsonValue.objectKeyToCreate) {
@@ -421,35 +385,97 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, v
     return result;
 }
 
+@interface MODJsonParser()
+@property (nonatomic, assign, readonly) json_parser_dom *helper;
+@property (nonatomic, assign, readonly) JsonParserContext *context;
+@property (nonatomic, assign, readonly) json_parser *parser;
+@end
+
 @implementation MODJsonParser
+
+@synthesize multiPartParsing = _multiPartParsing, totalParsedLength = _totalParsedLength;
+
+- (id)init
+{
+    if (self = [super init]) {
+        json_config config;
+        
+        _context = calloc(1, sizeof(JsonParserContext));
+        self.context->target = self;
+        self.context->pendingBsonValue.bsonType = NO_BSON_TYPE;
+        
+        _helper = calloc(1, sizeof(json_parser_dom));
+        json_parser_dom_init(self.helper, begin_structure_for_bson, end_structure_for_bson, create_data_for_bson, append_data_for_bson, self.context);
+        
+        memset(&config, 0, sizeof(json_config));
+        config.allow_c_comments = 1;
+        config.allow_yaml_comments = 1;
+        _parser = calloc(1, sizeof(json_parser));
+        json_parser_init(self.parser, &config, json_parser_dom_callback, self.helper);
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    if (_helper) {
+        json_parser_dom_free(self.helper);
+        free(_helper);
+    }
+    if (_context) {
+        clear_pending_value(self.context, YES);
+        free(_context);
+    }
+    if (_parser) {
+        json_parser_free(self.parser);
+        free(_parser);
+    }
+    [super dealloc];
+}
+
+- (void)_processJson:(const char *)json errorCode:(int *)errorCode parsedLength:(size_t *)parsedLength
+{
+    uint32_t processed;
+    size_t jsonToProcessLength = strlen(json);
+    
+    assert(parsedLength != nil);
+    assert(errorCode != nil);
+    *parsedLength = 0;
+    *errorCode = 0;
+    
+    while (jsonToProcessLength > UINT32_MAX) {
+        *errorCode = json_parser_string(self.parser, json, UINT32_MAX, &processed);
+        *parsedLength += processed;
+        jsonToProcessLength -= UINT32_MAX;
+        if (*errorCode != 0) {
+            break;
+        }
+    }
+    if (*errorCode == 0) {
+        *errorCode = json_parser_string(self.parser, json, (uint32_t)jsonToProcessLength, &processed);
+        *parsedLength += processed;
+    }
+}
 
 - (size_t)parseJsonWithCstring:(const char *)json error:(NSError **)error
 {
-    json_parser_dom helper;
-    JsonParserContext context;
-    size_t totalProcessed = strlen(json);
+    size_t parsedLength = 0;
     int errorCode = 0;
-    BOOL parserDone = YES;
     
-    bzero(&context, sizeof(context));
-    context.target = self;
-    context.pendingBsonValue.bsonType = NO_BSON_TYPE;
-    json_parser_dom_init(&helper, begin_structure_for_bson, end_structure_for_bson, create_data_for_bson, append_data_for_bson, &context);
-    parserDone = process_json(json, &helper, &errorCode, &totalProcessed);
-    json_parser_dom_free(&helper);
-    clear_pending_value(&context, YES);
+    [self _processJson:json errorCode:&errorCode parsedLength:&parsedLength];
     
-    if ((!parserDone || errorCode != 0) && error) {
+    _totalParsedLength += parsedLength;
+    if (((!_multiPartParsing && ![self parsingDone]) || errorCode != 0) && error) {
         NSRange range;
         size_t stringLength = strlen(json);
         char substring[21];
         
         range.length = sizeof(substring) - 1;
-        if (totalProcessed < range.length / 2) {
+        if (parsedLength < range.length / 2) {
             range.location = 0;
-            range.length -= (range.length / 2) - totalProcessed;
+            range.length -= (range.length / 2) - parsedLength;
         } else {
-            range.location = totalProcessed - (range.length / 2);
+            range.location = parsedLength - (range.length / 2);
         }
         if (range.location + range.length > stringLength) {
             range.length = stringLength - range.location;
@@ -464,12 +490,32 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, v
     } else if (errorCode == 0 && error) {
         *error = nil;
     }
-    return totalProcessed;
+    return parsedLength;
 }
 
-- (size_t)parseJsonWithString:(NSString *)json withError:(NSError **)error
+- (size_t)parseJsonWithString:(NSString *)json error:(NSError **)error
 {
     return [self parseJsonWithCstring:[json UTF8String] error:error];
+}
+
+- (BOOL)parsingDone
+{
+    return json_parser_is_done(self.parser)?YES:NO;
+}
+
+- (json_parser_dom *)helper
+{
+    return _helper;
+}
+
+- (JsonParserContext *)context
+{
+    return _context;
+}
+
+- (json_parser *)parser
+{
+    return _parser;
 }
 
 @end
@@ -483,7 +529,7 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, v
     
     parser = [[self alloc] init];
     [parser setBson:bsonResult];
-    result = [parser parseJsonWithString:json withError:error];
+    result = [parser parseJsonWithString:json error:error];
     [parser release];
     return result;
 }
@@ -640,7 +686,7 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, v
     MODJsonToObjectParser *parser;
     
     parser = [[MODJsonToObjectParser alloc] init];
-    [parser parseJsonWithString:json withError:error];
+    [parser parseJsonWithString:json error:error];
     objects = [(id)[parser mainObject] retain];
     [parser release];
     return [objects autorelease];

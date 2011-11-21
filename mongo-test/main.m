@@ -104,6 +104,10 @@ static void testObjects(NSString *json, id shouldEqual)
 
 static void testJson()
 {
+    MODJsonToObjectParser *parser;
+    NSError *error;
+    id value;
+    
     testObjects(@"{\"_id\":\"x\",\"toto\":[{\"1\":2}]}", [NSDictionary dictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil]);
     testObjects(@"{\"_id\":{\"$oid\":\"4E9807F88157F608B4000002\"},\"type\":\"Activity\"}", [NSDictionary dictionaryWithObjectsAndKeys:[[[MODObjectId alloc] initWithCString:"4E9807F88157F608B4000002"] autorelease], @"_id", @"Activity", @"type", nil]);
     testObjects(@"{\"regexp\":{\"$regex\":\"value\",\"$options\":\"x\"},\"toto\":{\"$regex\":\"value\"}}", [NSDictionary dictionaryWithObjectsAndKeys:[[[MODRegex alloc] initWithPattern:@"value" options:nil] autorelease], @"toto", [[[MODRegex alloc] initWithPattern:@"value" options:@"x"] autorelease], @"regexp", nil]);
@@ -113,6 +117,18 @@ static void testJson()
     testObjects(@"[{\"hello\":\"1\"},{\"zob\":\"2\"}]", [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"1", @"hello", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"2", @"zob", nil], nil]);
     testObjects(@"{\"timestamp\":{\"$timestamp\":[1,2]}}", [NSDictionary dictionaryWithObjectsAndKeys:[[[MODTimestamp alloc] initWithTValue:1 iValue:2] autorelease], @"timestamp", nil]);
     testObjects(@"{\"mydate\":{\"$date\":1320066612000.000000}}", [NSDictionary dictionaryWithObjectsAndKeys:[[[NSDate alloc] initWithTimeIntervalSince1970:1320066612] autorelease], @"mydate", nil]);
+    
+    parser = [[MODJsonToObjectParser alloc] init];
+    parser.multiPartParsing = YES;
+    [parser parseJsonWithString:@"{\"_id\":\"x\"" error:&error];
+    assert(error == nil);
+    [parser parseJsonWithString:@",\"toto\":[{\"1\":2}]}fdsa" error:&error];
+    assert(parser.totalParsedLength == 28);
+    assert(error != nil);
+    assert([error code] == JSON_ERROR_UNEXPECTED_CHAR);
+    assert([[error domain] isEqualToString:MODJsonErrorDomain]);
+    value = [NSDictionary dictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil];
+    assert([(id)[parser mainObject] isEqual:value]);
 }
 
 int main (int argc, const char * argv[])

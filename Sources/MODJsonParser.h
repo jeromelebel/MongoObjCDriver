@@ -34,9 +34,21 @@
 @end
 
 @interface MODJsonParser : NSObject
+{
+    void *_helper;
+    void *_context;
+    void *_parser;
+    
+    size_t _totalParsedLength;
+    BOOL _multiPartParsing;
+}
+
+@property (nonatomic, assign, readwrite) BOOL multiPartParsing;
+@property (nonatomic, assign, readonly) size_t totalParsedLength;
 
 - (size_t)parseJsonWithCstring:(const char *)json error:(NSError **)error;
-- (size_t)parseJsonWithString:(NSString *)json withError:(NSError **)error;
+- (size_t)parseJsonWithString:(NSString *)json error:(NSError **)error;
+- (BOOL)parsingDone;
 
 @end
 
