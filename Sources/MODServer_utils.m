@@ -178,6 +178,7 @@
     switch (bson_iterator_type(iterator)) {
         case BSON_EOO:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+            NSAssert(NO, @"BSON_EOO");
             break;
         case BSON_DOUBLE:
             result = [NSNumber numberWithDouble:bson_iterator_double(iterator)];
@@ -224,6 +225,7 @@
             break;
         case BSON_UNDEFINED:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+            NSAssert(NO, @"BSON_UNDEFINED");
             result = nil;
             break;
         case BSON_OID:
@@ -239,20 +241,37 @@
             result = [NSNull null];
             break;
         case BSON_REGEX:
-            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+            {
+                const char *cString;
+                NSString *pattern = nil;
+                NSString *options = nil;
+                
+                pattern = [[NSString alloc] initWithUTF8String:bson_iterator_regex(iterator)];
+                cString = bson_iterator_regex_opts(iterator);
+                if (cString) {
+                    options = [[NSString alloc] initWithUTF8String:cString];
+                }
+                result = [[[MODRegex alloc] initWithPattern:pattern options:options] autorelease];
+                [pattern release];
+                [options release];
+            }
             break;
         case BSON_DBREF:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+            NSAssert(NO, @"BSON_DBREF");
             break;
         case BSON_CODE:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+            NSAssert(NO, @"BSON_CODE");
             break;
         case BSON_SYMBOL:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+            NSAssert(NO, @"BSON_SYMBOL");
             result = [NSString stringWithUTF8String:bson_iterator_string(iterator)];
             break;
         case BSON_CODEWSCOPE:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+            NSAssert(NO, @"BSON_CODEWSCOPE");
             break;
         case BSON_INT:
             result = [NSNumber numberWithInt:bson_iterator_int(iterator)];
@@ -267,6 +286,9 @@
             break;
         case BSON_LONG:
             result = [NSNumber numberWithLongLong:bson_iterator_long(iterator)];
+            break;
+        default:
+            NSAssert(NO, @"unknown %d", bson_iterator_type(iterator));
             break;
     }
     return result;
