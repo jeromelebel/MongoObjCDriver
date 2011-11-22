@@ -66,7 +66,16 @@ static void testObjects(NSString *json, id shouldEqual)
 {
     NSError *error;
     id objects;
+    bson bsonResult;
     
+    bson_init(&bsonResult);
+    [MODJsonToBsonParser bsonFromJson:&bsonResult json:json error:&error];
+    if (error) {
+        NSLog(@"***** parsing errors for:");
+        NSLog(@"%@", json);
+        NSLog(@"%@", error);
+    }
+    bson_destroy(&bsonResult);
     objects = [MODJsonToObjectParser objectsFromJson:json error:&error];
     if (error) {
         NSLog(@"***** parsing errors for:");
@@ -108,6 +117,7 @@ static void testJson()
     NSError *error;
     id value;
     
+    testObjects(@"{\"_id\":\"x\",\"toto\":[1,2,3]}", [NSDictionary dictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSNumber numberWithInt:1], [NSNumber numberWithInt:2], [NSNumber numberWithInt:3], nil], @"toto", nil]);
     testObjects(@"{\"_id\":\"x\",\"toto\":[{\"1\":2}]}", [NSDictionary dictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil]);
     testObjects(@"{\"_id\":{\"$oid\":\"4E9807F88157F608B4000002\"},\"type\":\"Activity\"}", [NSDictionary dictionaryWithObjectsAndKeys:[[[MODObjectId alloc] initWithCString:"4E9807F88157F608B4000002"] autorelease], @"_id", @"Activity", @"type", nil]);
     testObjects(@"{\"regexp\":{\"$regex\":\"value\",\"$options\":\"x\"},\"toto\":{\"$regex\":\"value\"}}", [NSDictionary dictionaryWithObjectsAndKeys:[[[MODRegex alloc] initWithPattern:@"value" options:nil] autorelease], @"toto", [[[MODRegex alloc] initWithPattern:@"value" options:@"x"] autorelease], @"regexp", nil]);
