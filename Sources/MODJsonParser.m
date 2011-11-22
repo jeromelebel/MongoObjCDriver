@@ -697,7 +697,7 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
         snprintf(indexKey, sizeof(indexKey), "%d", index);
         key = indexKey;
     }
-    bson_append_bool(_bson, key, YES?1:0);
+    bson_append_bool(_bson, key, boolValue?1:0);
     return YES;
 }
 
