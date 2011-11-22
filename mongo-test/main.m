@@ -64,16 +64,26 @@ static void testTypes(void)
 
 static void testObjects(NSString *json, id shouldEqual)
 {
+    NSDictionary *objectsFromBson;
     NSError *error;
     id objects;
     bson bsonResult;
     
     bson_init(&bsonResult);
     [MODJsonToBsonParser bsonFromJson:&bsonResult json:json error:&error];
+    bson_finish(&bsonResult);
     if (error) {
         NSLog(@"***** parsing errors for:");
         NSLog(@"%@", json);
         NSLog(@"%@", error);
+    }
+    objectsFromBson = [MODServer objectFromBson:&bsonResult];
+    if (([shouldEqual isKindOfClass:[NSArray class]] && ![[objectsFromBson objectForKey:@"array"] isEqual:shouldEqual])
+        || ([shouldEqual isKindOfClass:[NSDictionary class]] && ![objectsFromBson isEqual:shouldEqual])) {
+        NSLog(@"***** problem to convert bson to objects:");
+        NSLog(@"json: %@", json);
+        NSLog(@"expecting: %@", shouldEqual);
+        NSLog(@"received: %@", objectsFromBson);
     }
     bson_destroy(&bsonResult);
     objects = [MODJsonToObjectParser objectsFromJson:json error:&error];
@@ -127,6 +137,7 @@ static void testJson()
     testObjects(@"[{\"hello\":\"1\"},{\"zob\":\"2\"}]", [NSArray arrayWithObjects:[NSDictionary dictionaryWithObjectsAndKeys:@"1", @"hello", nil], [NSDictionary dictionaryWithObjectsAndKeys:@"2", @"zob", nil], nil]);
     testObjects(@"{\"timestamp\":{\"$timestamp\":[1,2]}}", [NSDictionary dictionaryWithObjectsAndKeys:[[[MODTimestamp alloc] initWithTValue:1 iValue:2] autorelease], @"timestamp", nil]);
     testObjects(@"{\"mydate\":{\"$date\":1320066612000.000000}}", [NSDictionary dictionaryWithObjectsAndKeys:[[[NSDate alloc] initWithTimeIntervalSince1970:1320066612] autorelease], @"mydate", nil]);
+    testObjects(@"{\"false\":false,\"true\":true}", [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"false", [NSNumber numberWithBool:YES], @"true", nil]);
     
     parser = [[MODJsonToObjectParser alloc] init];
     parser.multiPartParsing = YES;
