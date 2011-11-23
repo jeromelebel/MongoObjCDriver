@@ -29,8 +29,8 @@ enum {
 @interface MODServer(utils_internal)
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails;
 + (NSError *)errorFromMongo:(mongo_ptr)mongo;
-+ (NSDictionary *)objectFromBson:(bson *)bsonObject;
-+ (void)appendObject:(NSDictionary *)object toBson:(bson *)bson;
++ (MODSortedMutableDictionary *)objectFromBson:(bson *)bsonObject;
++ (void)appendObject:(MODSortedMutableDictionary *)object toBson:(bson *)bson;
 @end
 
 @interface MODDatabase()
@@ -59,7 +59,7 @@ enum {
 @property(nonatomic, readwrite, assign) BOOL donotReleaseCursor;
 
 - (id)initWithMongoCollection:(MODCollection *)mongoCollection;
-- (NSDictionary *)nextDocumentAsynchronouslyWithError:(NSError **)error;
+- (MODSortedMutableDictionary *)nextDocumentAsynchronouslyWithError:(NSError **)error;
 @end
 
 @interface MODQuery()

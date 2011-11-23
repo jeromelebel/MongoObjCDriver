@@ -98,9 +98,9 @@
     return *error == nil;
 }
 
-- (NSDictionary *)nextDocumentAsynchronouslyWithError:(NSError **)error;
+- (MODSortedMutableDictionary *)nextDocumentAsynchronouslyWithError:(NSError **)error;
 {
-    NSDictionary *result = nil;
+    MODSortedMutableDictionary *result = nil;
     
     NSAssert(error != NULL, @"please give a pointer to get the error back");
     *error = nil;
@@ -126,7 +126,7 @@
     return result;
 }
 
-- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, NSDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback
+- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, MODSortedMutableDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback
 {
     MODQuery *query = nil;
     
@@ -135,7 +135,7 @@
         BOOL cursorStopped = NO;
         
         if (!mongoQuery.canceled) {
-            NSDictionary *document;
+            MODSortedMutableDictionary *document;
             NSError *error;
             
             [mongoQuery.mutableParameters setObject:self forKey:@"cursor"];

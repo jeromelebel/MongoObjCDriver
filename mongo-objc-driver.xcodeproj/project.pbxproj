@@ -66,6 +66,9 @@
 		02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
 		02AB057814296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
 		02ABA1C414103B37000417F4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C314103B37000417F4 /* Cocoa.framework */; };
+		02B24273147D1BD6008A15A3 /* MODSortedMutableDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B24271147D1BD6008A15A3 /* MODSortedMutableDictionary.h */; };
+		02B24274147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */; };
+		02B24275147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */; };
 		02BDC3E7141D6073000EF755 /* MODCursor.h in Headers */ = {isa = PBXBuildFile; fileRef = 02BDC3E5141D6073000EF755 /* MODCursor.h */; };
 		02BDC3E8141D6073000EF755 /* MODCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3E6141D6073000EF755 /* MODCursor.m */; };
 		02BDC3EA141D6938000EF755 /* MODCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3E6141D6073000EF755 /* MODCursor.m */; };
@@ -256,6 +259,8 @@
 		02ABA1C814103B37000417F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02ABA1CB14103B37000417F4 /* mongo-objc-driver-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "mongo-objc-driver-Info.plist"; sourceTree = "<group>"; };
 		02ABA1CD14103B37000417F4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		02B24271147D1BD6008A15A3 /* MODSortedMutableDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODSortedMutableDictionary.h; sourceTree = "<group>"; };
+		02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODSortedMutableDictionary.m; sourceTree = "<group>"; };
 		02BDC3E5141D6073000EF755 /* MODCursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODCursor.h; sourceTree = "<group>"; };
 		02BDC3E6141D6073000EF755 /* MODCursor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODCursor.m; sourceTree = "<group>"; };
 		02BDC3EB141D83A7000EF755 /* MODServer_utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODServer_utils.m; sourceTree = "<group>"; };
@@ -605,6 +610,8 @@
 				02411AB81432D02600A5FFCA /* MODBinary.m */,
 				025C561F1433E7E40064B010 /* MODDBRef.h */,
 				025C561E1433E7E40064B010 /* MODDBRef.m */,
+				02B24271147D1BD6008A15A3 /* MODSortedMutableDictionary.h */,
+				02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */,
 				0272D1BD142D48AE000091A4 /* MODJsonParser.h */,
 				0272D1BE142D48AF000091A4 /* MODJsonParser.m */,
 				02CF87F0142FA66D000C4C7F /* MODJsonGenerator.h */,
@@ -668,6 +675,7 @@
 				02411AB51432B8FA00A5FFCA /* MOD_public.h in Headers */,
 				02411AB91432D02700A5FFCA /* MODBinary.h in Headers */,
 				025C56211433E7E40064B010 /* MODDBRef.h in Headers */,
+				02B24273147D1BD6008A15A3 /* MODSortedMutableDictionary.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -805,6 +813,7 @@
 				02CF87F3142FA66D000C4C7F /* MODJsonGenerator.m in Sources */,
 				02411ABA1432D02700A5FFCA /* MODBinary.m in Sources */,
 				025C56201433E7E40064B010 /* MODDBRef.m in Sources */,
+				02B24274147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -834,6 +843,7 @@
 				02CF87F4142FA66D000C4C7F /* MODJsonGenerator.m in Sources */,
 				02411ABB1432D02700A5FFCA /* MODBinary.m in Sources */,
 				025C56231433EE0E0064B010 /* MODDBRef.m in Sources */,
+				02B24275147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

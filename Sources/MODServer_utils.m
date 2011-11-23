@@ -187,7 +187,7 @@
             result = [NSString stringWithUTF8String:bson_iterator_string(iterator)];
             break;
         case BSON_OBJECT:
-            result = [NSMutableDictionary dictionary];
+            result = [[[MODSortedMutableDictionary alloc] init] autorelease];
             bson_iterator_subiterator(iterator, &subIterator);
             while (bson_iterator_next(&subIterator)) {
                 id value;
@@ -294,12 +294,12 @@
     return result;
 }
 
-+ (NSDictionary *)objectFromBson:(bson *)bsonObject
++ (MODSortedMutableDictionary *)objectFromBson:(bson *)bsonObject
 {
     bson_iterator iterator;
-    NSMutableDictionary *result;
+    MODSortedMutableDictionary *result;
     
-    result = [[NSMutableDictionary alloc] init];
+    result = [[MODSortedMutableDictionary alloc] init];
     bson_iterator_init(&iterator, bsonObject);
     while (bson_iterator_next(&iterator) != BSON_EOO) {
         NSString *key;
@@ -323,7 +323,7 @@
         bson_append_null(bson, keyString);
     } else if ([value isKindOfClass:[NSString class]]) {
         bson_append_string(bson, keyString, [value UTF8String]);
-    } else if ([value isKindOfClass:[NSDictionary class]]) {
+    } else if ([value isKindOfClass:[MODSortedMutableDictionary class]]) {
         bson_append_start_object(bson, keyString);
         [self appendObject:value toBson:bson];
         bson_append_finish_object(bson);
@@ -370,9 +370,9 @@
     }
 }
 
-+ (void)appendObject:(NSDictionary *)object toBson:(bson *)bson
++ (void)appendObject:(MODSortedMutableDictionary *)object toBson:(bson *)bson
 {
-    for (NSString *key in [object allKeys]) {
+    for (NSString *key in object.sortedKeys) {
         id value = [object objectForKey:key];
         
         [self appendValue:value key:key toBson:bson];
@@ -393,7 +393,7 @@ static void addIdent(NSMutableString *result, int indent)
     }
 }
 
-static void convertDictionaryToJson(NSMutableString *result, int indent, NSDictionary *value, BOOL pretty)
+static void convertDictionaryToJson(NSMutableString *result, int indent, MODSortedMutableDictionary *value, BOOL pretty)
 {
     BOOL first = YES;
     
@@ -401,7 +401,7 @@ static void convertDictionaryToJson(NSMutableString *result, int indent, NSDicti
     if (pretty) {
         [result appendString:@"\n"];
     }
-    for (NSString *key in [[value allKeys] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)]) {
+    for (NSString *key in value.sortedKeys) {
         if (first) {
             first = NO;
         } else if (pretty) {
@@ -469,7 +469,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         }
     } else if ([value isKindOfClass:[NSNull class]]) {
         [result appendString:@"null"];
-    } else if ([value isKindOfClass:[NSDictionary class]]) {
+    } else if ([value isKindOfClass:[MODSortedMutableDictionary class]]) {
         convertDictionaryToJson(result, indent, value, pretty);
     } else if ([value isKindOfClass:[NSArray class]]) {
         convertArrayToJson(result, indent, value, pretty);
@@ -498,7 +498,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
 
 @implementation MODServer(utils)
 
-+ (NSString *)convertObjectToJson:(NSDictionary *)object pretty:(BOOL)pretty
++ (NSString *)convertObjectToJson:(MODSortedMutableDictionary *)object pretty:(BOOL)pretty
 {
     NSMutableString *result;
     

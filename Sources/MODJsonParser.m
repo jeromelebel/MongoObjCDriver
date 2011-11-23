@@ -773,7 +773,7 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 
 - (void)startMainDictionary
 {
-    _mainObject = [[NSMutableDictionary alloc] init];
+    _mainObject = [[MODSortedMutableDictionary alloc] init];
 }
 
 - (void)startMainArray
@@ -806,7 +806,7 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
         NSString *stringKey;
         
         stringKey = [[NSString alloc] initWithUTF8String:key];
-        [(NSMutableDictionary *)structure setObject:object forKey:stringKey];
+        [(MODSortedMutableDictionary *)structure setObject:object forKey:stringKey];
         [stringKey release];
     } else {
         [(NSMutableArray *)structure addObject:object];
@@ -816,13 +816,13 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 
 - (void *)openDictionaryWithPreviousStructure:(void *)structure key:(const char *)key index:(int)index
 {
-    NSMutableDictionary *result;
+    MODSortedMutableDictionary *result;
     
-    result = [NSMutableDictionary dictionary];
+    result = [[MODSortedMutableDictionary alloc] init];
     if (![self addObject:result toStructure:structure withKey:key]) {
         result = nil;
     }
-    return result;
+    return [result autorelease];
 }
 
 - (void *)openArrayWithPreviousStructure:(void *)structure key:(const char *)key index:(int)index

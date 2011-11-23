@@ -16,6 +16,7 @@
 @class MODQuery;
 @class MODDatabase;
 @class MODServer;
+@class MODSortedMutableDictionary;
 
 typedef struct mongo_replset            *mongo_replset_ptr;
 typedef struct mongo                    *mongo_ptr;
@@ -36,7 +37,7 @@ typedef struct mongo                    *mongo_ptr;
 
 - (MODQuery *)connectWithHostName:(NSString *)host callback:(void (^)(BOOL connected, MODQuery *mongoQuery))callback;
 - (MODQuery *)connectWithReplicaName:(NSString *)name hosts:(NSArray *)hosts callback:(void (^)(BOOL connected, MODQuery *mongoQuery))callback;
-- (MODQuery *)fetchServerStatusWithCallback:(void (^)(NSDictionary *serverStatus, MODQuery *mongoQuery))callback;
+- (MODQuery *)fetchServerStatusWithCallback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback;
 - (MODQuery *)fetchDatabaseListWithCallback:(void (^)(NSArray *list, MODQuery *mongoQuery))callback;
 
 - (MODQuery *)dropDatabaseWithName:(NSString *)databaseName callback:(void (^)(MODQuery *mongoQuery))callback;
@@ -53,5 +54,5 @@ typedef struct mongo                    *mongo_ptr;
 @interface MODServer(utils)
 + (NSString *)escapeQuotesForString:(NSString *)string;
 + (NSString *)escapeSlashesForString:(NSString *)string;
-+ (NSString *)convertObjectToJson:(NSDictionary *)object pretty:(BOOL)pretty;
++ (NSString *)convertObjectToJson:(MODSortedMutableDictionary *)object pretty:(BOOL)pretty;
 @end

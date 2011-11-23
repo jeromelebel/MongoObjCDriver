@@ -37,12 +37,12 @@
     [_mongoDatabase mongoQueryDidFinish:mongoQuery withCallbackBlock:callbackBlock];
 }
 
-- (MODQuery *)fetchCollectionStatsWithCallback:(void (^)(NSDictionary *stats, MODQuery *mongoQuery))callback
+- (MODQuery *)fetchCollectionStatsWithCallback:(void (^)(MODSortedMutableDictionary *stats, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        NSDictionary *stats = nil;
+        MODSortedMutableDictionary *stats = nil;
         
         if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson output;
@@ -69,7 +69,7 @@
         if (!mongoQuery.canceled) {
             NSMutableArray *documents;
             MODCursor *cursor;
-            NSDictionary *document;
+            MODSortedMutableDictionary *document;
             NSError *error = nil;
             
             documents = [[NSMutableArray alloc] init];
@@ -102,7 +102,7 @@
         if (!mongoQuery.canceled) {
             NSMutableArray *documents;
             MODCursor *cursor;
-            NSDictionary *document;
+            MODSortedMutableDictionary *document;
             NSError *error = nil;
             
             documents = [[NSMutableArray alloc] initWithCapacity:limit];

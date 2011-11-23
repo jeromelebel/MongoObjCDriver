@@ -191,13 +191,13 @@
     return query;
 }
 
-- (MODQuery *)fetchServerStatusWithCallback:(void (^)(NSDictionary *serverStatus, MODQuery *mongoQuery))callback
+- (MODQuery *)fetchServerStatusWithCallback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback
 {
     MODQuery *query;
     
     query = [self addQueryInQueue:^(MODQuery *mongoQuery){
         bson output;
-        NSDictionary *outputObjects = nil;
+        MODSortedMutableDictionary *outputObjects = nil;
         
         if (!mongoQuery.canceled && mongo_simple_int_command(_mongo, "admin", "serverStatus", 1, &output) == MONGO_OK) {
             outputObjects = [[self class] objectFromBson:&output];
@@ -221,7 +221,7 @@
         NSMutableArray *list = nil;
         
         if (!mongoQuery.canceled && mongo_simple_int_command(_mongo, "admin", "listDatabases", 1, &output) == MONGO_OK) {
-            NSDictionary *outputObjects;
+            MODSortedMutableDictionary *outputObjects;
             
             outputObjects = [[self class] objectFromBson:&output];
             list = [[NSMutableArray alloc] init];

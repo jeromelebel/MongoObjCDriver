@@ -44,12 +44,12 @@
     [_mongoServer mongoQueryDidFinish:mongoQuery withCallbackBlock:callbackBlock];
 }
 
-- (MODQuery *)fetchDatabaseStatsWithCallback:(void (^)(NSDictionary *databaseStats, MODQuery *mongoQuery))callback;
+- (MODQuery *)fetchDatabaseStatsWithCallback:(void (^)(MODSortedMutableDictionary *databaseStats, MODQuery *mongoQuery))callback;
 {
     MODQuery *query;
     
     query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
-        NSDictionary *stats = nil;
+        MODSortedMutableDictionary *stats = nil;
         
         if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
             bson output;

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class MODCursor;
+@class MODSortedMutableDictionary;
 
 @interface MODCursor : NSObject
 {
@@ -27,7 +28,7 @@
     BOOL                                _tailable;
 }
 
-- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, NSDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback;
+- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, MODSortedMutableDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback;
 
 @property(nonatomic, readonly, retain) MODCollection *mongoCollection;
 @property(nonatomic, readonly, retain) NSString *query;

@@ -12,6 +12,7 @@
 @class MODDatabase;
 @class MODCollection;
 @class MODQuery;
+@class MODSortedMutableDictionary;
 
 @interface MODDatabase : NSObject
 {
@@ -21,7 +22,7 @@
     NSString                    *_password;
 }
 
-- (MODQuery *)fetchDatabaseStatsWithCallback:(void (^)(NSDictionary *databaseStats, MODQuery *mongoQuery))callback;
+- (MODQuery *)fetchDatabaseStatsWithCallback:(void (^)(MODSortedMutableDictionary *databaseStats, MODQuery *mongoQuery))callback;
 - (MODQuery *)fetchCollectionListWithCallback:(void (^)(NSArray *collectionList, MODQuery *mongoQuery))callback;
 
 - (MODQuery *)createCollectionWithName:(NSString *)collectionName callback:(void (^)(MODQuery *mongoQuery))callback;

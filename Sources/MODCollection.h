@@ -12,6 +12,7 @@
 @class MODCollection;
 @class MODQuery;
 @class MODCursor;
+@class MODSortedMutableDictionary;
 
 enum MOD_INDEX_OPTIONS {
     MOD_INDEX_OPTIONS_UNIQUE = ( 1<<0 ),
@@ -27,7 +28,7 @@ enum MOD_INDEX_OPTIONS {
     NSString                            *_collectionName;
 }
 
-- (MODQuery *)fetchCollectionStatsWithCallback:(void (^)(NSDictionary *stats, MODQuery *mongoQuery))callback;
+- (MODQuery *)fetchCollectionStatsWithCallback:(void (^)(MODSortedMutableDictionary *stats, MODQuery *mongoQuery))callback;
 - (MODCursor *)cursorWithCriteria:(NSString *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort;
 - (MODQuery *)indexListWithcallback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback;
 - (MODQuery *)findWithCriteria:(NSString *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort callback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback;
