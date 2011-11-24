@@ -211,7 +211,7 @@
                 bson_init(data[ii]);
                 if ([document isKindOfClass:[NSString class]]) {
                     [MODJsonToBsonParser bsonFromJson:data[ii] json:document error:&error];
-                } else if ([document isKindOfClass:[NSDictionary class]]) {
+                } else if ([document isKindOfClass:[MODSortedMutableDictionary class]]) {
                     [[_mongoDatabase.mongoServer class] appendObject:document toBson:data[ii]];
                 }
                 bson_finish(data[ii]);
