@@ -8,8 +8,6 @@
 
 #import "MOD_internal.h"
 
-#define KEY_SIZE_FOR_ARRAY 32
-
 static void my_debug(void)
 {
     return;
@@ -577,11 +575,10 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 - (void *)openDictionaryWithPreviousStructure:(void *)structure key:(const char *)key index:(int)index
 {
     void *result = NULL;
-    char indexKey[KEY_SIZE_FOR_ARRAY];
     
     if (key == NULL) {
-        snprintf(indexKey, sizeof(indexKey), "%d", index);
-        key = indexKey;
+        snprintf(_indexKey, sizeof(_indexKey), "%d", index);
+        key = _indexKey;
     }
     bson_append_start_object(_bson, key);
     result = _bson;
@@ -591,11 +588,10 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 - (void *)openArrayWithPreviousStructure:(void *)structure key:(const char *)key index:(int)index
 {
     void *result = NULL;
-    char indexKey[KEY_SIZE_FOR_ARRAY];
     
     if (key == NULL) {
-        snprintf(indexKey, sizeof(indexKey), "%d", index);
-        key = indexKey;
+        snprintf(_indexKey, sizeof(_indexKey), "%d", index);
+        key = _indexKey;
     }
     bson_append_start_array(_bson, key);
     result = _bson;
@@ -617,11 +613,10 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 - (BOOL)appendTimestampWithTValue:(int)tValue iValue:(int)iValue key:(const char *)key previousStructure:(void *)structure index:(int)index
 {
     bson_timestamp_t ts;
-    char indexKey[KEY_SIZE_FOR_ARRAY];
     
     if (key == NULL) {
-        snprintf(indexKey, sizeof(indexKey), "%d", index);
-        key = indexKey;
+        snprintf(_indexKey, sizeof(_indexKey), "%d", index);
+        key = _indexKey;
     }
     ts.t = tValue;
     ts.i = iValue;
@@ -631,11 +626,9 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 
 - (BOOL)appendObjectId:(void *)objectId length:(size_t)length withKey:(const char *)key previousStructure:(void *)structure index:(int)index
 {
-    char indexKey[KEY_SIZE_FOR_ARRAY];
-    
     if (key == NULL) {
-        snprintf(indexKey, sizeof(indexKey), "%d", index);
-        key = indexKey;
+        snprintf(_indexKey, sizeof(_indexKey), "%d", index);
+        key = _indexKey;
     }
     bson_append_oid(_bson, key, objectId);
     return YES;
@@ -643,11 +636,9 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 
 - (BOOL)appendString:(const char *)stringValue withKey:(const char *)key previousStructure:(void *)structure index:(int)index
 {
-    char indexKey[KEY_SIZE_FOR_ARRAY];
-    
     if (key == NULL) {
-        snprintf(indexKey, sizeof(indexKey), "%d", index);
-        key = indexKey;
+        snprintf(_indexKey, sizeof(_indexKey), "%d", index);
+        key = _indexKey;
     }
     bson_append_string(_bson, key, stringValue);
     return YES;
@@ -655,11 +646,9 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 
 - (BOOL)appendLongLong:(long long)integer withKey:(const char *)key previousStructure:(void *)structure index:(int)index
 {
-    char indexKey[KEY_SIZE_FOR_ARRAY];
-    
     if (key == NULL) {
-        snprintf(indexKey, sizeof(indexKey), "%d", index);
-        key = indexKey;
+        snprintf(_indexKey, sizeof(_indexKey), "%d", index);
+        key = _indexKey;
     }
     bson_append_long(_bson, key, integer);
     return YES;
@@ -667,11 +656,9 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 
 - (BOOL)appendDouble:(double)doubleValue withKey:(const char *)key previousStructure:(void *)structure index:(int)index
 {
-    char indexKey[KEY_SIZE_FOR_ARRAY];
-    
     if (key == NULL) {
-        snprintf(indexKey, sizeof(indexKey), "%d", index);
-        key = indexKey;
+        snprintf(_indexKey, sizeof(_indexKey), "%d", index);
+        key = _indexKey;
     }
     bson_append_double(_bson, key, doubleValue);
     return YES;
@@ -679,11 +666,9 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 
 - (BOOL)appendNullWithKey:(const char *)key previousStructure:(void *)structure index:(int)index
 {
-    char indexKey[KEY_SIZE_FOR_ARRAY];
-    
     if (key == NULL) {
-        snprintf(indexKey, sizeof(indexKey), "%d", index);
-        key = indexKey;
+        snprintf(_indexKey, sizeof(_indexKey), "%d", index);
+        key = _indexKey;
     }
     bson_append_null(_bson, key);
     return YES;
@@ -691,11 +676,9 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 
 - (BOOL)appendBool:(BOOL)boolValue withKey:(const char *)key previousStructure:(void *)structure index:(int)index
 {
-    char indexKey[KEY_SIZE_FOR_ARRAY];
-    
     if (key == NULL) {
-        snprintf(indexKey, sizeof(indexKey), "%d", index);
-        key = indexKey;
+        snprintf(_indexKey, sizeof(_indexKey), "%d", index);
+        key = _indexKey;
     }
     bson_append_bool(_bson, key, boolValue?1:0);
     return YES;
@@ -703,11 +686,9 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 
 - (BOOL)appendDate:(int64_t)date withKey:(const char *)key previousStructure:(void *)structure index:(int)index
 {
-    char indexKey[KEY_SIZE_FOR_ARRAY];
-    
     if (key == NULL) {
-        snprintf(indexKey, sizeof(indexKey), "%d", index);
-        key = indexKey;
+        snprintf(_indexKey, sizeof(_indexKey), "%d", index);
+        key = _indexKey;
     }
     bson_append_date(_bson, key, date);
     return YES;
@@ -716,11 +697,10 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 - (BOOL)appendRegexWithPattern:(const char *)pattern options:(const char *)options key:(const char *)key previousStructure:(void *)structure index:(int)index
 {
     BOOL result = NO;
-    char indexKey[KEY_SIZE_FOR_ARRAY];
     
     if (key == NULL) {
-        snprintf(indexKey, sizeof(indexKey), "%d", index);
-        key = indexKey;
+        snprintf(_indexKey, sizeof(_indexKey), "%d", index);
+        key = _indexKey;
     }
     if (pattern) {
         if (!options) {
@@ -734,11 +714,9 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 
 - (BOOL)appendDataBinary:(const char *)binary withLength:(NSUInteger)length binaryType:(char)binaryType key:(const char *)key previousStructure:(void *)structure index:(int)index
 {
-    char indexKey[KEY_SIZE_FOR_ARRAY];
-    
     if (key == NULL) {
-        snprintf(indexKey, sizeof(indexKey), "%d", index);
-        key = indexKey;
+        snprintf(_indexKey, sizeof(_indexKey), "%d", index);
+        key = _indexKey;
     }
     bson_append_binary(_bson, key, binaryType, binary, length);
     return YES;

@@ -87,6 +87,7 @@ enum {
     bson *_bson;
     BOOL _mainObjectStarted;
     BOOL _isMainObjectArray;
+    char _indexKey[32];
 }
 + (NSInteger)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error;
 - (void)setBson:(bson *)bson;
