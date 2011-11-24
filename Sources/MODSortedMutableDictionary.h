@@ -10,8 +10,8 @@
 
 @interface MODSortedMutableDictionary : NSObject
 {
-	NSMutableDictionary *_content;
-	NSMutableArray *_sortedKeys;
+    NSMutableDictionary *_content;
+    NSMutableArray *_sortedKeys;
 }
 
 + (id)sortedDictionary;
