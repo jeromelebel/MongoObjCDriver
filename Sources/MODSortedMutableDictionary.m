@@ -77,10 +77,12 @@
 		id key;
 		
 		va_start(ap, firstObject);
-		while((object = va_arg(ap, id)) != nil) {
+        object = firstObject;
+		while (object != nil) {
 			key = va_arg(ap, id);
 			NSAssert(key, @"can't have nil as a key");
 			[self setObject:object forKey:key];
+            object = va_arg(ap, id);
 		}
 		va_end(ap);
 	}
