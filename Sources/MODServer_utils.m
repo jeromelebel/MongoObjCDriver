@@ -265,9 +265,13 @@
             NSAssert(NO, @"BSON_CODE");
             break;
         case BSON_SYMBOL:
-            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
-            NSAssert(NO, @"BSON_SYMBOL");
-            result = [NSString stringWithUTF8String:bson_iterator_string(iterator)];
+            {
+                NSString *value;
+                
+                value = [[NSString alloc] initWithUTF8String:bson_iterator_string(iterator)];
+                result = [[[MODSymbol alloc] initWithValue:value] autorelease];
+                [value release];
+            }
             break;
         case BSON_CODEWSCOPE:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
@@ -493,6 +497,11 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         [result appendString:[value jsonValueWithPretty:pretty]];
     } else if ([value isKindOfClass:[MODDBRef class]]) {
         [result appendString:[value jsonValueWithPretty:pretty]];
+    } else if ([value isKindOfClass:[MODSymbol class]]) {
+        [result appendString:[value jsonValueWithPretty:pretty]];
+    } else {
+        NSLog(@"unknown type: %@", [value class]);
+        assert(false);
     }
 }
 

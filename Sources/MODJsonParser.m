@@ -289,7 +289,7 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
     my_debug();
     if (context->shouldSkipNextEndStructure) {
         // error
-    } else if (key != NULL && strcmp(key, "$oid") == 0) {
+    } else if (key != NULL && strcmp(key, "$oid") == 0 && index == 0) {
         if (dataInfo->length == sizeof(bson_oid_t) * 2) {
             bson_oid_t oid;
             
@@ -297,6 +297,16 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
                 result = [context->target appendObjectId:&oid length:sizeof(oid) withKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure index:context->pendingBsonValue.index]?0:1;
                 clear_pending_value(context, YES);
             }
+        }
+    } else if (key != NULL && strcmp(key, "$symbol") == 0 && index == 0) {
+        if (dataInfo->type == JSON_STRING) {
+            NSString *value;
+            
+            value = [[NSString alloc] initWithUTF8String:dataInfo->data];
+            result = [context->target appendSymbol:value withKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure index:context->pendingBsonValue.index];
+            [value release];
+            clear_pending_value(context, YES);
+            result = 0;
         }
     } else if (key != NULL && (strcmp(key, "$regex") == 0 || strcmp(key, "$options") == 0)) {
         if (strcmp(key, "$regex") == 0 && !context->pendingBsonValue.regexBson.pattern && dataInfo->type == JSON_STRING && (context->pendingBsonValue.bsonType == REGEX_BSON_TYPE || context->pendingBsonValue.bsonType == NO_BSON_TYPE)) {
@@ -684,6 +694,16 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
     return YES;
 }
 
+- (BOOL)appendSymbol:(NSString *)value withKey:(const char *)key previousStructure:(void *)structure index:(int)index
+{
+    if (key == NULL) {
+        snprintf(_indexKey, sizeof(_indexKey), "%d", index);
+        key = _indexKey;
+    }
+    bson_append_symbol(_bson, key, [value UTF8String]);
+    return YES;
+}
+
 - (BOOL)appendDate:(int64_t)date withKey:(const char *)key previousStructure:(void *)structure index:(int)index
 {
     if (key == NULL) {
@@ -887,6 +907,17 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
     BOOL result;
     
     object = [[NSNumber alloc] initWithBool:boolValue];
+    result = [self addObject:object toStructure:structure withKey:key];
+    [object release];
+    return result;
+}
+
+- (BOOL)appendSymbol:(NSString *)value withKey:(const char *)key previousStructure:(void *)structure index:(int)index
+{
+    MODSymbol *object;
+    BOOL result;
+    
+    object = [[MODSymbol alloc] initWithValue:value];
     result = [self addObject:object toStructure:structure withKey:key];
     [object release];
     return result;

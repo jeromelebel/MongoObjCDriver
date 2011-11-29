@@ -28,6 +28,7 @@
 - (BOOL)appendDouble:(double)doubleValue withKey:(const char *)key previousStructure:(void *)structure index:(int)index;
 - (BOOL)appendNullWithKey:(const char *)key previousStructure:(void *)structure index:(int)index;
 - (BOOL)appendBool:(BOOL)boolValue withKey:(const char *)key previousStructure:(void *)structure index:(int)index;
+- (BOOL)appendSymbol:(NSString *)value withKey:(const char *)key previousStructure:(void *)structure index:(int)index;
 - (BOOL)appendRegexWithPattern:(const char *)pattern options:(const char *)options key:(const char *)key previousStructure:(void *)structure index:(int)index;
 - (BOOL)appendDataBinary:(const char *)binary withLength:(NSUInteger)length binaryType:(char)binaryType key:(const char *)key previousStructure:(void *)structure index:(int)index;
 

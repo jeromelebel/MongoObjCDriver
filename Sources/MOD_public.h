@@ -17,4 +17,5 @@
 #import "MODJsonParser.h"
 #import "MODBinary.h"
 #import "MODDBRef.h"
+#import "MODSymbol.h"
 #import "MODSortedMutableDictionary.h"

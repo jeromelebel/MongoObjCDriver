@@ -24,6 +24,9 @@
 /* Begin PBXBuildFile section */
 		02216F1F1412D47800789BD1 /* json.c in Sources */ = {isa = PBXBuildFile; fileRef = 02216EEA1412D32F00789BD1 /* json.c */; };
 		02216F681413031B00789BD1 /* json.c in Sources */ = {isa = PBXBuildFile; fileRef = 02216EEA1412D32F00789BD1 /* json.c */; };
+		023ECFFC14851BEE00185781 /* MODSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 023ECFFA14851BEE00185781 /* MODSymbol.h */; };
+		023ECFFD14851BEE00185781 /* MODSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 023ECFFB14851BEE00185781 /* MODSymbol.m */; };
+		023ECFFF1485237000185781 /* MODSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 023ECFFB14851BEE00185781 /* MODSymbol.m */; };
 		02411AB51432B8FA00A5FFCA /* MOD_public.h in Headers */ = {isa = PBXBuildFile; fileRef = 02411AB41432B8F900A5FFCA /* MOD_public.h */; };
 		02411AB91432D02700A5FFCA /* MODBinary.h in Headers */ = {isa = PBXBuildFile; fileRef = 02411AB71432D02600A5FFCA /* MODBinary.h */; };
 		02411ABA1432D02700A5FFCA /* MODBinary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02411AB81432D02600A5FFCA /* MODBinary.m */; };
@@ -176,6 +179,8 @@
 		02216F121412D32F00789BD1 /* multiobj.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = multiobj.json; sourceTree = "<group>"; };
 		02216F131412D32F00789BD1 /* yaml-comment.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "yaml-comment.json"; sourceTree = "<group>"; };
 		02216F141412D32F00789BD1 /* runtest */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = runtest; sourceTree = "<group>"; };
+		023ECFFA14851BEE00185781 /* MODSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODSymbol.h; sourceTree = "<group>"; };
+		023ECFFB14851BEE00185781 /* MODSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODSymbol.m; sourceTree = "<group>"; };
 		02411AB41432B8F900A5FFCA /* MOD_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOD_public.h; sourceTree = "<group>"; };
 		02411AB71432D02600A5FFCA /* MODBinary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODBinary.h; sourceTree = "<group>"; };
 		02411AB81432D02600A5FFCA /* MODBinary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODBinary.m; sourceTree = "<group>"; };
@@ -604,6 +609,8 @@
 				02AB057514296F9000B7CD19 /* MODObjectId.m */,
 				028CE603142E10BE0099B1F7 /* MODTimestamp.h */,
 				028CE604142E10BE0099B1F7 /* MODTimestamp.m */,
+				023ECFFA14851BEE00185781 /* MODSymbol.h */,
+				023ECFFB14851BEE00185781 /* MODSymbol.m */,
 				02CF87E7142F8AA3000C4C7F /* MODRegex.h */,
 				02CF87E8142F8AA3000C4C7F /* MODRegex.m */,
 				02411AB71432D02600A5FFCA /* MODBinary.h */,
@@ -676,6 +683,7 @@
 				02411AB91432D02700A5FFCA /* MODBinary.h in Headers */,
 				025C56211433E7E40064B010 /* MODDBRef.h in Headers */,
 				02B24273147D1BD6008A15A3 /* MODSortedMutableDictionary.h in Headers */,
+				023ECFFC14851BEE00185781 /* MODSymbol.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -814,6 +822,7 @@
 				02411ABA1432D02700A5FFCA /* MODBinary.m in Sources */,
 				025C56201433E7E40064B010 /* MODDBRef.m in Sources */,
 				02B24274147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */,
+				023ECFFD14851BEE00185781 /* MODSymbol.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -844,6 +853,7 @@
 				02411ABB1432D02700A5FFCA /* MODBinary.m in Sources */,
 				025C56231433EE0E0064B010 /* MODDBRef.m in Sources */,
 				02B24275147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */,
+				023ECFFF1485237000185781 /* MODSymbol.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
