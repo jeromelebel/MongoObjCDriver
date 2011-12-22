@@ -45,13 +45,13 @@
         MODSortedMutableDictionary *stats = nil;
         
         if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
-            bson output;
+            bson output = { NULL, 0 };
             
             if (mongo_simple_str_command(_mongoDatabase.mongo, [_mongoDatabase.databaseName UTF8String], "collstats", [_collectionName UTF8String], &output) == MONGO_OK) {
                 stats = [[self.mongoServer class] objectFromBson:&output];
                 [mongoQuery.mutableParameters setObject:stats forKey:@"collectionstats"];
-                bson_destroy(&output);
             }
+            bson_destroy(&output);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback(stats, mongoQuery);
@@ -525,7 +525,7 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
             bson bsonSort;
             bson bsonOutput;
             bson bsonScope;
-            bson bsonResult;
+            bson bsonResult = { NULL, 0 };
             NSError *error = nil;
             
             bson_init(&bsonQuery);
@@ -555,12 +555,12 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
                 bson_finish(&bsonScope);
             }
             if (!error) {
-                bson_init(&bsonResult);
                 mongo_map_reduce(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], [mapFunction UTF8String], [reduceFunction UTF8String], &bsonQuery, &bsonSort, limit, &bsonOutput, keepTemp?1:0, [finalizeFunction UTF8String], &bsonScope, jsmode?1:0, verbose?1:0, &bsonResult);
                 NSLog(@"%@", [MODServer objectFromBson:&bsonResult]);
             } else {
                 mongoQuery.error = error;
             }
+            bson_destroy(&bsonResult);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback(mongoQuery);

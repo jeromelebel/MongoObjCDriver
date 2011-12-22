@@ -196,17 +196,17 @@
     MODQuery *query;
     
     query = [self addQueryInQueue:^(MODQuery *mongoQuery){
-        bson output;
+        bson output = { NULL, 0 };
         MODSortedMutableDictionary *outputObjects = nil;
         
         if (!mongoQuery.canceled && mongo_simple_int_command(_mongo, "admin", "serverStatus", 1, &output) == MONGO_OK) {
             outputObjects = [[self class] objectFromBson:&output];
             [mongoQuery.mutableParameters setObject:outputObjects forKey:@"serverstatus"];
         }
-        bson_destroy(&output);
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback(outputObjects, mongoQuery);
         }];
+        bson_destroy(&output);
     }];
     [query.mutableParameters setObject:@"fetchserverstatus" forKey:@"command"];
     return query;
@@ -217,10 +217,13 @@
     MODQuery *query;
     
     query = [self addQueryInQueue:^(MODQuery *mongoQuery) {
-        bson output;
+        bson output = { NULL, 0 };
         NSMutableArray *list = nil;
         
-        if (!mongoQuery.canceled && mongo_simple_int_command(_mongo, "admin", "listDatabases", 1, &output) == MONGO_OK) {
+        /*if (self.authDatabase.length > 0) {
+            list = [[NSMutableArray alloc] initWithObjects:self.authDatabase, nil];
+            [mongoQuery.mutableParameters setObject:list forKey:@"databaselist"];
+        } else*/ if (!mongoQuery.canceled && mongo_simple_int_command(_mongo, "admin", "listDatabases", 1, &output) == MONGO_OK) {
             MODSortedMutableDictionary *outputObjects;
             
             outputObjects = [[self class] objectFromBson:&output];
@@ -229,11 +232,11 @@
                 [list addObject:[element objectForKey:@"name"]];
             }
             [mongoQuery.mutableParameters setObject:list forKey:@"databaselist"];
-            bson_destroy(&output);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback(list, mongoQuery);
         }];
+        bson_destroy(&output);
         [list release];
     }];
     [query.mutableParameters setObject:@"fetchdatabaselist" forKey:@"command"];

@@ -52,13 +52,13 @@
         MODSortedMutableDictionary *stats = nil;
         
         if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
-            bson output;
+            bson output = { NULL, 0 };
             
             if (mongo_simple_int_command(self.mongoServer.mongo, [_databaseName UTF8String], "dbstats", 1, &output) == MONGO_OK) {
                 stats = [[self.mongoServer class] objectFromBson:&output];
                 [mongoQuery.mutableParameters setObject:stats forKey:@"databasestats"];
-                bson_destroy(&output);
             }
+            bson_destroy(&output);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             if (callback) {
