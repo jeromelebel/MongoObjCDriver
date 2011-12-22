@@ -220,10 +220,10 @@
         bson output = { NULL, 0 };
         NSMutableArray *list = nil;
         
-        /*if (self.authDatabase.length > 0) {
+        if (self.authDatabase.length > 0) {
             list = [[NSMutableArray alloc] initWithObjects:self.authDatabase, nil];
             [mongoQuery.mutableParameters setObject:list forKey:@"databaselist"];
-        } else*/ if (!mongoQuery.canceled && mongo_simple_int_command(_mongo, "admin", "listDatabases", 1, &output) == MONGO_OK) {
+        } else if (!mongoQuery.canceled && mongo_simple_int_command(_mongo, "admin", "listDatabases", 1, &output) == MONGO_OK) {
             MODSortedMutableDictionary *outputObjects;
             
             outputObjects = [[self class] objectFromBson:&output];
