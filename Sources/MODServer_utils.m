@@ -301,20 +301,22 @@
 + (MODSortedMutableDictionary *)objectFromBson:(bson *)bsonObject
 {
     bson_iterator iterator;
-    MODSortedMutableDictionary *result;
+    MODSortedMutableDictionary *result = nil;
     
-    result = [[MODSortedMutableDictionary alloc] init];
-    bson_iterator_init(&iterator, bsonObject);
-    while (bson_iterator_next(&iterator) != BSON_EOO) {
-        NSString *key;
-        id value;
-        
-        key = [[NSString alloc] initWithUTF8String:bson_iterator_key(&iterator)];
-        value = [self objectFromBsonIterator:&iterator];
-        if (value) {
-            [result setObject:value forKey:key];
+    if (bsonObject->data) {
+        result = [[MODSortedMutableDictionary alloc] init];
+        bson_iterator_init(&iterator, bsonObject);
+        while (bson_iterator_next(&iterator) != BSON_EOO) {
+            NSString *key;
+            id value;
+            
+            key = [[NSString alloc] initWithUTF8String:bson_iterator_key(&iterator)];
+            value = [self objectFromBsonIterator:&iterator];
+            if (value) {
+                [result setObject:value forKey:key];
+            }
+            [key release];
         }
-        [key release];
     }
     return [result autorelease];
 }
