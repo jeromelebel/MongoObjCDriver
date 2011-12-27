@@ -387,9 +387,11 @@
             NSError *error = nil;
             
             bson_init(&bsonCriteria);
-            if (criteria && [criteria isKindOfClass:[NSString class]] && [criteria length] > 0) {
-                [MODJsonToBsonParser bsonFromJson:&bsonCriteria json:criteria error:&error];
-            } else if (criteria) {
+            if (criteria && [criteria isKindOfClass:[NSString class]]) {
+                if ([criteria length] > 0) {
+                    [MODJsonToBsonParser bsonFromJson:&bsonCriteria json:criteria error:&error];
+                }
+            } else if (criteria && [criteria isKindOfClass:[MODSortedMutableDictionary class]]) {
                 [[_mongoDatabase.mongoServer class] appendObject:criteria toBson:&bsonCriteria];
             } else {
                 error = [MODServer errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:@""];
