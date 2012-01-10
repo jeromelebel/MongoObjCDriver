@@ -31,6 +31,7 @@
 - (BOOL)appendSymbol:(NSString *)value withKey:(const char *)key previousStructure:(void *)structure index:(int)index;
 - (BOOL)appendRegexWithPattern:(const char *)pattern options:(const char *)options key:(const char *)key previousStructure:(void *)structure index:(int)index;
 - (BOOL)appendDataBinary:(const char *)binary withLength:(NSUInteger)length binaryType:(char)binaryType key:(const char *)key previousStructure:(void *)structure index:(int)index;
+- (BOOL)appendUndefinedWithKey:(const char *)key previousStructure:(void *)structure index:(int)index;
 
 @end
 

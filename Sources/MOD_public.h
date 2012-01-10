@@ -19,3 +19,4 @@
 #import "MODDBRef.h"
 #import "MODSymbol.h"
 #import "MODSortedMutableDictionary.h"
+#import "MODUndefined.h"

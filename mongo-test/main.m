@@ -139,6 +139,7 @@ static void testJson()
     testObjects(@"{\"mydate\":{\"$date\":1320066612000.000000}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[NSDate alloc] initWithTimeIntervalSince1970:1320066612] autorelease], @"mydate", nil]);
     testObjects(@"{\"false\":false,\"true\":true}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"false", [NSNumber numberWithBool:YES], @"true", nil]);
     testObjects(@"{\"my symbol\":{\"$symbol\":\"pour fred\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODSymbol alloc] initWithValue:@"pour fred"] autorelease], @"my symbol", nil]);
+    testObjects(@"{\"undefined value\":{\"$undefined\":\"$undefined\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODUndefined alloc] init] autorelease], @"undefined value", nil]);
     
     // test if can parse json in chunks, and we should get an error at the end of json
     parser = [[MODJsonToObjectParser alloc] init];

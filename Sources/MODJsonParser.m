@@ -308,6 +308,10 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
             clear_pending_value(context, YES);
             result = 0;
         }
+    } else if (key != NULL && strcmp(key, "$undefined") == 0 && index == 0 && dataInfo->type == JSON_STRING && strcmp(dataInfo->data, "$undefined") == 0) {
+        result = [context->target appendUndefinedWithKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure index:context->pendingBsonValue.index];
+        clear_pending_value(context, YES);
+        result = 0;
     } else if (key != NULL && (strcmp(key, "$regex") == 0 || strcmp(key, "$options") == 0)) {
         if (strcmp(key, "$regex") == 0 && !context->pendingBsonValue.regexBson.pattern && dataInfo->type == JSON_STRING && (context->pendingBsonValue.bsonType == REGEX_BSON_TYPE || context->pendingBsonValue.bsonType == NO_BSON_TYPE)) {
             context->pendingBsonValue.bsonType = REGEX_BSON_TYPE;
@@ -742,6 +746,16 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
     return YES;
 }
 
+- (BOOL)appendUndefinedWithKey:(const char *)key previousStructure:(void *)structure index:(int)index
+{
+    if (key == NULL) {
+        snprintf(_indexKey, sizeof(_indexKey), "%d", index);
+        key = _indexKey;
+    }
+    bson_append_undefined(_bson, key);
+    return YES;
+}
+
 @end
 
 @implementation MODJsonToObjectParser
@@ -969,6 +983,17 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
     BOOL result;
     
     object = [[MODBinary alloc] initWithBytes:binary length:length binaryType:binaryType];
+    result = [self addObject:object toStructure:structure withKey:key];
+    [object release];
+    return result;
+}
+
+- (BOOL)appendUndefinedWithKey:(const char *)key previousStructure:(void *)structure index:(int)index
+{
+    MODUndefined *object;
+    BOOL result;
+    
+    object = [[MODUndefined alloc] init];
     result = [self addObject:object toStructure:structure withKey:key];
     [object release];
     return result;
