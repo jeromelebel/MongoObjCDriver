@@ -832,6 +832,7 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
     
     result = [[MODSortedMutableDictionary alloc] init];
     if (![self addObject:result toStructure:structure withKey:key]) {
+        [result release];
         result = nil;
     }
     return [result autorelease];
