@@ -271,14 +271,14 @@
             if (jsonCriteria && [jsonCriteria length] > 0) {
                 [MODJsonToBsonParser bsonFromJson:&bsonCriteria json:jsonCriteria error:&error];
             } else {
-                error = [MODServer errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:@""];
+                error = [MODServer errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
             }
             bson_finish(&bsonCriteria);
             bson_init(&bsonUpdate);
             if (error == nil && update && [update length] > 0) {
                 [MODJsonToBsonParser bsonFromJson:&bsonUpdate json:update error:&error];
             } else if (error == nil && (!update || [update length] > 0)) {
-                error = [MODServer errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:@""];
+                error = [MODServer errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
             }
             bson_finish(&bsonUpdate);
             if (error == nil) {
@@ -394,7 +394,7 @@
             } else if (criteria && [criteria isKindOfClass:[MODSortedMutableDictionary class]]) {
                 [[_mongoDatabase.mongoServer class] appendObject:criteria toBson:&bsonCriteria];
             } else {
-                error = [MODServer errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:@""];
+                error = [MODServer errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
             }
             bson_finish(&bsonCriteria);
             if (error == nil) {
