@@ -103,7 +103,7 @@
         }
         result = mongo_cmd_authenticate(_mongo, dbName, [userName UTF8String], [password UTF8String]) == MONGO_OK;
         if (!result) {
-            *error = [[self class] errorWithErrorDomain:MODMongoErrorDomain code:_mongo->err descriptionDetails:_mongo->errstr?[NSString stringWithUTF8String:_mongo->errstr]:NULL];
+            *error = [[self class] errorWithErrorDomain:MODMongoErrorDomain code:_mongo->err descriptionDetails:_mongo->lasterrstr?[NSString stringWithUTF8String:_mongo->lasterrstr]:NULL];
         }
     }
     return result;
@@ -125,7 +125,7 @@
     [mongoQuery.mutableParameters setObject:self forKey:@"mongoserver"];
     [mongoQuery ends];
     if (_mongo->err != MONGO_CONN_SUCCESS) {
-        mongoQuery.error = [[self class] errorWithErrorDomain:MODMongoErrorDomain code:_mongo->err descriptionDetails:_mongo->errstr?[NSString stringWithUTF8String:_mongo->errstr]:NULL];
+        mongoQuery.error = [[self class] errorWithErrorDomain:MODMongoErrorDomain code:_mongo->err descriptionDetails:_mongo->lasterrstr?[NSString stringWithUTF8String:_mongo->lasterrstr]:NULL];
         _mongo->err = MONGO_CONN_SUCCESS;
     }
 }
