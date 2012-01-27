@@ -45,7 +45,12 @@
                 description = @"The response is not the expected length.";
                 break;
             case MONGO_COMMAND_FAILED:
-                description = @"The command returned with 'ok' value of 0.";
+                if (descriptionDetails) {
+                    description = [NSString stringWithFormat:@"Error returned by the server: \"%@\"", descriptionDetails];
+                    descriptionDetails = nil;
+                } else {
+                    description = @"The command returned with 'ok' value of 0.";
+                }
                 break;
             case MONGO_BSON_INVALID:
                 description = @"BSON not valid for the specified op.";
