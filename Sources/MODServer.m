@@ -130,12 +130,6 @@
     }
 }
 
-- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withTarget:(id)target callback:(SEL)callbackSelector
-{
-    [self mongoQueryDidFinish:mongoQuery];
-    [target performSelectorOnMainThread:callbackSelector withObject:mongoQuery waitUntilDone:NO];
-}
-
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock
 {
     if (![mongoQuery.parameters objectForKey:@"command"]) {
