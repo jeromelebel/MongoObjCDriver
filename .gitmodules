@@ -4,3 +4,6 @@
 [submodule "Libraries/libjson"]
 	path = Libraries/libjson
 	url = git@github.com:fotonauts/libjson.git
+[submodule "Libraries/json-c"]
+	path = Libraries/json-c
+	url = git@github.com:fotonauts/json-c.git
