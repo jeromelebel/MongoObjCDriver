@@ -23,8 +23,6 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		02216F1F1412D47800789BD1 /* json.c in Sources */ = {isa = PBXBuildFile; fileRef = 02216EEA1412D32F00789BD1 /* json.c */; };
-		02216F681413031B00789BD1 /* json.c in Sources */ = {isa = PBXBuildFile; fileRef = 02216EEA1412D32F00789BD1 /* json.c */; };
 		023ECFFC14851BEE00185781 /* MODSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 023ECFFA14851BEE00185781 /* MODSymbol.h */; };
 		023ECFFD14851BEE00185781 /* MODSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 023ECFFB14851BEE00185781 /* MODSymbol.m */; };
 		023ECFFF1485237000185781 /* MODSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 023ECFFB14851BEE00185781 /* MODSymbol.m */; };
@@ -132,57 +130,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		02216EDE1412D32F00789BD1 /* changelog */ = {isa = PBXFileReference; lastKnownFileType = text; path = changelog; sourceTree = "<group>"; };
-		02216EDF1412D32F00789BD1 /* compat */ = {isa = PBXFileReference; lastKnownFileType = text; path = compat; sourceTree = "<group>"; };
-		02216EE01412D32F00789BD1 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
-		02216EE11412D32F00789BD1 /* copyright */ = {isa = PBXFileReference; lastKnownFileType = text; path = copyright; sourceTree = "<group>"; };
-		02216EE21412D32F00789BD1 /* docs */ = {isa = PBXFileReference; lastKnownFileType = text; path = docs; sourceTree = "<group>"; };
-		02216EE31412D32F00789BD1 /* libjson-dev.dirs */ = {isa = PBXFileReference; lastKnownFileType = text; path = "libjson-dev.dirs"; sourceTree = "<group>"; };
-		02216EE41412D32F00789BD1 /* libjson-dev.install */ = {isa = PBXFileReference; lastKnownFileType = text; path = "libjson-dev.install"; sourceTree = "<group>"; };
-		02216EE51412D32F00789BD1 /* libjson.dirs */ = {isa = PBXFileReference; lastKnownFileType = text; path = libjson.dirs; sourceTree = "<group>"; };
-		02216EE61412D32F00789BD1 /* libjson.install */ = {isa = PBXFileReference; lastKnownFileType = text; path = libjson.install; sourceTree = "<group>"; };
-		02216EE71412D32F00789BD1 /* rules */ = {isa = PBXFileReference; lastKnownFileType = text; path = rules; sourceTree = "<group>"; };
-		02216EE81412D32F00789BD1 /* watch */ = {isa = PBXFileReference; lastKnownFileType = text; path = watch; sourceTree = "<group>"; };
-		02216EE91412D32F00789BD1 /* documentation */ = {isa = PBXFileReference; lastKnownFileType = text; path = documentation; sourceTree = "<group>"; };
-		02216EEA1412D32F00789BD1 /* json.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = json.c; sourceTree = "<group>"; };
-		02216EEB1412D32F00789BD1 /* json.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
-		02216EEC1412D32F00789BD1 /* jsonlint.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = jsonlint.c; sourceTree = "<group>"; };
-		02216EED1412D32F00789BD1 /* libjson.pc.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = libjson.pc.in; sourceTree = "<group>"; };
-		02216EEE1412D32F00789BD1 /* Makefile */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		02216EF21412D32F00789BD1 /* empty.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = empty.json; sourceTree = "<group>"; };
-		02216EF31412D32F00789BD1 /* esc0.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = esc0.json; sourceTree = "<group>"; };
-		02216EF41412D32F00789BD1 /* esc1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = esc1.json; sourceTree = "<group>"; };
-		02216EF51412D32F00789BD1 /* esc2.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = esc2.json; sourceTree = "<group>"; };
-		02216EF61412D32F00789BD1 /* esc3.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = esc3.json; sourceTree = "<group>"; };
-		02216EF71412D32F00789BD1 /* esc4.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = esc4.json; sourceTree = "<group>"; };
-		02216EF81412D32F00789BD1 /* float0.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = float0.json; sourceTree = "<group>"; };
-		02216EF91412D32F00789BD1 /* float1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = float1.json; sourceTree = "<group>"; };
-		02216EFA1412D32F00789BD1 /* object0.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = object0.json; sourceTree = "<group>"; };
-		02216EFB1412D32F00789BD1 /* object1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = object1.json; sourceTree = "<group>"; };
-		02216EFC1412D32F00789BD1 /* object2.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = object2.json; sourceTree = "<group>"; };
-		02216EFD1412D32F00789BD1 /* object3.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = object3.json; sourceTree = "<group>"; };
-		02216EFF1412D32F00789BD1 /* 1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 1.json; sourceTree = "<group>"; };
-		02216F001412D32F00789BD1 /* 2.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 2.json; sourceTree = "<group>"; };
-		02216F011412D32F00789BD1 /* 2obj.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 2obj.json; sourceTree = "<group>"; };
-		02216F021412D32F00789BD1 /* 3.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 3.json; sourceTree = "<group>"; };
-		02216F031412D32F00789BD1 /* 4.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 4.json; sourceTree = "<group>"; };
-		02216F041412D32F00789BD1 /* 5.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 5.json; sourceTree = "<group>"; };
-		02216F051412D32F00789BD1 /* 6.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 6.json; sourceTree = "<group>"; };
-		02216F061412D32F00789BD1 /* 7.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = 7.json; sourceTree = "<group>"; };
-		02216F071412D32F00789BD1 /* c-comment.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "c-comment.json"; sourceTree = "<group>"; };
-		02216F081412D32F00789BD1 /* complex0.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = complex0.json; sourceTree = "<group>"; };
-		02216F091412D32F00789BD1 /* emptyobj.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = emptyobj.json; sourceTree = "<group>"; };
-		02216F0A1412D32F00789BD1 /* esc0.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = esc0.json; sourceTree = "<group>"; };
-		02216F0B1412D32F00789BD1 /* esc1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = esc1.json; sourceTree = "<group>"; };
-		02216F0C1412D32F00789BD1 /* esc2.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = esc2.json; sourceTree = "<group>"; };
-		02216F0D1412D32F00789BD1 /* esc3.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = esc3.json; sourceTree = "<group>"; };
-		02216F0E1412D32F00789BD1 /* esc4.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = esc4.json; sourceTree = "<group>"; };
-		02216F0F1412D32F00789BD1 /* float0.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = float0.json; sourceTree = "<group>"; };
-		02216F101412D32F00789BD1 /* float1.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = float1.json; sourceTree = "<group>"; };
-		02216F111412D32F00789BD1 /* float2.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = float2.json; sourceTree = "<group>"; };
-		02216F121412D32F00789BD1 /* multiobj.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = multiobj.json; sourceTree = "<group>"; };
-		02216F131412D32F00789BD1 /* yaml-comment.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "yaml-comment.json"; sourceTree = "<group>"; };
-		02216F141412D32F00789BD1 /* runtest */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = runtest; sourceTree = "<group>"; };
 		023ECFFA14851BEE00185781 /* MODSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODSymbol.h; sourceTree = "<group>"; };
 		023ECFFB14851BEE00185781 /* MODSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODSymbol.m; sourceTree = "<group>"; };
 		02411AB41432B8F900A5FFCA /* MOD_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOD_public.h; sourceTree = "<group>"; };
@@ -361,96 +308,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		02216EDC1412D32F00789BD1 /* libjson */ = {
-			isa = PBXGroup;
-			children = (
-				02216EDD1412D32F00789BD1 /* debian */,
-				02216EE91412D32F00789BD1 /* documentation */,
-				02216EEA1412D32F00789BD1 /* json.c */,
-				02216EEB1412D32F00789BD1 /* json.h */,
-				02216EEC1412D32F00789BD1 /* jsonlint.c */,
-				02216EED1412D32F00789BD1 /* libjson.pc.in */,
-				02216EEE1412D32F00789BD1 /* Makefile */,
-				02216EF01412D32F00789BD1 /* tests */,
-			);
-			path = libjson;
-			sourceTree = "<group>";
-		};
-		02216EDD1412D32F00789BD1 /* debian */ = {
-			isa = PBXGroup;
-			children = (
-				02216EDE1412D32F00789BD1 /* changelog */,
-				02216EDF1412D32F00789BD1 /* compat */,
-				02216EE01412D32F00789BD1 /* control */,
-				02216EE11412D32F00789BD1 /* copyright */,
-				02216EE21412D32F00789BD1 /* docs */,
-				02216EE31412D32F00789BD1 /* libjson-dev.dirs */,
-				02216EE41412D32F00789BD1 /* libjson-dev.install */,
-				02216EE51412D32F00789BD1 /* libjson.dirs */,
-				02216EE61412D32F00789BD1 /* libjson.install */,
-				02216EE71412D32F00789BD1 /* rules */,
-				02216EE81412D32F00789BD1 /* watch */,
-			);
-			path = debian;
-			sourceTree = "<group>";
-		};
-		02216EF01412D32F00789BD1 /* tests */ = {
-			isa = PBXGroup;
-			children = (
-				02216EF11412D32F00789BD1 /* bad */,
-				02216EFE1412D32F00789BD1 /* good */,
-				02216F141412D32F00789BD1 /* runtest */,
-			);
-			path = tests;
-			sourceTree = "<group>";
-		};
-		02216EF11412D32F00789BD1 /* bad */ = {
-			isa = PBXGroup;
-			children = (
-				02216EF21412D32F00789BD1 /* empty.json */,
-				02216EF31412D32F00789BD1 /* esc0.json */,
-				02216EF41412D32F00789BD1 /* esc1.json */,
-				02216EF51412D32F00789BD1 /* esc2.json */,
-				02216EF61412D32F00789BD1 /* esc3.json */,
-				02216EF71412D32F00789BD1 /* esc4.json */,
-				02216EF81412D32F00789BD1 /* float0.json */,
-				02216EF91412D32F00789BD1 /* float1.json */,
-				02216EFA1412D32F00789BD1 /* object0.json */,
-				02216EFB1412D32F00789BD1 /* object1.json */,
-				02216EFC1412D32F00789BD1 /* object2.json */,
-				02216EFD1412D32F00789BD1 /* object3.json */,
-			);
-			path = bad;
-			sourceTree = "<group>";
-		};
-		02216EFE1412D32F00789BD1 /* good */ = {
-			isa = PBXGroup;
-			children = (
-				02216EFF1412D32F00789BD1 /* 1.json */,
-				02216F001412D32F00789BD1 /* 2.json */,
-				02216F011412D32F00789BD1 /* 2obj.json */,
-				02216F021412D32F00789BD1 /* 3.json */,
-				02216F031412D32F00789BD1 /* 4.json */,
-				02216F041412D32F00789BD1 /* 5.json */,
-				02216F051412D32F00789BD1 /* 6.json */,
-				02216F061412D32F00789BD1 /* 7.json */,
-				02216F071412D32F00789BD1 /* c-comment.json */,
-				02216F081412D32F00789BD1 /* complex0.json */,
-				02216F091412D32F00789BD1 /* emptyobj.json */,
-				02216F0A1412D32F00789BD1 /* esc0.json */,
-				02216F0B1412D32F00789BD1 /* esc1.json */,
-				02216F0C1412D32F00789BD1 /* esc2.json */,
-				02216F0D1412D32F00789BD1 /* esc3.json */,
-				02216F0E1412D32F00789BD1 /* esc4.json */,
-				02216F0F1412D32F00789BD1 /* float0.json */,
-				02216F101412D32F00789BD1 /* float1.json */,
-				02216F111412D32F00789BD1 /* float2.json */,
-				02216F121412D32F00789BD1 /* multiobj.json */,
-				02216F131412D32F00789BD1 /* yaml-comment.json */,
-			);
-			path = good;
-			sourceTree = "<group>";
-		};
 		0251E2FE14F02CDD00D1BA8B /* json-c */ = {
 			isa = PBXGroup;
 			children = (
@@ -519,7 +376,6 @@
 			children = (
 				0251E2FE14F02CDD00D1BA8B /* json-c */,
 				02A85F0214103D4D004F3FE9 /* mongo-c-driver */,
-				02216EDC1412D32F00789BD1 /* libjson */,
 			);
 			path = Libraries;
 			sourceTree = "<group>";
@@ -943,7 +799,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02216F681413031B00789BD1 /* json.c in Sources */,
 				02A85F4614103D64004F3FE9 /* bson.c in Sources */,
 				02A85F4714103D64004F3FE9 /* encoding.c in Sources */,
 				02A85F4814103D64004F3FE9 /* gridfs.c in Sources */,
@@ -974,7 +829,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02216F1F1412D47800789BD1 /* json.c in Sources */,
 				02F121C31410EF5200197811 /* main.m in Sources */,
 				02F121CC1410F01B00197811 /* MODServer.m in Sources */,
 				02F121CD1410F01D00197811 /* MODQuery.m in Sources */,
