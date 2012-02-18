@@ -13,6 +13,7 @@
 			buildPhases = (
 				02216F191412D3B700789BD1 /* mongo-c-driver */,
 				02216F1A1412D3CB00789BD1 /* libjson */,
+				0251E33814F02D1B00D1BA8B /* json-c */,
 			);
 			dependencies = (
 			);
@@ -187,6 +188,62 @@
 		02411AB41432B8F900A5FFCA /* MOD_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOD_public.h; sourceTree = "<group>"; };
 		02411AB71432D02600A5FFCA /* MODBinary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODBinary.h; sourceTree = "<group>"; };
 		02411AB81432D02600A5FFCA /* MODBinary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODBinary.m; sourceTree = "<group>"; };
+		0251E2FF14F02CDD00D1BA8B /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		0251E30014F02CDD00D1BA8B /* arraylist.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = arraylist.c; sourceTree = "<group>"; };
+		0251E30114F02CDD00D1BA8B /* arraylist.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = arraylist.h; sourceTree = "<group>"; };
+		0251E30214F02CDD00D1BA8B /* AUTHORS */ = {isa = PBXFileReference; lastKnownFileType = text; path = AUTHORS; sourceTree = "<group>"; };
+		0251E30314F02CDD00D1BA8B /* autogen.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = autogen.sh; sourceTree = "<group>"; };
+		0251E30414F02CDD00D1BA8B /* bits.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bits.h; sourceTree = "<group>"; };
+		0251E30514F02CDD00D1BA8B /* ChangeLog */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChangeLog; sourceTree = "<group>"; };
+		0251E30614F02CDD00D1BA8B /* config.h.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = config.h.in; sourceTree = "<group>"; };
+		0251E30714F02CDD00D1BA8B /* config.h.win32 */ = {isa = PBXFileReference; lastKnownFileType = text; path = config.h.win32; sourceTree = "<group>"; };
+		0251E30814F02CDD00D1BA8B /* configure.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = configure.in; sourceTree = "<group>"; };
+		0251E30914F02CDD00D1BA8B /* COPYING */ = {isa = PBXFileReference; lastKnownFileType = text; path = COPYING; sourceTree = "<group>"; };
+		0251E30A14F02CDD00D1BA8B /* debug.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = debug.c; sourceTree = "<group>"; };
+		0251E30B14F02CDD00D1BA8B /* debug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = debug.h; sourceTree = "<group>"; };
+		0251E30C14F02CDD00D1BA8B /* Doxyfile */ = {isa = PBXFileReference; lastKnownFileType = text; path = Doxyfile; sourceTree = "<group>"; };
+		0251E30D14F02CDD00D1BA8B /* INSTALL */ = {isa = PBXFileReference; lastKnownFileType = text; path = INSTALL; sourceTree = "<group>"; };
+		0251E30E14F02CDD00D1BA8B /* json-c.vcproj */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "json-c.vcproj"; sourceTree = "<group>"; };
+		0251E30F14F02CDD00D1BA8B /* json.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		0251E31014F02CDD00D1BA8B /* json.pc.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = json.pc.in; sourceTree = "<group>"; };
+		0251E31114F02CDD00D1BA8B /* json_config.h.in */ = {isa = PBXFileReference; lastKnownFileType = text; path = json_config.h.in; sourceTree = "<group>"; };
+		0251E31214F02CDD00D1BA8B /* json_inttypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json_inttypes.h; sourceTree = "<group>"; };
+		0251E31314F02CDD00D1BA8B /* json_object.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = json_object.c; sourceTree = "<group>"; };
+		0251E31414F02CDD00D1BA8B /* json_object.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json_object.h; sourceTree = "<group>"; };
+		0251E31514F02CDD00D1BA8B /* json_object_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json_object_private.h; sourceTree = "<group>"; };
+		0251E31614F02CDD00D1BA8B /* json_tokener.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = json_tokener.c; sourceTree = "<group>"; };
+		0251E31714F02CDD00D1BA8B /* json_tokener.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json_tokener.h; sourceTree = "<group>"; };
+		0251E31814F02CDD00D1BA8B /* json_util.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = json_util.c; sourceTree = "<group>"; };
+		0251E31914F02CDD00D1BA8B /* json_util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json_util.h; sourceTree = "<group>"; };
+		0251E31A14F02CDD00D1BA8B /* linkhash.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = linkhash.c; sourceTree = "<group>"; };
+		0251E31B14F02CDD00D1BA8B /* linkhash.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = linkhash.h; sourceTree = "<group>"; };
+		0251E31C14F02CDD00D1BA8B /* Makefile.am */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
+		0251E31D14F02CDD00D1BA8B /* NEWS */ = {isa = PBXFileReference; lastKnownFileType = text; path = NEWS; sourceTree = "<group>"; };
+		0251E31E14F02CDD00D1BA8B /* parse_int64.test */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = parse_int64.test; sourceTree = "<group>"; };
+		0251E31F14F02CDD00D1BA8B /* printbuf.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = printbuf.c; sourceTree = "<group>"; };
+		0251E32014F02CDD00D1BA8B /* printbuf.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = printbuf.h; sourceTree = "<group>"; };
+		0251E32114F02CDD00D1BA8B /* README */ = {isa = PBXFileReference; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
+		0251E32214F02CDD00D1BA8B /* README-WIN32.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = "README-WIN32.html"; sourceTree = "<group>"; };
+		0251E32314F02CDD00D1BA8B /* README.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = README.html; sourceTree = "<group>"; };
+		0251E32414F02CDD00D1BA8B /* RELEASE_CHECKLIST.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = RELEASE_CHECKLIST.txt; sourceTree = "<group>"; };
+		0251E32514F02CDD00D1BA8B /* test-defs.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = "test-defs.sh"; sourceTree = "<group>"; };
+		0251E32614F02CDD00D1BA8B /* test1.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = test1.c; sourceTree = "<group>"; };
+		0251E32714F02CDD00D1BA8B /* test1.expected */ = {isa = PBXFileReference; lastKnownFileType = text; path = test1.expected; sourceTree = "<group>"; };
+		0251E32814F02CDD00D1BA8B /* test1.test */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = test1.test; sourceTree = "<group>"; };
+		0251E32914F02CDD00D1BA8B /* test2.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = test2.c; sourceTree = "<group>"; };
+		0251E32A14F02CDD00D1BA8B /* test2.expected */ = {isa = PBXFileReference; lastKnownFileType = text; path = test2.expected; sourceTree = "<group>"; };
+		0251E32B14F02CDD00D1BA8B /* test2.test */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = test2.test; sourceTree = "<group>"; };
+		0251E32C14F02CDD00D1BA8B /* test4.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = test4.c; sourceTree = "<group>"; };
+		0251E32D14F02CDD00D1BA8B /* test4.expected */ = {isa = PBXFileReference; lastKnownFileType = text; path = test4.expected; sourceTree = "<group>"; };
+		0251E32E14F02CDD00D1BA8B /* test4.test */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = test4.test; sourceTree = "<group>"; };
+		0251E32F14F02CDD00D1BA8B /* test_cast.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = test_cast.c; sourceTree = "<group>"; };
+		0251E33014F02CDD00D1BA8B /* test_cast.expected */ = {isa = PBXFileReference; lastKnownFileType = text; path = test_cast.expected; sourceTree = "<group>"; };
+		0251E33114F02CDD00D1BA8B /* test_cast.test */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = test_cast.test; sourceTree = "<group>"; };
+		0251E33214F02CDD00D1BA8B /* test_null.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = test_null.c; sourceTree = "<group>"; };
+		0251E33314F02CDD00D1BA8B /* test_null.expected */ = {isa = PBXFileReference; lastKnownFileType = text; path = test_null.expected; sourceTree = "<group>"; };
+		0251E33414F02CDD00D1BA8B /* test_null.test */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = test_null.test; sourceTree = "<group>"; };
+		0251E33514F02CDD00D1BA8B /* test_parse_int64.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = test_parse_int64.c; sourceTree = "<group>"; };
+		0251E33614F02CDD00D1BA8B /* test_parse_int64.expected */ = {isa = PBXFileReference; lastKnownFileType = text; path = test_parse_int64.expected; sourceTree = "<group>"; };
 		025C561E1433E7E40064B010 /* MODDBRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODDBRef.m; sourceTree = "<group>"; };
 		025C561F1433E7E40064B010 /* MODDBRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODDBRef.h; sourceTree = "<group>"; };
 		02688DDA14119CF50014ED51 /* MODDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODDatabase.h; sourceTree = "<group>"; };
@@ -394,9 +451,73 @@
 			path = good;
 			sourceTree = "<group>";
 		};
+		0251E2FE14F02CDD00D1BA8B /* json-c */ = {
+			isa = PBXGroup;
+			children = (
+				0251E2FF14F02CDD00D1BA8B /* .gitignore */,
+				0251E30014F02CDD00D1BA8B /* arraylist.c */,
+				0251E30114F02CDD00D1BA8B /* arraylist.h */,
+				0251E30214F02CDD00D1BA8B /* AUTHORS */,
+				0251E30314F02CDD00D1BA8B /* autogen.sh */,
+				0251E30414F02CDD00D1BA8B /* bits.h */,
+				0251E30514F02CDD00D1BA8B /* ChangeLog */,
+				0251E30614F02CDD00D1BA8B /* config.h.in */,
+				0251E30714F02CDD00D1BA8B /* config.h.win32 */,
+				0251E30814F02CDD00D1BA8B /* configure.in */,
+				0251E30914F02CDD00D1BA8B /* COPYING */,
+				0251E30A14F02CDD00D1BA8B /* debug.c */,
+				0251E30B14F02CDD00D1BA8B /* debug.h */,
+				0251E30C14F02CDD00D1BA8B /* Doxyfile */,
+				0251E30D14F02CDD00D1BA8B /* INSTALL */,
+				0251E30E14F02CDD00D1BA8B /* json-c.vcproj */,
+				0251E30F14F02CDD00D1BA8B /* json.h */,
+				0251E31014F02CDD00D1BA8B /* json.pc.in */,
+				0251E31114F02CDD00D1BA8B /* json_config.h.in */,
+				0251E31214F02CDD00D1BA8B /* json_inttypes.h */,
+				0251E31314F02CDD00D1BA8B /* json_object.c */,
+				0251E31414F02CDD00D1BA8B /* json_object.h */,
+				0251E31514F02CDD00D1BA8B /* json_object_private.h */,
+				0251E31614F02CDD00D1BA8B /* json_tokener.c */,
+				0251E31714F02CDD00D1BA8B /* json_tokener.h */,
+				0251E31814F02CDD00D1BA8B /* json_util.c */,
+				0251E31914F02CDD00D1BA8B /* json_util.h */,
+				0251E31A14F02CDD00D1BA8B /* linkhash.c */,
+				0251E31B14F02CDD00D1BA8B /* linkhash.h */,
+				0251E31C14F02CDD00D1BA8B /* Makefile.am */,
+				0251E31D14F02CDD00D1BA8B /* NEWS */,
+				0251E31E14F02CDD00D1BA8B /* parse_int64.test */,
+				0251E31F14F02CDD00D1BA8B /* printbuf.c */,
+				0251E32014F02CDD00D1BA8B /* printbuf.h */,
+				0251E32114F02CDD00D1BA8B /* README */,
+				0251E32214F02CDD00D1BA8B /* README-WIN32.html */,
+				0251E32314F02CDD00D1BA8B /* README.html */,
+				0251E32414F02CDD00D1BA8B /* RELEASE_CHECKLIST.txt */,
+				0251E32514F02CDD00D1BA8B /* test-defs.sh */,
+				0251E32614F02CDD00D1BA8B /* test1.c */,
+				0251E32714F02CDD00D1BA8B /* test1.expected */,
+				0251E32814F02CDD00D1BA8B /* test1.test */,
+				0251E32914F02CDD00D1BA8B /* test2.c */,
+				0251E32A14F02CDD00D1BA8B /* test2.expected */,
+				0251E32B14F02CDD00D1BA8B /* test2.test */,
+				0251E32C14F02CDD00D1BA8B /* test4.c */,
+				0251E32D14F02CDD00D1BA8B /* test4.expected */,
+				0251E32E14F02CDD00D1BA8B /* test4.test */,
+				0251E32F14F02CDD00D1BA8B /* test_cast.c */,
+				0251E33014F02CDD00D1BA8B /* test_cast.expected */,
+				0251E33114F02CDD00D1BA8B /* test_cast.test */,
+				0251E33214F02CDD00D1BA8B /* test_null.c */,
+				0251E33314F02CDD00D1BA8B /* test_null.expected */,
+				0251E33414F02CDD00D1BA8B /* test_null.test */,
+				0251E33514F02CDD00D1BA8B /* test_parse_int64.c */,
+				0251E33614F02CDD00D1BA8B /* test_parse_int64.expected */,
+			);
+			path = "json-c";
+			sourceTree = "<group>";
+		};
 		02A85F0114103D4D004F3FE9 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				0251E2FE14F02CDD00D1BA8B /* json-c */,
 				02A85F0214103D4D004F3FE9 /* mongo-c-driver */,
 				02216EDC1412D32F00789BD1 /* libjson */,
 			);
@@ -800,6 +921,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "module_name=\"libjson\"\nmodule_owner=\"fotonauts\"\nmodule_branch=\"master\"\nmodule_path=\"Libraries/${module_name}\"\n\nfiles=`ls \"${module_path}\" 2> /dev/null`\nif [ \"${files}\" = \"\" ] ; then\n  if [ -d .git ] ; then\n    echo \"\"\n  else\n    cd \"${module_path}\"\n    curl -o \"${module_name}.zip\" -L \"https://nodeload.github.com/${module_owner}/${module_name}/zipball/${module_branch}\"\n    unzip \"${module_name}.zip\"\n    rm \"${module_name}.zip\"\n    module_unzip_dir=`ls`\n    cd \"${module_unzip_dir}\"\n    mv * ..\n    cd ..\n    rm -fr \"${module_unzip_dir}\"\n  fi\nfi\n";
+		};
+		0251E33814F02D1B00D1BA8B /* json-c */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "json-c";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "module_name=\"json-c\"\nmodule_owner=\"fotonauts\"\nmodule_branch=\"master\"\nmodule_path=\"Libraries/${module_name}\"\n\nfiles=`ls \"${module_path}\" 2> /dev/null`\nif [ \"${files}\" = \"\" ] ; then\nif [ -d .git ] ; then\necho \"\"\nelse\ncd \"${module_path}\"\ncurl -o \"${module_name}.zip\" -L \"https://nodeload.github.com/${module_owner}/${module_name}/zipball/${module_branch}\"\nunzip \"${module_name}.zip\"\nrm \"${module_name}.zip\"\nmodule_unzip_dir=`ls`\ncd \"${module_unzip_dir}\"\nmv * ..\ncd ..\nrm -fr \"${module_unzip_dir}\"\nfi\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
