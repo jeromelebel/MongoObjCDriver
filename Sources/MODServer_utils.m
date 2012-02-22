@@ -27,7 +27,7 @@
                 description = @"An error occured while calling connect().";
                 break;
             case MONGO_CONN_ADDR_FAIL:
-                description = @"Cannot an ip address with this domain name.";
+                description = @"Cannot get an ip address with this domain name.";
                 break;
             case MONGO_CONN_NOT_MASTER:
                 description = @"Warning: connected to a non-master node (read-only).";
