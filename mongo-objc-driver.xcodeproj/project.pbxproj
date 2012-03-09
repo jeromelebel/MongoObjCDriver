@@ -741,7 +741,7 @@
 		02ABA1B614103B36000417F4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 02ABA1B914103B36000417F4 /* Build configuration list for PBXProject "mongo-objc-driver" */;
 			compatibilityVersion = "Xcode 3.2";
