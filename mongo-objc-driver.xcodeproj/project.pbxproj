@@ -65,7 +65,6 @@
 		02A85F61141080A2004F3FE9 /* gridfs.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F1F14103D4D004F3FE9 /* gridfs.h */; };
 		02A85F62141080A2004F3FE9 /* md5.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F2114103D4D004F3FE9 /* md5.h */; };
 		02A85F63141080A2004F3FE9 /* mongo.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F2314103D4D004F3FE9 /* mongo.h */; };
-		02A85F65141080A2004F3FE9 /* platform.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F2B14103D4E004F3FE9 /* platform.h */; };
 		02AB057614296F9000B7CD19 /* MODObjectId.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB057414296F9000B7CD19 /* MODObjectId.h */; };
 		02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
 		02AB057814296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
@@ -226,7 +225,6 @@
 		02A85F2214103D4D004F3FE9 /* mongo.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = mongo.c; sourceTree = "<group>"; };
 		02A85F2314103D4D004F3FE9 /* mongo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mongo.h; sourceTree = "<group>"; };
 		02A85F2614103D4D004F3FE9 /* numbers.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = numbers.c; sourceTree = "<group>"; };
-		02A85F2B14103D4E004F3FE9 /* platform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
 		02A85F2D14103D4E004F3FE9 /* auth.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = auth.c; sourceTree = "<group>"; };
 		02A85F2E14103D4E004F3FE9 /* benchmark.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = benchmark.c; sourceTree = "<group>"; };
 		02A85F2F14103D4E004F3FE9 /* bson.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bson.c; sourceTree = "<group>"; };
@@ -266,7 +264,6 @@
 		02ABA1CD14103B37000417F4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		02AC8DF3151C6B8F00F7531B /* env_default.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = env_default.c; sourceTree = "<group>"; };
 		02AC8DF4151C6B8F00F7531B /* env_posix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = env_posix.c; sourceTree = "<group>"; };
-		02AC8DF5151C6B8F00F7531B /* env_posix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = env_posix.h; sourceTree = "<group>"; };
 		02AC8DF6151C6B8F00F7531B /* env.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = env.h; sourceTree = "<group>"; };
 		02B24271147D1BD6008A15A3 /* MODSortedMutableDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODSortedMutableDictionary.h; sourceTree = "<group>"; };
 		02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODSortedMutableDictionary.m; sourceTree = "<group>"; };
@@ -477,7 +474,6 @@
 				02A85F1D14103D4D004F3FE9 /* encoding.h */,
 				02AC8DF3151C6B8F00F7531B /* env_default.c */,
 				02AC8DF4151C6B8F00F7531B /* env_posix.c */,
-				02AC8DF5151C6B8F00F7531B /* env_posix.h */,
 				02AC8DF6151C6B8F00F7531B /* env.h */,
 				02A85F1E14103D4D004F3FE9 /* gridfs.c */,
 				02A85F1F14103D4D004F3FE9 /* gridfs.h */,
@@ -486,7 +482,6 @@
 				02A85F2214103D4D004F3FE9 /* mongo.c */,
 				02A85F2314103D4D004F3FE9 /* mongo.h */,
 				02A85F2614103D4D004F3FE9 /* numbers.c */,
-				02A85F2B14103D4E004F3FE9 /* platform.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -659,7 +654,6 @@
 				02A85F61141080A2004F3FE9 /* gridfs.h in Headers */,
 				02A85F62141080A2004F3FE9 /* md5.h in Headers */,
 				02A85F63141080A2004F3FE9 /* mongo.h in Headers */,
-				02A85F65141080A2004F3FE9 /* platform.h in Headers */,
 				02688DDC14119CF50014ED51 /* MODDatabase.h in Headers */,
 				02688DE21411C5010014ED51 /* MODCollection.h in Headers */,
 				02BDC3E7141D6073000EF755 /* MODCursor.h in Headers */,
