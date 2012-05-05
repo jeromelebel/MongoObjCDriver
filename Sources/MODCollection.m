@@ -224,7 +224,7 @@
                 dataCursor = data;
                 countCursor = documentCount;
                 while (countCursor > INT32_MAX) {
-                    if (mongo_insert_batch(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], dataCursor, INT32_MAX) != MONGO_OK) {
+                    if (mongo_insert_batch(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], (const bson **)dataCursor, INT32_MAX) != MONGO_OK) {
                         error = [[_mongoDatabase.mongoServer class] errorFromMongo:_mongoDatabase.mongo];
                         break;
                     }
@@ -232,7 +232,7 @@
                     dataCursor += INT32_MAX;
                 }
                 if (!error) {
-                    if (mongo_insert_batch(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], dataCursor, (int32_t)countCursor) != MONGO_OK) {
+                    if (mongo_insert_batch(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], (const bson **)dataCursor, (int32_t)countCursor) != MONGO_OK) {
                         error = [[_mongoDatabase.mongoServer class] errorFromMongo:_mongoDatabase.mongo];
                     }
                 }
