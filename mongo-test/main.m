@@ -156,6 +156,31 @@ static void testJson()
     assert([[error domain] isEqualToString:MODJsonErrorDomain]);
     value = [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil];
     assert([(id)[parser mainObject] isEqual:value]);
+    
+    // test to make sure each items in an array has the correct index
+    {
+        bson bsonObject;
+        bson_iterator iterator;
+        bson_iterator subIterator;
+        unsigned int ii = 0;
+        
+        bson_init(&bsonObject);
+        [MODJsonToBsonParser bsonFromJson:&bsonObject json:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
+        bson_finish(&bsonObject);
+        bson_iterator_init(&iterator, &bsonObject);
+        
+        assert(bson_iterator_next(&iterator) != BSON_EOO);
+        assert(strcmp(bson_iterator_key(&iterator), "array") == 0);
+        
+        bson_iterator_subiterator(&iterator, &subIterator);
+        while (bson_iterator_next(&subIterator) != BSON_EOO) {
+            assert(ii == atoi(bson_iterator_key(&subIterator)));
+            ii++;
+        }
+        assert(ii == 3);
+        
+        assert(bson_iterator_next(&iterator) == BSON_EOO);
+    }
 }
 
 int main (int argc, const char * argv[])
