@@ -354,10 +354,10 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
                         }
                         break;
                     case JSON_INT:
-//                        if (create_waiting_structure_if_needed(context)) {
-//                            result = [context->target appendLongLong:atoll(dataInfo->data) withKey:key previousStructure:context->latestStack->structure index:index]?0:1;
-//                        }
-//                        break;
+                        if (create_waiting_structure_if_needed(context)) {
+                            result = [context->target appendLongLong:atoll(dataInfo->data) withKey:key previousStructure:context->latestStack->structure index:index]?0:1;
+                        }
+                        break;
                     case JSON_FLOAT:
                         if (create_waiting_structure_if_needed(context)) {
                             result = [context->target appendDouble:atof(dataInfo->data) withKey:key previousStructure:context->latestStack->structure index:index]?0:1;
