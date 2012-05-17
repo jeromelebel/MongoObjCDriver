@@ -159,6 +159,11 @@
     return NO;
 }
 
+- (NSUInteger)count
+{
+    return [_content count];
+}
+
 - (NSString *)description
 {
     NSMutableDictionary *hack;

@@ -32,5 +32,6 @@
 
 @property (nonatomic, retain, readonly) NSDictionary *content;
 @property (nonatomic, retain, readonly) NSArray *sortedKeys;
+@property (nonatomic, assign, readonly) NSUInteger count;
 
 @end
