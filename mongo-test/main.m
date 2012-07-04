@@ -201,6 +201,7 @@ int main (int argc, const char * argv[])
         ip = argv[1];
         server = [[MODServer alloc] init];
         [server connectWithHostName:[NSString stringWithUTF8String:ip] callback:^(BOOL connected, MODQuery *mongoQuery) {
+            NSLog(@"connecting to %s…", ip);
             logMongoQuery(mongoQuery);
         }];
         [server fetchServerStatusWithCallback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {

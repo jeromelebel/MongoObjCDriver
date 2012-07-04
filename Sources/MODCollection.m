@@ -224,7 +224,7 @@
                 dataCursor = data;
                 countCursor = documentCount;
                 while (countCursor > INT32_MAX) {
-                    if (mongo_insert_batch(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], (const bson **)dataCursor, INT32_MAX) != MONGO_OK) {
+                    if (mongo_insert_batch(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], (const bson **)dataCursor, INT32_MAX, NULL, 0) != MONGO_OK) {
                         error = [[_mongoDatabase.mongoServer class] errorFromMongo:_mongoDatabase.mongo];
                         break;
                     }
@@ -232,7 +232,7 @@
                     dataCursor += INT32_MAX;
                 }
                 if (!error) {
-                    if (mongo_insert_batch(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], (const bson **)dataCursor, (int32_t)countCursor) != MONGO_OK) {
+                    if (mongo_insert_batch(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], (const bson **)dataCursor, (int32_t)countCursor, NULL, 0) != MONGO_OK) {
                         error = [[_mongoDatabase.mongoServer class] errorFromMongo:_mongoDatabase.mongo];
                     }
                 }
@@ -282,7 +282,7 @@
             }
             bson_finish(&bsonUpdate);
             if (error == nil) {
-                mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonUpdate, (upsert?MONGO_UPDATE_UPSERT:0) | (multiUpdate?MONGO_UPDATE_MULTI:0));
+                mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonUpdate, (upsert?MONGO_UPDATE_UPSERT:0) | (multiUpdate?MONGO_UPDATE_MULTI:0), NULL);
             } else {
                 mongoQuery.error = error;
             }
@@ -361,7 +361,7 @@
             }
             bson_finish(&bsonCriteria);
             if (error == nil) {
-                mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonDocument, MONGO_UPDATE_UPSERT);
+                mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonDocument, MONGO_UPDATE_UPSERT, NULL);
             } else {
                 mongoQuery.error = error;
             }
@@ -398,7 +398,7 @@
             }
             bson_finish(&bsonCriteria);
             if (error == nil) {
-                mongo_remove(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria);
+                mongo_remove(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, NULL);
             } else {
                 mongoQuery.error = error;
             }
