@@ -347,6 +347,7 @@
             arrayKey = [[NSString alloc] initWithFormat:@"%ld", ii];
             [self appendValue:arrayValue key:arrayKey toBson:bson];
             [arrayKey release];
+            ii++;
         }
         bson_append_finish_array(bson);
     } else if ([value isKindOfClass:[MODObjectId class]]) {
