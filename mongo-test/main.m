@@ -121,6 +121,27 @@ static void testObjects(NSString *json, id shouldEqual)
     NSLog(@"OK: %@", json);
 }
 
+static void testBsonArrayIndex(bson *bsonObject)
+{
+    bson_iterator iterator;
+    bson_iterator subIterator;
+    unsigned int ii = 0;
+    
+    bson_iterator_init(&iterator, bsonObject);
+    
+    assert(bson_iterator_next(&iterator) != BSON_EOO);
+    assert(strcmp(bson_iterator_key(&iterator), "array") == 0);
+    
+    bson_iterator_subiterator(&iterator, &subIterator);
+    while (bson_iterator_next(&subIterator) != BSON_EOO) {
+        assert(ii == atoi(bson_iterator_key(&subIterator)));
+        ii++;
+    }
+    assert(ii == 3);
+    
+    assert(bson_iterator_next(&iterator) == BSON_EOO);
+}
+
 static void testJson()
 {
     MODJsonToObjectParser *parser;
@@ -158,28 +179,29 @@ static void testJson()
     assert([(id)[parser mainObject] isEqual:value]);
     
     // test to make sure each items in an array has the correct index
+    // https://github.com/fotonauts/MongoHub-Mac/issues/28
     {
         bson bsonObject;
-        bson_iterator iterator;
-        bson_iterator subIterator;
-        unsigned int ii = 0;
         
         bson_init(&bsonObject);
         [MODJsonToBsonParser bsonFromJson:&bsonObject json:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
         bson_finish(&bsonObject);
-        bson_iterator_init(&iterator, &bsonObject);
+        testBsonArrayIndex(&bsonObject);
+        bson_destroy(&bsonObject);
+    }
+    
+    // test to make sure each items in an array has the correct index
+    // https://github.com/fotonauts/MongoHub-Mac/issues/39
+    {
+        id objects;
+        bson bsonObject;
         
-        assert(bson_iterator_next(&iterator) != BSON_EOO);
-        assert(strcmp(bson_iterator_key(&iterator), "array") == 0);
-        
-        bson_iterator_subiterator(&iterator, &subIterator);
-        while (bson_iterator_next(&subIterator) != BSON_EOO) {
-            assert(ii == atoi(bson_iterator_key(&subIterator)));
-            ii++;
-        }
-        assert(ii == 3);
-        
-        assert(bson_iterator_next(&iterator) == BSON_EOO);
+        objects = [MODJsonToObjectParser objectsFromJson:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
+        bson_init(&bsonObject);
+        [MODServer appendObject:objects toBson:&bsonObject];
+        bson_finish(&bsonObject);
+        testBsonArrayIndex(&bsonObject);
+        bson_destroy(&bsonObject);
     }
 }
 
