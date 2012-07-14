@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "MOD_public.h"
 #import "mongo.h"
-#import "json.h"
 
 enum {
     JSON_PARSER_ERROR_EXPECTED_END
