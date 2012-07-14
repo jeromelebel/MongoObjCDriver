@@ -53,7 +53,6 @@
 		02A85F4814103D64004F3FE9 /* gridfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F1E14103D4D004F3FE9 /* gridfs.c */; };
 		02A85F4914103D64004F3FE9 /* md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2014103D4D004F3FE9 /* md5.c */; };
 		02A85F4A14103D64004F3FE9 /* mongo.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2214103D4D004F3FE9 /* mongo.c */; };
-		02A85F4B14103D64004F3FE9 /* net.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2414103D4D004F3FE9 /* net.c */; };
 		02A85F4C14103D64004F3FE9 /* numbers.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2614103D4D004F3FE9 /* numbers.c */; };
 		02A85F5114103EA6004F3FE9 /* MODServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F4F14103EA6004F3FE9 /* MODServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02A85F5214103EA6004F3FE9 /* MODServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5014103EA6004F3FE9 /* MODServer.m */; };
@@ -65,12 +64,12 @@
 		02A85F61141080A2004F3FE9 /* gridfs.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F1F14103D4D004F3FE9 /* gridfs.h */; };
 		02A85F62141080A2004F3FE9 /* md5.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F2114103D4D004F3FE9 /* md5.h */; };
 		02A85F63141080A2004F3FE9 /* mongo.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F2314103D4D004F3FE9 /* mongo.h */; };
-		02A85F64141080A2004F3FE9 /* net.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F2514103D4D004F3FE9 /* net.h */; };
-		02A85F65141080A2004F3FE9 /* platform.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F2B14103D4E004F3FE9 /* platform.h */; };
 		02AB057614296F9000B7CD19 /* MODObjectId.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB057414296F9000B7CD19 /* MODObjectId.h */; };
 		02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
 		02AB057814296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
 		02ABA1C414103B37000417F4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C314103B37000417F4 /* Cocoa.framework */; };
+		02AC8DF7151C6BAB00F7531B /* env_posix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02AC8DF4151C6B8F00F7531B /* env_posix.c */; };
+		02AC8DF8151C6BAC00F7531B /* env_posix.c in Sources */ = {isa = PBXBuildFile; fileRef = 02AC8DF4151C6B8F00F7531B /* env_posix.c */; };
 		02B24273147D1BD6008A15A3 /* MODSortedMutableDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B24271147D1BD6008A15A3 /* MODSortedMutableDictionary.h */; };
 		02B24274147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */; };
 		02B24275147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */; };
@@ -95,7 +94,6 @@
 		02F121D01410F07200197811 /* gridfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F1E14103D4D004F3FE9 /* gridfs.c */; };
 		02F121D11410F07200197811 /* md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2014103D4D004F3FE9 /* md5.c */; };
 		02F121D21410F07200197811 /* mongo.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2214103D4D004F3FE9 /* mongo.c */; };
-		02F121D31410F07200197811 /* net.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2414103D4D004F3FE9 /* net.c */; };
 		02F121D41410F07200197811 /* numbers.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2614103D4D004F3FE9 /* numbers.c */; };
 /* End PBXBuildFile section */
 
@@ -230,12 +228,7 @@
 		02A85F2114103D4D004F3FE9 /* md5.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = md5.h; sourceTree = "<group>"; };
 		02A85F2214103D4D004F3FE9 /* mongo.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = mongo.c; sourceTree = "<group>"; };
 		02A85F2314103D4D004F3FE9 /* mongo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mongo.h; sourceTree = "<group>"; };
-		02A85F2414103D4D004F3FE9 /* net.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = net.c; sourceTree = "<group>"; };
-		02A85F2514103D4D004F3FE9 /* net.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = net.h; sourceTree = "<group>"; };
 		02A85F2614103D4D004F3FE9 /* numbers.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = numbers.c; sourceTree = "<group>"; };
-		02A85F2914103D4E004F3FE9 /* net.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = net.c; sourceTree = "<group>"; };
-		02A85F2A14103D4E004F3FE9 /* net.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = net.h; sourceTree = "<group>"; };
-		02A85F2B14103D4E004F3FE9 /* platform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
 		02A85F2D14103D4E004F3FE9 /* auth.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = auth.c; sourceTree = "<group>"; };
 		02A85F2E14103D4E004F3FE9 /* benchmark.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = benchmark.c; sourceTree = "<group>"; };
 		02A85F2F14103D4E004F3FE9 /* bson.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bson.c; sourceTree = "<group>"; };
@@ -273,6 +266,8 @@
 		02ABA1C814103B37000417F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02ABA1CB14103B37000417F4 /* mongo-objc-driver-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "mongo-objc-driver-Info.plist"; sourceTree = "<group>"; };
 		02ABA1CD14103B37000417F4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		02AC8DF4151C6B8F00F7531B /* env_posix.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = env_posix.c; sourceTree = "<group>"; };
+		02AC8DF6151C6B8F00F7531B /* env.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = env.h; sourceTree = "<group>"; };
 		02B24271147D1BD6008A15A3 /* MODSortedMutableDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODSortedMutableDictionary.h; sourceTree = "<group>"; };
 		02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODSortedMutableDictionary.m; sourceTree = "<group>"; };
 		02BDC3E5141D6073000EF755 /* MODCursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODCursor.h; sourceTree = "<group>"; };
@@ -453,36 +448,18 @@
 				02A85F1B14103D4D004F3FE9 /* bson.h */,
 				02A85F1C14103D4D004F3FE9 /* encoding.c */,
 				02A85F1D14103D4D004F3FE9 /* encoding.h */,
+				02AC8DF4151C6B8F00F7531B /* env_posix.c */,
+				022604FA1555B431005E6857 /* env_standard.c */,
+				02AC8DF6151C6B8F00F7531B /* env.h */,
 				02A85F1E14103D4D004F3FE9 /* gridfs.c */,
 				02A85F1F14103D4D004F3FE9 /* gridfs.h */,
 				02A85F2014103D4D004F3FE9 /* md5.c */,
 				02A85F2114103D4D004F3FE9 /* md5.h */,
 				02A85F2214103D4D004F3FE9 /* mongo.c */,
 				02A85F2314103D4D004F3FE9 /* mongo.h */,
-				02A85F2414103D4D004F3FE9 /* net.c */,
-				02A85F2514103D4D004F3FE9 /* net.h */,
 				02A85F2614103D4D004F3FE9 /* numbers.c */,
-				02A85F2714103D4D004F3FE9 /* platform */,
-				02A85F2B14103D4E004F3FE9 /* platform.h */,
 			);
 			path = src;
-			sourceTree = "<group>";
-		};
-		02A85F2714103D4D004F3FE9 /* platform */ = {
-			isa = PBXGroup;
-			children = (
-				02A85F2814103D4E004F3FE9 /* linux */,
-			);
-			path = platform;
-			sourceTree = "<group>";
-		};
-		02A85F2814103D4E004F3FE9 /* linux */ = {
-			isa = PBXGroup;
-			children = (
-				02A85F2914103D4E004F3FE9 /* net.c */,
-				02A85F2A14103D4E004F3FE9 /* net.h */,
-			);
-			path = linux;
 			sourceTree = "<group>";
 		};
 		02A85F2C14103D4E004F3FE9 /* test */ = {
@@ -653,8 +630,6 @@
 				02A85F61141080A2004F3FE9 /* gridfs.h in Headers */,
 				02A85F62141080A2004F3FE9 /* md5.h in Headers */,
 				02A85F63141080A2004F3FE9 /* mongo.h in Headers */,
-				02A85F64141080A2004F3FE9 /* net.h in Headers */,
-				02A85F65141080A2004F3FE9 /* platform.h in Headers */,
 				02688DDC14119CF50014ED51 /* MODDatabase.h in Headers */,
 				02688DE21411C5010014ED51 /* MODCollection.h in Headers */,
 				02BDC3E7141D6073000EF755 /* MODCursor.h in Headers */,
@@ -718,7 +693,7 @@
 		02ABA1B614103B36000417F4 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 			};
 			buildConfigurationList = 02ABA1B914103B36000417F4 /* Build configuration list for PBXProject "mongo-objc-driver" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -804,7 +779,6 @@
 				02A85F4814103D64004F3FE9 /* gridfs.c in Sources */,
 				02A85F4914103D64004F3FE9 /* md5.c in Sources */,
 				02A85F4A14103D64004F3FE9 /* mongo.c in Sources */,
-				02A85F4B14103D64004F3FE9 /* net.c in Sources */,
 				02A85F4C14103D64004F3FE9 /* numbers.c in Sources */,
 				02A85F5214103EA6004F3FE9 /* MODServer.m in Sources */,
 				02688DDD14119CF50014ED51 /* MODDatabase.m in Sources */,
@@ -822,6 +796,7 @@
 				02B24274147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */,
 				023ECFFD14851BEE00185781 /* MODSymbol.m in Sources */,
 				026B94A014BC276100BA0688 /* MODUndefined.m in Sources */,
+				02AC8DF7151C6BAB00F7531B /* env_posix.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -837,7 +812,6 @@
 				02F121D01410F07200197811 /* gridfs.c in Sources */,
 				02F121D11410F07200197811 /* md5.c in Sources */,
 				02F121D21410F07200197811 /* mongo.c in Sources */,
-				02F121D31410F07200197811 /* net.c in Sources */,
 				02F121D41410F07200197811 /* numbers.c in Sources */,
 				02688DDE14119CF50014ED51 /* MODDatabase.m in Sources */,
 				02688DE41411C5010014ED51 /* MODCollection.m in Sources */,
@@ -853,6 +827,7 @@
 				02B24275147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */,
 				023ECFFF1485237000185781 /* MODSymbol.m in Sources */,
 				026B94A314BC278700BA0688 /* MODUndefined.m in Sources */,
+				02AC8DF8151C6BAC00F7531B /* env_posix.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

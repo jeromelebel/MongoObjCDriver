@@ -121,12 +121,36 @@ static void testObjects(NSString *json, id shouldEqual)
     NSLog(@"OK: %@", json);
 }
 
+static void testBsonArrayIndex(bson *bsonObject)
+{
+    bson_iterator iterator;
+    bson_iterator subIterator;
+    unsigned int ii = 0;
+    
+    bson_iterator_init(&iterator, bsonObject);
+    
+    assert(bson_iterator_next(&iterator) != BSON_EOO);
+    assert(strcmp(bson_iterator_key(&iterator), "array") == 0);
+    
+    bson_iterator_subiterator(&iterator, &subIterator);
+    while (bson_iterator_next(&subIterator) != BSON_EOO) {
+        assert(ii == atoi(bson_iterator_key(&subIterator)));
+        ii++;
+    }
+    assert(ii == 3);
+    
+    assert(bson_iterator_next(&iterator) == BSON_EOO);
+}
+
 static void testJson()
 {
     MODJsonToObjectParser *parser;
     NSError *error;
     id value;
     
+    testObjects(@"{\"data\":{\"$binary\":\"00\",\"$type\":\"0\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODBinary alloc] initWithBytes:"\0" length:1 binaryType:0] autorelease], @"data", nil]);
+    testObjects(@"{\"data\":{\"$binary\":\"4A65726F6D65\",\"$type\":\"0\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODBinary alloc] initWithBytes:"Jerome" length:6 binaryType:0] autorelease], @"data", nil]);
+    testObjects(@"{\"not data\":{\"$type\":\"encore fred\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"encore fred", @"$type", nil], @"not data", nil]);
     testObjects(@"{\"_id\":\"x\",\"toto\":[1,2,3]}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSNumber numberWithInt:1], [NSNumber numberWithInt:2], [NSNumber numberWithInt:3], nil], @"toto", nil]);
     testObjects(@"{\"_id\":\"x\",\"toto\":[{\"1\":2}]}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil]);
     testObjects(@"{\"_id\":{\"$oid\":\"4E9807F88157F608B4000002\"},\"type\":\"Activity\"}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODObjectId alloc] initWithCString:"4E9807F88157F608B4000002"] autorelease], @"_id", @"Activity", @"type", nil]);
@@ -153,6 +177,32 @@ static void testJson()
     assert([[error domain] isEqualToString:MODJsonErrorDomain]);
     value = [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil];
     assert([(id)[parser mainObject] isEqual:value]);
+    
+    // test to make sure each items in an array has the correct index
+    // https://github.com/fotonauts/MongoHub-Mac/issues/28
+    {
+        bson bsonObject;
+        
+        bson_init(&bsonObject);
+        [MODJsonToBsonParser bsonFromJson:&bsonObject json:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
+        bson_finish(&bsonObject);
+        testBsonArrayIndex(&bsonObject);
+        bson_destroy(&bsonObject);
+    }
+    
+    // test to make sure each items in an array has the correct index
+    // https://github.com/fotonauts/MongoHub-Mac/issues/39
+    {
+        id objects;
+        bson bsonObject;
+        
+        objects = [MODJsonToObjectParser objectsFromJson:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
+        bson_init(&bsonObject);
+        [MODServer appendObject:objects toBson:&bsonObject];
+        bson_finish(&bsonObject);
+        testBsonArrayIndex(&bsonObject);
+        bson_destroy(&bsonObject);
+    }
 }
 
 int main (int argc, const char * argv[])
@@ -173,6 +223,7 @@ int main (int argc, const char * argv[])
         ip = argv[1];
         server = [[MODServer alloc] init];
         [server connectWithHostName:[NSString stringWithUTF8String:ip] callback:^(BOOL connected, MODQuery *mongoQuery) {
+            NSLog(@"connecting to %s…", ip);
             logMongoQuery(mongoQuery);
         }];
         [server fetchServerStatusWithCallback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {

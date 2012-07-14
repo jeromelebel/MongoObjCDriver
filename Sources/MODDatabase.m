@@ -157,7 +157,7 @@
     
     query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
         if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
-            mongo_cmd_drop_collection(self.mongoServer.mongo, [_databaseName UTF8String], [collectionName UTF8String]);
+            mongo_cmd_drop_collection(self.mongoServer.mongo, [_databaseName UTF8String], [collectionName UTF8String], NULL);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             if (callback) {

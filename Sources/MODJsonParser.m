@@ -171,6 +171,7 @@ static void * begin_structure_for_bson(int nesting, int is_object, void *structu
         } else if (key != NULL && strcmp(key, "$timestamp") == 0) {
             if (context->pendingBsonValue.bsonType == NO_BSON_TYPE) {
                 context->pendingBsonValue.bsonType = TIMESTAMP_BSON_TYPE;
+                context->pendingBsonValue.index = index;
                 result = context->target;
             } else {
                 result = NULL;
@@ -179,6 +180,7 @@ static void * begin_structure_for_bson(int nesting, int is_object, void *structu
             if (create_waiting_structure_if_needed(context)) {
                 context->pendingBsonValue.structureWaiting = is_object?OBJECT_STRUCTURE:ARRAY_STRUCTURE;
                 context->pendingBsonValue.objectKeyToCreate = copyString(key);
+                context->pendingBsonValue.index = index;
                 result = context->target;
             } else {
                 result = NULL;
@@ -327,12 +329,14 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
             result = [context->target appendDate:atof(dataInfo->data) withKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure index:context->pendingBsonValue.index]?0:1;
             clear_pending_value(context, YES);
         }
-    } else if (key != NULL && (strcmp(key, "$data_binary") == 0 || strcmp(key, "$type") == 0)) {
-        if (strcmp(key, "$data_binary") == 0 && !context->pendingBsonValue.dataBinary.binary && dataInfo->type == JSON_DATA_BINARY_TYPE && (context->pendingBsonValue.bsonType == JSON_DATA_BINARY_TYPE || context->pendingBsonValue.bsonType == NO_BSON_TYPE)) {
+    } else if (key != NULL && ((strcmp(key, "$binary") == 0 && index == 0) || (context->pendingBsonValue.bsonType == JSON_DATA_BINARY_TYPE && strcmp(key, "$type") == 0))) {
+        if (strcmp(key, "$binary") == 0 && !context->pendingBsonValue.dataBinary.binary && dataInfo->type == JSON_STRING && context->pendingBsonValue.bsonType == NO_BSON_TYPE) {
+            context->pendingBsonValue.bsonType = JSON_DATA_BINARY_TYPE;
             context->pendingBsonValue.dataBinary.binary = malloc(dataInfo->length);
             memcpy(context->pendingBsonValue.dataBinary.binary, dataInfo->data, dataInfo->length);
             context->pendingBsonValue.dataBinary.length = dataInfo->length;
-        } else if (strcmp(key, "$type") == 0 && !context->pendingBsonValue.dataBinary.hasBinaryType && dataInfo->type == JSON_DATA_BINARY_TYPE && (context->pendingBsonValue.bsonType == JSON_DATA_BINARY_TYPE || context->pendingBsonValue.bsonType == NO_BSON_TYPE)) {
+            result = 0;
+        } else if (strcmp(key, "$type") == 0 && !context->pendingBsonValue.dataBinary.hasBinaryType && dataInfo->type == JSON_STRING && context->pendingBsonValue.bsonType == JSON_DATA_BINARY_TYPE) {
             context->pendingBsonValue.dataBinary.hasBinaryType = YES;
             context->pendingBsonValue.dataBinary.binaryType = atoi(dataInfo->data);
         }
@@ -738,11 +742,15 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 
 - (BOOL)appendDataBinary:(const char *)binary withLength:(NSUInteger)length binaryType:(char)binaryType key:(const char *)key previousStructure:(void *)structure index:(int)index
 {
+    void *buffer = malloc(length / 2);
+    
     if (key == NULL) {
         snprintf(_indexKey, sizeof(_indexKey), "%d", index);
         key = _indexKey;
     }
-    bson_append_binary(_bson, key, binaryType, binary, length);
+    convertStringToData(binary, buffer, length / 2);
+    bson_append_binary(_bson, key, binaryType, buffer, length / 2);
+    free(buffer);
     return YES;
 }
 
@@ -982,10 +990,13 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 {
     MODBinary *object;
     BOOL result;
+    void *buffer = malloc(length / 2);
     
-    object = [[MODBinary alloc] initWithBytes:binary length:length binaryType:binaryType];
+    convertStringToData(binary, buffer, length / 2);
+    object = [[MODBinary alloc] initWithBytes:buffer length:length / 2 binaryType:binaryType];
     result = [self addObject:object toStructure:structure withKey:key];
     [object release];
+    free(buffer);
     return result;
 }
 
