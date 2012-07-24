@@ -280,135 +280,8 @@ static size_t convertStringToData(const char * string, void *data, size_t length
     return count;
 }
 
-/** callback from the parser helper callback to append a value to an object or array value
- * append(parent, key, key_length, val); */
-static int append_data_for_bson(void *structure, char *key, size_t key_length, int index, void *obj, void *void_user_context)
-{
-    ParserDataInfo *dataInfo = obj;
-    JsonParserContext *context = void_user_context;
-    int result = 1;
-    
-    my_debug();
-    if (context->shouldSkipNextEndStructure) {
-        // error
-    } else if (key != NULL && strcmp(key, "$oid") == 0 && index == 0) {
-        if (dataInfo->length == sizeof(bson_oid_t) * 2) {
-            bson_oid_t oid;
-            
-            if (convertStringToData(dataInfo->data, &oid, sizeof(bson_oid_t)) == sizeof(bson_oid_t) && context->pendingBsonValue.bsonType == NO_BSON_TYPE && dataInfo->type == JSON_STRING) {
-                result = [context->target appendObjectId:&oid length:sizeof(oid) withKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure index:context->pendingBsonValue.index]?0:1;
-                clear_pending_value(context, YES);
-            }
-        }
-    } else if (key != NULL && strcmp(key, "$symbol") == 0 && index == 0) {
-        if (dataInfo->type == JSON_STRING) {
-            NSString *value;
-            
-            value = [[NSString alloc] initWithUTF8String:dataInfo->data];
-            result = [context->target appendSymbol:value withKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure index:context->pendingBsonValue.index];
-            [value release];
-            clear_pending_value(context, YES);
-            result = 0;
-        }
-    } else if (key != NULL && strcmp(key, "$undefined") == 0 && index == 0 && dataInfo->type == JSON_STRING && strcmp(dataInfo->data, "$undefined") == 0) {
-        result = [context->target appendUndefinedWithKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure index:context->pendingBsonValue.index];
-        clear_pending_value(context, YES);
-        result = 0;
-    } else if (key != NULL && (strcmp(key, "$regex") == 0 || strcmp(key, "$options") == 0)) {
-        if (strcmp(key, "$regex") == 0 && !context->pendingBsonValue.regexBson.pattern && dataInfo->type == JSON_STRING && (context->pendingBsonValue.bsonType == REGEX_BSON_TYPE || context->pendingBsonValue.bsonType == NO_BSON_TYPE)) {
-            context->pendingBsonValue.bsonType = REGEX_BSON_TYPE;
-            context->pendingBsonValue.regexBson.pattern = copyString(dataInfo->data);
-            result = 0;
-        } else if (strcmp(key, "$options") == 0 && !context->pendingBsonValue.regexBson.options && dataInfo->type == JSON_STRING && (context->pendingBsonValue.bsonType == REGEX_BSON_TYPE || context->pendingBsonValue.bsonType == NO_BSON_TYPE)) {
-            context->pendingBsonValue.bsonType = REGEX_BSON_TYPE;
-            context->pendingBsonValue.regexBson.options = copyString(dataInfo->data);
-            result = 0;
-        }
-    } else if (key != NULL && strcmp(key, "$date") == 0) {
-        if (dataInfo->type == JSON_INT || dataInfo->type == JSON_FLOAT) {
-            result = [context->target appendDate:atof(dataInfo->data) withKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure index:context->pendingBsonValue.index]?0:1;
-            clear_pending_value(context, YES);
-        }
-    } else if (key != NULL && ((strcmp(key, "$binary") == 0 && index == 0) || (context->pendingBsonValue.bsonType == JSON_DATA_BINARY_TYPE && strcmp(key, "$type") == 0))) {
-        if (strcmp(key, "$binary") == 0 && !context->pendingBsonValue.dataBinary.binary && dataInfo->type == JSON_STRING && context->pendingBsonValue.bsonType == NO_BSON_TYPE) {
-            context->pendingBsonValue.bsonType = JSON_DATA_BINARY_TYPE;
-            context->pendingBsonValue.dataBinary.binary = malloc(dataInfo->length);
-            memcpy(context->pendingBsonValue.dataBinary.binary, dataInfo->data, dataInfo->length);
-            context->pendingBsonValue.dataBinary.length = dataInfo->length;
-            result = 0;
-        } else if (strcmp(key, "$type") == 0 && !context->pendingBsonValue.dataBinary.hasBinaryType && dataInfo->type == JSON_STRING && context->pendingBsonValue.bsonType == JSON_DATA_BINARY_TYPE) {
-            context->pendingBsonValue.dataBinary.hasBinaryType = YES;
-            context->pendingBsonValue.dataBinary.binaryType = atoi(dataInfo->data);
-        }
-        if (context->pendingBsonValue.dataBinary.binary && context->pendingBsonValue.dataBinary.hasBinaryType) {
-            result = [context->target appendDataBinary:context->pendingBsonValue.dataBinary.binary withLength:context->pendingBsonValue.dataBinary.length binaryType:context->pendingBsonValue.dataBinary.binaryType key:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure index:context->pendingBsonValue.index]?0:1;
-            clear_pending_value(context, YES);
-        }
-    } else {
-        switch (context->pendingBsonValue.bsonType) {
-            case NO_BSON_TYPE:
-                switch (dataInfo->type) {
-                    case JSON_STRING:
-                        if (create_waiting_structure_if_needed(context)) {
-                            result = [context->target appendString:dataInfo->data withKey:key previousStructure:context->latestStack->structure index:index]?0:1;
-                        }
-                        break;
-                    case JSON_INT:
-                        if (create_waiting_structure_if_needed(context)) {
-                            result = [context->target appendLongLong:atoll(dataInfo->data) withKey:key previousStructure:context->latestStack->structure index:index]?0:1;
-                        }
-                        break;
-                    case JSON_FLOAT:
-                        if (create_waiting_structure_if_needed(context)) {
-                            result = [context->target appendDouble:atof(dataInfo->data) withKey:key previousStructure:context->latestStack->structure index:index]?0:1;
-                        }
-                        break;
-                    case JSON_NULL:
-                        if (create_waiting_structure_if_needed(context)) {
-                            result = [context->target appendNullWithKey:key previousStructure:context->latestStack->structure index:index]?0:1;
-                        }
-                        break;
-                    case JSON_TRUE:
-                        if (create_waiting_structure_if_needed(context)) {
-                            result = [context->target appendBool:YES withKey:key previousStructure:context->latestStack->structure index:index]?0:1;
-                        }
-                        break;
-                    case JSON_FALSE:
-                        if (create_waiting_structure_if_needed(context)) {
-                            result = [context->target appendBool:NO withKey:key previousStructure:context->latestStack->structure index:index]?0:1;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-                break;
-            case TIMESTAMP_BSON_TYPE:
-                if (dataInfo->type == JSON_INT) {
-                    if (!context->pendingBsonValue.timestampBson.hasTValue) {
-                        context->pendingBsonValue.timestampBson.hasTValue = YES;
-                        context->pendingBsonValue.timestampBson.tValue = atoi(dataInfo->data);
-                        result = context->pendingBsonValue.timestampBson.hasIValue?1:0;
-                    } else if (!context->pendingBsonValue.timestampBson.hasIValue) {
-                        context->pendingBsonValue.timestampBson.hasIValue = YES;
-                        context->pendingBsonValue.timestampBson.iValue = atoi(dataInfo->data);
-                        result = context->pendingBsonValue.timestampBson.hasTValue?0:1;
-                    }
-                }
-                break;
-            case REGEX_BSON_TYPE:
-            case JSON_DATA_BINARY_TYPE:
-                // error
-                break;
-        }
-    }
-    free(obj);
-    return result;
-}
-
 @interface MODJsonParser()
-@property (nonatomic, assign, readonly) json_parser_dom *helper;
-@property (nonatomic, assign, readonly) JsonParserContext *context;
-@property (nonatomic, assign, readonly) json_parser *parser;
+@property (nonatomic, assign, readonly) struct json_tokener *tokener;
 @end
 
 @implementation MODJsonParser
@@ -418,63 +291,29 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 - (id)init
 {
     if (self = [super init]) {
-        json_config config;
-        
-        _context = calloc(1, sizeof(JsonParserContext));
-        self.context->target = self;
-        self.context->pendingBsonValue.bsonType = NO_BSON_TYPE;
-        
-        _helper = calloc(1, sizeof(json_parser_dom));
-        json_parser_dom_init(self.helper, begin_structure_for_bson, end_structure_for_bson, create_data_for_bson, append_data_for_bson, self.context);
-        
-        memset(&config, 0, sizeof(json_config));
-        config.allow_c_comments = 1;
-        config.allow_yaml_comments = 1;
-        _parser = calloc(1, sizeof(json_parser));
-        json_parser_init(self.parser, &config, json_parser_dom_callback, self.helper);
+        _tokener = json_tokener_new();
     }
     return self;
 }
 
 - (void)dealloc
 {
-    if (_helper) {
-        json_parser_dom_free(self.helper);
-        free(_helper);
-    }
-    if (_context) {
-        clear_pending_value(self.context, YES);
-        free(_context);
-    }
-    if (_parser) {
-        json_parser_free(self.parser);
-        free(_parser);
-    }
+    json_tokener_free(self.tokener);
     [super dealloc];
 }
 
 - (void)_processJson:(const char *)json errorCode:(int *)errorCode parsedLength:(size_t *)parsedLength
 {
-    uint32_t processed;
-    size_t jsonToProcessLength = strlen(json);
+    json_object *object;
     
     assert(parsedLength != nil);
     assert(errorCode != nil);
     *parsedLength = 0;
     *errorCode = 0;
     
-    while (jsonToProcessLength > UINT32_MAX) {
-        *errorCode = json_parser_string(self.parser, json, UINT32_MAX, &processed);
-        *parsedLength += processed;
-        jsonToProcessLength -= UINT32_MAX;
-        if (*errorCode != 0) {
-            break;
-        }
-    }
-    if (*errorCode == 0) {
-        *errorCode = json_parser_string(self.parser, json, (uint32_t)jsonToProcessLength, &processed);
-        *parsedLength += processed;
-    }
+    object = json_tokener_parse_ex(self.tokener, json, -1);
+    *parsedLength = self.tokener->char_offset;
+    *errorCode = self.tokener->err;
 }
 
 - (size_t)parseJsonWithCstring:(const char *)json error:(NSError **)error
@@ -520,22 +359,12 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 
 - (BOOL)parsingDone
 {
-    return json_parser_is_done(self.parser)?YES:NO;
+    return self.tokener->err != json_tokener_error_parse_eof;
 }
 
-- (json_parser_dom *)helper
+- (struct json_tokener *)tokener
 {
-    return _helper;
-}
-
-- (JsonParserContext *)context
-{
-    return _context;
-}
-
-- (json_parser *)parser
-{
-    return _parser;
+    return _tokener;
 }
 
 @end

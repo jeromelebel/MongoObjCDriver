@@ -67,47 +67,44 @@
         }
     } else if ([errorDomain isEqualToString:MODJsonErrorDomain]) {
         switch (code) {
-            case JSON_ERROR_NO_MEMORY:
-                description = @"running out of memory";
+            case json_tokener_error_depth:
+                description = @"json_tokener_error_depth";
                 break;
-            case JSON_ERROR_BAD_CHAR:
-                description = @"character < 32, except space newline tab";
+            case json_tokener_error_parse_eof:
+                description = @"json_tokener_error_parse_eof";
                 break;
-            case JSON_ERROR_POP_EMPTY:
-                description = @"trying to pop more object/array than pushed on the stack";
+            case json_tokener_error_parse_unexpected:
+                description = @"json_tokener_error_parse_unexpected";
                 break;
-            case JSON_ERROR_POP_UNEXPECTED_MODE:
-                description = @"trying to pop wrong type of mode. popping array in object mode, vice versa";
+            case json_tokener_error_parse_null:
+                description = @"json_tokener_error_parse_null";
                 break;
-            case JSON_ERROR_NESTING_LIMIT:
-                description = @"reach nesting limit on stack";
+            case json_tokener_error_parse_boolean:
+                description = @"json_tokener_error_parse_boolean";
                 break;
-            case JSON_ERROR_DATA_LIMIT:
-                description = @"reach data limit on buffer";
+            case json_tokener_error_parse_number:
+                description = @"json_tokener_error_parse_number";
                 break;
-            case JSON_ERROR_COMMENT_NOT_ALLOWED:
-                description = @"comment are not allowed with current configuration";
+            case json_tokener_error_parse_array:
+                description = @"json_tokener_error_parse_array";
                 break;
-            case JSON_ERROR_UNEXPECTED_CHAR:
-                description = @"unexpected char in the current parser context";
+            case json_tokener_error_parse_object_key_name:
+                description = @"json_tokener_error_parse_object_key_name";
                 break;
-            case JSON_ERROR_UNICODE_MISSING_LOW_SURROGATE:
-                description = @"unicode low surrogate missing after high surrogate";
+            case json_tokener_error_parse_object_key_sep:
+                description = @"json_tokener_error_parse_object_key_sep";
                 break;
-            case JSON_ERROR_UNICODE_UNEXPECTED_LOW_SURROGATE:
-                description = @"unicode low surrogate missing without previous high surrogate";
+            case json_tokener_error_parse_object_value_sep:
+                description = @"json_tokener_error_parse_object_value_sep";
                 break;
-            case JSON_ERROR_COMMA_OUT_OF_STRUCTURE:
-                description = @"found a comma not in structure (array/object)";
+            case json_tokener_error_parse_string:
+                description = @"json_tokener_error_parse_string";
                 break;
-            case JSON_ERROR_END_OF_STRUCTURE_OUT_OF_STRUCTURE:
-                description = @"found end of structure out of structure (array/object)";
-                break;
-            case JSON_ERROR_CALLBACK:
-                description = @"callback returns error";
+            case json_tokener_error_parse_comment:
+                description = @"json_tokener_error_parse_comment";
                 break;
             default:
-                description = @"";
+                description = [NSString stringWithFormat:@"error %d", code];
                 break;
         }
         if (descriptionDetails) {

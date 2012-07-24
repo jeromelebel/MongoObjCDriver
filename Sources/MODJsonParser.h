@@ -37,9 +37,7 @@
 
 @interface MODJsonParser : NSObject
 {
-    void *_helper;
-    void *_context;
-    void *_parser;
+    void *_tokener;
     
     size_t _totalParsedLength;
     BOOL _multiPartParsing;
