@@ -45,7 +45,7 @@
         snprintf(bufferString + (ii * 2), 3, "%.2X", bytes[ii]);
     }
     bufferString[(ii * 2) + 1] = 0;
-    result = [NSString stringWithFormat:@"Dbref(\"%@\", \"%@\")", _refValue, bufferString];
+    result = [NSString stringWithFormat:@"Dbref(\"%@\", \"%s\")", _refValue, bufferString];
     free(bufferString);
     return result;
 }
