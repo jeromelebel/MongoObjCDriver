@@ -153,13 +153,13 @@
         }
     } else {
         if (descriptionDetails) {
-            description = [NSString stringWithFormat:@"Unknown error %ld (%@) - %@", code, errorDomain, descriptionDetails];
+            description = [NSString stringWithFormat:@"Unknown error %ld (%@) - %@", (long)code, errorDomain, descriptionDetails];
         } else {
-            description = [NSString stringWithFormat:@"Unknown error %ld (%@)", code, errorDomain];
+            description = [NSString stringWithFormat:@"Unknown error %ld (%@)", (long)code, errorDomain];
         }
     }
     if (!description) {
-        description = [NSString stringWithFormat:@"Unknown error %ld - %@", code, errorDomain];
+        description = [NSString stringWithFormat:@"Unknown error %ld - %@", (long)code, errorDomain];
     }
     error = [NSError errorWithDomain:errorDomain code:code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:description, NSLocalizedDescriptionKey, nil]];
     return error;
