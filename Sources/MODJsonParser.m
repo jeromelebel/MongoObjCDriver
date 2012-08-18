@@ -770,12 +770,14 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 
 + (id)objectsFromJson:(NSString *)json error:(NSError **)error
 {
-    id objects;
+    id objects = nil;
     MODJsonToObjectParser *parser;
     
     parser = [[MODJsonToObjectParser alloc] init];
     [parser parseJsonWithString:json error:error];
-    objects = [(id)[parser mainObject] retain];
+    if ([parser parsingDone]) {
+        objects = [(id)[parser mainObject] retain];
+    }
     [parser release];
     return [objects autorelease];
 }
