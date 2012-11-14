@@ -149,7 +149,7 @@
         mongo_host_port hostPort;
         
         mongo_parse_host([host UTF8String], &hostPort);
-        if (!mongoQuery.canceled && mongo_connect(_mongo, hostPort.host, hostPort.port) == MONGO_OK) {
+        if (!mongoQuery.canceled && mongo_client(_mongo, hostPort.host, hostPort.port) == MONGO_OK) {
             [self authenticateSynchronouslyWithDatabaseName:_authDatabase userName:_userName password:_password mongoQuery:mongoQuery];
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
