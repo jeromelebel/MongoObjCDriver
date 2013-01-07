@@ -38,14 +38,14 @@
     copy = [[MODServer alloc] init];
     copy.userName = self.userName;
     copy.password = self.password;
-    if (_mongo->replset) {
+    if (_mongo->replica_set) {
         NSString *replicaName;
         NSMutableArray *hosts;
         mongo_host_port *hostPort;
         
-        replicaName = [[NSString alloc] initWithUTF8String:_mongo->replset->name];
+        replicaName = [[NSString alloc] initWithUTF8String:_mongo->replica_set->name];
         hosts = [[NSMutableArray alloc] init];
-        hostPort = _mongo->replset->seeds;
+        hostPort = _mongo->replica_set->seeds;
         while (hostPort != NULL) {
             NSString *hostName;
             
