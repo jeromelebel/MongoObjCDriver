@@ -453,7 +453,7 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
                 [[_mongoDatabase.mongoServer class] appendObject:indexDocument toBson:&index];
             }
             bson_finish(&index);
-            mongo_create_index(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], [name UTF8String], &index, convertIndexOptions(options), &output);
+            mongo_create_index(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &index, [name UTF8String], convertIndexOptions(options), &output);
             bson_destroy(&index);
             bson_destroy(&output);
         }
