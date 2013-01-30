@@ -132,6 +132,37 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		020F140016B72F450099436C /* auth_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = auth_test.c; sourceTree = "<group>"; };
+		020F140116B72F450099436C /* bcon_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bcon_test.c; sourceTree = "<group>"; };
+		020F140216B72F450099436C /* benchmark_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = benchmark_test.c; sourceTree = "<group>"; };
+		020F140316B72F450099436C /* bson_subobject_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bson_subobject_test.c; sourceTree = "<group>"; };
+		020F140416B72F450099436C /* bson_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bson_test.c; sourceTree = "<group>"; };
+		020F140516B72F450099436C /* commands_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = commands_test.c; sourceTree = "<group>"; };
+		020F140616B72F450099436C /* connect_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = connect_test.c; sourceTree = "<group>"; };
+		020F140716B72F450099436C /* count_delete_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = count_delete_test.c; sourceTree = "<group>"; };
+		020F140816B72F450099436C /* cpptest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cpptest.cpp; sourceTree = "<group>"; };
+		020F140916B72F450099436C /* cursors_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = cursors_test.c; sourceTree = "<group>"; };
+		020F140A16B72F450099436C /* endian_swap_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = endian_swap_test.c; sourceTree = "<group>"; };
+		020F140B16B72F450099436C /* env_posix_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = env_posix_test.c; sourceTree = "<group>"; };
+		020F140C16B72F450099436C /* env_win32_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = env_win32_test.c; sourceTree = "<group>"; };
+		020F140D16B72F450099436C /* errors_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = errors_test.c; sourceTree = "<group>"; };
+		020F140E16B72F450099436C /* examples_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = examples_test.c; sourceTree = "<group>"; };
+		020F140F16B72F450099436C /* functions_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = functions_test.c; sourceTree = "<group>"; };
+		020F141016B72F450099436C /* gridfs_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = gridfs_test.c; sourceTree = "<group>"; };
+		020F141116B72F450099436C /* helpers_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = helpers_test.c; sourceTree = "<group>"; };
+		020F141216B72F450099436C /* json_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = json_test.c; sourceTree = "<group>"; };
+		020F141316B72F450099436C /* oid_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = oid_test.c; sourceTree = "<group>"; };
+		020F141616B72F450099436C /* timeouts.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = timeouts.c; sourceTree = "<group>"; };
+		020F141716B72F450099436C /* replica_set_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = replica_set_test.c; sourceTree = "<group>"; };
+		020F141816B72F450099436C /* replset_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = replset_test.c; sourceTree = "<group>"; };
+		020F141916B72F450099436C /* resize_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = resize_test.c; sourceTree = "<group>"; };
+		020F141A16B72F450099436C /* simple_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = simple_test.c; sourceTree = "<group>"; };
+		020F141B16B72F450099436C /* sizes_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = sizes_test.c; sourceTree = "<group>"; };
+		020F141C16B72F450099436C /* test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
+		020F141D16B72F450099436C /* unix_socket_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = unix_socket_test.c; sourceTree = "<group>"; };
+		020F141E16B72F450099436C /* update_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = update_test.c; sourceTree = "<group>"; };
+		020F141F16B72F450099436C /* validate_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = validate_test.c; sourceTree = "<group>"; };
+		020F142016B72F450099436C /* write_concern_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = write_concern_test.c; sourceTree = "<group>"; };
 		02216EDE1412D32F00789BD1 /* changelog */ = {isa = PBXFileReference; lastKnownFileType = text; path = changelog; sourceTree = "<group>"; };
 		02216EDF1412D32F00789BD1 /* compat */ = {isa = PBXFileReference; lastKnownFileType = text; path = compat; sourceTree = "<group>"; };
 		02216EE01412D32F00789BD1 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
@@ -231,29 +262,6 @@
 		02A85F2214103D4D004F3FE9 /* mongo.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = mongo.c; sourceTree = "<group>"; };
 		02A85F2314103D4D004F3FE9 /* mongo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mongo.h; sourceTree = "<group>"; };
 		02A85F2614103D4D004F3FE9 /* numbers.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = numbers.c; sourceTree = "<group>"; };
-		02A85F2D14103D4E004F3FE9 /* auth.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = auth.c; sourceTree = "<group>"; };
-		02A85F2E14103D4E004F3FE9 /* benchmark.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = benchmark.c; sourceTree = "<group>"; };
-		02A85F2F14103D4E004F3FE9 /* bson.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bson.c; sourceTree = "<group>"; };
-		02A85F3014103D4E004F3FE9 /* bson_subobject.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = bson_subobject.c; sourceTree = "<group>"; };
-		02A85F3114103D4E004F3FE9 /* count_delete.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = count_delete.c; sourceTree = "<group>"; };
-		02A85F3214103D4E004F3FE9 /* cpptest.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cpptest.cpp; sourceTree = "<group>"; };
-		02A85F3314103D4E004F3FE9 /* cursors.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = cursors.c; sourceTree = "<group>"; };
-		02A85F3414103D4E004F3FE9 /* endian_swap.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = endian_swap.c; sourceTree = "<group>"; };
-		02A85F3514103D4E004F3FE9 /* errors.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = errors.c; sourceTree = "<group>"; };
-		02A85F3614103D4E004F3FE9 /* examples.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = examples.c; sourceTree = "<group>"; };
-		02A85F3714103D4E004F3FE9 /* functions.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = functions.c; sourceTree = "<group>"; };
-		02A85F3814103D4E004F3FE9 /* gridfs.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = gridfs.c; sourceTree = "<group>"; };
-		02A85F3914103D4E004F3FE9 /* helpers.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = helpers.c; sourceTree = "<group>"; };
-		02A85F3A14103D4E004F3FE9 /* json.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = json.c; sourceTree = "<group>"; };
-		02A85F3B14103D4E004F3FE9 /* oid.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = oid.c; sourceTree = "<group>"; };
-		02A85F3E14103D4E004F3FE9 /* timeouts.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = timeouts.c; sourceTree = "<group>"; };
-		02A85F3F14103D4E004F3FE9 /* replica_set.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = replica_set.c; sourceTree = "<group>"; };
-		02A85F4014103D4E004F3FE9 /* resize.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = resize.c; sourceTree = "<group>"; };
-		02A85F4114103D4E004F3FE9 /* simple.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = simple.c; sourceTree = "<group>"; };
-		02A85F4214103D4E004F3FE9 /* sizes.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = sizes.c; sourceTree = "<group>"; };
-		02A85F4314103D4E004F3FE9 /* test.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test.h; sourceTree = "<group>"; };
-		02A85F4414103D4E004F3FE9 /* update.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = update.c; sourceTree = "<group>"; };
-		02A85F4514103D4E004F3FE9 /* validate.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = validate.c; sourceTree = "<group>"; };
 		02A85F4F14103EA6004F3FE9 /* MODServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODServer.h; sourceTree = "<group>"; };
 		02A85F5014103EA6004F3FE9 /* MODServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODServer.m; sourceTree = "<group>"; };
 		02A85F5714104184004F3FE9 /* MODQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODQuery.h; sourceTree = "<group>"; };
@@ -304,6 +312,60 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		020F13FF16B72F450099436C /* test */ = {
+			isa = PBXGroup;
+			children = (
+				020F140016B72F450099436C /* auth_test.c */,
+				020F140116B72F450099436C /* bcon_test.c */,
+				020F140216B72F450099436C /* benchmark_test.c */,
+				020F140316B72F450099436C /* bson_subobject_test.c */,
+				020F140416B72F450099436C /* bson_test.c */,
+				020F140516B72F450099436C /* commands_test.c */,
+				020F140616B72F450099436C /* connect_test.c */,
+				020F140716B72F450099436C /* count_delete_test.c */,
+				020F140816B72F450099436C /* cpptest.cpp */,
+				020F140916B72F450099436C /* cursors_test.c */,
+				020F140A16B72F450099436C /* endian_swap_test.c */,
+				020F140B16B72F450099436C /* env_posix_test.c */,
+				020F140C16B72F450099436C /* env_win32_test.c */,
+				020F140D16B72F450099436C /* errors_test.c */,
+				020F140E16B72F450099436C /* examples_test.c */,
+				020F140F16B72F450099436C /* functions_test.c */,
+				020F141016B72F450099436C /* gridfs_test.c */,
+				020F141116B72F450099436C /* helpers_test.c */,
+				020F141216B72F450099436C /* json_test.c */,
+				020F141316B72F450099436C /* oid_test.c */,
+				020F141416B72F450099436C /* platform */,
+				020F141716B72F450099436C /* replica_set_test.c */,
+				020F141816B72F450099436C /* replset_test.c */,
+				020F141916B72F450099436C /* resize_test.c */,
+				020F141A16B72F450099436C /* simple_test.c */,
+				020F141B16B72F450099436C /* sizes_test.c */,
+				020F141C16B72F450099436C /* test.h */,
+				020F141D16B72F450099436C /* unix_socket_test.c */,
+				020F141E16B72F450099436C /* update_test.c */,
+				020F141F16B72F450099436C /* validate_test.c */,
+				020F142016B72F450099436C /* write_concern_test.c */,
+			);
+			path = test;
+			sourceTree = "<group>";
+		};
+		020F141416B72F450099436C /* platform */ = {
+			isa = PBXGroup;
+			children = (
+				020F141516B72F450099436C /* linux */,
+			);
+			path = platform;
+			sourceTree = "<group>";
+		};
+		020F141516B72F450099436C /* linux */ = {
+			isa = PBXGroup;
+			children = (
+				020F141616B72F450099436C /* timeouts.c */,
+			);
+			path = linux;
+			sourceTree = "<group>";
+		};
 		02216EDC1412D32F00789BD1 /* libjson */ = {
 			isa = PBXGroup;
 			children = (
@@ -415,7 +477,7 @@
 				02A85F1714103D4D004F3FE9 /* README.md */,
 				02A85F1814103D4D004F3FE9 /* SConstruct */,
 				02A85F1914103D4D004F3FE9 /* src */,
-				02A85F2C14103D4E004F3FE9 /* test */,
+				020F13FF16B72F450099436C /* test */,
 			);
 			path = "mongo-c-driver";
 			sourceTree = "<group>";
@@ -489,52 +551,6 @@
 				02A85F2614103D4D004F3FE9 /* numbers.c */,
 			);
 			path = src;
-			sourceTree = "<group>";
-		};
-		02A85F2C14103D4E004F3FE9 /* test */ = {
-			isa = PBXGroup;
-			children = (
-				02A85F2D14103D4E004F3FE9 /* auth.c */,
-				02A85F2E14103D4E004F3FE9 /* benchmark.c */,
-				02A85F2F14103D4E004F3FE9 /* bson.c */,
-				02A85F3014103D4E004F3FE9 /* bson_subobject.c */,
-				02A85F3114103D4E004F3FE9 /* count_delete.c */,
-				02A85F3214103D4E004F3FE9 /* cpptest.cpp */,
-				02A85F3314103D4E004F3FE9 /* cursors.c */,
-				02A85F3414103D4E004F3FE9 /* endian_swap.c */,
-				02A85F3514103D4E004F3FE9 /* errors.c */,
-				02A85F3614103D4E004F3FE9 /* examples.c */,
-				02A85F3714103D4E004F3FE9 /* functions.c */,
-				02A85F3814103D4E004F3FE9 /* gridfs.c */,
-				02A85F3914103D4E004F3FE9 /* helpers.c */,
-				02A85F3A14103D4E004F3FE9 /* json.c */,
-				02A85F3B14103D4E004F3FE9 /* oid.c */,
-				02A85F3C14103D4E004F3FE9 /* platform */,
-				02A85F3F14103D4E004F3FE9 /* replica_set.c */,
-				02A85F4014103D4E004F3FE9 /* resize.c */,
-				02A85F4114103D4E004F3FE9 /* simple.c */,
-				02A85F4214103D4E004F3FE9 /* sizes.c */,
-				02A85F4314103D4E004F3FE9 /* test.h */,
-				02A85F4414103D4E004F3FE9 /* update.c */,
-				02A85F4514103D4E004F3FE9 /* validate.c */,
-			);
-			path = test;
-			sourceTree = "<group>";
-		};
-		02A85F3C14103D4E004F3FE9 /* platform */ = {
-			isa = PBXGroup;
-			children = (
-				02A85F3D14103D4E004F3FE9 /* linux */,
-			);
-			path = platform;
-			sourceTree = "<group>";
-		};
-		02A85F3D14103D4E004F3FE9 /* linux */ = {
-			isa = PBXGroup;
-			children = (
-				02A85F3E14103D4E004F3FE9 /* timeouts.c */,
-			);
-			path = linux;
 			sourceTree = "<group>";
 		};
 		02ABA1B414103B36000417F4 = {
