@@ -29,7 +29,7 @@ static void testTypes(void)
     MODSortedMutableDictionary *document;
     MODBinary *binary;
     NSData *data;
-    bson myBson;
+    bson myBson = NULL_BSON;
     bson_oid_t bsonOid;
     MODObjectId *objectOid;
     const char *oid = "4E9807F88157F608B4000002";
@@ -67,7 +67,7 @@ static void testObjects(NSString *json, id shouldEqual)
     MODSortedMutableDictionary *objectsFromBson;
     NSError *error;
     id objects;
-    bson bsonResult;
+    bson bsonResult = NULL_BSON;
     
     bson_init(&bsonResult);
     [MODJsonToBsonParser bsonFromJson:&bsonResult json:json error:&error];
@@ -181,7 +181,7 @@ static void testJson()
     // test to make sure each items in an array has the correct index
     // https://github.com/fotonauts/MongoHub-Mac/issues/28
     {
-        bson bsonObject;
+        bson bsonObject = NULL_BSON;
         
         bson_init(&bsonObject);
         [MODJsonToBsonParser bsonFromJson:&bsonObject json:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
@@ -194,7 +194,7 @@ static void testJson()
     // https://github.com/fotonauts/MongoHub-Mac/issues/39
     {
         id objects;
-        bson bsonObject;
+        bson bsonObject = NULL_BSON;
         
         objects = [MODJsonToObjectParser objectsFromJson:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
         bson_init(&bsonObject);
