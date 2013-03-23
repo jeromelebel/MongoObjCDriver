@@ -32,7 +32,7 @@ static void testTypes(void)
     bson myBson;
     bson_oid_t bsonOid;
     MODObjectId *objectOid;
-    const char *oid = "4E9807F88157F608B4000002";
+    const char *oid = "4e9807f88157f608b4000002";
     
     document = [[MODSortedMutableDictionary alloc] init];
     
@@ -153,7 +153,7 @@ static void testJson()
     testObjects(@"{\"not data\":{\"$type\":\"encore fred\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"encore fred", @"$type", nil], @"not data", nil]);
     testObjects(@"{\"_id\":\"x\",\"toto\":[1,2,3]}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSNumber numberWithInt:1], [NSNumber numberWithInt:2], [NSNumber numberWithInt:3], nil], @"toto", nil]);
     testObjects(@"{\"_id\":\"x\",\"toto\":[{\"1\":2}]}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil]);
-    testObjects(@"{\"_id\":{\"$oid\":\"4E9807F88157F608B4000002\"},\"type\":\"Activity\"}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODObjectId alloc] initWithCString:"4E9807F88157F608B4000002"] autorelease], @"_id", @"Activity", @"type", nil]);
+    testObjects(@"{\"_id\":{\"$oid\":\"4e9807f88157f608b4000002\"},\"type\":\"Activity\"}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODObjectId alloc] initWithCString:"4e9807f88157f608b4000002"] autorelease], @"_id", @"Activity", @"type", nil]);
     testObjects(@"{\"toto\":{\"$regex\":\"value\"},\"regexp\":{\"$regex\":\"value\",\"$options\":\"x\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODRegex alloc] initWithPattern:@"value" options:nil] autorelease], @"toto", [[[MODRegex alloc] initWithPattern:@"value" options:@"x"] autorelease], @"regexp", nil]);
     testObjects(@"{\"_id\":\"x\",\"toto\":[{\"1\":2},{\"2\":true}]}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"2", nil], nil], @"toto", nil]);
     testObjects(@"{\"toto\":1,\"empty_array\":[],\"type\":\"Activity\"}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"toto", [NSArray array], @"empty_array", @"Activity", @"type", nil]);
