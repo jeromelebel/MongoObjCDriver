@@ -104,7 +104,7 @@
                 description = @"json_tokener_error_parse_comment";
                 break;
             default:
-                description = [NSString stringWithFormat:@"error %d", code];
+                description = [NSString stringWithFormat:@"error %ld", (long)code];
                 break;
         }
         if (descriptionDetails) {
