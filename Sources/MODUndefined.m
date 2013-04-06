@@ -12,7 +12,7 @@
 
 - (NSString *)tengenString
 {
-    return [self jsonValue];
+    return @"undefined";
 }
 
 - (NSString *)jsonValue
