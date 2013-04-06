@@ -109,6 +109,7 @@
 		02C0F1981710E17700C991BC /* printbuf.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C0F1421710E17700C991BC /* printbuf.c */; };
 		02C0F1991710E17700C991BC /* printbuf.c in Sources */ = {isa = PBXBuildFile; fileRef = 02C0F1421710E17700C991BC /* printbuf.c */; };
 		02C0F19A1710E17700C991BC /* printbuf.h in Headers */ = {isa = PBXBuildFile; fileRef = 02C0F1431710E17700C991BC /* printbuf.h */; };
+		02C0F1CB1710E9B500C991BC /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 02C0F1CA1710E9B500C991BC /* config.h */; };
 		02CF87E9142F8AA3000C4C7F /* MODRegex.h in Headers */ = {isa = PBXBuildFile; fileRef = 02CF87E7142F8AA3000C4C7F /* MODRegex.h */; };
 		02CF87EA142F8AA3000C4C7F /* MODRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87E8142F8AA3000C4C7F /* MODRegex.m */; };
 		02CF87EC142F91CA000C4C7F /* MODRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87E8142F8AA3000C4C7F /* MODRegex.m */; };
@@ -283,6 +284,7 @@
 		02C0F13E1710E17700C991BC /* linkhash.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = linkhash.h; sourceTree = "<group>"; };
 		02C0F1421710E17700C991BC /* printbuf.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = printbuf.c; sourceTree = "<group>"; };
 		02C0F1431710E17700C991BC /* printbuf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = printbuf.h; sourceTree = "<group>"; };
+		02C0F1CA1710E9B500C991BC /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		02CF87E7142F8AA3000C4C7F /* MODRegex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODRegex.h; sourceTree = "<group>"; };
 		02CF87E8142F8AA3000C4C7F /* MODRegex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODRegex.m; sourceTree = "<group>"; };
 		02CF87F0142FA66D000C4C7F /* MODJsonGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODJsonGenerator.h; sourceTree = "<group>"; };
@@ -569,6 +571,7 @@
 		02C0F11C1710E17700C991BC /* json-c */ = {
 			isa = PBXGroup;
 			children = (
+				02C0F1CA1710E9B500C991BC /* config.h */,
 				02C0F11F1710E17700C991BC /* arraylist.c */,
 				02C0F1201710E17700C991BC /* arraylist.h */,
 				02C0F1231710E17700C991BC /* bits.h */,
@@ -654,6 +657,7 @@
 				02C0F1901710E17700C991BC /* json_util.h in Headers */,
 				02C0F1931710E17700C991BC /* linkhash.h in Headers */,
 				02C0F19A1710E17700C991BC /* printbuf.h in Headers */,
+				02C0F1CB1710E9B500C991BC /* config.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
