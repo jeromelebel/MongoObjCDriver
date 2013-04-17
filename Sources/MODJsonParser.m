@@ -302,9 +302,58 @@ static size_t convertStringToData(const char * string, void *data, size_t length
     [super dealloc];
 }
 
+- (void)_convertJsonObject:(json_object *)jsonObject previousStructure:(void *)previousStructure
+{
+    struct json_object_iterator iterator;
+    struct json_object_iterator endIterator;
+    int ii = 0;
+    
+    iterator = json_object_iter_begin(jsonObject);
+    endIterator = json_object_iter_end(jsonObject);
+    while (!json_object_iter_equal(&iterator, &endIterator)) {
+        const char *key;
+        struct json_object *value;
+        void *newStructure;
+        
+        key = json_object_iter_peek_name(&iterator);
+        value = json_object_iter_peek_value(&iterator);
+        switch (json_object_get_type(value)) {
+            case json_type_null:
+                [(id<MODJsonParserProtocol>)self appendNullWithKey:key previousStructure:previousStructure index:ii];
+                break;
+            case json_type_boolean:
+                [(id<MODJsonParserProtocol>)self appendBool:json_object_get_boolean(value) withKey:key previousStructure:previousStructure index:ii];
+                break;
+            case json_type_double:
+                [(id<MODJsonParserProtocol>)self appendDouble:json_object_get_double(value) withKey:key previousStructure:previousStructure index:ii];
+                break;
+            case json_type_int:
+                [(id<MODJsonParserProtocol>)self appendLongLong:json_object_get_int64(value) withKey:key previousStructure:previousStructure index:ii];
+                break;
+            case json_type_object:
+                newStructure = [(id<MODJsonParserProtocol>)self openDictionaryWithPreviousStructure:previousStructure key:key index:ii];
+                [self _convertJsonObject:value previousStructure:newStructure];
+                [(id<MODJsonParserProtocol>)self closeDictionaryWithStructure:newStructure];
+                break;
+            case json_type_array:
+                newStructure = [(id<MODJsonParserProtocol>)self openArrayWithPreviousStructure:previousStructure key:key index:ii];
+                [self _convertJsonObject:value previousStructure:newStructure];
+                [(id<MODJsonParserProtocol>)self closeArrayWithStructure:newStructure];
+                break;
+            case json_type_string:
+                [(id<MODJsonParserProtocol>)self appendString:json_object_get_string(value) withKey:key previousStructure:previousStructure index:ii];
+                break;
+        }
+        json_object_iter_next(&iterator);
+        ii++;
+    }
+}
+
 - (void)_processJson:(const char *)json errorCode:(int *)errorCode parsedLength:(size_t *)parsedLength
 {
     json_object *object;
+    struct json_object_iterator iterator;
+    struct json_object_iterator endIterator;
     
     assert(parsedLength != nil);
     assert(errorCode != nil);
@@ -312,6 +361,32 @@ static size_t convertStringToData(const char * string, void *data, size_t length
     *errorCode = 0;
     
     object = json_tokener_parse_ex(self.tokener, json, -1);
+    iterator = json_object_iter_begin(object);
+    endIterator = json_object_iter_end(object);
+    
+    switch (json_object_get_type(object)) {
+        case json_type_object:
+            [(id<MODJsonParserProtocol>)self startMainDictionary];
+            break;
+        case json_type_array:
+            [(id<MODJsonParserProtocol>)self startMainArray];
+            break;
+        default:
+            NSAssert(NO, @"unknown type %d", json_object_get_type(object));
+    }
+    [self _convertJsonObject:object previousStructure:[(id<MODJsonParserProtocol>)self mainObject]];
+    
+    switch (json_object_get_type(object)) {
+        case json_type_object:
+            [(id<MODJsonParserProtocol>)self finishMainDictionary];
+            break;
+        case json_type_array:
+            [(id<MODJsonParserProtocol>)self finishMainArray];
+            break;
+        default:
+            NSAssert(NO, @"unknown type %d", json_object_get_type(object));
+    }
+    
     *parsedLength = self.tokener->char_offset;
     *errorCode = self.tokener->err;
 }
