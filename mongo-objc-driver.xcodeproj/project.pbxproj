@@ -22,6 +22,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		021D5C4C1722EAB8001AA92D /* libv8_base.x64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 021D5C441722EAB8001AA92D /* libv8_base.x64.a */; };
+		021D5C4D1722EAB8001AA92D /* libv8_snapshot.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 021D5C451722EAB8001AA92D /* libv8_snapshot.a */; };
 		02216F1F1412D47800789BD1 /* json.c in Sources */ = {isa = PBXBuildFile; fileRef = 02216EEA1412D32F00789BD1 /* json.c */; };
 		02216F681413031B00789BD1 /* json.c in Sources */ = {isa = PBXBuildFile; fileRef = 02216EEA1412D32F00789BD1 /* json.c */; };
 		022F8C52169B5EF20024D20C /* bcon.c in Sources */ = {isa = PBXBuildFile; fileRef = 022F8C4F169B5EF20024D20C /* bcon.c */; };
@@ -132,6 +134,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		021D5C441722EAB8001AA92D /* libv8_base.x64.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libv8_base.x64.a; sourceTree = "<group>"; };
+		021D5C451722EAB8001AA92D /* libv8_snapshot.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libv8_snapshot.a; sourceTree = "<group>"; };
+		021D5C461722EAB8001AA92D /* v8-debug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "v8-debug.h"; sourceTree = "<group>"; };
+		021D5C471722EAB8001AA92D /* v8-preparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "v8-preparser.h"; sourceTree = "<group>"; };
+		021D5C481722EAB8001AA92D /* v8-profiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "v8-profiler.h"; sourceTree = "<group>"; };
+		021D5C491722EAB8001AA92D /* v8-testing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "v8-testing.h"; sourceTree = "<group>"; };
+		021D5C4A1722EAB8001AA92D /* v8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v8.h; sourceTree = "<group>"; };
+		021D5C4B1722EAB8001AA92D /* v8stdint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = v8stdint.h; sourceTree = "<group>"; };
 		02216EDE1412D32F00789BD1 /* changelog */ = {isa = PBXFileReference; lastKnownFileType = text; path = changelog; sourceTree = "<group>"; };
 		02216EDF1412D32F00789BD1 /* compat */ = {isa = PBXFileReference; lastKnownFileType = text; path = compat; sourceTree = "<group>"; };
 		02216EE01412D32F00789BD1 /* control */ = {isa = PBXFileReference; lastKnownFileType = text; path = control; sourceTree = "<group>"; };
@@ -302,6 +312,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				02ABA1C414103B37000417F4 /* Cocoa.framework in Frameworks */,
+				021D5C4C1722EAB8001AA92D /* libv8_base.x64.a in Frameworks */,
+				021D5C4D1722EAB8001AA92D /* libv8_snapshot.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,6 +328,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		021D5C431722EAA2001AA92D /* v8 */ = {
+			isa = PBXGroup;
+			children = (
+				021D5C441722EAB8001AA92D /* libv8_base.x64.a */,
+				021D5C451722EAB8001AA92D /* libv8_snapshot.a */,
+				021D5C461722EAB8001AA92D /* v8-debug.h */,
+				021D5C471722EAB8001AA92D /* v8-preparser.h */,
+				021D5C481722EAB8001AA92D /* v8-profiler.h */,
+				021D5C491722EAB8001AA92D /* v8-testing.h */,
+				021D5C4A1722EAB8001AA92D /* v8.h */,
+				021D5C4B1722EAB8001AA92D /* v8stdint.h */,
+			);
+			path = v8;
+			sourceTree = "<group>";
+		};
 		02216EDC1412D32F00789BD1 /* libjson */ = {
 			isa = PBXGroup;
 			children = (
@@ -524,6 +551,7 @@
 		02A85F0114103D4D004F3FE9 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				021D5C431722EAA2001AA92D /* v8 */,
 				02A85F0214103D4D004F3FE9 /* mongo-c-driver */,
 				02216EDC1412D32F00789BD1 /* libjson */,
 			);
@@ -979,6 +1007,10 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Libraries/v8\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -991,6 +1023,10 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Libraries/v8\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
 			};
