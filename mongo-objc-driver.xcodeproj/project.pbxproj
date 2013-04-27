@@ -11,6 +11,7 @@
 			isa = PBXAggregateTarget;
 			buildConfigurationList = 02216F161412D39200789BD1 /* Build configuration list for PBXAggregateTarget "Submodules" */;
 			buildPhases = (
+				02DB18A6172C7C2200B26EAE /* Update submodules */,
 				02216F191412D3B700789BD1 /* mongo-c-driver */,
 				02216F1A1412D3CB00789BD1 /* libjson */,
 			);
@@ -814,6 +815,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "module_name=\"libjson\"\nmodule_owner=\"fotonauts\"\nmodule_branch=\"master\"\nmodule_path=\"Libraries/${module_name}\"\n\nfiles=`ls \"${module_path}\" 2> /dev/null`\nif [ \"${files}\" = \"\" ] ; then\n  if [ -d .git ] ; then\n    echo \"\"\n  else\n    cd \"${module_path}\"\n    curl -o \"${module_name}.zip\" -L \"https://nodeload.github.com/${module_owner}/${module_name}/zipball/${module_branch}\"\n    unzip \"${module_name}.zip\"\n    rm \"${module_name}.zip\"\n    module_unzip_dir=`ls`\n    cd \"${module_unzip_dir}\"\n    mv * ..\n    cd ..\n    rm -fr \"${module_unzip_dir}\"\n  fi\nfi\n";
+		};
+		02DB18A6172C7C2200B26EAE /* Update submodules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Update submodules";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -d \".git\" ] ; then\n  git submodule update --init\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
