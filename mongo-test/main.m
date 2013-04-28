@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "MOD_internal.h"
+#import "NSData+Base64.h"
+#import "NSString+Base64.h"
 
 #define DATABASE_NAME_TEST @"database_test"
 #define COLLECTION_NAME_TEST @"collection_test"
@@ -148,8 +150,8 @@ static void testJson()
     NSError *error;
     id value;
     
-    testObjects(@"{\"data\":{\"$binary\":\"00\",\"$type\":\"0\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODBinary alloc] initWithBytes:"\0" length:1 binaryType:0] autorelease], @"data", nil]);
-    testObjects(@"{\"data\":{\"$binary\":\"4A65726F6D65\",\"$type\":\"0\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODBinary alloc] initWithBytes:"Jerome" length:6 binaryType:0] autorelease], @"data", nil]);
+    testObjects(@"{\"data\":{\"$binary\":\"AA==\",\"$type\":\"0\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODBinary alloc] initWithBytes:"\0" length:1 binaryType:0] autorelease], @"data", nil]);
+    testObjects(@"{\"data\":{\"$binary\":\"SmVyb21l\",\"$type\":\"0\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODBinary alloc] initWithBytes:"Jerome" length:6 binaryType:0] autorelease], @"data", nil]);
     testObjects(@"{\"not data\":{\"$type\":\"encore fred\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"encore fred", @"$type", nil], @"not data", nil]);
     testObjects(@"{\"_id\":\"x\",\"toto\":[1,2,3]}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSNumber numberWithInt:1], [NSNumber numberWithInt:2], [NSNumber numberWithInt:3], nil], @"toto", nil]);
     testObjects(@"{\"_id\":\"x\",\"toto\":[{\"1\":2}]}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil]);
@@ -206,6 +208,48 @@ static void testJson()
     }
 }
 
+static void testNSDataInBase64(NSData *dataToConvert, const char *base64)
+{
+    NSString *base64String;
+    
+    base64String = [NSString stringWithUTF8String:base64];
+    if (![[dataToConvert base64String] isEqualToString:base64String]) {
+        NSLog(@"***** Problem to encode base 64");
+        NSLog(@"trying to encode %@", dataToConvert);
+        NSLog(@"expecting %s", base64);
+        NSLog(@"received %@", [dataToConvert base64String]);
+        assert(false);
+    }
+    if (![[base64String dataFromBase64] isEqualToData:dataToConvert]) {
+        NSLog(@"***** Problem to decode base 64");
+        NSLog(@"trying to decode %s", base64);
+        NSLog(@"expecting %@", dataToConvert);
+        NSLog(@"received %@", [base64String dataFromBase64]);
+        assert(false);
+    }
+}
+
+static void testStringInBase64(const char *string, const char *base64)
+{
+    testNSDataInBase64([NSData dataWithBytes:string length:strlen(string)], base64);
+}
+
+static void testDataInBase64(const char *data, NSUInteger length, const char *base64)
+{
+    testNSDataInBase64([NSData dataWithBytes:data length:length], base64);
+}
+
+static void testBase64(void)
+{
+    testDataInBase64("\0", 1, "AA==");
+    testStringInBase64("1", "MQ==");
+    testStringInBase64("12", "MTI=");
+    testStringInBase64("123", "MTIz");
+    testStringInBase64("1234", "MTIzNA==");
+    testStringInBase64("12345", "MTIzNDU=");
+    testStringInBase64("123456", "MTIzNDU2");
+}
+
 int main (int argc, const char * argv[])
 {
     @autoreleasepool {
@@ -215,6 +259,7 @@ int main (int argc, const char * argv[])
         MODCollection *mongoCollection;
         MODCursor *cursor;
 
+        testBase64();
         //testTypes();
         testJson();
         if (argc != 2) {
