@@ -89,6 +89,12 @@
 		02CF87F2142FA66D000C4C7F /* MODJsonGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 02CF87F0142FA66D000C4C7F /* MODJsonGenerator.h */; };
 		02CF87F3142FA66D000C4C7F /* MODJsonGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87F1142FA66D000C4C7F /* MODJsonGenerator.m */; };
 		02CF87F4142FA66D000C4C7F /* MODJsonGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87F1142FA66D000C4C7F /* MODJsonGenerator.m */; };
+		02DB18AB172C8C5A00B26EAE /* NSData+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DB18A9172C8C5A00B26EAE /* NSData+Base64.h */; };
+		02DB18AC172C8C5A00B26EAE /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DB18AA172C8C5A00B26EAE /* NSData+Base64.m */; };
+		02DB18AF172C8C9700B26EAE /* NSString+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DB18AD172C8C9700B26EAE /* NSString+Base64.h */; };
+		02DB18B0172C8C9700B26EAE /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DB18AE172C8C9700B26EAE /* NSString+Base64.m */; };
+		02DB18B1172C8DFA00B26EAE /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DB18AA172C8C5A00B26EAE /* NSData+Base64.m */; };
+		02DB18B2172C8E0700B26EAE /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DB18AE172C8C9700B26EAE /* NSString+Base64.m */; };
 		02F121C01410EF5200197811 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F121BF1410EF5200197811 /* Foundation.framework */; };
 		02F121C31410EF5200197811 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F121C21410EF5200197811 /* main.m */; };
 		02F121C71410EF5200197811 /* mongo_test.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02F121C61410EF5200197811 /* mongo_test.1 */; };
@@ -291,6 +297,10 @@
 		02CF87E8142F8AA3000C4C7F /* MODRegex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODRegex.m; sourceTree = "<group>"; };
 		02CF87F0142FA66D000C4C7F /* MODJsonGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODJsonGenerator.h; sourceTree = "<group>"; };
 		02CF87F1142FA66D000C4C7F /* MODJsonGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODJsonGenerator.m; sourceTree = "<group>"; };
+		02DB18A9172C8C5A00B26EAE /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		02DB18AA172C8C5A00B26EAE /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		02DB18AD172C8C9700B26EAE /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
+		02DB18AE172C8C9700B26EAE /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
 		02F121BD1410EF5200197811 /* mongo-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mongo-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02F121BF1410EF5200197811 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02F121C21410EF5200197811 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -646,6 +656,10 @@
 				0272D1BE142D48AF000091A4 /* MODJsonParser.m */,
 				02CF87F0142FA66D000C4C7F /* MODJsonGenerator.h */,
 				02CF87F1142FA66D000C4C7F /* MODJsonGenerator.m */,
+				02DB18AD172C8C9700B26EAE /* NSString+Base64.h */,
+				02DB18AE172C8C9700B26EAE /* NSString+Base64.m */,
+				02DB18A9172C8C5A00B26EAE /* NSData+Base64.h */,
+				02DB18AA172C8C5A00B26EAE /* NSData+Base64.m */,
 				02ABA1CA14103B37000417F4 /* Supporting Files */,
 			);
 			path = Sources;
@@ -707,6 +721,8 @@
 				023ECFFC14851BEE00185781 /* MODSymbol.h in Headers */,
 				026B94A114BC276100BA0688 /* MODUndefined.h in Headers */,
 				022F8C53169B5EF20024D20C /* bcon.h in Headers */,
+				02DB18AB172C8C5A00B26EAE /* NSData+Base64.h in Headers */,
+				02DB18AF172C8C9700B26EAE /* NSString+Base64.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -862,6 +878,8 @@
 				026B94A014BC276100BA0688 /* MODUndefined.m in Sources */,
 				022F8C52169B5EF20024D20C /* bcon.c in Sources */,
 				022F8C54169B5EF20024D20C /* env.c in Sources */,
+				02DB18AC172C8C5A00B26EAE /* NSData+Base64.m in Sources */,
+				02DB18B0172C8C9700B26EAE /* NSString+Base64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -895,6 +913,8 @@
 				026B94A314BC278700BA0688 /* MODUndefined.m in Sources */,
 				022F8C55169B5F420024D20C /* env.c in Sources */,
 				022F8C56169B5F450024D20C /* bcon.c in Sources */,
+				02DB18B1172C8DFA00B26EAE /* NSData+Base64.m in Sources */,
+				02DB18B2172C8E0700B26EAE /* NSString+Base64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
