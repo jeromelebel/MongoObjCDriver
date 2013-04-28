@@ -650,15 +650,17 @@ static size_t convertHexaStringToData(const char * string, void *data, size_t le
 
 - (BOOL)appendDataBinary:(const char *)binary withLength:(NSUInteger)length binaryType:(char)binaryType key:(const char *)key previousStructure:(void *)structure index:(int)index
 {
-    void *buffer = malloc(length / 2);
+    NSString *base64String;
+    NSData *data;
     
     if (key == NULL) {
         snprintf(_indexKey, sizeof(_indexKey), "%d", index);
         key = _indexKey;
     }
-    convertHexaStringToData(binary, buffer, length / 2);
-    bson_append_binary(_bson, key, binaryType, buffer, length / 2);
-    free(buffer);
+    base64String = [[NSString alloc] initWithBytes:binary length:length encoding:NSUTF8StringEncoding];
+    data = [base64String dataFromBase64];
+    bson_append_binary(_bson, key, binaryType, [data bytes], [data length]);
+    [base64String release];
     return YES;
 }
 
