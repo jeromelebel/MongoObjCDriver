@@ -78,6 +78,7 @@ static void testObjects(NSString *json, id shouldEqual)
         NSLog(@"***** parsing errors for:");
         NSLog(@"%@", json);
         NSLog(@"%@", error);
+        assert(0);
     }
     objectsFromBson = [MODServer objectFromBson:&bsonResult];
     if (([shouldEqual isKindOfClass:[NSArray class]] && ![[objectsFromBson objectForKey:@"array"] isEqual:shouldEqual])
@@ -86,6 +87,7 @@ static void testObjects(NSString *json, id shouldEqual)
         NSLog(@"json: %@", json);
         NSLog(@"expecting: %@", shouldEqual);
         NSLog(@"received: %@", objectsFromBson);
+        assert(0);
     }
     bson_destroy(&bsonResult);
     objects = [MODJsonToObjectParser objectsFromJson:json error:&error];
@@ -93,6 +95,7 @@ static void testObjects(NSString *json, id shouldEqual)
         NSLog(@"***** parsing errors for:");
         NSLog(@"%@", json);
         NSLog(@"%@", error);
+        assert(0);
     } else if (![objects isEqual:shouldEqual]) {
         NSLog(@"***** wrong result for:");
         NSLog(@"%@", json);
@@ -105,6 +108,7 @@ static void testObjects(NSString *json, id shouldEqual)
                 }
             }
         }
+        assert(0);
     }
     assert(error == nil);
     assert([objects isEqual:shouldEqual]);
