@@ -7,6 +7,7 @@
 //
 
 #import "MOD_internal.h"
+#import "NSString+Base64.h"
 
 static void my_debug(void)
 {
@@ -257,7 +258,7 @@ static void * create_data_for_bson(int type, const char *data, size_t length, vo
     return result;
 }
 
-static size_t convertStringToData(const char * string, void *data, size_t length)
+static size_t convertHexaStringToData(const char * string, void *data, size_t length)
 {
     BOOL isValid = YES;
     size_t count = 0;
@@ -295,7 +296,7 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
         if (dataInfo->length == sizeof(bson_oid_t) * 2) {
             bson_oid_t oid;
             
-            if (convertStringToData(dataInfo->data, &oid, sizeof(bson_oid_t)) == sizeof(bson_oid_t) && context->pendingBsonValue.bsonType == NO_BSON_TYPE && dataInfo->type == JSON_STRING) {
+            if (convertHexaStringToData(dataInfo->data, &oid, sizeof(bson_oid_t)) == sizeof(bson_oid_t) && context->pendingBsonValue.bsonType == NO_BSON_TYPE && dataInfo->type == JSON_STRING) {
                 result = [context->target appendObjectId:&oid length:sizeof(oid) withKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure index:context->pendingBsonValue.index]?0:1;
                 clear_pending_value(context, YES);
             }
@@ -748,7 +749,7 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
         snprintf(_indexKey, sizeof(_indexKey), "%d", index);
         key = _indexKey;
     }
-    convertStringToData(binary, buffer, length / 2);
+    convertHexaStringToData(binary, buffer, length / 2);
     bson_append_binary(_bson, key, binaryType, buffer, length / 2);
     free(buffer);
     return YES;
@@ -992,13 +993,13 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
 {
     MODBinary *object;
     BOOL result;
-    void *buffer = malloc(length / 2);
+    NSString *base64String;
     
-    convertStringToData(binary, buffer, length / 2);
-    object = [[MODBinary alloc] initWithBytes:buffer length:length / 2 binaryType:binaryType];
+    base64String = [[NSString alloc] initWithBytes:binary length:length encoding:NSUTF8StringEncoding];
+    object = [[MODBinary alloc] initWithData:[base64String dataFromBase64] binaryType:binaryType];
     result = [self addObject:object toStructure:structure withKey:key];
     [object release];
-    free(buffer);
+    [base64String release];
     return result;
 }
 

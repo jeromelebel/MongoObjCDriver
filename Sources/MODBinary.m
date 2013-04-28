@@ -7,6 +7,7 @@
 //
 
 #import "MOD_internal.h"
+#import "NSData+Base64.h"
 
 @implementation MODBinary
 
@@ -38,24 +39,13 @@
 
 - (NSString *)jsonValueWithPretty:(BOOL)pretty
 {
-    char *bufferString;
-    const unsigned char *bytes;
     NSString *result;
-    size_t ii, count;
     
-    bytes = [_data bytes];
-    bufferString = malloc(([_data length] * 2) + 1);
-    count = [_data length];
-    for(ii = 0; ii < count; ii++) {
-        snprintf(bufferString + (ii * 2), 3, "%.2X", bytes[ii]);
-    }
-    bufferString[(ii * 2) + 1] = 0;
     if (pretty) {
-        result = [NSString stringWithFormat:@"{ \"$binary\" : \"%s\", \"$type\" : \"%d\" }", bufferString, (int)_binaryType];
+        result = [NSString stringWithFormat:@"{ \"$binary\" : \"%@\", \"$type\" : \"%d\" }", [_data base64String], (int)_binaryType];
     } else {
-        result = [NSString stringWithFormat:@"{\"$binary\":\"%s\",\"$type\":\"%d\"}", bufferString, (int)_binaryType];
+        result = [NSString stringWithFormat:@"{\"$binary\":\"%@\",\"$type\":\"%d\"}", [_data base64String], (int)_binaryType];
     }
-    free(bufferString);
     return result;
 }
 
