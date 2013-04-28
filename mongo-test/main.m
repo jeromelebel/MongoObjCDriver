@@ -150,7 +150,7 @@ static void testJson()
     NSError *error;
     id value;
     
-    testObjects(@"{\"data\":{\"$binary\":\"AA==\",\"$type\":\"0\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODBinary alloc] initWithBytes:"\0" length:1 binaryType:0] autorelease], @"data", nil]);
+    testObjects(@"{\"data\":BinData(0,\":\"AA==\")}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODBinary alloc] initWithBytes:"\0" length:1 binaryType:0] autorelease], @"data", nil]);
     testObjects(@"{\"data\":{\"$binary\":\"SmVyb21l\",\"$type\":\"0\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODBinary alloc] initWithBytes:"Jerome" length:6 binaryType:0] autorelease], @"data", nil]);
     testObjects(@"{\"not data\":{\"$type\":\"encore fred\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"encore fred", @"$type", nil], @"not data", nil]);
     testObjects(@"{\"_id\":\"x\",\"toto\":[1,2,3]}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSNumber numberWithInt:1], [NSNumber numberWithInt:2], [NSNumber numberWithInt:3], nil], @"toto", nil]);
