@@ -344,6 +344,9 @@ static size_t convertHexaStringToData(const char * string, void *data, size_t le
             case json_type_string:
                 [(id<MODJsonParserProtocol>)self appendString:json_object_get_string(value) withKey:key previousStructure:previousStructure index:ii];
                 break;
+            case json_type_binary:
+                [(id<MODJsonParserProtocol>)self appendDataBinary:json_object_get_string(value) withLength:<#(NSUInteger)#> binaryType:<#(char)#> key:key previousStructure:previousStructure index:ii];
+                break;
         }
         json_object_iter_next(&iterator);
         ii++;
