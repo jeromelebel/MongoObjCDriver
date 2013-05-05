@@ -90,6 +90,9 @@
 		02CF87F2142FA66D000C4C7F /* MODJsonGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 02CF87F0142FA66D000C4C7F /* MODJsonGenerator.h */; };
 		02CF87F3142FA66D000C4C7F /* MODJsonGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87F1142FA66D000C4C7F /* MODJsonGenerator.m */; };
 		02CF87F4142FA66D000C4C7F /* MODJsonGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87F1142FA66D000C4C7F /* MODJsonGenerator.m */; };
+		02DB18B51731B8DD00B26EAE /* MODJsonParserV8.mm in Sources */ = {isa = PBXBuildFile; fileRef = 02DB18B41731B8DD00B26EAE /* MODJsonParserV8.mm */; };
+		02DB18B6173359B200B26EAE /* libv8_base.x64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 021D5C441722EAB8001AA92D /* libv8_base.x64.a */; };
+		02DB18B7173359B500B26EAE /* libv8_snapshot.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 021D5C451722EAB8001AA92D /* libv8_snapshot.a */; };
 		02F121C01410EF5200197811 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F121BF1410EF5200197811 /* Foundation.framework */; };
 		02F121C31410EF5200197811 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F121C21410EF5200197811 /* main.m */; };
 		02F121C71410EF5200197811 /* mongo_test.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02F121C61410EF5200197811 /* mongo_test.1 */; };
@@ -300,6 +303,8 @@
 		02CF87E8142F8AA3000C4C7F /* MODRegex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODRegex.m; sourceTree = "<group>"; };
 		02CF87F0142FA66D000C4C7F /* MODJsonGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODJsonGenerator.h; sourceTree = "<group>"; };
 		02CF87F1142FA66D000C4C7F /* MODJsonGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODJsonGenerator.m; sourceTree = "<group>"; };
+		02DB18B31731B8DD00B26EAE /* MODJsonParserV8.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODJsonParserV8.h; sourceTree = "<group>"; };
+		02DB18B41731B8DD00B26EAE /* MODJsonParserV8.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MODJsonParserV8.mm; sourceTree = "<group>"; };
 		02F121BD1410EF5200197811 /* mongo-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mongo-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02F121BF1410EF5200197811 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02F121C21410EF5200197811 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -322,13 +327,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				02F121C01410EF5200197811 /* Foundation.framework in Frameworks */,
+				02DB18B6173359B200B26EAE /* libv8_base.x64.a in Frameworks */,
+				02DB18B7173359B500B26EAE /* libv8_snapshot.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		021D5C431722EAA2001AA92D /* v8 */ = {
+		021D5C431722EAA2001AA92D /* v8-libraries */ = {
 			isa = PBXGroup;
 			children = (
 				021D5C441722EAB8001AA92D /* libv8_base.x64.a */,
@@ -340,7 +347,7 @@
 				021D5C4A1722EAB8001AA92D /* v8.h */,
 				021D5C4B1722EAB8001AA92D /* v8stdint.h */,
 			);
-			path = v8;
+			path = "v8-libraries";
 			sourceTree = "<group>";
 		};
 		02216EDC1412D32F00789BD1 /* libjson */ = {
@@ -551,7 +558,7 @@
 		02A85F0114103D4D004F3FE9 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				021D5C431722EAA2001AA92D /* v8 */,
+				021D5C431722EAA2001AA92D /* v8-libraries */,
 				02A85F0214103D4D004F3FE9 /* mongo-c-driver */,
 				02216EDC1412D32F00789BD1 /* libjson */,
 			);
@@ -671,6 +678,8 @@
 				02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */,
 				0272D1BD142D48AE000091A4 /* MODJsonParser.h */,
 				0272D1BE142D48AF000091A4 /* MODJsonParser.m */,
+				02DB18B31731B8DD00B26EAE /* MODJsonParserV8.h */,
+				02DB18B41731B8DD00B26EAE /* MODJsonParserV8.mm */,
 				02CF87F0142FA66D000C4C7F /* MODJsonGenerator.h */,
 				02CF87F1142FA66D000C4C7F /* MODJsonGenerator.m */,
 				02ABA1CA14103B37000417F4 /* Supporting Files */,
@@ -908,6 +917,7 @@
 				026B94A314BC278700BA0688 /* MODUndefined.m in Sources */,
 				022F8C55169B5F420024D20C /* env.c in Sources */,
 				022F8C56169B5F450024D20C /* bcon.c in Sources */,
+				02DB18B51731B8DD00B26EAE /* MODJsonParserV8.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1035,6 +1045,10 @@
 		02F121C81410EF5200197811 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Libraries/v8-libraries\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1042,6 +1056,10 @@
 		02F121C91410EF5200197811 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Libraries/v8-libraries\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
