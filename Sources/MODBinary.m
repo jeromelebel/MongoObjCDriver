@@ -42,9 +42,9 @@
     NSString *result;
     
     if (pretty) {
-        result = [NSString stringWithFormat:@"{ \"$binary\" : \"%@\", \"$type\" : \"%d\" }", [_data base64String], (int)_binaryType];
+        result = [NSString stringWithFormat:@"BinData(%d, \"%@\")", (int)_binaryType, [_data base64String]];
     } else {
-        result = [NSString stringWithFormat:@"{\"$binary\":\"%@\",\"$type\":\"%d\"}", [_data base64String], (int)_binaryType];
+        result = [NSString stringWithFormat:@"BinData(%d,\"%@\")", (int)_binaryType, [_data base64String]];
     }
     return result;
 }
