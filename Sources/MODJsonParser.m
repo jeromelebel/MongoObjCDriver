@@ -303,7 +303,59 @@ static size_t convertHexaStringToData(const char * string, void *data, size_t le
     [super dealloc];
 }
 
-- (void)_convertJsonObject:(json_object *)jsonObject previousStructure:(void *)previousStructure
+- (void)_convertJsonValue:(struct json_object *)value previousStructure:(void *)previousStructure key:(const char *)key index:(int)index
+{
+    void *newStructure;
+    
+    switch (json_object_get_type(value)) {
+        case json_type_null:
+            [(id<MODJsonParserProtocol>)self appendNullWithKey:key previousStructure:previousStructure index:index];
+            break;
+        case json_type_boolean:
+            [(id<MODJsonParserProtocol>)self appendBool:json_object_get_boolean(value) withKey:key previousStructure:previousStructure index:index];
+            break;
+        case json_type_double:
+            [(id<MODJsonParserProtocol>)self appendDouble:json_object_get_double(value) withKey:key previousStructure:previousStructure index:index];
+            break;
+        case json_type_int:
+            [(id<MODJsonParserProtocol>)self appendLongLong:json_object_get_int64(value) withKey:key previousStructure:previousStructure index:index];
+            break;
+        case json_type_object:
+            newStructure = [(id<MODJsonParserProtocol>)self openDictionaryWithPreviousStructure:previousStructure key:key index:index];
+            [self _convertJsonObject:value objectStructure:newStructure];
+            [(id<MODJsonParserProtocol>)self closeDictionaryWithStructure:newStructure];
+            break;
+        case json_type_array:
+            newStructure = [(id<MODJsonParserProtocol>)self openArrayWithPreviousStructure:previousStructure key:key index:index];
+            [self _convertJsonArray:value arrayStructure:newStructure];
+            [(id<MODJsonParserProtocol>)self closeArrayWithStructure:newStructure];
+            break;
+        case json_type_string:
+            [(id<MODJsonParserProtocol>)self appendString:json_object_get_string(value) withKey:key previousStructure:previousStructure index:index];
+            break;
+        case json_type_binary:
+            [(id<MODJsonParserProtocol>)self appendDataBinary:json_object_get_binary(value) withLength:json_object_get_binary_len(value) binaryType:json_object_get_binary_type(value) key:key previousStructure:previousStructure index:index];
+            break;
+    }
+}
+
+- (void)_convertJsonArray:(json_object *)jsonArray arrayStructure:(void *)arrayStructure
+{
+    struct array_list *array;
+    int ii, count;
+    
+    array = json_object_get_array(jsonArray);
+    count = array_list_length(array);
+    for (ii = 0; ii < count; ii++) {
+        void *value;
+        
+        value = array_list_get_idx(array, ii);
+        [self _convertJsonValue:value previousStructure:arrayStructure key:NULL index:ii];
+    }
+    
+}
+
+- (void)_convertJsonObject:(json_object *)jsonObject objectStructure:(void *)objectStructure
 {
     struct json_object_iterator iterator;
     struct json_object_iterator endIterator;
@@ -314,40 +366,10 @@ static size_t convertHexaStringToData(const char * string, void *data, size_t le
     while (!json_object_iter_equal(&iterator, &endIterator)) {
         const char *key;
         struct json_object *value;
-        void *newStructure;
         
         key = json_object_iter_peek_name(&iterator);
         value = json_object_iter_peek_value(&iterator);
-        switch (json_object_get_type(value)) {
-            case json_type_null:
-                [(id<MODJsonParserProtocol>)self appendNullWithKey:key previousStructure:previousStructure index:ii];
-                break;
-            case json_type_boolean:
-                [(id<MODJsonParserProtocol>)self appendBool:json_object_get_boolean(value) withKey:key previousStructure:previousStructure index:ii];
-                break;
-            case json_type_double:
-                [(id<MODJsonParserProtocol>)self appendDouble:json_object_get_double(value) withKey:key previousStructure:previousStructure index:ii];
-                break;
-            case json_type_int:
-                [(id<MODJsonParserProtocol>)self appendLongLong:json_object_get_int64(value) withKey:key previousStructure:previousStructure index:ii];
-                break;
-            case json_type_object:
-                newStructure = [(id<MODJsonParserProtocol>)self openDictionaryWithPreviousStructure:previousStructure key:key index:ii];
-                [self _convertJsonObject:value previousStructure:newStructure];
-                [(id<MODJsonParserProtocol>)self closeDictionaryWithStructure:newStructure];
-                break;
-            case json_type_array:
-                newStructure = [(id<MODJsonParserProtocol>)self openArrayWithPreviousStructure:previousStructure key:key index:ii];
-                [self _convertJsonObject:value previousStructure:newStructure];
-                [(id<MODJsonParserProtocol>)self closeArrayWithStructure:newStructure];
-                break;
-            case json_type_string:
-                [(id<MODJsonParserProtocol>)self appendString:json_object_get_string(value) withKey:key previousStructure:previousStructure index:ii];
-                break;
-            case json_type_binary:
-                [(id<MODJsonParserProtocol>)self appendDataBinary:json_object_get_binary(value) withLength:json_object_get_binary_len(value) binaryType:json_object_get_binary_type(value) key:key previousStructure:previousStructure index:ii];
-                break;
-        }
+        [self _convertJsonValue:value previousStructure:objectStructure key:key index:ii];
         json_object_iter_next(&iterator);
         ii++;
     }
@@ -378,7 +400,7 @@ static size_t convertHexaStringToData(const char * string, void *data, size_t le
         default:
             NSAssert(NO, @"unknown type %d", json_object_get_type(object));
     }
-    [self _convertJsonObject:object previousStructure:[(id<MODJsonParserProtocol>)self mainObject]];
+    [self _convertJsonObject:object objectStructure:[(id<MODJsonParserProtocol>)self mainObject]];
     
     switch (json_object_get_type(object)) {
         case json_type_object:
