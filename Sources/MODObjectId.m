@@ -84,11 +84,7 @@
 
 - (NSString *)jsonValueWithPretty:(BOOL)pretty
 {
-    if (pretty) {
-        return [NSString stringWithFormat:@"{ \"$oid\" : \"%@\" }", [self stringValue]];
-    } else {
-        return [NSString stringWithFormat:@"{\"$oid\":\"%@\"}", [self stringValue]];
-    }
+    return [NSString stringWithFormat:@"ObjectId(\"%@\")", [self stringValue]];
 }
 
 - (BOOL)isEqual:(id)object
