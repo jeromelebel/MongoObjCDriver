@@ -497,9 +497,9 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
                 [result appendString:@"false"];
             }
         } else if (strcmp([value objCType], @encode(float)) == 0) {
-            [result appendFormat:@"%f", [value floatValue]];
+            [result appendString:[value description]];
         } else if (strcmp([value objCType], @encode(double)) == 0) {
-            [result appendFormat:@"%f", [value doubleValue]];
+            [result appendString:[value description]];
         } else {
             [result appendString:[value description]];
         }
