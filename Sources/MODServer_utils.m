@@ -7,6 +7,8 @@
 //
 
 #import "MOD_internal.h"
+#import "MODJsonParser.h"
+#import "json.h"
 
 @implementation MODServer(utils_internal)
 
@@ -596,6 +598,25 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         ii++;
     }
     return [result autorelease];
+}
+
++ (void)compareJson:(NSString *)json document:(id)document
+{
+    bson bsonDocument;
+    NSError *error;
+    id convertedDocument;
+    
+    bson_init(&bsonDocument);
+    [MODJsonToBsonParser bsonFromJson:&bsonDocument json:json error:&error];
+    bson_finish(&bsonDocument);
+    NSAssert(error == nil, @"Error while parsing to bson %@, %@", json, error);
+    convertedDocument = [MODServer objectFromBson:&bsonDocument];
+    NSAssert([document isEqual:convertedDocument], @"Error to conver json %@ to %@ (got %@, while converting it to bson)", json, document, convertedDocument);
+    bson_destroy(&bsonDocument);
+    
+    convertedDocument = [MODJsonToObjectParser objectsFromJson:json error:&error];
+    NSAssert(error == nil, @"Error while parsing to objects %@, %@", json, error);
+    NSAssert([document isEqual:convertedDocument], @"Error to conver json %@ to %@ (got %@)", json, document, convertedDocument);
 }
 
 @end
