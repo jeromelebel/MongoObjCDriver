@@ -161,6 +161,7 @@ static void testJson()
     NSError *error;
     id value;
     
+    testObjects(@"{'value':null}", @"{\"value\":null}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNull null], @"value", nil]);
     testObjects(@"{value:null}", @"{\"value\":null}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNull null], @"value", nil]);
     testObjects(@"{\"null value\":null}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNull null], @"null value", nil]);
     testObjects(@"{\"number\":1.234567891}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:1.234567891], @"number", nil]);
