@@ -10,6 +10,8 @@
 #import "MOD_internal.h"
 #import "NSData+Base64.h"
 #import "NSString+Base64.h"
+#import "mongo-objc-driver-tests.h"
+#import "MODJsonToObjectAssembler.h"
 
 #define DATABASE_NAME_TEST @"database_test"
 #define COLLECTION_NAME_TEST @"collection_test"
@@ -90,7 +92,7 @@ static void testObjects(NSString *json, id shouldEqual)
         assert(0);
     }
     bson_destroy(&bsonResult);
-    objects = [MODJsonToObjectParser objectsFromJson:json error:&error];
+    objects = [MODJsonToObjectAssembler objectsFromJson:json error:&error];
     if (error) {
         NSLog(@"***** parsing errors for:");
         NSLog(@"%@", json);
@@ -105,6 +107,8 @@ static void testObjects(NSString *json, id shouldEqual)
             for (NSString *key in [objects allKeys]) {
                 if (![[objects objectForKey:key] isEqual:[shouldEqual objectForKey:key]]) {
                     NSLog(@"different value for %@", key);
+                    NSLog(@"received %@ expected %@", [objects objectForKey:key], [shouldEqual objectForKey:key]);
+                    NSLog(@"received %@ expected %@", [[objects objectForKey:key] class], [[shouldEqual objectForKey:key] class]);
                 }
             }
         }
@@ -203,7 +207,7 @@ static void testJson()
         id objects;
         bson bsonObject;
         
-        objects = [MODJsonToObjectParser objectsFromJson:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
+        objects = [MODJsonToObjectAssembler objectsFromJson:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
         bson_init(&bsonObject);
         [MODServer appendObject:objects toBson:&bsonObject];
         bson_finish(&bsonObject);
@@ -254,26 +258,20 @@ static void testBase64(void)
     testStringInBase64("123456", "MTIzNDU2");
 }
 
-int main (int argc, const char * argv[])
+int mongoObjcDriverTests(NSString *mongoTestServer)
 {
     @autoreleasepool {
-        const char *ip;
         MODServer *server;
         MODDatabase *mongoDatabase;
         MODCollection *mongoCollection;
         MODCursor *cursor;
 
         testBase64();
-        //testTypes();
+        testTypes();
         testJson();
-        if (argc != 2) {
-            NSLog(@"need to put the ip a of a mongo server as a parameter, so we can test the objective-c driver");
-            exit(1);
-        }
-        ip = argv[1];
         server = [[MODServer alloc] init];
-        [server connectWithHostName:[NSString stringWithUTF8String:ip] callback:^(BOOL connected, MODQuery *mongoQuery) {
-            NSLog(@"connecting to %s…", ip);
+        [server connectWithHostName:mongoTestServer callback:^(BOOL connected, MODQuery *mongoQuery) {
+            NSLog(@"connecting to %@…", mongoTestServer);
             logMongoQuery(mongoQuery);
         }];
         [server fetchServerStatusWithCallback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {

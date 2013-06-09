@@ -7,7 +7,8 @@
 //
 
 #import "MOTAppDelegate.h"
-#import "MODServer.h"
+#import "mongo-objc-driver-tests.h"
+#import "MODJsonToObjectAssembler.h"
 
 @implementation MOTAppDelegate
 
@@ -18,7 +19,13 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    // Insert code here to initialize your application
+    NSError *error = nil;
+    id object;
+    
+    object = [MODJsonToObjectAssembler objectsFromJson:@"{\"object\":{\"number\":1.234567891}}" error:&error];
+    NSLog(@"error %@", error);
+    NSLog(@"object %@", object);
+    mongoObjcDriverTests([[NSProcessInfo processInfo] environment][@"test_mongo_server"]);
 }
 
 @end

@@ -1,0 +1,32 @@
+/*
+    A Grammar for JSON.
+*/
+
+@start        = Empty | arrayElement | objectElement;
+
+objectElement        = openCurlyToken objectContentElement closeCurlyToken;
+objectContentElement = Empty | actualObjectElement;
+actualObjectElement  = propertyElement commaPropertyElement*;
+propertyElement      = propertyNameElement colonToken valueElement;
+commaPropertyElement = commaToken propertyElement;
+propertyNameElement  = stringToken;         // NOTE: property names are quoted in JSON
+
+arrayElement         = openBracketToken arrayContentElement closeBracketToken;
+arrayContentElement  = Empty | actualArrayElement;
+actualArrayElement   = valueElement commaValueElement*;
+commaValueElement    = commaToken valueElement;
+
+valueElement         = nullToken | trueToken | falseToken | arrayElement | objectElement | numberToken | stringToken;
+
+stringToken        = QuotedString;
+numberToken        = Number;
+nullToken          = 'null';
+trueToken          = 'true';
+falseToken         = 'false';
+
+openCurlyToken     = '{';
+closeCurlyToken    = '}';
+openBracketToken   = '[';
+closeBracketToken  = ']';
+commaToken         = ',';
+colonToken         = ':';
