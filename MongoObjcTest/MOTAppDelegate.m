@@ -19,12 +19,6 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    NSError *error = nil;
-    id object;
-    
-    object = [MODJsonToObjectAssembler objectsFromJson:@"{\"object\":{\"number\":1.234567891}}" error:&error];
-    NSLog(@"error %@", error);
-    NSLog(@"object %@", object);
     mongoObjcDriverTests([[NSProcessInfo processInfo] environment][@"test_mongo_server"]);
 }
 

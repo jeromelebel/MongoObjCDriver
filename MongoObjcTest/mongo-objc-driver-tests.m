@@ -66,19 +66,22 @@ static void testTypes(void)
     [document release];
 }
 
-static void testObjects(NSString *json, id shouldEqual)
+static void testObjects(NSString *jsonToParse, NSString *jsonExpected, id shouldEqual)
 {
     MODSortedMutableDictionary *objectsFromBson;
     NSError *error;
     id objects;
     bson bsonResult;
     
+    if (!jsonExpected) {
+        jsonExpected = jsonToParse;
+    }
     bson_init(&bsonResult);
-    [MODJsonToBsonParser bsonFromJson:&bsonResult json:json error:&error];
+    [MODJsonToObjectAssembler bsonFromJson:&bsonResult json:jsonToParse error:&error];
     bson_finish(&bsonResult);
     if (error) {
         NSLog(@"***** parsing errors for:");
-        NSLog(@"%@", json);
+        NSLog(@"%@", jsonToParse);
         NSLog(@"%@", error);
         assert(0);
     }
@@ -86,21 +89,21 @@ static void testObjects(NSString *json, id shouldEqual)
     if (([shouldEqual isKindOfClass:[NSArray class]] && ![[objectsFromBson objectForKey:@"array"] isEqual:shouldEqual])
         || ([shouldEqual isKindOfClass:[MODSortedMutableDictionary class]] && ![objectsFromBson isEqual:shouldEqual])) {
         NSLog(@"***** problem to convert bson to objects:");
-        NSLog(@"json: %@", json);
+        NSLog(@"json: %@", jsonToParse);
         NSLog(@"expecting: %@", shouldEqual);
         NSLog(@"received: %@", objectsFromBson);
         assert(0);
     }
     bson_destroy(&bsonResult);
-    objects = [MODJsonToObjectAssembler objectsFromJson:json error:&error];
+    objects = [MODJsonToObjectAssembler objectsFromJson:jsonToParse error:&error];
     if (error) {
         NSLog(@"***** parsing errors for:");
-        NSLog(@"%@", json);
+        NSLog(@"%@", jsonToParse);
         NSLog(@"%@", error);
         assert(0);
     } else if (![objects isEqual:shouldEqual]) {
         NSLog(@"***** wrong result for:");
-        NSLog(@"%@", json);
+        NSLog(@"%@", jsonToParse);
         NSLog(@"expecting: %@", shouldEqual);
         NSLog(@"received: %@", objects);
         if ([objects isKindOfClass:[MODSortedMutableDictionary class]]) {
@@ -121,14 +124,14 @@ static void testObjects(NSString *json, id shouldEqual)
         NSString *jsonFromObjects;
         
         jsonFromObjects = [MODServer convertObjectToJson:shouldEqual pretty:NO];
-        if (![jsonFromObjects isEqualToString:json]) {
+        if (![jsonFromObjects isEqualToString:jsonExpected]) {
             NSLog(@"problem to convert objects to json %@", shouldEqual);
-            NSLog(@"expecting: '%@'", json);
+            NSLog(@"expecting: '%@'", jsonToParse);
             NSLog(@"received: '%@'", jsonFromObjects);
-            assert([jsonFromObjects isEqualToString:json]);
+            assert([jsonFromObjects isEqualToString:jsonToParse]);
         }
     }
-    NSLog(@"OK: %@", json);
+    NSLog(@"OK: %@", jsonToParse);
 }
 
 static void testBsonArrayIndex(bson *bsonObject)
@@ -158,23 +161,25 @@ static void testJson()
     NSError *error;
     id value;
     
-    testObjects(@"{\"number\":1.234567891}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:1.234567891], @"number", nil]);
-    testObjects(@"{\"data\":{\"$binary\":\"AA==\",\"$type\":\"0\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODBinary alloc] initWithBytes:"\0" length:1 binaryType:0] autorelease], @"data", nil]);
-    testObjects(@"{\"data\":{\"$binary\":\"SmVyb21l\",\"$type\":\"0\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODBinary alloc] initWithBytes:"Jerome" length:6 binaryType:0] autorelease], @"data", nil]);
-    testObjects(@"{\"not data\":{\"$type\":\"encore fred\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"encore fred", @"$type", nil], @"not data", nil]);
-    testObjects(@"{\"_id\":\"x\",\"toto\":[1,2,3]}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSNumber numberWithInt:1], [NSNumber numberWithInt:2], [NSNumber numberWithInt:3], nil], @"toto", nil]);
-    testObjects(@"{\"_id\":\"x\",\"toto\":[{\"1\":2}]}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil]);
-    testObjects(@"{\"_id\":{\"$oid\":\"4e9807f88157f608b4000002\"},\"type\":\"Activity\"}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODObjectId alloc] initWithCString:"4e9807f88157f608b4000002"] autorelease], @"_id", @"Activity", @"type", nil]);
-    testObjects(@"{\"toto\":{\"$regex\":\"value\"},\"regexp\":{\"$regex\":\"value\",\"$options\":\"x\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODRegex alloc] initWithPattern:@"value" options:nil] autorelease], @"toto", [[[MODRegex alloc] initWithPattern:@"value" options:@"x"] autorelease], @"regexp", nil]);
-    testObjects(@"{\"_id\":\"x\",\"toto\":[{\"1\":2},{\"2\":true}]}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"2", nil], nil], @"toto", nil]);
-    testObjects(@"{\"toto\":1,\"empty_array\":[],\"type\":\"Activity\"}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"toto", [NSArray array], @"empty_array", @"Activity", @"type", nil]);
-    testObjects(@"{\"empty_hash\":{},\"toto\":1,\"type\":\"Activity\"}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[MODSortedMutableDictionary sortedDictionary], @"empty_hash", [NSNumber numberWithInt:1], @"toto", @"Activity", @"type", nil]);
-    testObjects(@"[{\"hello\":\"1\"},{\"zob\":\"2\"}]", [NSArray arrayWithObjects:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"1", @"hello", nil], [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"2", @"zob", nil], nil]);
-    testObjects(@"{\"timestamp\":{\"$timestamp\":[1,2]}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODTimestamp alloc] initWithTValue:1 iValue:2] autorelease], @"timestamp", nil]);
-    testObjects(@"{\"mydate\":{\"$date\":1320066612000.000000}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[NSDate alloc] initWithTimeIntervalSince1970:1320066612] autorelease], @"mydate", nil]);
-    testObjects(@"{\"false\":false,\"true\":true}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"false", [NSNumber numberWithBool:YES], @"true", nil]);
-    testObjects(@"{\"my symbol\":{\"$symbol\":\"pour fred\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODSymbol alloc] initWithValue:@"pour fred"] autorelease], @"my symbol", nil]);
-    testObjects(@"{\"undefined value\":{\"$undefined\":\"$undefined\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODUndefined alloc] init] autorelease], @"undefined value", nil]);
+    testObjects(@"{value:null}", @"{\"value\":null}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNull null], @"value", nil]);
+    testObjects(@"{\"null value\":null}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNull null], @"null value", nil]);
+    testObjects(@"{\"number\":1.234567891}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:1.234567891], @"number", nil]);
+    testObjects(@"{\"data\":{\"$binary\":\"AA==\",\"$type\":\"0\"}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODBinary alloc] initWithBytes:"\0" length:1 binaryType:0] autorelease], @"data", nil]);
+    testObjects(@"{\"data\":{\"$binary\":\"SmVyb21l\",\"$type\":\"0\"}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODBinary alloc] initWithBytes:"Jerome" length:6 binaryType:0] autorelease], @"data", nil]);
+    testObjects(@"{\"not data\":{\"$type\":\"encore fred\"}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"encore fred", @"$type", nil], @"not data", nil]);
+    testObjects(@"{\"_id\":\"x\",\"toto\":[1,2,3]}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[NSNumber numberWithInt:1], [NSNumber numberWithInt:2], [NSNumber numberWithInt:3], nil], @"toto", nil]);
+    testObjects(@"{\"_id\":\"x\",\"toto\":[{\"1\":2}]}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil]);
+    testObjects(@"{\"_id\":{\"$oid\":\"4e9807f88157f608b4000002\"},\"type\":\"Activity\"}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODObjectId alloc] initWithCString:"4e9807f88157f608b4000002"] autorelease], @"_id", @"Activity", @"type", nil]);
+    testObjects(@"{\"toto\":{\"$regex\":\"value\"},\"regexp\":{\"$regex\":\"value\",\"$options\":\"x\"}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODRegex alloc] initWithPattern:@"value" options:nil] autorelease], @"toto", [[[MODRegex alloc] initWithPattern:@"value" options:@"x"] autorelease], @"regexp", nil]);
+    testObjects(@"{\"_id\":\"x\",\"toto\":[{\"1\":2},{\"2\":true}]}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithBool:YES], @"2", nil], nil], @"toto", nil]);
+    testObjects(@"{\"toto\":1,\"empty_array\":[],\"type\":\"Activity\"}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"toto", [NSArray array], @"empty_array", @"Activity", @"type", nil]);
+    testObjects(@"{\"empty_hash\":{},\"toto\":1,\"type\":\"Activity\"}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[MODSortedMutableDictionary sortedDictionary], @"empty_hash", [NSNumber numberWithInt:1], @"toto", @"Activity", @"type", nil]);
+    testObjects(@"[{\"hello\":\"1\"},{\"zob\":\"2\"}]", nil, [NSArray arrayWithObjects:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"1", @"hello", nil], [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"2", @"zob", nil], nil]);
+    testObjects(@"{\"timestamp\":{\"$timestamp\":[1,2]}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODTimestamp alloc] initWithTValue:1 iValue:2] autorelease], @"timestamp", nil]);
+    testObjects(@"{\"mydate\":{\"$date\":1320066612000.000000}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[NSDate alloc] initWithTimeIntervalSince1970:1320066612] autorelease], @"mydate", nil]);
+    testObjects(@"{\"false\":false,\"true\":true}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"false", [NSNumber numberWithBool:YES], @"true", nil]);
+    testObjects(@"{\"my symbol\":{\"$symbol\":\"pour fred\"}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODSymbol alloc] initWithValue:@"pour fred"] autorelease], @"my symbol", nil]);
+    testObjects(@"{\"undefined value\":{\"$undefined\":\"$undefined\"}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODUndefined alloc] init] autorelease], @"undefined value", nil]);
     
     // test if can parse json in chunks, and we should get an error at the end of json
     parser = [[MODJsonToObjectParser alloc] init];
@@ -195,7 +200,7 @@ static void testJson()
         bson bsonObject;
         
         bson_init(&bsonObject);
-        [MODJsonToBsonParser bsonFromJson:&bsonObject json:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
+        [MODJsonToObjectAssembler bsonFromJson:&bsonObject json:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
         bson_finish(&bsonObject);
         testBsonArrayIndex(&bsonObject);
         bson_destroy(&bsonObject);

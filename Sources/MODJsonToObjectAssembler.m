@@ -9,10 +9,27 @@
 #import "MODJsonToObjectAssembler.h"
 #import "MODPKJsonParser.h"
 #import "MODSortedMutableDictionary.h"
+#import "MOD_internal.h"
 #import <ParseKit/ParseKit.h>
 
 @interface MODJsonToObjectAssembler()
 @property (nonatomic, retain, readwrite) id mainObject;
+@end
+
+@implementation MODJsonToObjectAssembler(internal)
+
++ (void)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error
+{
+    id object = [self objectsFromJson:json error:error];
+    
+    if (object && !*error && [object isKindOfClass:NSArray.class]) {
+        object = [MODSortedMutableDictionary sortedDictionaryWithObject:object forKey:@"array"];
+    }
+    if (object && !*error && [object isKindOfClass:MODSortedMutableDictionary.class]) {
+        [MODServer appendObject:object toBson:bsonResult];
+    }
+}
+
 @end
 
 @implementation MODJsonToObjectAssembler
@@ -26,11 +43,13 @@
     parser = [[MODPKJsonParser alloc] init];
     assembler = [[MODJsonToObjectAssembler alloc] init];
     
+    *error = nil;
     object = [[[parser parseString:json assembler:assembler error:error] stack] retain];
     if ([object count] > 1) {
         NSLog(@"%@", object);
         NSLog(@"%@", json);
         NSLog(@"");
+        NSAssert(NO, @"problem");
     } else {
         object = [object objectAtIndex:0];
     }
@@ -61,7 +80,6 @@
         [stackEnumerator nextObject]; // ,
     }
     tengenJsonEncodedObject = [dictionary tengenJsonEncodedObject];
-    NSLog(@"%@", [dictionary sortedKeys]);
     if (tengenJsonEncodedObject) {
         [assembly push:tengenJsonEncodedObject];
     } else {
@@ -87,16 +105,45 @@
     [assembly push:result];
 }
 
-- (void)parser:(MODPKJsonParser *)parser didMatchStringToken:(PKAssembly *)assembly
+- (void)parser:(MODPKJsonParser *)parser didMatchQuotedStringToken:(PKAssembly *)assembly
 {
     PKToken *token = [assembly pop];
     [assembly push:token.quotedStringValue];
+}
+
+- (void)parser:(MODPKJsonParser *)parser didMatchWordToken:(PKAssembly *)assembly
+{
+    PKToken *token = [assembly pop];
+    [assembly push:token.stringValue];
 }
 
 - (void)parser:(MODPKJsonParser *)parser didMatchNumberToken:(PKAssembly *)assembly
 {
     PKToken *token = [assembly pop];
     [assembly push:[NSNumber numberWithDouble:token.floatValue]];
+}
+
+- (void)parser:(MODPKJsonParser *)parser didMatchTrueToken:(PKAssembly *)assembly
+{
+    [assembly pop];
+    [assembly push:[NSNumber numberWithBool:YES]];
+}
+
+- (void)parser:(MODPKJsonParser *)parser didMatchFalseToken:(PKAssembly *)assembly
+{
+    [assembly pop];
+    [assembly push:[NSNumber numberWithBool:NO]];
+}
+
+- (void)parser:(MODPKJsonParser *)parser didMatchNullToken:(PKAssembly *)assembly
+{
+    [assembly pop];
+    [assembly push:[NSNull null]];
+}
+
+- (void)parser:(MODPKJsonParser *)parser didMatchPropertyNameElement:(PKAssembly *)assembly
+{
+    NSLog(@"");
 }
 
 @end

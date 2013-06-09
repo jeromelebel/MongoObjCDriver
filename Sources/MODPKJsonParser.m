@@ -54,17 +54,23 @@
 @property (nonatomic, retain) NSMutableDictionary *actualArrayElement_memo;
 @property (nonatomic, retain) NSMutableDictionary *commaValueElement_memo;
 @property (nonatomic, retain) NSMutableDictionary *valueElement_memo;
-@property (nonatomic, retain) NSMutableDictionary *stringToken_memo;
+@property (nonatomic, retain) NSMutableDictionary *objectIDElement_memo;
+@property (nonatomic, retain) NSMutableDictionary *quotedStringToken_memo;
+@property (nonatomic, retain) NSMutableDictionary *wordToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *numberToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *nullToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *trueToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *falseToken_memo;
+@property (nonatomic, retain) NSMutableDictionary *undefinedToken_memo;
+@property (nonatomic, retain) NSMutableDictionary *objectIDToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *openCurlyToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *closeCurlyToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *openBracketToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *closeBracketToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *commaToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *colonToken_memo;
+@property (nonatomic, retain) NSMutableDictionary *openParentheseToken_memo;
+@property (nonatomic, retain) NSMutableDictionary *closeParenthesetoken_memo;
 @end
 
 @implementation MODPKJsonParser
@@ -74,25 +80,33 @@
     if (self) {
         self.enableAutomaticErrorRecovery = YES;
 
-        self._tokenKindTab[@"false"] = @(MODPKJSON_TOKEN_KIND_FALSETOKEN);
-        self._tokenKindTab[@"}"] = @(MODPKJSON_TOKEN_KIND_CLOSECURLYTOKEN);
-        self._tokenKindTab[@"["] = @(MODPKJSON_TOKEN_KIND_OPENBRACKETTOKEN);
-        self._tokenKindTab[@"null"] = @(MODPKJSON_TOKEN_KIND_NULLTOKEN);
-        self._tokenKindTab[@","] = @(MODPKJSON_TOKEN_KIND_COMMATOKEN);
-        self._tokenKindTab[@"true"] = @(MODPKJSON_TOKEN_KIND_TRUETOKEN);
-        self._tokenKindTab[@"]"] = @(MODPKJSON_TOKEN_KIND_CLOSEBRACKETTOKEN);
-        self._tokenKindTab[@"{"] = @(MODPKJSON_TOKEN_KIND_OPENCURLYTOKEN);
+        self._tokenKindTab[@"ObjectID"] = @(MODPKJSON_TOKEN_KIND_OBJECTIDTOKEN);
         self._tokenKindTab[@":"] = @(MODPKJSON_TOKEN_KIND_COLONTOKEN);
+        self._tokenKindTab[@"false"] = @(MODPKJSON_TOKEN_KIND_FALSETOKEN);
+        self._tokenKindTab[@","] = @(MODPKJSON_TOKEN_KIND_COMMATOKEN);
+        self._tokenKindTab[@"["] = @(MODPKJSON_TOKEN_KIND_OPENBRACKETTOKEN);
+        self._tokenKindTab[@"true"] = @(MODPKJSON_TOKEN_KIND_TRUETOKEN);
+        self._tokenKindTab[@"{"] = @(MODPKJSON_TOKEN_KIND_OPENCURLYTOKEN);
+        self._tokenKindTab[@"undefined"] = @(MODPKJSON_TOKEN_KIND_UNDEFINEDTOKEN);
+        self._tokenKindTab[@"null"] = @(MODPKJSON_TOKEN_KIND_NULLTOKEN);
+        self._tokenKindTab[@"]"] = @(MODPKJSON_TOKEN_KIND_CLOSEBRACKETTOKEN);
+        self._tokenKindTab[@"("] = @(MODPKJSON_TOKEN_KIND_OPENPARENTHESETOKEN);
+        self._tokenKindTab[@"}"] = @(MODPKJSON_TOKEN_KIND_CLOSECURLYTOKEN);
+        self._tokenKindTab[@")"] = @(MODPKJSON_TOKEN_KIND_CLOSEPARENTHESETOKEN);
 
-        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_FALSETOKEN] = @"false";
-        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_CLOSECURLYTOKEN] = @"}";
-        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_OPENBRACKETTOKEN] = @"[";
-        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_NULLTOKEN] = @"null";
-        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_COMMATOKEN] = @",";
-        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_TRUETOKEN] = @"true";
-        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_CLOSEBRACKETTOKEN] = @"]";
-        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_OPENCURLYTOKEN] = @"{";
+        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_OBJECTIDTOKEN] = @"ObjectID";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_COLONTOKEN] = @":";
+        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_FALSETOKEN] = @"false";
+        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_COMMATOKEN] = @",";
+        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_OPENBRACKETTOKEN] = @"[";
+        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_TRUETOKEN] = @"true";
+        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_OPENCURLYTOKEN] = @"{";
+        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_UNDEFINEDTOKEN] = @"undefined";
+        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_NULLTOKEN] = @"null";
+        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_CLOSEBRACKETTOKEN] = @"]";
+        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_OPENPARENTHESETOKEN] = @"(";
+        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_CLOSECURLYTOKEN] = @"}";
+        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_CLOSEPARENTHESETOKEN] = @")";
 
         self.objectElement_memo = [NSMutableDictionary dictionary];
         self.objectContentElement_memo = [NSMutableDictionary dictionary];
@@ -105,17 +119,23 @@
         self.actualArrayElement_memo = [NSMutableDictionary dictionary];
         self.commaValueElement_memo = [NSMutableDictionary dictionary];
         self.valueElement_memo = [NSMutableDictionary dictionary];
-        self.stringToken_memo = [NSMutableDictionary dictionary];
+        self.objectIDElement_memo = [NSMutableDictionary dictionary];
+        self.quotedStringToken_memo = [NSMutableDictionary dictionary];
+        self.wordToken_memo = [NSMutableDictionary dictionary];
         self.numberToken_memo = [NSMutableDictionary dictionary];
         self.nullToken_memo = [NSMutableDictionary dictionary];
         self.trueToken_memo = [NSMutableDictionary dictionary];
         self.falseToken_memo = [NSMutableDictionary dictionary];
+        self.undefinedToken_memo = [NSMutableDictionary dictionary];
+        self.objectIDToken_memo = [NSMutableDictionary dictionary];
         self.openCurlyToken_memo = [NSMutableDictionary dictionary];
         self.closeCurlyToken_memo = [NSMutableDictionary dictionary];
         self.openBracketToken_memo = [NSMutableDictionary dictionary];
         self.closeBracketToken_memo = [NSMutableDictionary dictionary];
         self.commaToken_memo = [NSMutableDictionary dictionary];
         self.colonToken_memo = [NSMutableDictionary dictionary];
+        self.openParentheseToken_memo = [NSMutableDictionary dictionary];
+        self.closeParenthesetoken_memo = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -132,17 +152,23 @@
     self.actualArrayElement_memo = nil;
     self.commaValueElement_memo = nil;
     self.valueElement_memo = nil;
-    self.stringToken_memo = nil;
+    self.objectIDElement_memo = nil;
+    self.quotedStringToken_memo = nil;
+    self.wordToken_memo = nil;
     self.numberToken_memo = nil;
     self.nullToken_memo = nil;
     self.trueToken_memo = nil;
     self.falseToken_memo = nil;
+    self.undefinedToken_memo = nil;
+    self.objectIDToken_memo = nil;
     self.openCurlyToken_memo = nil;
     self.closeCurlyToken_memo = nil;
     self.openBracketToken_memo = nil;
     self.closeBracketToken_memo = nil;
     self.commaToken_memo = nil;
     self.colonToken_memo = nil;
+    self.openParentheseToken_memo = nil;
+    self.closeParenthesetoken_memo = nil;
 
     [super dealloc];
 }
@@ -159,17 +185,23 @@
     [_actualArrayElement_memo removeAllObjects];
     [_commaValueElement_memo removeAllObjects];
     [_valueElement_memo removeAllObjects];
-    [_stringToken_memo removeAllObjects];
+    [_objectIDElement_memo removeAllObjects];
+    [_quotedStringToken_memo removeAllObjects];
+    [_wordToken_memo removeAllObjects];
     [_numberToken_memo removeAllObjects];
     [_nullToken_memo removeAllObjects];
     [_trueToken_memo removeAllObjects];
     [_falseToken_memo removeAllObjects];
+    [_undefinedToken_memo removeAllObjects];
+    [_objectIDToken_memo removeAllObjects];
     [_openCurlyToken_memo removeAllObjects];
     [_closeCurlyToken_memo removeAllObjects];
     [_openBracketToken_memo removeAllObjects];
     [_closeBracketToken_memo removeAllObjects];
     [_commaToken_memo removeAllObjects];
     [_colonToken_memo removeAllObjects];
+    [_openParentheseToken_memo removeAllObjects];
+    [_closeParenthesetoken_memo removeAllObjects];
 }
 
 - (void)_start {
@@ -208,7 +240,7 @@
 - (void)__objectContentElement {
     
     [self fireAssemblerSelector:@selector(parser:willMatchObjectContentElement:)];
-        if ([self predicts:TOKEN_KIND_BUILTIN_QUOTEDSTRING, 0]) {
+        if ([self predicts:TOKEN_KIND_BUILTIN_QUOTEDSTRING, TOKEN_KIND_BUILTIN_WORD, 0]) {
         [self actualObjectElement]; 
     }
 
@@ -272,7 +304,13 @@
 - (void)__propertyNameElement {
     
     [self fireAssemblerSelector:@selector(parser:willMatchPropertyNameElement:)];
-        [self stringToken]; 
+        if ([self predicts:TOKEN_KIND_BUILTIN_QUOTEDSTRING, 0]) {
+        [self quotedStringToken]; 
+    } else if ([self predicts:TOKEN_KIND_BUILTIN_WORD, 0]) {
+        [self wordToken]; 
+    } else {
+        [self raise:@"No viable alternative found in rule 'propertyNameElement'."];
+    }
 
     [self fireAssemblerSelector:@selector(parser:didMatchPropertyNameElement:)];
 }
@@ -302,7 +340,7 @@
 - (void)__arrayContentElement {
     
     [self fireAssemblerSelector:@selector(parser:willMatchArrayContentElement:)];
-        if ([self predicts:MODPKJSON_TOKEN_KIND_FALSETOKEN, MODPKJSON_TOKEN_KIND_NULLTOKEN, MODPKJSON_TOKEN_KIND_OPENBRACKETTOKEN, MODPKJSON_TOKEN_KIND_OPENCURLYTOKEN, MODPKJSON_TOKEN_KIND_TRUETOKEN, TOKEN_KIND_BUILTIN_NUMBER, TOKEN_KIND_BUILTIN_QUOTEDSTRING, 0]) {
+        if ([self predicts:MODPKJSON_TOKEN_KIND_FALSETOKEN, MODPKJSON_TOKEN_KIND_NULLTOKEN, MODPKJSON_TOKEN_KIND_OBJECTIDTOKEN, MODPKJSON_TOKEN_KIND_OPENBRACKETTOKEN, MODPKJSON_TOKEN_KIND_OPENCURLYTOKEN, MODPKJSON_TOKEN_KIND_TRUETOKEN, MODPKJSON_TOKEN_KIND_UNDEFINEDTOKEN, TOKEN_KIND_BUILTIN_NUMBER, TOKEN_KIND_BUILTIN_QUOTEDSTRING, 0]) {
         [self actualArrayElement]; 
     }
 
@@ -361,7 +399,11 @@
     } else if ([self predicts:TOKEN_KIND_BUILTIN_NUMBER, 0]) {
         [self numberToken]; 
     } else if ([self predicts:TOKEN_KIND_BUILTIN_QUOTEDSTRING, 0]) {
-        [self stringToken]; 
+        [self quotedStringToken]; 
+    } else if ([self predicts:MODPKJSON_TOKEN_KIND_UNDEFINEDTOKEN, 0]) {
+        [self undefinedToken]; 
+    } else if ([self predicts:MODPKJSON_TOKEN_KIND_OBJECTIDTOKEN, 0]) {
+        [self objectIDElement]; 
     } else {
         [self raise:@"No viable alternative found in rule 'valueElement'."];
     }
@@ -373,16 +415,51 @@
     [self parseRule:@selector(__valueElement) withMemo:_valueElement_memo];
 }
 
-- (void)__stringToken {
+- (void)__objectIDElement {
     
-    [self fireAssemblerSelector:@selector(parser:willMatchStringToken:)];
-        [self matchQuotedString:NO]; 
+    [self fireAssemblerSelector:@selector(parser:willMatchObjectIDElement:)];
+        [self objectIDToken]; 
+    [self tryAndRecover:MODPKJSON_TOKEN_KIND_OPENPARENTHESETOKEN block:^{ 
+        [self openParentheseToken]; 
+    } completion:^{ 
+        [self openParentheseToken]; 
+    }];
+    [self wordToken]; 
+    [self tryAndRecover:MODPKJSON_TOKEN_KIND_CLOSEPARENTHESETOKEN block:^{ 
+        [self closeParenthesetoken]; 
+    } completion:^{ 
+        [self closeParenthesetoken]; 
+    }];
 
-    [self fireAssemblerSelector:@selector(parser:didMatchStringToken:)];
+    [self fireAssemblerSelector:@selector(parser:didMatchObjectIDElement:)];
 }
 
-- (void)stringToken {
-    [self parseRule:@selector(__stringToken) withMemo:_stringToken_memo];
+- (void)objectIDElement {
+    [self parseRule:@selector(__objectIDElement) withMemo:_objectIDElement_memo];
+}
+
+- (void)__quotedStringToken {
+    
+    [self fireAssemblerSelector:@selector(parser:willMatchQuotedStringToken:)];
+        [self matchQuotedString:NO]; 
+
+    [self fireAssemblerSelector:@selector(parser:didMatchQuotedStringToken:)];
+}
+
+- (void)quotedStringToken {
+    [self parseRule:@selector(__quotedStringToken) withMemo:_quotedStringToken_memo];
+}
+
+- (void)__wordToken {
+    
+    [self fireAssemblerSelector:@selector(parser:willMatchWordToken:)];
+        [self matchWord:NO]; 
+
+    [self fireAssemblerSelector:@selector(parser:didMatchWordToken:)];
+}
+
+- (void)wordToken {
+    [self parseRule:@selector(__wordToken) withMemo:_wordToken_memo];
 }
 
 - (void)__numberToken {
@@ -431,6 +508,30 @@
 
 - (void)falseToken {
     [self parseRule:@selector(__falseToken) withMemo:_falseToken_memo];
+}
+
+- (void)__undefinedToken {
+    
+    [self fireAssemblerSelector:@selector(parser:willMatchUndefinedToken:)];
+        [self match:MODPKJSON_TOKEN_KIND_UNDEFINEDTOKEN discard:NO]; 
+
+    [self fireAssemblerSelector:@selector(parser:didMatchUndefinedToken:)];
+}
+
+- (void)undefinedToken {
+    [self parseRule:@selector(__undefinedToken) withMemo:_undefinedToken_memo];
+}
+
+- (void)__objectIDToken {
+    
+    [self fireAssemblerSelector:@selector(parser:willMatchObjectIDToken:)];
+        [self match:MODPKJSON_TOKEN_KIND_OBJECTIDTOKEN discard:NO]; 
+
+    [self fireAssemblerSelector:@selector(parser:didMatchObjectIDToken:)];
+}
+
+- (void)objectIDToken {
+    [self parseRule:@selector(__objectIDToken) withMemo:_objectIDToken_memo];
 }
 
 - (void)__openCurlyToken {
@@ -503,6 +604,30 @@
 
 - (void)colonToken {
     [self parseRule:@selector(__colonToken) withMemo:_colonToken_memo];
+}
+
+- (void)__openParentheseToken {
+    
+    [self fireAssemblerSelector:@selector(parser:willMatchOpenParentheseToken:)];
+        [self match:MODPKJSON_TOKEN_KIND_OPENPARENTHESETOKEN discard:NO]; 
+
+    [self fireAssemblerSelector:@selector(parser:didMatchOpenParentheseToken:)];
+}
+
+- (void)openParentheseToken {
+    [self parseRule:@selector(__openParentheseToken) withMemo:_openParentheseToken_memo];
+}
+
+- (void)__closeParenthesetoken {
+    
+    [self fireAssemblerSelector:@selector(parser:willMatchCloseParenthesetoken:)];
+        [self match:MODPKJSON_TOKEN_KIND_CLOSEPARENTHESETOKEN discard:NO]; 
+
+    [self fireAssemblerSelector:@selector(parser:didMatchCloseParenthesetoken:)];
+}
+
+- (void)closeParenthesetoken {
+    [self parseRule:@selector(__closeParenthesetoken) withMemo:_closeParenthesetoken_memo];
 }
 
 @end

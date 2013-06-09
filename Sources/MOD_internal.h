@@ -10,6 +10,7 @@
 #import "MOD_public.h"
 #import "mongo.h"
 #import "json.h"
+#import "MODJsonToObjectAssembler.h"
 
 enum {
     JSON_PARSER_ERROR_EXPECTED_END
@@ -92,3 +93,8 @@ enum {
 - (void)setBson:(bson *)bson;
 - (BOOL)isMainObjectArray;
 @end
+
+@interface MODJsonToObjectAssembler(internal)
++ (void)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error;
+@end
+

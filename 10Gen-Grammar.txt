@@ -9,24 +9,31 @@ objectContentElement = Empty | actualObjectElement;
 actualObjectElement  = propertyElement commaPropertyElement*;
 propertyElement      = propertyNameElement colonToken valueElement;
 commaPropertyElement = commaToken propertyElement;
-propertyNameElement  = stringToken;         // NOTE: property names are quoted in JSON
+propertyNameElement  = quotedStringToken | wordToken;         // NOTE: property names are quoted in JSON
 
 arrayElement         = openBracketToken arrayContentElement closeBracketToken;
 arrayContentElement  = Empty | actualArrayElement;
 actualArrayElement   = valueElement commaValueElement*;
 commaValueElement    = commaToken valueElement;
 
-valueElement         = nullToken | trueToken | falseToken | arrayElement | objectElement | numberToken | stringToken;
+valueElement         = nullToken | trueToken | falseToken | arrayElement | objectElement | numberToken | quotedStringToken | undefinedToken | objectIDElement;
 
-stringToken        = QuotedString;
-numberToken        = Number;
-nullToken          = 'null';
-trueToken          = 'true';
-falseToken         = 'false';
+objectIDElement      = objectIDToken openParentheseToken wordToken closeParenthesetoken;
 
-openCurlyToken     = '{';
-closeCurlyToken    = '}';
-openBracketToken   = '[';
-closeBracketToken  = ']';
-commaToken         = ',';
-colonToken         = ':';
+quotedStringToken    = QuotedString;
+wordToken            = Word;
+numberToken          = Number;
+nullToken            = 'null';
+trueToken            = 'true';
+falseToken           = 'false';
+undefinedToken       = 'undefined';
+objectIDToken        = 'ObjectID';
+
+openCurlyToken       = '{';
+closeCurlyToken      = '}';
+openBracketToken     = '[';
+closeBracketToken    = ']';
+commaToken           = ',';
+colonToken           = ':';
+openParentheseToken  = '(';
+closeParenthesetoken = ')';
