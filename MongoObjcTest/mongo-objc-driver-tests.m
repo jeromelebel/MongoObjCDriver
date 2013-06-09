@@ -157,9 +157,7 @@ static void testBsonArrayIndex(bson *bsonObject)
 
 static void testJson()
 {
-    MODJsonToObjectParser *parser;
     NSError *error;
-    id value;
     
     testObjects(@"{'value':null}", @"{\"value\":null}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNull null], @"value", nil]);
     testObjects(@"{value:null}", @"{\"value\":null}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNull null], @"value", nil]);
@@ -181,19 +179,6 @@ static void testJson()
     testObjects(@"{\"false\":false,\"true\":true}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"false", [NSNumber numberWithBool:YES], @"true", nil]);
     testObjects(@"{\"my symbol\":{\"$symbol\":\"pour fred\"}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODSymbol alloc] initWithValue:@"pour fred"] autorelease], @"my symbol", nil]);
     testObjects(@"{\"undefined value\":{\"$undefined\":\"$undefined\"}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODUndefined alloc] init] autorelease], @"undefined value", nil]);
-    
-    // test if can parse json in chunks, and we should get an error at the end of json
-    parser = [[MODJsonToObjectParser alloc] init];
-    parser.multiPartParsing = YES;
-    [parser parseJsonWithString:@"{\"_id\":\"x\"" error:&error];
-    assert(error == nil);
-    [parser parseJsonWithString:@",\"toto\":[{\"1\":2}]}fdsa" error:&error];
-    assert(parser.totalParsedLength == 28);
-    assert(error != nil);
-    assert([error code] == JSON_ERROR_UNEXPECTED_CHAR);
-    assert([[error domain] isEqualToString:MODJsonErrorDomain]);
-    value = [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil];
-    assert([(id)[parser mainObject] isEqual:value]);
     
     // test to make sure each items in an array has the correct index
     // https://github.com/fotonauts/MongoHub-Mac/issues/28

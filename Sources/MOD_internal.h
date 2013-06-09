@@ -82,18 +82,6 @@ enum {
 - (void)getBsonTimestamp:(bson_timestamp_t *)ts;
 @end
 
-@interface MODJsonToBsonParser : MODJsonParser<MODJsonParserProtocol>
-{
-    bson *_bson;
-    BOOL _mainObjectStarted;
-    BOOL _isMainObjectArray;
-    char _indexKey[32];
-}
-+ (NSInteger)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error;
-- (void)setBson:(bson *)bson;
-- (BOOL)isMainObjectArray;
-@end
-
 @interface MODJsonToObjectAssembler(internal)
 + (void)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error;
 @end

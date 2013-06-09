@@ -61,14 +61,14 @@
     
     bson_append_start_object(_bsonQuery, "$query");
     if (_query && [_query  length] > 0) {
-        [MODJsonToBsonParser bsonFromJson:_bsonQuery json:_query error:error];
+        [MODJsonToObjectAssembler bsonFromJson:_bsonQuery json:_query error:error];
     }
     bson_append_finish_object(_bsonQuery);
     if (*error == nil) {
         if ([_sort length] > 0) {
             bson_append_start_object(_bsonQuery, "$orderby");
             if (_sort) {
-                [MODJsonToBsonParser bsonFromJson:_bsonQuery json:_sort error:error];
+                [MODJsonToObjectAssembler bsonFromJson:_bsonQuery json:_sort error:error];
             }
             bson_append_finish_object(_bsonQuery);
         }

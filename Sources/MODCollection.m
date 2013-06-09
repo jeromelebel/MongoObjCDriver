@@ -162,7 +162,7 @@
             bsonQuery = malloc(sizeof(*bsonQuery));
             bson_init(bsonQuery);
             if (jsonCriteria && [jsonCriteria length] > 0) {
-                [MODJsonToBsonParser bsonFromJson:bsonQuery json:jsonCriteria error:&error];
+                [MODJsonToObjectAssembler bsonFromJson:bsonQuery json:jsonCriteria error:&error];
             }
             bson_finish(bsonQuery);
             
@@ -210,7 +210,7 @@
                 data[ii] = malloc(sizeof(bson));
                 bson_init(data[ii]);
                 if ([document isKindOfClass:[NSString class]]) {
-                    [MODJsonToBsonParser bsonFromJson:data[ii] json:document error:&error];
+                    [MODJsonToObjectAssembler bsonFromJson:data[ii] json:document error:&error];
                 } else if ([document isKindOfClass:[MODSortedMutableDictionary class]]) {
                     [[_mongoDatabase.mongoServer class] appendObject:document toBson:data[ii]];
                 }
@@ -269,14 +269,14 @@
             
             bson_init(&bsonCriteria);
             if (jsonCriteria && [jsonCriteria length] > 0) {
-                [MODJsonToBsonParser bsonFromJson:&bsonCriteria json:jsonCriteria error:&error];
+                [MODJsonToObjectAssembler bsonFromJson:&bsonCriteria json:jsonCriteria error:&error];
             } else {
                 error = [MODServer errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
             }
             bson_finish(&bsonCriteria);
             bson_init(&bsonUpdate);
             if (error == nil && update && [update length] > 0) {
-                [MODJsonToBsonParser bsonFromJson:&bsonUpdate json:update error:&error];
+                [MODJsonToObjectAssembler bsonFromJson:&bsonUpdate json:update error:&error];
             } else if (error == nil && (!update || [update length] > 0)) {
                 error = [MODServer errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
             }
@@ -314,7 +314,7 @@
             NSError *error = nil;
             
             bson_init(&bsonDocument);
-            [MODJsonToBsonParser bsonFromJson:&bsonDocument json:document error:&error];
+            [MODJsonToObjectAssembler bsonFromJson:&bsonDocument json:document error:&error];
             bson_finish(&bsonDocument);
             bson_init(&bsonCriteria);
             if (error == nil) {
@@ -389,7 +389,7 @@
             bson_init(&bsonCriteria);
             if (criteria && [criteria isKindOfClass:[NSString class]]) {
                 if ([criteria length] > 0) {
-                    [MODJsonToBsonParser bsonFromJson:&bsonCriteria json:criteria error:&error];
+                    [MODJsonToObjectAssembler bsonFromJson:&bsonCriteria json:criteria error:&error];
                 }
             } else if (criteria && [criteria isKindOfClass:[MODSortedMutableDictionary class]]) {
                 [[_mongoDatabase.mongoServer class] appendObject:criteria toBson:&bsonCriteria];
@@ -429,7 +429,7 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
         NSDictionary *objects;
         
         if ([indexDocument isKindOfClass:[NSString class]]) {
-            objects = [MODJsonToObjectParser objectsFromJson:indexDocument error:NULL];
+            objects = [MODJsonToObjectAssembler objectsFromJson:indexDocument error:NULL];
         } else {
             objects = indexDocument;
         }
@@ -448,7 +448,7 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
             
             bson_init(&index);
             if ([indexDocument isKindOfClass:[NSString class]]) {
-                [MODJsonToBsonParser bsonFromJson:&index json:indexDocument error:&error];
+                [MODJsonToObjectAssembler bsonFromJson:&index json:indexDocument error:&error];
             } else {
                 [[_mongoDatabase.mongoServer class] appendObject:indexDocument toBson:&index];
             }
@@ -480,7 +480,7 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
             
             bson_init(&index);
             if ([indexDocument isKindOfClass:[NSString class]]) {
-                [MODJsonToBsonParser bsonFromJson:&index json:indexDocument error:&error];
+                [MODJsonToObjectAssembler bsonFromJson:&index json:indexDocument error:&error];
             } else {
                 [[_mongoDatabase.mongoServer class] appendObject:indexDocument toBson:&index];
             }
@@ -532,27 +532,27 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
             
             bson_init(&bsonQuery);
             if (mapReduceQuery && [mapReduceQuery length] > 0) {
-                [MODJsonToBsonParser bsonFromJson:&bsonQuery json:mapReduceQuery error:&error];
+                [MODJsonToObjectAssembler bsonFromJson:&bsonQuery json:mapReduceQuery error:&error];
             }
             bson_finish(&bsonQuery);
             if (!error) {
                 bson_init(&bsonSort);
                 if (sort) {
-                    [MODJsonToBsonParser bsonFromJson:&bsonSort json:sort error:&error];
+                    [MODJsonToObjectAssembler bsonFromJson:&bsonSort json:sort error:&error];
                 }
                 bson_finish(&bsonSort);
             }
             if (!error) {
                 bson_init(&bsonOutput);
                 if (output) {
-                    [MODJsonToBsonParser bsonFromJson:&bsonOutput json:output error:&error];
+                    [MODJsonToObjectAssembler bsonFromJson:&bsonOutput json:output error:&error];
                 }
                 bson_finish(&bsonOutput);
             }
             if (!error) {
                 bson_init(&bsonScope);
                 if (scope) {
-                    [MODJsonToBsonParser bsonFromJson:&bsonScope json:scope error:&error];
+                    [MODJsonToObjectAssembler bsonFromJson:&bsonScope json:scope error:&error];
                 }
                 bson_finish(&bsonScope);
             }
