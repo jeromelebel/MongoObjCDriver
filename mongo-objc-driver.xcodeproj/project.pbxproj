@@ -333,11 +333,11 @@
 		02F121BF1410EF5200197811 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02F121C21410EF5200197811 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		02F121C61410EF5200197811 /* mongo_test.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = mongo_test.1; sourceTree = "<group>"; };
-		02F239621764C75A00042A12 /* MongoObjectiveCTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MongoObjectiveCTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		02F239661764C75A00042A12 /* MongoObjectiveCTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MongoObjectiveCTest-Info.plist"; sourceTree = "<group>"; };
+		02F239621764C75A00042A12 /* MongoObjcTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MongoObjcTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		02F239661764C75A00042A12 /* MongoObjcTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MongoObjcTest-Info.plist"; sourceTree = "<group>"; };
 		02F239681764C75A00042A12 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		02F2396A1764C75A00042A12 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		02F2396C1764C75A00042A12 /* MongoObjectiveCTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MongoObjectiveCTest-Prefix.pch"; sourceTree = "<group>"; };
+		02F2396C1764C75A00042A12 /* MongoObjcTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MongoObjcTest-Prefix.pch"; sourceTree = "<group>"; };
 		02F2396E1764C75A00042A12 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		02F239701764C75A00042A12 /* MOTAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MOTAppDelegate.h; sourceTree = "<group>"; };
 		02F239711764C75A00042A12 /* MOTAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MOTAppDelegate.m; sourceTree = "<group>"; };
@@ -634,7 +634,7 @@
 				02ABA1C914103B37000417F4 /* Sources */,
 				02F121C11410EF5200197811 /* mongo-test */,
 				02A85F0114103D4D004F3FE9 /* Libraries */,
-				02F239641764C75A00042A12 /* MongoObjectiveCTest */,
+				02F239641764C75A00042A12 /* MongoObjcTest */,
 				02ABA1C214103B37000417F4 /* Frameworks */,
 				02ABA1C114103B37000417F4 /* Products */,
 			);
@@ -645,7 +645,7 @@
 			children = (
 				02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */,
 				02F121BD1410EF5200197811 /* mongo-test */,
-				02F239621764C75A00042A12 /* MongoObjectiveCTest.app */,
+				02F239621764C75A00042A12 /* MongoObjcTest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -742,7 +742,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		02F239641764C75A00042A12 /* MongoObjectiveCTest */ = {
+		02F239641764C75A00042A12 /* MongoObjcTest */ = {
 			isa = PBXGroup;
 			children = (
 				02F239701764C75A00042A12 /* MOTAppDelegate.h */,
@@ -750,16 +750,16 @@
 				02F239731764C75A00042A12 /* MainMenu.xib */,
 				02F239651764C75A00042A12 /* Supporting Files */,
 			);
-			path = MongoObjectiveCTest;
+			path = MongoObjcTest;
 			sourceTree = "<group>";
 		};
 		02F239651764C75A00042A12 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				02F239661764C75A00042A12 /* MongoObjectiveCTest-Info.plist */,
+				02F239661764C75A00042A12 /* MongoObjcTest-Info.plist */,
 				02F239671764C75A00042A12 /* InfoPlist.strings */,
 				02F2396A1764C75A00042A12 /* main.m */,
-				02F2396C1764C75A00042A12 /* MongoObjectiveCTest-Prefix.pch */,
+				02F2396C1764C75A00042A12 /* MongoObjcTest-Prefix.pch */,
 				02F2396D1764C75A00042A12 /* Credits.rtf */,
 			);
 			name = "Supporting Files";
@@ -840,9 +840,9 @@
 			productReference = 02F121BD1410EF5200197811 /* mongo-test */;
 			productType = "com.apple.product-type.tool";
 		};
-		02F239611764C75A00042A12 /* MongoObjectiveCTest */ = {
+		02F239611764C75A00042A12 /* MongoObjcTest */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 02F239781764C75A00042A12 /* Build configuration list for PBXNativeTarget "MongoObjectiveCTest" */;
+			buildConfigurationList = 02F239781764C75A00042A12 /* Build configuration list for PBXNativeTarget "MongoObjcTest" */;
 			buildPhases = (
 				02F2395E1764C75A00042A12 /* Sources */,
 				02F2395F1764C75A00042A12 /* Frameworks */,
@@ -854,9 +854,9 @@
 			dependencies = (
 				02F2397E1764C83400042A12 /* PBXTargetDependency */,
 			);
-			name = MongoObjectiveCTest;
+			name = MongoObjcTest;
 			productName = MongoObjectiveCTest;
-			productReference = 02F239621764C75A00042A12 /* MongoObjectiveCTest.app */;
+			productReference = 02F239621764C75A00042A12 /* MongoObjcTest.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -882,7 +882,7 @@
 				02ABA1BF14103B37000417F4 /* mongo-objc-driver */,
 				02F121BC1410EF5200197811 /* mongo-test */,
 				02216F151412D39200789BD1 /* Submodules */,
-				02F239611764C75A00042A12 /* MongoObjectiveCTest */,
+				02F239611764C75A00042A12 /* MongoObjcTest */,
 			);
 		};
 /* End PBXProject section */
@@ -1208,13 +1208,13 @@
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MongoObjectiveCTest/MongoObjectiveCTest-Prefix.pch";
+				GCC_PREFIX_HEADER = "MongoObjcTest/MongoObjcTest-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "MongoObjectiveCTest/MongoObjectiveCTest-Info.plist";
+				INFOPLIST_FILE = "MongoObjcTest/MongoObjcTest-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -1238,9 +1238,9 @@
 				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "MongoObjectiveCTest/MongoObjectiveCTest-Prefix.pch";
+				GCC_PREFIX_HEADER = "MongoObjcTest/MongoObjcTest-Prefix.pch";
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				INFOPLIST_FILE = "MongoObjectiveCTest/MongoObjectiveCTest-Info.plist";
+				INFOPLIST_FILE = "MongoObjcTest/MongoObjcTest-Info.plist";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -1286,7 +1286,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		02F239781764C75A00042A12 /* Build configuration list for PBXNativeTarget "MongoObjectiveCTest" */ = {
+		02F239781764C75A00042A12 /* Build configuration list for PBXNativeTarget "MongoObjcTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				02F239761764C75A00042A12 /* Debug */,
