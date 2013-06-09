@@ -112,6 +112,10 @@
 		02F2396F1764C75A00042A12 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 02F2396D1764C75A00042A12 /* Credits.rtf */; };
 		02F239721764C75A00042A12 /* MOTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F239711764C75A00042A12 /* MOTAppDelegate.m */; };
 		02F239751764C75A00042A12 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02F239731764C75A00042A12 /* MainMenu.xib */; };
+		02F2397A1764C7EA00042A12 /* mongo-objc-driver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		02F239801764C88900042A12 /* ParseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F2397F1764C87F00042A12 /* ParseKit.framework */; };
+		02F239811764C89A00042A12 /* ParseKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02F2397F1764C87F00042A12 /* ParseKit.framework */; };
+		02F239831764C8AF00042A12 /* mongo-objc-driver.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +133,13 @@
 			remoteGlobalIDString = 02216F151412D39200789BD1;
 			remoteInfo = Submodules;
 		};
+		02F2397D1764C83400042A12 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02ABA1B614103B36000417F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 02ABA1BF14103B37000417F4;
+			remoteInfo = "mongo-objc-driver";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -141,6 +152,17 @@
 				02F121C71410EF5200197811 /* mongo_test.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		02F2397B1764C80900042A12 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				02F239811764C89A00042A12 /* ParseKit.framework in CopyFiles */,
+				02F239831764C8AF00042A12 /* mongo-objc-driver.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -320,6 +342,7 @@
 		02F239701764C75A00042A12 /* MOTAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MOTAppDelegate.h; sourceTree = "<group>"; };
 		02F239711764C75A00042A12 /* MOTAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MOTAppDelegate.m; sourceTree = "<group>"; };
 		02F239741764C75A00042A12 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		02F2397F1764C87F00042A12 /* ParseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -344,6 +367,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				02F239631764C75A00042A12 /* Cocoa.framework in Frameworks */,
+				02F2397A1764C7EA00042A12 /* mongo-objc-driver.framework in Frameworks */,
+				02F239801764C88900042A12 /* ParseKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -628,11 +653,12 @@
 		02ABA1C214103B37000417F4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				02F2397F1764C87F00042A12 /* ParseKit.framework */,
 				02ABA1C314103B37000417F4 /* Cocoa.framework */,
 				02F121BF1410EF5200197811 /* Foundation.framework */,
 				02ABA1C514103B37000417F4 /* Other Frameworks */,
 			);
-			name = Frameworks;
+			path = Frameworks;
 			sourceTree = "<group>";
 		};
 		02ABA1C514103B37000417F4 /* Other Frameworks */ = {
@@ -821,10 +847,12 @@
 				02F2395E1764C75A00042A12 /* Sources */,
 				02F2395F1764C75A00042A12 /* Frameworks */,
 				02F239601764C75A00042A12 /* Resources */,
+				02F2397B1764C80900042A12 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				02F2397E1764C83400042A12 /* PBXTargetDependency */,
 			);
 			name = MongoObjectiveCTest;
 			productName = MongoObjectiveCTest;
@@ -1016,6 +1044,11 @@
 			target = 02216F151412D39200789BD1 /* Submodules */;
 			targetProxy = 02216F1D1412D43C00789BD1 /* PBXContainerItemProxy */;
 		};
+		02F2397E1764C83400042A12 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 02ABA1BF14103B37000417F4 /* mongo-objc-driver */;
+			targetProxy = 02F2397D1764C83400042A12 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -1121,8 +1154,10 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@executable_path/../Frameworks";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
+				LD_DYLIB_INSTALL_NAME = "$(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1133,8 +1168,10 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@executable_path/../Frameworks";
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
+				LD_DYLIB_INSTALL_NAME = "$(DYLIB_INSTALL_NAME_BASE:standardizepath)/$(EXECUTABLE_PATH)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -1165,6 +1202,10 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Frameworks\"",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MongoObjectiveCTest/MongoObjectiveCTest-Prefix.pch";
@@ -1191,6 +1232,10 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Frameworks\"",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "MongoObjectiveCTest/MongoObjectiveCTest-Prefix.pch";
@@ -1248,6 +1293,7 @@
 				02F239771764C75A00042A12 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
