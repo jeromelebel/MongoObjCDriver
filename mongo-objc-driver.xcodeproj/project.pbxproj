@@ -106,6 +106,12 @@
 		02F121D11410F07200197811 /* md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2014103D4D004F3FE9 /* md5.c */; };
 		02F121D21410F07200197811 /* mongo.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2214103D4D004F3FE9 /* mongo.c */; };
 		02F121D41410F07200197811 /* numbers.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F2614103D4D004F3FE9 /* numbers.c */; };
+		02F239631764C75A00042A12 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C314103B37000417F4 /* Cocoa.framework */; };
+		02F239691764C75A00042A12 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 02F239671764C75A00042A12 /* InfoPlist.strings */; };
+		02F2396B1764C75A00042A12 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F2396A1764C75A00042A12 /* main.m */; };
+		02F2396F1764C75A00042A12 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 02F2396D1764C75A00042A12 /* Credits.rtf */; };
+		02F239721764C75A00042A12 /* MOTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F239711764C75A00042A12 /* MOTAppDelegate.m */; };
+		02F239751764C75A00042A12 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 02F239731764C75A00042A12 /* MainMenu.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -305,6 +311,15 @@
 		02F121BF1410EF5200197811 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02F121C21410EF5200197811 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		02F121C61410EF5200197811 /* mongo_test.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = mongo_test.1; sourceTree = "<group>"; };
+		02F239621764C75A00042A12 /* MongoObjectiveCTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MongoObjectiveCTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		02F239661764C75A00042A12 /* MongoObjectiveCTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MongoObjectiveCTest-Info.plist"; sourceTree = "<group>"; };
+		02F239681764C75A00042A12 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		02F2396A1764C75A00042A12 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		02F2396C1764C75A00042A12 /* MongoObjectiveCTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MongoObjectiveCTest-Prefix.pch"; sourceTree = "<group>"; };
+		02F2396E1764C75A00042A12 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		02F239701764C75A00042A12 /* MOTAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MOTAppDelegate.h; sourceTree = "<group>"; };
+		02F239711764C75A00042A12 /* MOTAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MOTAppDelegate.m; sourceTree = "<group>"; };
+		02F239741764C75A00042A12 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -321,6 +336,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				02F121C01410EF5200197811 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02F2395F1764C75A00042A12 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02F239631764C75A00042A12 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -586,6 +609,7 @@
 				02ABA1C914103B37000417F4 /* Sources */,
 				02F121C11410EF5200197811 /* mongo-test */,
 				02A85F0114103D4D004F3FE9 /* Libraries */,
+				02F239641764C75A00042A12 /* MongoObjectiveCTest */,
 				02ABA1C214103B37000417F4 /* Frameworks */,
 				02ABA1C114103B37000417F4 /* Products */,
 			);
@@ -596,6 +620,7 @@
 			children = (
 				02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */,
 				02F121BD1410EF5200197811 /* mongo-test */,
+				02F239621764C75A00042A12 /* MongoObjectiveCTest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -691,6 +716,29 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		02F239641764C75A00042A12 /* MongoObjectiveCTest */ = {
+			isa = PBXGroup;
+			children = (
+				02F239701764C75A00042A12 /* MOTAppDelegate.h */,
+				02F239711764C75A00042A12 /* MOTAppDelegate.m */,
+				02F239731764C75A00042A12 /* MainMenu.xib */,
+				02F239651764C75A00042A12 /* Supporting Files */,
+			);
+			path = MongoObjectiveCTest;
+			sourceTree = "<group>";
+		};
+		02F239651764C75A00042A12 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				02F239661764C75A00042A12 /* MongoObjectiveCTest-Info.plist */,
+				02F239671764C75A00042A12 /* InfoPlist.strings */,
+				02F2396A1764C75A00042A12 /* main.m */,
+				02F2396C1764C75A00042A12 /* MongoObjectiveCTest-Prefix.pch */,
+				02F2396D1764C75A00042A12 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -766,6 +814,23 @@
 			productReference = 02F121BD1410EF5200197811 /* mongo-test */;
 			productType = "com.apple.product-type.tool";
 		};
+		02F239611764C75A00042A12 /* MongoObjectiveCTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02F239781764C75A00042A12 /* Build configuration list for PBXNativeTarget "MongoObjectiveCTest" */;
+			buildPhases = (
+				02F2395E1764C75A00042A12 /* Sources */,
+				02F2395F1764C75A00042A12 /* Frameworks */,
+				02F239601764C75A00042A12 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MongoObjectiveCTest;
+			productName = MongoObjectiveCTest;
+			productReference = 02F239621764C75A00042A12 /* MongoObjectiveCTest.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -789,6 +854,7 @@
 				02ABA1BF14103B37000417F4 /* mongo-objc-driver */,
 				02F121BC1410EF5200197811 /* mongo-test */,
 				02216F151412D39200789BD1 /* Submodules */,
+				02F239611764C75A00042A12 /* MongoObjectiveCTest */,
 			);
 		};
 /* End PBXProject section */
@@ -798,6 +864,16 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02F239601764C75A00042A12 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02F239691764C75A00042A12 /* InfoPlist.strings in Resources */,
+				02F2396F1764C75A00042A12 /* Credits.rtf in Resources */,
+				02F239751764C75A00042A12 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -918,6 +994,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		02F2395E1764C75A00042A12 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02F2396B1764C75A00042A12 /* main.m in Sources */,
+				02F239721764C75A00042A12 /* MOTAppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -940,6 +1025,30 @@
 				02ABA1CD14103B37000417F4 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		02F239671764C75A00042A12 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				02F239681764C75A00042A12 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		02F2396D1764C75A00042A12 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				02F2396E1764C75A00042A12 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		02F239731764C75A00042A12 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				02F239741764C75A00042A12 /* en */,
+			);
+			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1045,6 +1154,54 @@
 			};
 			name = Release;
 		};
+		02F239761764C75A00042A12 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MongoObjectiveCTest/MongoObjectiveCTest-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "MongoObjectiveCTest/MongoObjectiveCTest-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		02F239771764C75A00042A12 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "MongoObjectiveCTest/MongoObjectiveCTest-Prefix.pch";
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				INFOPLIST_FILE = "MongoObjectiveCTest/MongoObjectiveCTest-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1083,6 +1240,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		02F239781764C75A00042A12 /* Build configuration list for PBXNativeTarget "MongoObjectiveCTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02F239761764C75A00042A12 /* Debug */,
+				02F239771764C75A00042A12 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
