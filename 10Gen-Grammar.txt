@@ -16,9 +16,17 @@ arrayContentElement  = Empty | actualArrayElement;
 actualArrayElement   = valueElement commaValueElement*;
 commaValueElement    = commaToken valueElement;
 
-valueElement         = nullToken | trueToken | falseToken | arrayElement | objectElement | numberToken | quotedStringToken | undefinedToken | objectIDElement;
+dateElement          = jsnewToken dateToken openParentheseToken quotedStringToken? closeParenthesetoken;
 
-objectIDElement      = objectIDToken openParentheseToken wordToken closeParenthesetoken;
+symbolElement        = symbolToken openParentheseToken quotedStringToken closeParenthesetoken;
+
+dataElement          = binDataToken openParentheseToken numberToken quotedStringToken closeParenthesetoken;
+
+timestampElement     = timestampToken openParentheseToken numberToken commaToken numberToken closeParenthesetoken;
+
+valueElement         = nullToken | trueToken | falseToken | arrayElement | objectElement | numberToken | quotedStringToken | undefinedToken | objectIDElement | minKeyToken | maxKeyToken | symbolElement | dateElement | dataElement | timestampElement;
+
+objectIDElement      = objectIDToken openParentheseToken quotedStringToken closeParenthesetoken;
 
 quotedStringToken    = QuotedString;
 wordToken            = Word;
@@ -28,6 +36,13 @@ trueToken            = 'true';
 falseToken           = 'false';
 undefinedToken       = 'undefined';
 objectIDToken        = 'ObjectID';
+minKeyToken          = 'MinKey';
+maxKeyToken          = 'MaxKey';
+jsnewToken           = 'new';
+dateToken            = 'Date';
+symbolToken          = 'Symbol';
+binDataToken         = 'BinData';
+timestampToken       = 'Timestamp';
 
 openCurlyToken       = '{';
 closeCurlyToken      = '}';

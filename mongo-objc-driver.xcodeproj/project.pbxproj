@@ -623,8 +623,8 @@
 			children = (
 				02F239951764DECF00042A12 /* MODPKJsonParser.h */,
 				02F239961764DECF00042A12 /* MODPKJsonParser.m */,
-				02F239841764CE1100042A12 /* MODJsonToObjectAssembler.m */,
 				02F239851764CE1100042A12 /* MODJsonToObjectAssembler.h */,
+				02F239841764CE1100042A12 /* MODJsonToObjectAssembler.m */,
 				02A85F5B14104373004F3FE9 /* MOD_internal.h */,
 				02411AB41432B8F900A5FFCA /* MOD_public.h */,
 				02A85F4F14103EA6004F3FE9 /* MODServer.h */,
