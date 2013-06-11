@@ -92,6 +92,7 @@ static void testObjects(NSString *jsonToParse, NSString *jsonExpected, id should
         NSLog(@"json: %@", jsonToParse);
         NSLog(@"expecting: %@", shouldEqual);
         NSLog(@"received: %@", objectsFromBson);
+        NSLog(@"difference in: %@", [MODServer findFirstDifferenceInObject:shouldEqual with:objectsFromBson]);
         assert(0);
     }
     bson_destroy(&bsonResult);
@@ -159,8 +160,8 @@ static void testJson()
 {
     NSError *error;
     
-    testObjects(@"{\"minkey\":{\"$minKey\":1}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMinKey alloc] init] autorelease], @"minkey", nil]);
-    testObjects(@"{\"maxkey\":{\"$maxKey\":1}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMaxKey alloc] init] autorelease], @"maxkey", nil]);
+    testObjects(@"{\"minkey\":MinKey}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMinKey alloc] init] autorelease], @"minkey", nil]);
+    testObjects(@"{\"maxkey\":MaxKey}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMaxKey alloc] init] autorelease], @"maxkey", nil]);
     testObjects(@"{\"number\":16.0391999999999939}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:16.0391999999999939], @"number", nil]);
     testObjects(@"{'value':null}", @"{\"value\":null}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNull null], @"value", nil]);
     testObjects(@"{value:null}", @"{\"value\":null}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNull null], @"value", nil]);

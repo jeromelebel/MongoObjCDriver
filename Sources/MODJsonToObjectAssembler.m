@@ -141,6 +141,18 @@
     [assembly push:[NSNull null]];
 }
 
+- (void)parser:(MODPKJsonParser *)parser didMatchMinKeyToken:(PKAssembly *)assembly
+{
+    [assembly pop];
+    [assembly push:[[[MODMinKey alloc] init] autorelease]];
+}
+
+- (void)parser:(MODPKJsonParser *)parser didMatchMaxKeyToken:(PKAssembly *)assembly
+{
+    [assembly pop];
+    [assembly push:[[[MODMaxKey alloc] init] autorelease]];
+}
+
 - (void)parser:(MODPKJsonParser *)parser didMatchPropertyNameElement:(PKAssembly *)assembly
 {
     NSLog(@"");

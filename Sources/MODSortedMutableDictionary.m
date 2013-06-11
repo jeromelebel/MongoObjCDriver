@@ -13,6 +13,8 @@
 #import "MODTimestamp.h"
 #import "MODSymbol.h"
 #import "MODUndefined.h"
+#import "MODMinKey.h"
+#import "MODMaxKey.h"
 #import "NSString+Base64.h"
 
 @implementation MODSortedMutableDictionary
@@ -204,6 +206,10 @@
         result = [[MODSymbol alloc] initWithValue:[self objectForKey:@"$symbol"]];
     } else if (self.count == 1 && [[self objectForKey:@"$undefined"] isKindOfClass:NSString.class] && [[self objectForKey:@"$undefined"] isEqualToString:@"$undefined"]) {
         result = [[MODUndefined alloc] init];
+    } else if (self.count == 1 && [[self objectForKey:@"$minKey"] isKindOfClass:NSNumber.class] && [[self objectForKey:@"$minKey"] intValue] == 1) {
+        result = [[MODMinKey alloc] init];
+    } else if (self.count == 1 && [[self objectForKey:@"$maxKey"] isKindOfClass:NSNumber.class] && [[self objectForKey:@"$maxKey"] intValue] == 1) {
+        result = [[MODMaxKey alloc] init];
     }
     return [result autorelease];
 }
