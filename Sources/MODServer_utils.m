@@ -176,103 +176,27 @@
     }
     return result;
 }
-+ (bson_type)bsonIteratorNext:(bson_iterator *)iterator 
-{
-    size_t ds;
-    
-    if ( iterator->first ) {
-        iterator->first = 0;
-        return ( bson_type )( *iterator->cur );
-    }
-    real_bson_type real_type = (real_bson_type) bson_iterator_type(iterator);
-    switch (real_type) {
-        case EOO:
-            return BSON_EOO; /* don't advance */
-        case Undefined:
-        case MinKey:
-        case MaxKey:
-        case jstNULL:
-            ds = 0;
-            break;
-        case Bool:
-            ds = 1;
-            break;
-        case NumberInt:
-            ds = 4;
-            break;
-        case NumberLong:
-        case NumberDouble:
-        case Timestamp:
-        case Date:
-            ds = 8;
-            break;
-        case jstOID:
-            ds = 12;
-            break;
-        case String:
-        case Symbol:
-        case Code:
-            ds = 4 + bson_iterator_int_raw( iterator );
-            break;
-        case BinData:
-            ds = 5 + bson_iterator_int_raw( iterator );
-            break;
-        case Object:
-        case Array:
-        case CodeWScope:
-            ds = bson_iterator_int_raw( iterator );
-            break;
-        case DBRef:
-            ds = 4+12 + bson_iterator_int_raw( iterator );
-            break;
-        case RegEx: {
-            const char *s = bson_iterator_value( iterator );
-            const char *p = s;
-            p += strlen( p )+1;
-            p += strlen( p )+1;
-            ds = p-s;
-            break;
-        }
-            
-        default: {
-            char msg[] = "unknown type: 000000000000";
-            bson_numstr( msg+14, ( unsigned )( iterator->cur[0] ) );
-            bson_fatal_msg( 0, msg );
-            return 0;
-        }
-    }
-    
-    iterator->cur += 1 + strlen( iterator->cur + 1 ) + 1 + ds;
-    
-    return ( bson_type )( *iterator->cur );
-}
 
 + (id)objectFromBsonIterator:(bson_iterator *)iterator
 {
     id result = nil;
     bson_iterator subIterator;
-    real_bson_type real_type = (real_bson_type) bson_iterator_type(iterator);
-    switch (real_type) {
-        case MinKey:
-            result = [[[MODMinKey alloc] init] autorelease];
-            break;
-        case MaxKey:
-            result = [[[MODMaxKey alloc] init] autorelease];
-            break;
-        case EOO:
+    
+    switch (bson_iterator_type(iterator)) {
+        case BSON_EOO:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             NSAssert(NO, @"BSON_EOO");
             break;
-        case NumberDouble:
+        case BSON_DOUBLE:
             result = [NSNumber numberWithDouble:bson_iterator_double(iterator)];
             break;
-        case String:
+        case BSON_STRING:
             result = [NSString stringWithUTF8String:bson_iterator_string(iterator)];
             break;
-        case Object:
+        case BSON_OBJECT:
             result = [[[MODSortedMutableDictionary alloc] init] autorelease];
             bson_iterator_subiterator(iterator, &subIterator);
-            while ([self bsonIteratorNext:&subIterator]) {
+            while (bson_iterator_next(&subIterator)) {
                 id value;
                 
                 value = [self objectFromBsonIterator:&subIterator];
@@ -285,10 +209,10 @@
                 }
             }
             break;
-        case Array:
+        case BSON_ARRAY:
             result = [NSMutableArray array];
             bson_iterator_subiterator(iterator, &subIterator);
-            while ([self bsonIteratorNext:&subIterator]) {
+            while (bson_iterator_next(&subIterator)) {
                 id value;
                 
                 value = [self objectFromBsonIterator:&subIterator];
@@ -297,7 +221,7 @@
                 }
             }
             break;
-        case BinData:
+        case BSON_BINDATA:
             {
                 NSData *data;
                 
@@ -306,22 +230,22 @@
                 [data release];
             }
             break;
-        case Undefined:
+        case BSON_UNDEFINED:
             result = [[[MODUndefined alloc] init] autorelease];
             break;
-        case jstOID:
+        case BSON_OID:
             result = [[[MODObjectId alloc] initWithOid:bson_iterator_oid(iterator)] autorelease];
             break;
-        case Bool:
+        case BSON_BOOL:
             result = [NSNumber numberWithBool:bson_iterator_bool(iterator) == true];
             break;
-        case Date:
+        case BSON_DATE:
             result = [NSDate dateWithTimeIntervalSince1970:bson_iterator_date(iterator) / 1000];
             break;
-        case jstNULL:
+        case BSON_NULL:
             result = [NSNull null];
             break;
-        case RegEx:
+        case BSON_REGEX:
             {
                 const char *cString;
                 NSString *pattern = nil;
@@ -337,15 +261,15 @@
                 [options release];
             }
             break;
-        case DBRef:
+        case BSON_DBREF:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             NSAssert(NO, @"BSON_DBREF");
             break;
-        case Code:
+        case BSON_CODE:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             NSAssert(NO, @"BSON_CODE");
             break;
-        case Symbol:
+        case BSON_SYMBOL:
             {
                 NSString *value;
                 
@@ -354,14 +278,14 @@
                 [value release];
             }
             break;
-        case CodeWScope:
+        case BSON_CODEWSCOPE:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             NSAssert(NO, @"BSON_CODEWSCOPE");
             break;
-        case NumberInt:
+        case BSON_INT:
             result = [NSNumber numberWithInt:bson_iterator_int(iterator)];
             break;
-        case Timestamp:
+        case BSON_TIMESTAMP:
             {
                 bson_timestamp_t ts;
                 
@@ -369,8 +293,14 @@
                 result = [[[MODTimestamp alloc] initWithTValue:ts.t iValue:ts.i] autorelease];
             }
             break;
-        case NumberLong:
+        case BSON_LONG:
             result = [NSNumber numberWithLongLong:bson_iterator_long(iterator)];
+            break;
+        case BSON_MINKEY:
+            result = [[[MODMinKey alloc] init] autorelease];
+            break;
+        case BSON_MAXKEY:
+            result = [[[MODMaxKey alloc] init] autorelease];
             break;
         default:
             NSAssert(NO, @"unknown %d", bson_iterator_type(iterator));
@@ -388,7 +318,7 @@
         result = [[MODSortedMutableDictionary alloc] init];
         bson_iterator_init(&iterator, bsonObject);
         
-        while ([self bsonIteratorNext:&iterator] != BSON_EOO) {
+        while (bson_iterator_next(&iterator) != BSON_EOO) {
             NSString *key;
             id value;
             
