@@ -25,9 +25,9 @@
     NSString *result;
     
     if (pretty) {
-        result = [NSString stringWithFormat:@"MinKey"];
+        result = @"{ \"$minKey\": 1 }";
     } else {
-        result = [NSString stringWithFormat:@"MinKey"];
+        result = @"{\"$minKey\":1}";
     }
     return result;
 }
