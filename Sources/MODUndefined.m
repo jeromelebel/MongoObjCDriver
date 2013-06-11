@@ -25,9 +25,9 @@
     NSString *result;
     
     if (pretty) {
-        result = [NSString stringWithFormat:@"{ \"$undefined\" : \"$undefined\" }"];
+        result = @"{ \"$undefined\": \"$undefined\" }";
     } else {
-        result = [NSString stringWithFormat:@"{\"$undefined\":\"$undefined\"}"];
+        result = @"{\"$undefined\":\"$undefined\"}";
     }
     return result;
 }
