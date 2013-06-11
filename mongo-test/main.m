@@ -154,6 +154,9 @@ static void testJson()
     NSError *error;
     id value;
     
+    testObjects(@"{\"minkey\":{\"$minKey\":1}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMinKey alloc] init] autorelease], @"minkey", nil]);
+    testObjects(@"{\"maxkey\":{\"$maxKey\":1}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMaxKey alloc] init] autorelease], @"maxkey", nil]);
+    testObjects(@"{\"number\":16.0391999999999939}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:16.0391999999999939], @"number", nil]);
     testObjects(@"{\"number\":16.0391999999999939}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:16.0391999999999939], @"number", nil]);
     testObjects(@"{\"number\":1.2345678910000000}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:1.234567891], @"number", nil]);
     testObjects(@"{\"data\":{\"$binary\":\"AA==\",\"$type\":\"0\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODBinary alloc] initWithBytes:"\0" length:1 binaryType:0] autorelease], @"data", nil]);
@@ -265,7 +268,7 @@ int main (int argc, const char * argv[])
         MODCursor *cursor;
 
         testBase64();
-        //testTypes();
+        testTypes();
         testJson();
         if (argc != 2) {
             NSLog(@"need to put the ip a of a mongo server as a parameter, so we can test the objective-c driver");

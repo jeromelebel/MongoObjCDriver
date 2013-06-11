@@ -318,6 +318,7 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
     } else if (key != NULL && strcmp(key, "$minKey") == 0 && index == 0 && dataInfo->type == JSON_INT && atoll(dataInfo->data) == 1) {
         result = [context->target appendMinKeyWithKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure index:context->pendingBsonValue.index];
         clear_pending_value(context, YES);
+        result = 0;
     } else if (key != NULL && strcmp(key, "$maxKey") == 0 && index == 0 && dataInfo->type == JSON_INT && atoll(dataInfo->data) == 1) {
         result = [context->target appendMaxKeyWithKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure index:context->pendingBsonValue.index];
         clear_pending_value(context, YES);
@@ -780,7 +781,7 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
         snprintf(_indexKey, sizeof(_indexKey), "%d", index);
         key = _indexKey;
     }
-    bson_append_undefined(_bson, key);
+    bson_append_maxkey(_bson, key);
     return YES;
 }
 
@@ -790,7 +791,7 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
         snprintf(_indexKey, sizeof(_indexKey), "%d", index);
         key = _indexKey;
     }
-    bson_append_undefined(_bson, key);
+    bson_append_minkey(_bson, key);
     return YES;
 }
 

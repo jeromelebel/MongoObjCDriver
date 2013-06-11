@@ -254,10 +254,10 @@
     real_bson_type real_type = (real_bson_type) bson_iterator_type(iterator);
     switch (real_type) {
         case MinKey:
-            result = @"$minKey";
+            result = [[[MODMinKey alloc] init] autorelease];
             break;
         case MaxKey:
-            result = @"$maxKey";
+            result = [[[MODMaxKey alloc] init] autorelease];
             break;
         case EOO:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
