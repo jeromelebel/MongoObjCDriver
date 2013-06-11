@@ -153,6 +153,12 @@
     [assembly push:[[[MODMaxKey alloc] init] autorelease]];
 }
 
+- (void)parser:(MODPKJsonParser *)parser didMatchUndefinedToken:(PKAssembly *)assembly
+{
+    [assembly pop];
+    [assembly push:[[[MODUndefined alloc] init] autorelease]];
+}
+
 - (void)parser:(MODPKJsonParser *)parser didMatchPropertyNameElement:(PKAssembly *)assembly
 {
     NSLog(@"");

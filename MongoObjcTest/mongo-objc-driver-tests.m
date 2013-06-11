@@ -182,7 +182,7 @@ static void testJson()
     testObjects(@"{\"mydate\":{\"$date\":1320066612000.000000}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[NSDate alloc] initWithTimeIntervalSince1970:1320066612] autorelease], @"mydate", nil]);
     testObjects(@"{\"false\":false,\"true\":true}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"false", [NSNumber numberWithBool:YES], @"true", nil]);
     testObjects(@"{\"my symbol\":{\"$symbol\":\"pour fred\"}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODSymbol alloc] initWithValue:@"pour fred"] autorelease], @"my symbol", nil]);
-    testObjects(@"{\"undefined value\":{\"$undefined\":\"$undefined\"}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODUndefined alloc] init] autorelease], @"undefined value", nil]);
+    testObjects(@"{\"undefined value\":undefined}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODUndefined alloc] init] autorelease], @"undefined value", nil]);
     
     // test to make sure each items in an array has the correct index
     // https://github.com/fotonauts/MongoHub-Mac/issues/28
