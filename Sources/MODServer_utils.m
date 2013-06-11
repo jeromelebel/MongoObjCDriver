@@ -397,6 +397,48 @@
     }
 }
 
++ (NSString *)findFirstDifferenceInArray:(NSArray *)array1 with:(NSArray *)array2
+{
+    NSString *result = nil;
+    
+    if ([array1 count] != [array2 count]) {
+        result = @"*";
+    } else {
+        NSInteger ii, count = [array1 count];
+        
+        for (ii = 0; ii < count; ii++) {
+            NSString *valueDiff;
+            
+            valueDiff = [self findFirstDifferenceInObject:[array1 objectAtIndex:ii] with:[array2 objectAtIndex:ii]];
+            if (valueDiff) {
+                result = [NSString stringWithFormat:@"%ld.%@", (long)ii, valueDiff];
+                break;
+            }
+        }
+    }
+    return result;
+}
+
++ (NSString *)findFirstDifferenceInSortedDictionary:(MODSortedMutableDictionary *)dictionary1 with:(MODSortedMutableDictionary *)dictionary2
+{
+    NSString *result = nil;
+    
+    if (![dictionary1.sortedKeys isEqual:dictionary2.sortedKeys]) {
+        result = @"*";
+    } else {
+        for (NSString *key in dictionary1.sortedKeys) {
+            NSString *valueDiff;
+            
+            valueDiff = [self findFirstDifferenceInObject:[dictionary1 objectForKey:key] with:[dictionary2 objectForKey:key]];
+            if (valueDiff) {
+                result = [NSString stringWithFormat:@"%@.%@", key, valueDiff];
+                break;
+            }
+        }
+    }
+    return result;
+}
+
 @end
 
 static void convertValueToJson(NSMutableString *result, int indent, id value, NSString *key, BOOL pretty);
@@ -611,12 +653,30 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     bson_finish(&bsonDocument);
     NSAssert(error == nil, @"Error while parsing to bson %@, %@", json, error);
     convertedDocument = [MODServer objectFromBson:&bsonDocument];
-    NSAssert([document isEqual:convertedDocument], @"Error to conver json %@ to %@ (got %@, while converting it to bson)", json, document, convertedDocument);
+    if (![document isEqual:convertedDocument]) {
+        NSLog(@"%@", [MODServer convertObjectToJson:convertedDocument pretty:YES]);
+        NSLog(@"%@", json);
+        NSLog(@"%@", [MODServer convertObjectToJson:document pretty:YES]);
+        NSAssert([document isEqual:convertedDocument], @"Error to convert json %@ to %@ (got %@, while converting it to bson)", json, document, convertedDocument);
+    }
     bson_destroy(&bsonDocument);
     
     convertedDocument = [MODJsonToObjectParser objectsFromJson:json error:&error];
     NSAssert(error == nil, @"Error while parsing to objects %@, %@", json, error);
     NSAssert([document isEqual:convertedDocument], @"Error to conver json %@ to %@ (got %@)", json, document, convertedDocument);
+}
+
++ (NSString *)findFirstDifferenceInObject:(id)object1 with:(id)object2
+{
+    if ([object1 isKindOfClass:NSArray.class] && [object2 isKindOfClass:NSArray.class]) {
+        return [self findFirstDifferenceInArray:object1 with:object2];
+    } else if ([object1 isKindOfClass:MODSortedMutableDictionary.class] && [object2 isKindOfClass:MODSortedMutableDictionary.class]) {
+        return [self findFirstDifferenceInSortedDictionary:object1 with:object2];
+    } else if ([object1 isEqual:object2]) {
+        return nil;
+    } else {
+        return @"*";
+    }
 }
 
 @end

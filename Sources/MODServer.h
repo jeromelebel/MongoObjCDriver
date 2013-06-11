@@ -56,4 +56,5 @@ typedef struct mongo                    *mongo_ptr;
 + (NSString *)escapeSlashesForString:(NSString *)string;
 + (NSString *)convertObjectToJson:(MODSortedMutableDictionary *)object pretty:(BOOL)pretty;
 + (void)compareJson:(NSString *)json document:(id)document;
++ (NSString *)findFirstDifferenceInObject:(id)object1 with:(id)object2;
 @end
