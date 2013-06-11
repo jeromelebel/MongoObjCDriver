@@ -28,6 +28,7 @@ enum {
 @interface MODServer(utils_internal)
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails;
 + (NSError *)errorFromMongo:(mongo_ptr)mongo;
++ (bson_type)bsonIteratorNext:(bson_iterator *)iterator;
 + (MODSortedMutableDictionary *)objectFromBson:(bson *)bsonObject;
 + (void)appendObject:(MODSortedMutableDictionary *)object toBson:(bson *)bson;
 + (NSString *)findFirstDifferenceInArray:(NSArray *)array1 with:(NSArray *)array2;
