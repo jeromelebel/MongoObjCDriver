@@ -232,7 +232,6 @@
         case BSON_UNDEFINED:
             result = [[[MODUndefined alloc] init] autorelease];
             break;
-            break;
         case BSON_OID:
             result = [[[MODObjectId alloc] initWithOid:bson_iterator_oid(iterator)] autorelease];
             break;
@@ -296,6 +295,12 @@
         case BSON_LONG:
             result = [NSNumber numberWithLongLong:bson_iterator_long(iterator)];
             break;
+        case BSON_MINKEY:
+            result = [[[MODMinKey alloc] init] autorelease];
+            break;
+        case BSON_MAXKEY:
+            result = [[[MODMaxKey alloc] init] autorelease];
+            break;
         default:
             NSAssert(NO, @"unknown %d", bson_iterator_type(iterator));
             break;
@@ -311,6 +316,7 @@
     if (bsonObject->data) {
         result = [[MODSortedMutableDictionary alloc] init];
         bson_iterator_init(&iterator, bsonObject);
+        
         while (bson_iterator_next(&iterator) != BSON_EOO) {
             NSString *key;
             id value;
@@ -383,6 +389,10 @@
         bson_append_undefined(bson, keyString);
     } else if ([value isKindOfClass:[MODSymbol class]]) {
         bson_append_symbol(bson, keyString, [[value value] UTF8String]);
+    } else if ([value isKindOfClass:[MODMinKey class]]) {
+        bson_append_minkey(bson, keyString);
+    } else if ([value isKindOfClass:[MODMaxKey class]]) {
+        bson_append_maxkey(bson, keyString);
     } else {
         NSLog(@"*********************** class %@ key %@ %d", NSStringFromClass([value class]), key, __LINE__);
         NSAssert(NO, @"class %@ key %@ line %d", NSStringFromClass([value class]), key, __LINE__);
@@ -561,6 +571,10 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     } else if ([value isKindOfClass:[MODSymbol class]]) {
         [result appendString:[value jsonValueWithPretty:pretty]];
     } else if ([value isKindOfClass:[MODUndefined class]]) {
+        [result appendString:[value jsonValueWithPretty:pretty]];
+    } else if ([value isKindOfClass:[MODMaxKey class]]) {
+        [result appendString:[value jsonValueWithPretty:pretty]];
+    } else if ([value isKindOfClass:[MODMinKey class]]) {
         [result appendString:[value jsonValueWithPretty:pretty]];
     } else {
         NSLog(@"unknown type: %@", [value class]);
