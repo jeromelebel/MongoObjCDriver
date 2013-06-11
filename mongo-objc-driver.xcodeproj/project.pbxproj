@@ -38,16 +38,12 @@
 		02688DDD14119CF50014ED51 /* MODDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DDB14119CF50014ED51 /* MODDatabase.m */; };
 		02688DE21411C5010014ED51 /* MODCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 02688DE01411C5010014ED51 /* MODCollection.h */; };
 		02688DE31411C5010014ED51 /* MODCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DE11411C5010014ED51 /* MODCollection.m */; };
-		02688DE41411C5010014ED51 /* MODCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DE11411C5010014ED51 /* MODCollection.m */; };
 		027A1DA21767E91F0048AD60 /* MODMaxKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 027A1D9C1767E91F0048AD60 /* MODMaxKey.h */; };
 		027A1DA31767E91F0048AD60 /* MODMaxKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 027A1D9D1767E91F0048AD60 /* MODMaxKey.m */; };
-		027A1DA41767E91F0048AD60 /* MODMaxKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 027A1D9D1767E91F0048AD60 /* MODMaxKey.m */; };
 		027A1DA51767E91F0048AD60 /* MODMinKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 027A1D9E1767E91F0048AD60 /* MODMinKey.h */; };
 		027A1DA61767E91F0048AD60 /* MODMinKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 027A1D9F1767E91F0048AD60 /* MODMinKey.m */; };
-		027A1DA71767E91F0048AD60 /* MODMinKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 027A1D9F1767E91F0048AD60 /* MODMinKey.m */; };
 		027A1DA81767E91F0048AD60 /* MODUndefined.h in Headers */ = {isa = PBXBuildFile; fileRef = 027A1DA01767E91F0048AD60 /* MODUndefined.h */; };
 		027A1DA91767E91F0048AD60 /* MODUndefined.m in Sources */ = {isa = PBXBuildFile; fileRef = 027A1DA11767E91F0048AD60 /* MODUndefined.m */; };
-		027A1DAA1767E91F0048AD60 /* MODUndefined.m in Sources */ = {isa = PBXBuildFile; fileRef = 027A1DA11767E91F0048AD60 /* MODUndefined.m */; };
 		028CE605142E10BE0099B1F7 /* MODTimestamp.h in Headers */ = {isa = PBXBuildFile; fileRef = 028CE603142E10BE0099B1F7 /* MODTimestamp.h */; };
 		028CE606142E10BE0099B1F7 /* MODTimestamp.m in Sources */ = {isa = PBXBuildFile; fileRef = 028CE604142E10BE0099B1F7 /* MODTimestamp.m */; };
 		02A85F4614103D64004F3FE9 /* bson.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F1A14103D4D004F3FE9 /* bson.c */; };
@@ -927,34 +923,6 @@
 				02F2396B1764C75A00042A12 /* main.m in Sources */,
 				02F239721764C75A00042A12 /* MOTAppDelegate.m in Sources */,
 				02F239901764D0DC00042A12 /* mongo-objc-driver-tests.m in Sources */,
-				02216F1F1412D47800789BD1 /* json.c in Sources */,
-				02F121C31410EF5200197811 /* main.m in Sources */,
-				02F121CC1410F01B00197811 /* MODServer.m in Sources */,
-				02F121CD1410F01D00197811 /* MODQuery.m in Sources */,
-				02F121CE1410F07200197811 /* bson.c in Sources */,
-				02F121CF1410F07200197811 /* encoding.c in Sources */,
-				02F121D01410F07200197811 /* gridfs.c in Sources */,
-				02F121D11410F07200197811 /* md5.c in Sources */,
-				02F121D21410F07200197811 /* mongo.c in Sources */,
-				02F121D41410F07200197811 /* numbers.c in Sources */,
-				02688DDE14119CF50014ED51 /* MODDatabase.m in Sources */,
-				02688DE41411C5010014ED51 /* MODCollection.m in Sources */,
-				02BDC3EA141D6938000EF755 /* MODCursor.m in Sources */,
-				02BDC3ED141D83A7000EF755 /* MODServer_utils.m in Sources */,
-				02AB057814296F9000B7CD19 /* MODObjectId.m in Sources */,
-				028CE608142E4A1A0099B1F7 /* MODTimestamp.m in Sources */,
-				02CF87EC142F91CA000C4C7F /* MODRegex.m in Sources */,
-				02411ABB1432D02700A5FFCA /* MODBinary.m in Sources */,
-				025C56231433EE0E0064B010 /* MODDBRef.m in Sources */,
-				02B24275147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */,
-				023ECFFF1485237000185781 /* MODSymbol.m in Sources */,
-				022F8C55169B5F420024D20C /* env.c in Sources */,
-				022F8C56169B5F450024D20C /* bcon.c in Sources */,
-				02DB18B1172C8DFA00B26EAE /* NSData+Base64.m in Sources */,
-				02DB18B2172C8E0700B26EAE /* NSString+Base64.m in Sources */,
-				027A1DA41767E91F0048AD60 /* MODMaxKey.m in Sources */,
-				027A1DA71767E91F0048AD60 /* MODMinKey.m in Sources */,
-				027A1DAA1767E91F0048AD60 /* MODUndefined.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

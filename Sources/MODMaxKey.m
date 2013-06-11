@@ -25,9 +25,9 @@
     NSString *result;
     
     if (pretty) {
-        result = [NSString stringWithFormat:@"{ \"$maxKey\" : 1 }"];
+        result = [NSString stringWithFormat:@"MaxKey"];
     } else {
-        result = [NSString stringWithFormat:@"{\"$maxKey\":1}"];
+        result = [NSString stringWithFormat:@"MaxKey"];
     }
     return result;
 }
