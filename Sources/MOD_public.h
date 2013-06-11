@@ -18,5 +18,7 @@
 #import "MODBinary.h"
 #import "MODDBRef.h"
 #import "MODSymbol.h"
+#import "MODMinKey.h"
+#import "MODMaxKey.h"
 #import "MODSortedMutableDictionary.h"
 #import "MODUndefined.h"

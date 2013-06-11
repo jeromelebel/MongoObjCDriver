@@ -309,7 +309,6 @@
         case Undefined:
             result = [[[MODUndefined alloc] init] autorelease];
             break;
-            break;
         case jstOID:
             result = [[[MODObjectId alloc] initWithOid:bson_iterator_oid(iterator)] autorelease];
             break;
@@ -457,6 +456,10 @@
         bson_append_binary(bson, keyString, BSON_BIN_BINARY, [value bytes], [value length]);
     } else if ([value isKindOfClass:[MODBinary class]]) {
         bson_append_binary(bson, keyString, [value binaryType], [[value data] bytes], [[value data] length]);
+    } else if ([value isKindOfClass:[MODUndefined class]]) {
+        bson_append_undefined(bson, keyString);
+    } else if ([value isKindOfClass:[MODUndefined class]]) {
+        bson_append_undefined(bson, keyString);
     } else if ([value isKindOfClass:[MODUndefined class]]) {
         bson_append_undefined(bson, keyString);
     } else {
@@ -637,6 +640,10 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     } else if ([value isKindOfClass:[MODSymbol class]]) {
         [result appendString:[value jsonValueWithPretty:pretty]];
     } else if ([value isKindOfClass:[MODUndefined class]]) {
+        [result appendString:[value jsonValueWithPretty:pretty]];
+    } else if ([value isKindOfClass:[MODMaxKey class]]) {
+        [result appendString:[value jsonValueWithPretty:pretty]];
+    } else if ([value isKindOfClass:[MODMinKey class]]) {
         [result appendString:[value jsonValueWithPretty:pretty]];
     } else {
         NSLog(@"unknown type: %@", [value class]);
