@@ -40,19 +40,11 @@
     return _options;
 }
 
-- (NSString *)tengenString
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
 {
-    return [NSString stringWithFormat:@"/%@/%@", [MODServer escapeSlashesForString:_pattern], [MODServer escapeSlashesForString:_options]];
-}
-
-- (NSString *)jsonValue
-{
-    return [self jsonValueWithPretty:YES];
-}
-
-- (NSString *)jsonValueWithPretty:(BOOL)pretty
-{
-    if (pretty && _options && [_options length] > 0) {
+    if (!strictJSON) {
+        return [NSString stringWithFormat:@"/%@/%@", [MODServer escapeSlashesForString:_pattern], [MODServer escapeSlashesForString:_options]];
+    } else if (pretty && _options && [_options length] > 0) {
         return [NSString stringWithFormat:@"{ \"$regex\": \"%@\", \"$options\": \"%@\" }", [MODServer escapeQuotesForString:_pattern], [MODServer escapeQuotesForString:_options]];
     } else if (pretty) {
         return [NSString stringWithFormat:@"{ \"$regex\": \"%@\" }", [MODServer escapeQuotesForString:_pattern]];

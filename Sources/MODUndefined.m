@@ -10,26 +10,15 @@
 
 @implementation MODUndefined
 
-- (NSString *)tengenString
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
 {
-    return @"undefined";
-}
-
-- (NSString *)jsonValue
-{
-    return [self jsonValueWithPretty:YES];
-}
-
-- (NSString *)jsonValueWithPretty:(BOOL)pretty
-{
-    NSString *result;
-    
-    if (pretty) {
-        result = @"{ \"$undefined\": \"$undefined\" }";
+    if (!strictJSON) {
+        return @"undefined";
+    } else if (pretty) {
+        return @"{ \"$undefined\": \"$undefined\" }";
     } else {
-        result = @"{\"$undefined\":\"$undefined\"}";
+        return @"{\"$undefined\":\"$undefined\"}";
     }
-    return result;
 }
 
 - (BOOL)isEqual:(id)object

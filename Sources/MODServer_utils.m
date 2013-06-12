@@ -451,7 +451,7 @@
 
 @end
 
-static void convertValueToJson(NSMutableString *result, int indent, id value, NSString *key, BOOL pretty);
+static void convertValueToJson(NSMutableString *result, int indent, id value, NSString *key, BOOL pretty, BOOL useStrictJSON);
 
 static void addIdent(NSMutableString *result, int indent)
 {
@@ -463,7 +463,7 @@ static void addIdent(NSMutableString *result, int indent)
     }
 }
 
-static void convertDictionaryToJson(NSMutableString *result, int indent, MODSortedMutableDictionary *value, BOOL pretty)
+static void convertDictionaryToJson(NSMutableString *result, int indent, MODSortedMutableDictionary *value, BOOL pretty, BOOL useStrictJSON)
 {
     BOOL first = YES;
     
@@ -479,7 +479,7 @@ static void convertDictionaryToJson(NSMutableString *result, int indent, MODSort
         } else {
             [result appendString:@","];
         }
-        convertValueToJson(result, indent + 1, [value objectForKey:key], key, pretty);
+        convertValueToJson(result, indent + 1, [value objectForKey:key], key, pretty, useStrictJSON);
     }
     if (pretty) {
         [result appendString:@"\n"];
@@ -488,7 +488,7 @@ static void convertDictionaryToJson(NSMutableString *result, int indent, MODSort
     [result appendString:@"}"];
 }
 
-static void convertArrayToJson(NSMutableString *result, int indent, NSArray *value, BOOL pretty)
+static void convertArrayToJson(NSMutableString *result, int indent, NSArray *value, BOOL pretty, BOOL useStrictJSON)
 {
     BOOL first = YES;
     
@@ -504,7 +504,7 @@ static void convertArrayToJson(NSMutableString *result, int indent, NSArray *val
         } else {
             [result appendString:@","];
         }
-        convertValueToJson(result, indent + 1, arrayValue, nil, pretty);
+        convertValueToJson(result, indent + 1, arrayValue, nil, pretty, useStrictJSON);
     }
     if (pretty) {
         [result appendString:@"\n"];
@@ -513,7 +513,7 @@ static void convertArrayToJson(NSMutableString *result, int indent, NSArray *val
     [result appendString:@"]"];
 }
 
-static void convertValueToJson(NSMutableString *result, int indent, id value, NSString *key, BOOL pretty)
+static void convertValueToJson(NSMutableString *result, int indent, id value, NSString *key, BOOL pretty, BOOL useStrictJSON)
 {
     if (pretty) {
         addIdent(result, indent);
@@ -540,9 +540,9 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     } else if ([value isKindOfClass:[NSNull class]]) {
         [result appendString:@"null"];
     } else if ([value isKindOfClass:[MODSortedMutableDictionary class]]) {
-        convertDictionaryToJson(result, indent, value, pretty);
+        convertDictionaryToJson(result, indent, value, pretty, useStrictJSON);
     } else if ([value isKindOfClass:[NSArray class]]) {
-        convertArrayToJson(result, indent, value, pretty);
+        convertArrayToJson(result, indent, value, pretty, useStrictJSON);
     } else if ([value isKindOfClass:[NSNumber class]]) {
         if (strcmp([value objCType], @encode(BOOL)) == 0) {
             if ([value boolValue]) {
@@ -558,23 +558,23 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
             [result appendString:[value description]];
         }
     } else if ([value isKindOfClass:[MODObjectId class]]) {
-        [result appendString:[value jsonValueWithPretty:pretty]];
+        [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else if ([value isKindOfClass:[MODRegex class]]) {
-        [result appendString:[value jsonValueWithPretty:pretty]];
+        [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else if ([value isKindOfClass:[MODTimestamp class]]) {
-        [result appendString:[value jsonValueWithPretty:pretty]];
+        [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else if ([value isKindOfClass:[MODBinary class]]) {
-        [result appendString:[value jsonValueWithPretty:pretty]];
+        [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else if ([value isKindOfClass:[MODDBRef class]]) {
-        [result appendString:[value jsonValueWithPretty:pretty]];
+        [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else if ([value isKindOfClass:[MODSymbol class]]) {
-        [result appendString:[value jsonValueWithPretty:pretty]];
+        [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else if ([value isKindOfClass:[MODUndefined class]]) {
-        [result appendString:[value jsonValueWithPretty:pretty]];
+        [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else if ([value isKindOfClass:[MODMaxKey class]]) {
-        [result appendString:[value jsonValueWithPretty:pretty]];
+        [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else if ([value isKindOfClass:[MODMinKey class]]) {
-        [result appendString:[value jsonValueWithPretty:pretty]];
+        [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else {
         NSLog(@"unknown type: %@", [value class]);
         assert(false);
@@ -588,7 +588,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     NSMutableString *result;
     
     result = [NSMutableString string];
-    convertDictionaryToJson(result, 0, object, pretty);
+    convertDictionaryToJson(result, 0, object, pretty, YES);
     return result;
 }
 

@@ -16,9 +16,7 @@
 
 - (id)initWithData:(NSData *)data binaryType:(char)binaryType;
 - (id)initWithBytes:(const void *)bytes length:(NSUInteger)length binaryType:(char)binaryType;
-- (NSString *)tengenString;
-- (NSString *)jsonValue;
-- (NSString *)jsonValueWithPretty:(BOOL)pretty;
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;
 
 @property(nonatomic, readonly, assign)char binaryType;
 @property(nonatomic, readonly, assign)NSData *data;

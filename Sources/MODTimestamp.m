@@ -21,19 +21,11 @@
     return self;
 }
 
-- (NSString *)tengenString
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
 {
-    return [NSString stringWithFormat:@"Timestamp(%d, %d)", _tValue, _iValue];
-}
-
-- (NSString *)jsonValue
-{
-    return [self jsonValueWithPretty:YES];
-}
-
-- (NSString *)jsonValueWithPretty:(BOOL)pretty
-{
-    if (pretty) {
+    if (!strictJSON) {
+        return [NSString stringWithFormat:@"Timestamp(%d, %d)", _tValue, _iValue];
+    } else if (pretty) {
         return [NSString stringWithFormat:@"{ \"$timestamp\" : [ %d, %d ] }", _tValue, _iValue];
     } else {
         return [NSString stringWithFormat:@"{\"$timestamp\":[%d,%d]}", _tValue, _iValue];

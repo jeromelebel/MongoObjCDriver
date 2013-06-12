@@ -17,8 +17,6 @@
 - (id)initWithPattern:(NSString *)pattern options:(NSString *)options;
 - (NSString *)pattern;
 - (NSString *)options;
-- (NSString *)tengenString;
-- (NSString *)jsonValue;
-- (NSString *)jsonValueWithPretty:(BOOL)pretty;
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;
 
 @end

@@ -10,21 +10,13 @@
 
 @implementation MODMinKey
 
-- (NSString *)tengenString
-{
-    return @"MinKey";
-}
-
-- (NSString *)jsonValue
-{
-    return [self jsonValueWithPretty:YES];
-}
-
-- (NSString *)jsonValueWithPretty:(BOOL)pretty
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
 {
     NSString *result;
     
-    if (pretty) {
+    if (!strictJSON) {
+        result = @"MinKey";
+    } else if (pretty) {
         result = @"{ \"$minKey\": 1 }";
     } else {
         result = @"{\"$minKey\":1}";

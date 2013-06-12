@@ -10,26 +10,15 @@
 
 @implementation MODMaxKey
 
-- (NSString *)tengenString
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
 {
-    return @"MaxKey";
-}
-
-- (NSString *)jsonValue
-{
-    return [self jsonValueWithPretty:YES];
-}
-
-- (NSString *)jsonValueWithPretty:(BOOL)pretty
-{
-    NSString *result;
-    
-    if (pretty) {
-        result = @"{ \"$maxKey\": 1 }";
+    if (!strictJSON) {
+        return @"MaxKey";
+    } else if (pretty) {
+        return @"{ \"$maxKey\": 1 }";
     } else {
-        result = @"{\"$maxKey\":1}";
+        return @"{\"$maxKey\":1}";
     }
-    return result;
 }
 
 - (BOOL)isEqual:(id)object
