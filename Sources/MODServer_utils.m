@@ -589,7 +589,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     NSMutableString *result;
     
     result = [NSMutableString string];
-    convertDictionaryToJson(result, 0, object, pretty, YES);
+    convertDictionaryToJson(result, 0, object, pretty, NO);
     return result;
 }
 
