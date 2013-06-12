@@ -32,7 +32,7 @@
     return _idValue;
 }
 
-- (NSString *)tengenString
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
 {
     char *bufferString;
     const unsigned char *bytes;
@@ -45,30 +45,9 @@
         snprintf(bufferString + (ii * 2), 3, "%.2X", bytes[ii]);
     }
     bufferString[(ii * 2) + 1] = 0;
-    result = [NSString stringWithFormat:@"Dbref(\"%@\", \"%s\")", _refValue, bufferString];
-    free(bufferString);
-    return result;
-}
-
-- (NSString *)jsonValue
-{
-    return [self jsonValueWithPretty:YES];
-}
-
-- (NSString *)jsonValueWithPretty:(BOOL)pretty
-{
-    char *bufferString;
-    const unsigned char *bytes;
-    NSString *result;
-    size_t ii, count;
-    
-    count = sizeof(_idValue);
-    bufferString = malloc((count * 2) + 1);
-    for(ii = 0; ii < count; ii++) {
-        snprintf(bufferString + (ii * 2), 3, "%.2X", bytes[ii]);
-    }
-    bufferString[(ii * 2) + 1] = 0;
-    if (pretty) {
+    if (!strictJSON) {
+        result = [NSString stringWithFormat:@"Dbref(\"%@\", \"%s\")", _refValue, bufferString];
+    } else if (pretty) {
         result = [NSString stringWithFormat:@"{ \"$ref\" : \"%@\", \"$id\" : \"%s\" }", _refValue, bufferString];
     } else {
         result = [NSString stringWithFormat:@"{\"$ref\":\"%@\",\"$id\":\"%s\"}", _refValue, bufferString];

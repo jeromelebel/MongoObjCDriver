@@ -26,19 +26,11 @@
     [super dealloc];
 }
 
-- (NSString *)tengenString
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
 {
-    return [NSString stringWithFormat:@"Symbol(%@)", [MODServer escapeSlashesForString:_value]];
-}
-
-- (NSString *)jsonValue
-{
-    return [self jsonValueWithPretty:YES];
-}
-
-- (NSString *)jsonValueWithPretty:(BOOL)pretty
-{
-    if (pretty) {
+    if (!strictJSON) {
+        return [NSString stringWithFormat:@"Symbol(%@)", [MODServer escapeSlashesForString:_value]];
+    } else if (pretty) {
         return [NSString stringWithFormat:@"{ \"$symbol\" : \"%@\" }", [MODServer escapeSlashesForString:_value]];
     } else {
         return [NSString stringWithFormat:@"{\"$symbol\":\"%@\"}", [MODServer escapeSlashesForString:_value]];

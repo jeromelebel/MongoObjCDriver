@@ -10,8 +10,6 @@
 
 @interface MODMinKey : NSObject
 
-- (NSString *)tengenString;
-- (NSString *)jsonValue;
-- (NSString *)jsonValueWithPretty:(BOOL)pretty;
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;
 
 @end

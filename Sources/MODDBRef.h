@@ -16,9 +16,7 @@
 
 - (id)initWithRefValue:(NSString *)refValue idValue:(const unsigned char[12])idValue;
 - (const unsigned char *)idValue;
-- (NSString *)tengenString;
-- (NSString *)jsonValue;
-- (NSString *)jsonValueWithPretty:(BOOL)pretty;
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;
 
 @property(nonatomic, readonly, retain) NSString *refValue;
 

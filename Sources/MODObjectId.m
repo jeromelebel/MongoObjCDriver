@@ -59,11 +59,6 @@
     return (bson_oid_t *)_bytes;
 }
 
-- (NSString *)tengenString
-{
-    return [NSString stringWithFormat:@"ObjectId(\"%@\")", [self stringValue]];
-}
-
 - (NSString *)stringValue
 {
     NSMutableString *result;
@@ -77,14 +72,11 @@
     return result;
 }
 
-- (NSString *)jsonValue
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
 {
-    return [self jsonValueWithPretty:YES];
-}
-
-- (NSString *)jsonValueWithPretty:(BOOL)pretty
-{
-    if (pretty) {
+    if (!strictJSON) {
+        return [NSString stringWithFormat:@"ObjectId(\"%@\")", [self stringValue]];
+    } else if (pretty) {
         return [NSString stringWithFormat:@"{ \"$oid\" : \"%@\" }", [self stringValue]];
     } else {
         return [NSString stringWithFormat:@"{\"$oid\":\"%@\"}", [self stringValue]];

@@ -27,17 +27,7 @@
     return self;
 }
 
-- (NSString *)tengenString
-{
-    return [self jsonValue];
-}
-
-- (NSString *)jsonValue
-{
-    return [self jsonValueWithPretty:YES];
-}
-
-- (NSString *)jsonValueWithPretty:(BOOL)pretty
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
 {
     NSString *result;
     

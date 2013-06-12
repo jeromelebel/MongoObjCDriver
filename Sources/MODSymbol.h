@@ -14,9 +14,7 @@
 }
 
 - (id)initWithValue:(NSString *)value;
-- (NSString *)tengenString;
-- (NSString *)jsonValue;
-- (NSString *)jsonValueWithPretty:(BOOL)pretty;
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;
 
 @property (nonatomic, retain, readwrite) NSString *value;
 
