@@ -92,7 +92,7 @@ static void testObjects(NSString *jsonToParse, NSString *jsonExpected, id should
         NSLog(@"json: %@", jsonToParse);
         NSLog(@"expecting: %@", shouldEqual);
         NSLog(@"received: %@", objectsFromBson);
-        NSLog(@"difference in: %@", [MODServer findFirstDifferenceInObject:shouldEqual with:objectsFromBson]);
+        NSLog(@"difference in: %@", [MODServer findAllDifferencesInObject1:shouldEqual object2:objectsFromBson]);
         assert(0);
     }
     bson_destroy(&bsonResult);
@@ -162,7 +162,9 @@ static void testJson()
     
     testObjects(@"{\"minkey\":MinKey}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMinKey alloc] init] autorelease], @"minkey", nil]);
     testObjects(@"{\"maxkey\":MaxKey}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMaxKey alloc] init] autorelease], @"maxkey", nil]);
-    testObjects(@"{\"number\":16.0391999999999939}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:16.0391999999999939], @"number", nil]);
+    testObjects(@"{\"number\":16.039199999999993906}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:16.039199999999994], @"number", nil]);
+    testObjects(@"{\"number\":1.2345678909999999728}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:1.234567891], @"number", nil]);
+    testObjects(@"{\"number\":3.8365551715863071018E-13}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:3.8365551715863071018e-13], @"number", nil]);
     testObjects(@"{'value':null}", @"{\"value\":null}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNull null], @"value", nil]);
     testObjects(@"{value:null}", @"{\"value\":null}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNull null], @"value", nil]);
     testObjects(@"{\"null value\":null}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNull null], @"null value", nil]);

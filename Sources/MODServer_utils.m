@@ -408,48 +408,6 @@
     }
 }
 
-+ (NSString *)findFirstDifferenceInArray:(NSArray *)array1 with:(NSArray *)array2
-{
-    NSString *result = nil;
-    
-    if ([array1 count] != [array2 count]) {
-        result = @"*";
-    } else {
-        NSInteger ii, count = [array1 count];
-        
-        for (ii = 0; ii < count; ii++) {
-            NSString *valueDiff;
-            
-            valueDiff = [self findFirstDifferenceInObject:[array1 objectAtIndex:ii] with:[array2 objectAtIndex:ii]];
-            if (valueDiff) {
-                result = [NSString stringWithFormat:@"%ld.%@", (long)ii, valueDiff];
-                break;
-            }
-        }
-    }
-    return result;
-}
-
-+ (NSString *)findFirstDifferenceInSortedDictionary:(MODSortedMutableDictionary *)dictionary1 with:(MODSortedMutableDictionary *)dictionary2
-{
-    NSString *result = nil;
-    
-    if (![dictionary1.sortedKeys isEqual:dictionary2.sortedKeys]) {
-        result = @"*";
-    } else {
-        for (NSString *key in dictionary1.sortedKeys) {
-            NSString *valueDiff;
-            
-            valueDiff = [self findFirstDifferenceInObject:[dictionary1 objectForKey:key] with:[dictionary2 objectForKey:key]];
-            if (valueDiff) {
-                result = [NSString stringWithFormat:@"%@.%@", key, valueDiff];
-                break;
-            }
-        }
-    }
-    return result;
-}
-
 @end
 
 static void convertValueToJson(NSMutableString *result, int indent, id value, NSString *key, BOOL pretty, BOOL useStrictJSON);
@@ -554,7 +512,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         } else if (strcmp([value objCType], @encode(float)) == 0) {
             [result appendString:[value description]];
         } else if (strcmp([value objCType], @encode(double)) == 0) {
-            [result appendFormat:@"%.16f", [value doubleValue]];
+            [result appendFormat:@"%.20g", [value doubleValue]];
         } else {
             [result appendString:[value description]];
         }
@@ -662,17 +620,18 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     bson bsonDocument;
     NSError *error;
     id convertedDocument;
-    
+  
     bson_init(&bsonDocument);
     [MODJsonToObjectAssembler bsonFromJson:&bsonDocument json:json error:&error];
     bson_finish(&bsonDocument);
     NSAssert(error == nil, @"Error while parsing to bson %@, %@", json, error);
     convertedDocument = [MODServer objectFromBson:&bsonDocument];
     if (![document isEqual:convertedDocument]) {
+        NSLog(@"%@", [MODServer findAllDifferencesInObject1:document object2:convertedDocument]);
         NSLog(@"%@", [MODServer convertObjectToJson:convertedDocument pretty:YES]);
         NSLog(@"%@", json);
         NSLog(@"%@", [MODServer convertObjectToJson:document pretty:YES]);
-        NSAssert([document isEqual:convertedDocument], @"Error to convert json %@ to %@ (got %@, while converting it to bson)", json, document, convertedDocument);
+        NSAssert([document isEqual:convertedDocument], @"Error to parse values with %@ document id %@", [MODServer findAllDifferencesInObject1:document object2:convertedDocument], [document objectForKey:@"_id"]);
     }
     bson_destroy(&bsonDocument);
     
@@ -681,16 +640,64 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     NSAssert([document isEqual:convertedDocument], @"Error to conver json %@ to %@ (got %@)", json, document, convertedDocument);
 }
 
-+ (NSString *)findFirstDifferenceInObject:(id)object1 with:(id)object2
++ (NSArray *)findAllDifferencesInArray1:(NSArray *)array1 array2:(NSArray *)array2
+{
+    NSMutableArray *result = NSMutableArray.array;
+    
+    if ([array1 count] != [array2 count]) {
+        [result addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"*", @"key", array1, @"value1", array2, @"value2", nil]];
+    } else {
+        NSInteger ii, count = [array1 count];
+        
+        for (ii = 0; ii < count; ii++) {
+            NSArray *subDifferences;
+            
+            subDifferences = [self findAllDifferencesInObject1:[array1 objectAtIndex:ii] object2:[array2 objectAtIndex:ii]];
+            for (NSMutableDictionary *difference in subDifferences) {
+                [difference setObject:[NSString stringWithFormat:@"%ld.%@", (long)ii, [difference objectForKey:@"key"]] forKey:@"key"];
+                [result addObject:difference];
+            }
+        }
+    }
+    if (result.count == 0) {
+        result = nil;
+    }
+    return result;
+}
+
++ (NSArray *)findAllDifferencesInSortedDictionary1:(MODSortedMutableDictionary *)dictionary1 sortedDictionary2:(MODSortedMutableDictionary *)dictionary2
+{
+    NSMutableArray *result = NSMutableArray.array;
+    
+    if (![dictionary1.sortedKeys isEqual:dictionary2.sortedKeys]) {
+        [result addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"*", @"key", dictionary1, @"value1", dictionary2, @"value2", nil]];
+    } else {
+        for (NSString *key in dictionary1.sortedKeys) {
+            NSArray *subDifferences;
+            
+            subDifferences = [self findAllDifferencesInObject1:[dictionary1 objectForKey:key] object2:[dictionary2 objectForKey:key]];
+            for (NSMutableDictionary *difference in subDifferences) {
+                [difference setObject:[NSString stringWithFormat:@"%@.%@", key, [difference objectForKey:@"key"]] forKey:@"key"];
+                [result addObject:difference];
+            }
+        }
+    }
+    if (result.count == 0) {
+        result = nil;
+    }
+    return result;
+}
+
++ (NSArray *)findAllDifferencesInObject1:(id)object1 object2:(id)object2
 {
     if ([object1 isKindOfClass:NSArray.class] && [object2 isKindOfClass:NSArray.class]) {
-        return [self findFirstDifferenceInArray:object1 with:object2];
+        return [self findAllDifferencesInArray1:object1 array2:object2];
     } else if ([object1 isKindOfClass:MODSortedMutableDictionary.class] && [object2 isKindOfClass:MODSortedMutableDictionary.class]) {
-        return [self findFirstDifferenceInSortedDictionary:object1 with:object2];
+        return [self findAllDifferencesInSortedDictionary1:object1 sortedDictionary2:object2];
     } else if ([object1 isEqual:object2]) {
         return nil;
     } else {
-        return @"*";
+        return @[ [NSMutableDictionary dictionaryWithObjectsAndKeys:@"*", @"key", object1, @"value1", object2, @"value2", nil]];
     }
 }
 
