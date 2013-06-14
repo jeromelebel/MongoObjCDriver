@@ -30,8 +30,6 @@ enum {
 + (NSError *)errorFromMongo:(mongo_ptr)mongo;
 + (MODSortedMutableDictionary *)objectFromBson:(bson *)bsonObject;
 + (void)appendObject:(MODSortedMutableDictionary *)object toBson:(bson *)bson;
-+ (NSString *)findFirstDifferenceInArray:(NSArray *)array1 with:(NSArray *)array2;
-+ (NSString *)findFirstDifferenceInSortedDictionary:(MODSortedMutableDictionary *)dictionary1 with:(MODSortedMutableDictionary *)dictionary2;
 @end
 
 @interface MODDatabase()
