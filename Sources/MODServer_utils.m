@@ -553,7 +553,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         } else if (strcmp([value objCType], @encode(float)) == 0) {
             [result appendString:[value description]];
         } else if (strcmp([value objCType], @encode(double)) == 0) {
-            [result appendFormat:@"%.16f", [value doubleValue]];
+            [result appendFormat:@"%.20g", [value doubleValue]];
         } else {
             [result appendString:[value description]];
         }
@@ -661,17 +661,18 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     bson bsonDocument;
     NSError *error;
     id convertedDocument;
-    
+  
     bson_init(&bsonDocument);
     [MODJsonToBsonParser bsonFromJson:&bsonDocument json:json error:&error];
     bson_finish(&bsonDocument);
     NSAssert(error == nil, @"Error while parsing to bson %@, %@", json, error);
     convertedDocument = [MODServer objectFromBson:&bsonDocument];
     if (![document isEqual:convertedDocument]) {
+        NSLog(@"%@", [MODServer findFirstDifferenceInObject:document with:convertedDocument]);
         NSLog(@"%@", [MODServer convertObjectToJson:convertedDocument pretty:YES]);
         NSLog(@"%@", json);
         NSLog(@"%@", [MODServer convertObjectToJson:document pretty:YES]);
-        NSAssert([document isEqual:convertedDocument], @"Error to convert json %@ to %@ (got %@, while converting it to bson)", json, document, convertedDocument);
+        NSAssert([document isEqual:convertedDocument], @"Error to convert json %@ to %@ (got %@, while converting it to bson) path %@", json, document, convertedDocument, [MODServer findFirstDifferenceInObject:document with:convertedDocument]);
     }
     bson_destroy(&bsonDocument);
     
