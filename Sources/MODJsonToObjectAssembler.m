@@ -58,6 +58,16 @@
     return [object autorelease];
 }
 
+- (void)parser:(MODPKJsonParser *)parser didMatchObjectIdElement:(PKAssembly *)assembly
+{
+  
+  [assembly pop]; // )
+  NSString *objectId = [assembly pop];
+  [assembly pop]; // (
+  [assembly pop]; // ObjectId
+  [assembly push:[[[MODObjectId alloc] initWithCString:objectId.UTF8String] autorelease]];
+}
+
 - (void)parser:(MODPKJsonParser *)parser didMatchObjectElement:(PKAssembly *)assembly
 {
     NSArray *stack;
@@ -120,7 +130,7 @@
 - (void)parser:(MODPKJsonParser *)parser didMatchNumberToken:(PKAssembly *)assembly
 {
     PKToken *token = [assembly pop];
-    [assembly push:[NSNumber numberWithDouble:token.floatValue]];
+    [assembly push:token.value];
 }
 
 - (void)parser:(MODPKJsonParser *)parser didMatchTrueToken:(PKAssembly *)assembly

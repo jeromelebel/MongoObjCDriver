@@ -58,7 +58,7 @@
 @property (nonatomic, retain) NSMutableDictionary *dataElement_memo;
 @property (nonatomic, retain) NSMutableDictionary *timestampElement_memo;
 @property (nonatomic, retain) NSMutableDictionary *valueElement_memo;
-@property (nonatomic, retain) NSMutableDictionary *objectIDElement_memo;
+@property (nonatomic, retain) NSMutableDictionary *objectIdElement_memo;
 @property (nonatomic, retain) NSMutableDictionary *quotedStringToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *wordToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *numberToken_memo;
@@ -66,7 +66,7 @@
 @property (nonatomic, retain) NSMutableDictionary *trueToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *falseToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *undefinedToken_memo;
-@property (nonatomic, retain) NSMutableDictionary *objectIDToken_memo;
+@property (nonatomic, retain) NSMutableDictionary *objectIdToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *minKeyToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *maxKeyToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *jsnewToken_memo;
@@ -93,13 +93,13 @@
 
         self._tokenKindTab[@","] = @(MODPKJSON_TOKEN_KIND_COMMATOKEN);
         self._tokenKindTab[@":"] = @(MODPKJSON_TOKEN_KIND_COLONTOKEN);
+        self._tokenKindTab[@"ObjectId"] = @(MODPKJSON_TOKEN_KIND_OBJECTIDTOKEN);
         self._tokenKindTab[@"true"] = @(MODPKJSON_TOKEN_KIND_TRUETOKEN);
         self._tokenKindTab[@"MaxKey"] = @(MODPKJSON_TOKEN_KIND_MAXKEYTOKEN);
         self._tokenKindTab[@"null"] = @(MODPKJSON_TOKEN_KIND_NULLTOKEN);
         self._tokenKindTab[@"new"] = @(MODPKJSON_TOKEN_KIND_JSNEWTOKEN);
         self._tokenKindTab[@"Symbol"] = @(MODPKJSON_TOKEN_KIND_SYMBOLTOKEN);
         self._tokenKindTab[@"Timestamp"] = @(MODPKJSON_TOKEN_KIND_TIMESTAMPTOKEN);
-        self._tokenKindTab[@"ObjectID"] = @(MODPKJSON_TOKEN_KIND_OBJECTIDTOKEN);
         self._tokenKindTab[@"["] = @(MODPKJSON_TOKEN_KIND_OPENBRACKETTOKEN);
         self._tokenKindTab[@"Date"] = @(MODPKJSON_TOKEN_KIND_DATETOKEN);
         self._tokenKindTab[@"false"] = @(MODPKJSON_TOKEN_KIND_FALSETOKEN);
@@ -114,13 +114,13 @@
 
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_COMMATOKEN] = @",";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_COLONTOKEN] = @":";
+        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_OBJECTIDTOKEN] = @"ObjectId";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_TRUETOKEN] = @"true";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_MAXKEYTOKEN] = @"MaxKey";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_NULLTOKEN] = @"null";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_JSNEWTOKEN] = @"new";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_SYMBOLTOKEN] = @"Symbol";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_TIMESTAMPTOKEN] = @"Timestamp";
-        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_OBJECTIDTOKEN] = @"ObjectID";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_OPENBRACKETTOKEN] = @"[";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_DATETOKEN] = @"Date";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_FALSETOKEN] = @"false";
@@ -148,7 +148,7 @@
         self.dataElement_memo = [NSMutableDictionary dictionary];
         self.timestampElement_memo = [NSMutableDictionary dictionary];
         self.valueElement_memo = [NSMutableDictionary dictionary];
-        self.objectIDElement_memo = [NSMutableDictionary dictionary];
+        self.objectIdElement_memo = [NSMutableDictionary dictionary];
         self.quotedStringToken_memo = [NSMutableDictionary dictionary];
         self.wordToken_memo = [NSMutableDictionary dictionary];
         self.numberToken_memo = [NSMutableDictionary dictionary];
@@ -156,7 +156,7 @@
         self.trueToken_memo = [NSMutableDictionary dictionary];
         self.falseToken_memo = [NSMutableDictionary dictionary];
         self.undefinedToken_memo = [NSMutableDictionary dictionary];
-        self.objectIDToken_memo = [NSMutableDictionary dictionary];
+        self.objectIdToken_memo = [NSMutableDictionary dictionary];
         self.minKeyToken_memo = [NSMutableDictionary dictionary];
         self.maxKeyToken_memo = [NSMutableDictionary dictionary];
         self.jsnewToken_memo = [NSMutableDictionary dictionary];
@@ -192,7 +192,7 @@
     self.dataElement_memo = nil;
     self.timestampElement_memo = nil;
     self.valueElement_memo = nil;
-    self.objectIDElement_memo = nil;
+    self.objectIdElement_memo = nil;
     self.quotedStringToken_memo = nil;
     self.wordToken_memo = nil;
     self.numberToken_memo = nil;
@@ -200,7 +200,7 @@
     self.trueToken_memo = nil;
     self.falseToken_memo = nil;
     self.undefinedToken_memo = nil;
-    self.objectIDToken_memo = nil;
+    self.objectIdToken_memo = nil;
     self.minKeyToken_memo = nil;
     self.maxKeyToken_memo = nil;
     self.jsnewToken_memo = nil;
@@ -236,7 +236,7 @@
     [_dataElement_memo removeAllObjects];
     [_timestampElement_memo removeAllObjects];
     [_valueElement_memo removeAllObjects];
-    [_objectIDElement_memo removeAllObjects];
+    [_objectIdElement_memo removeAllObjects];
     [_quotedStringToken_memo removeAllObjects];
     [_wordToken_memo removeAllObjects];
     [_numberToken_memo removeAllObjects];
@@ -244,7 +244,7 @@
     [_trueToken_memo removeAllObjects];
     [_falseToken_memo removeAllObjects];
     [_undefinedToken_memo removeAllObjects];
-    [_objectIDToken_memo removeAllObjects];
+    [_objectIdToken_memo removeAllObjects];
     [_minKeyToken_memo removeAllObjects];
     [_maxKeyToken_memo removeAllObjects];
     [_jsnewToken_memo removeAllObjects];
@@ -263,7 +263,7 @@
 }
 
 - (void)_start {
-    
+    self.tokenizer.numberState.allowsScientificNotation = YES;
     [self tryAndRecover:TOKEN_KIND_BUILTIN_EOF block:^{
         if ([self predicts:MODPKJSON_TOKEN_KIND_OPENBRACKETTOKEN, 0]) {
             [self arrayElement]; 
@@ -548,7 +548,7 @@
     } else if ([self predicts:MODPKJSON_TOKEN_KIND_UNDEFINEDTOKEN, 0]) {
         [self undefinedToken]; 
     } else if ([self predicts:MODPKJSON_TOKEN_KIND_OBJECTIDTOKEN, 0]) {
-        [self objectIDElement]; 
+        [self objectIdElement]; 
     } else if ([self predicts:MODPKJSON_TOKEN_KIND_MINKEYTOKEN, 0]) {
         [self minKeyToken]; 
     } else if ([self predicts:MODPKJSON_TOKEN_KIND_MAXKEYTOKEN, 0]) {
@@ -572,9 +572,9 @@
     [self parseRule:@selector(__valueElement) withMemo:_valueElement_memo];
 }
 
-- (void)__objectIDElement {
+- (void)__objectIdElement {
     
-    [self objectIDToken]; 
+    [self objectIdToken]; 
     [self tryAndRecover:MODPKJSON_TOKEN_KIND_OPENPARENTHESETOKEN block:^{ 
         [self openParentheseToken]; 
     } completion:^{ 
@@ -587,11 +587,11 @@
         [self closeParenthesetoken]; 
     }];
 
-    [self fireAssemblerSelector:@selector(parser:didMatchObjectIDElement:)];
+    [self fireAssemblerSelector:@selector(parser:didMatchObjectIdElement:)];
 }
 
-- (void)objectIDElement {
-    [self parseRule:@selector(__objectIDElement) withMemo:_objectIDElement_memo];
+- (void)objectIdElement {
+    [self parseRule:@selector(__objectIdElement) withMemo:_objectIdElement_memo];
 }
 
 - (void)__quotedStringToken {
@@ -671,15 +671,15 @@
     [self parseRule:@selector(__undefinedToken) withMemo:_undefinedToken_memo];
 }
 
-- (void)__objectIDToken {
+- (void)__objectIdToken {
     
     [self match:MODPKJSON_TOKEN_KIND_OBJECTIDTOKEN discard:NO]; 
 
-    [self fireAssemblerSelector:@selector(parser:didMatchObjectIDToken:)];
+    [self fireAssemblerSelector:@selector(parser:didMatchObjectIdToken:)];
 }
 
-- (void)objectIDToken {
-    [self parseRule:@selector(__objectIDToken) withMemo:_objectIDToken_memo];
+- (void)objectIdToken {
+    [self parseRule:@selector(__objectIdToken) withMemo:_objectIdToken_memo];
 }
 
 - (void)__minKeyToken {

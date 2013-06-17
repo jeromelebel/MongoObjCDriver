@@ -24,9 +24,9 @@ dataElement          = binDataToken openParentheseToken numberToken quotedString
 
 timestampElement     = timestampToken openParentheseToken numberToken commaToken numberToken closeParenthesetoken;
 
-valueElement         = nullToken | trueToken | falseToken | arrayElement | objectElement | numberToken | quotedStringToken | undefinedToken | objectIDElement | minKeyToken | maxKeyToken | symbolElement | dateElement | dataElement | timestampElement;
+valueElement         = nullToken | trueToken | falseToken | arrayElement | objectElement | numberToken | quotedStringToken | undefinedToken | objectIdElement | minKeyToken | maxKeyToken | symbolElement | dateElement | dataElement | timestampElement;
 
-objectIDElement      = objectIDToken openParentheseToken quotedStringToken closeParenthesetoken;
+objectIdElement      = objectIdToken openParentheseToken quotedStringToken closeParenthesetoken;
 
 quotedStringToken    = QuotedString;
 wordToken            = Word;
@@ -35,7 +35,7 @@ nullToken            = 'null';
 trueToken            = 'true';
 falseToken           = 'false';
 undefinedToken       = 'undefined';
-objectIDToken        = 'ObjectID';
+objectIdToken        = 'ObjectId';
 minKeyToken          = 'MinKey';
 maxKeyToken          = 'MaxKey';
 jsnewToken           = 'new';
