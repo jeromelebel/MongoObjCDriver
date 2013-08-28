@@ -263,7 +263,12 @@
 }
 
 - (void)_start {
-    self.tokenizer.numberState.allowsScientificNotation = YES;
+    
+    [self execute:(id)^{
+    
+        self.tokenizer.numberState.allowsScientificNotation = YES;
+
+    }];
     [self tryAndRecover:TOKEN_KIND_BUILTIN_EOF block:^{
         if ([self predicts:MODPKJSON_TOKEN_KIND_OPENBRACKETTOKEN, 0]) {
             [self arrayElement]; 

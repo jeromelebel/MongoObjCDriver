@@ -2,7 +2,10 @@
     A Grammar for JSON.
 */
 
-@start        = Empty | arrayElement | objectElement;
+@start
+@before {
+    self.tokenizer.numberState.allowsScientificNotation = YES;
+}                    = Empty | arrayElement | objectElement;
 
 objectElement        = openCurlyToken objectContentElement closeCurlyToken;
 objectContentElement = Empty | actualObjectElement;
