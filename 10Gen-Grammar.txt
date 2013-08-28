@@ -4,7 +4,7 @@
 
 @start
 @before {
-    self.tokenizer.numberState.allowsScientificNotation = YES;
+        self.tokenizer.numberState.allowsScientificNotation = YES;
 }                    = Empty | arrayElement | objectElement;
 
 objectElement        = openCurlyToken objectContentElement closeCurlyToken;
