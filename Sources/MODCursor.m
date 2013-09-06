@@ -76,14 +76,11 @@
     bson_finish(_bsonQuery);
     mongo_cursor_set_query(_cursor, _bsonQuery);
     if ([_fields count] > 0 && *error == nil) {
-        NSUInteger index = 0;
-        char indexString[128];
         
         _bsonFields = malloc(sizeof(bson));
         bson_init(_bsonFields);
         for (NSString *field in _fields) {
-            snprintf(indexString, sizeof(indexString), "%lu", (unsigned long)index);
-            bson_append_string(_bsonFields, [field UTF8String], indexString);
+            bson_append_bool(_bsonFields, [field UTF8String], 1);
         }
         bson_finish(_bsonFields);
         mongo_cursor_set_fields(_cursor, _bsonFields);
