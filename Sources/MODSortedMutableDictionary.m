@@ -7,6 +7,15 @@
 //
 
 #import "MODSortedMutableDictionary.h"
+#import "MODBinary.h"
+#import "MODRegex.h"
+#import "MODObjectId.h"
+#import "MODTimestamp.h"
+#import "MODSymbol.h"
+#import "MODUndefined.h"
+#import "MODMinKey.h"
+#import "MODMaxKey.h"
+#import "NSString+Base64.h"
 
 @implementation MODSortedMutableDictionary
 
@@ -174,6 +183,34 @@
     [hack setObject:_sortedKeys forKey:@"__sorted_keys__"];
     result = [[hack description] retain];
     [hack release];
+    return [result autorelease];
+}
+
+- (id)tengenJsonEncodedObject
+{
+    id result = nil;
+    
+    if (self.count == 1 && [[self objectForKey:@"$date"] isKindOfClass:NSNumber.class]) {
+        result = [[NSDate alloc] initWithTimeIntervalSince1970:[[self objectForKey:@"$date"] doubleValue] / 1000.0];
+    } else if (self.count == 1 && [[self objectForKey:@"$oid"] isKindOfClass:NSString.class] && [[self objectForKey:@"$oid"] length] == 24) {
+        result = [[MODObjectId alloc] initWithCString:[[self objectForKey:@"$oid"] cStringUsingEncoding:NSUTF8StringEncoding]];
+    } else if (self.count == 1 && [[self objectForKey:@"$timestamp"] isKindOfClass:NSArray.class] && [[self objectForKey:@"$timestamp"] count] == 2) {
+        result = [[MODTimestamp alloc] initWithTValue:[[[self objectForKey:@"$timestamp"] objectAtIndex:0] intValue] iValue:[[[self objectForKey:@"$timestamp"] objectAtIndex:1] intValue]];
+    } else if (self.count == 2 && [[self objectForKey:@"$binary"] isKindOfClass:NSString.class] && [[self objectForKey:@"$type"] isKindOfClass:NSString.class]) {
+        result = [[MODBinary alloc] initWithData:[[self objectForKey:@"$binary"] dataFromBase64] binaryType:[[self objectForKey:@"$type"] intValue]];
+    } else if (self.count == 2 && [[self objectForKey:@"$regex"] isKindOfClass:NSString.class] && [[self objectForKey:@"$options"] isKindOfClass:NSString.class]) {
+        result = [[MODRegex alloc] initWithPattern:[self objectForKey:@"$regex"] options:[self objectForKey:@"$options"]];
+    } else if (self.count == 1 && [[self objectForKey:@"$regex"] isKindOfClass:NSString.class]) {
+        result = [[MODRegex alloc] initWithPattern:[self objectForKey:@"$regex"] options:nil];
+    } else if (self.count == 1 && [[self objectForKey:@"$symbol"] isKindOfClass:NSString.class]) {
+        result = [[MODSymbol alloc] initWithValue:[self objectForKey:@"$symbol"]];
+    } else if (self.count == 1 && [[self objectForKey:@"$undefined"] isKindOfClass:NSString.class] && [[self objectForKey:@"$undefined"] isEqualToString:@"$undefined"]) {
+        result = [[MODUndefined alloc] init];
+    } else if (self.count == 1 && [[self objectForKey:@"$minKey"] isKindOfClass:NSNumber.class] && [[self objectForKey:@"$minKey"] intValue] == 1) {
+        result = [[MODMinKey alloc] init];
+    } else if (self.count == 1 && [[self objectForKey:@"$maxKey"] isKindOfClass:NSNumber.class] && [[self objectForKey:@"$maxKey"] intValue] == 1) {
+        result = [[MODMaxKey alloc] init];
+    }
     return [result autorelease];
 }
 

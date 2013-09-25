@@ -30,6 +30,8 @@
 - (id)objectForKey:(id)aKey;
 - (void)setObject:(id)anObject forKey:(id)aKey;
 
+- (id)tengenJsonEncodedObject;
+
 @property (nonatomic, retain, readonly) NSDictionary *content;
 @property (nonatomic, retain, readonly) NSArray *sortedKeys;
 @property (nonatomic, assign, readonly) NSUInteger count;
