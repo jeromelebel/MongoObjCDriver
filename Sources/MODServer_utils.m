@@ -389,6 +389,8 @@
         bson_append_undefined(bson, keyString);
     } else if ([value isKindOfClass:[MODSymbol class]]) {
         bson_append_symbol(bson, keyString, [[value value] UTF8String]);
+    } else if ([value isKindOfClass:[MODUndefined class]]) {
+        bson_append_undefined(bson, keyString);
     } else if ([value isKindOfClass:[MODMinKey class]]) {
         bson_append_minkey(bson, keyString);
     } else if ([value isKindOfClass:[MODMaxKey class]]) {
