@@ -14,7 +14,6 @@
 #import "MODTimestamp.h"
 #import "MODObjectId.h"
 #import "MODRegex.h"
-#import "MODJsonParser.h"
 #import "MODBinary.h"
 #import "MODDBRef.h"
 #import "MODSymbol.h"
@@ -22,3 +21,4 @@
 #import "MODMaxKey.h"
 #import "MODSortedMutableDictionary.h"
 #import "MODUndefined.h"
+#import "MODRagelJsonParser.h"

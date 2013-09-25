@@ -20,6 +20,17 @@
 			name = Submodules;
 			productName = Submodules;
 		};
+		0299B61B17F3A8B800FB40A2 /* Ragel */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 0299B61C17F3A8B800FB40A2 /* Build configuration list for PBXAggregateTarget "Ragel" */;
+			buildPhases = (
+				0299B61F17F3A8E000FB40A2 /* MODRagelJsonParser */,
+			);
+			dependencies = (
+			);
+			name = Ragel;
+			productName = Ragel1;
+		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
@@ -47,8 +58,6 @@
 		02688DE31411C5010014ED51 /* MODCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DE11411C5010014ED51 /* MODCollection.m */; };
 		02688DE41411C5010014ED51 /* MODCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DE11411C5010014ED51 /* MODCollection.m */; };
 		0272D1BF142D48AF000091A4 /* MODJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 0272D1BD142D48AE000091A4 /* MODJsonParser.h */; };
-		0272D1C0142D48AF000091A4 /* MODJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0272D1BE142D48AF000091A4 /* MODJsonParser.m */; };
-		0272D1C2142D5A5C000091A4 /* MODJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0272D1BE142D48AF000091A4 /* MODJsonParser.m */; };
 		027A1DA21767E91F0048AD60 /* MODMaxKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 027A1D9C1767E91F0048AD60 /* MODMaxKey.h */; };
 		027A1DA31767E91F0048AD60 /* MODMaxKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 027A1D9D1767E91F0048AD60 /* MODMaxKey.m */; };
 		027A1DA41767E91F0048AD60 /* MODMaxKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 027A1D9D1767E91F0048AD60 /* MODMaxKey.m */; };
@@ -61,6 +70,8 @@
 		028CE605142E10BE0099B1F7 /* MODTimestamp.h in Headers */ = {isa = PBXBuildFile; fileRef = 028CE603142E10BE0099B1F7 /* MODTimestamp.h */; };
 		028CE606142E10BE0099B1F7 /* MODTimestamp.m in Sources */ = {isa = PBXBuildFile; fileRef = 028CE604142E10BE0099B1F7 /* MODTimestamp.m */; };
 		028CE608142E4A1A0099B1F7 /* MODTimestamp.m in Sources */ = {isa = PBXBuildFile; fileRef = 028CE604142E10BE0099B1F7 /* MODTimestamp.m */; };
+		0299B61417F39FA900FB40A2 /* MODRagelJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0299B61217F39FA200FB40A2 /* MODRagelJsonParser.m */; };
+		0299B61517F39FAA00FB40A2 /* MODRagelJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0299B61217F39FA200FB40A2 /* MODRagelJsonParser.m */; };
 		02A85F4614103D64004F3FE9 /* bson.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F1A14103D4D004F3FE9 /* bson.c */; };
 		02A85F4714103D64004F3FE9 /* encoding.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F1C14103D4D004F3FE9 /* encoding.c */; };
 		02A85F4814103D64004F3FE9 /* gridfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F1E14103D4D004F3FE9 /* gridfs.c */; };
@@ -125,6 +136,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 02216F151412D39200789BD1;
 			remoteInfo = Submodules;
+		};
+		02C4B0E517F3A93500663C06 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02ABA1B614103B36000417F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0299B61B17F3A8B800FB40A2;
+			remoteInfo = Ragel;
+		};
+		02C4B0E717F3A93C00663C06 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02ABA1B614103B36000417F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0299B61B17F3A8B800FB40A2;
+			remoteInfo = Ragel;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -217,6 +242,9 @@
 		027A1DA11767E91F0048AD60 /* MODUndefined.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODUndefined.m; sourceTree = "<group>"; };
 		028CE603142E10BE0099B1F7 /* MODTimestamp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODTimestamp.h; sourceTree = "<group>"; };
 		028CE604142E10BE0099B1F7 /* MODTimestamp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODTimestamp.m; sourceTree = "<group>"; };
+		0299B61117F39FA200FB40A2 /* MODRagelJsonParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MODRagelJsonParser.h; sourceTree = "<group>"; };
+		0299B61217F39FA200FB40A2 /* MODRagelJsonParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MODRagelJsonParser.m; sourceTree = "<group>"; };
+		0299B61317F39FA200FB40A2 /* MODRagelJsonParser.rl */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; path = MODRagelJsonParser.rl; sourceTree = "<group>"; };
 		02A02EDD16B9E428002A4305 /* __init__.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = __init__.py; sourceTree = "<group>"; };
 		02A02EDE16B9E428002A4305 /* docs.py */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = docs.py; sourceTree = "<group>"; };
 		02A02EE016B9E428002A4305 /* example.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = example.c; sourceTree = "<group>"; };
@@ -628,6 +656,9 @@
 		02ABA1C914103B37000417F4 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				0299B61117F39FA200FB40A2 /* MODRagelJsonParser.h */,
+				0299B61217F39FA200FB40A2 /* MODRagelJsonParser.m */,
+				0299B61317F39FA200FB40A2 /* MODRagelJsonParser.rl */,
 				02A85F5B14104373004F3FE9 /* MOD_internal.h */,
 				02411AB41432B8F900A5FFCA /* MOD_public.h */,
 				02A85F4F14103EA6004F3FE9 /* MODServer.h */,
@@ -741,6 +772,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02ABA1D514103B37000417F4 /* Build configuration list for PBXNativeTarget "mongo-objc-driver" */;
 			buildPhases = (
+				0299B61617F39FFA00FB40A2 /* Ragel */,
 				02ABA1BB14103B37000417F4 /* Sources */,
 				02ABA1BC14103B37000417F4 /* Frameworks */,
 				02ABA1BD14103B37000417F4 /* Headers */,
@@ -749,6 +781,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				02C4B0E617F3A93500663C06 /* PBXTargetDependency */,
 				02216F1C1412D42B00789BD1 /* PBXTargetDependency */,
 			);
 			name = "mongo-objc-driver";
@@ -768,6 +801,7 @@
 			);
 			dependencies = (
 				02216F1E1412D43C00789BD1 /* PBXTargetDependency */,
+				02C4B0E817F3A93C00663C06 /* PBXTargetDependency */,
 			);
 			name = "mongo-test";
 			productName = "mongo-test";
@@ -797,6 +831,7 @@
 				02ABA1BF14103B37000417F4 /* mongo-objc-driver */,
 				02F121BC1410EF5200197811 /* mongo-test */,
 				02216F151412D39200789BD1 /* Submodules */,
+				0299B61B17F3A8B800FB40A2 /* Ragel */,
 			);
 		};
 /* End PBXProject section */
@@ -840,6 +875,38 @@
 			shellPath = /bin/sh;
 			shellScript = "module_name=\"libjson\"\nmodule_owner=\"fotonauts\"\nmodule_branch=\"master\"\nmodule_path=\"Libraries/${module_name}\"\n\nfiles=`ls \"${module_path}\" 2> /dev/null`\nif [ \"${files}\" = \"\" ] ; then\n  if [ -d .git ] ; then\n    echo \"\"\n  else\n    cd \"${module_path}\"\n    curl -o \"${module_name}.zip\" -L \"https://nodeload.github.com/${module_owner}/${module_name}/zipball/${module_branch}\"\n    unzip \"${module_name}.zip\"\n    rm \"${module_name}.zip\"\n    module_unzip_dir=`ls`\n    cd \"${module_unzip_dir}\"\n    mv * ..\n    cd ..\n    rm -fr \"${module_unzip_dir}\"\n  fi\nfi\n";
 		};
+		0299B61617F39FFA00FB40A2 /* Ragel */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Sources/MODRagelJsonParser.rl",
+			);
+			name = Ragel;
+			outputPaths = (
+				"$(SRCROOT)/Sources/MODRagelJsonParser.m",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/opt/local/bin/ragel \"${SRCROOT}/Sources/MODRagelJsonParser.rl\" -o \"${SRCROOT}/Sources/MODRagelJsonParser.m\"";
+		};
+		0299B61F17F3A8E000FB40A2 /* MODRagelJsonParser */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Sources/MODRagelJsonParser.rl",
+			);
+			name = MODRagelJsonParser;
+			outputPaths = (
+				"$(SRCROOT)/Sources/MODRagelJsonParser.m",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/opt/local/bin/ragel \"${SRCROOT}/Sources/MODRagelJsonParser.rl\" -o \"${SRCROOT}/Sources/MODRagelJsonParser.m\"";
+		};
 		02DB18A6172C7C2200B26EAE /* Update submodules */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -870,12 +937,12 @@
 				02A85F4C14103D64004F3FE9 /* numbers.c in Sources */,
 				02A85F5214103EA6004F3FE9 /* MODServer.m in Sources */,
 				02688DDD14119CF50014ED51 /* MODDatabase.m in Sources */,
+				0299B61517F39FAA00FB40A2 /* MODRagelJsonParser.m in Sources */,
 				02688DE31411C5010014ED51 /* MODCollection.m in Sources */,
 				02A85F5A14104184004F3FE9 /* MODQuery.m in Sources */,
 				02BDC3E8141D6073000EF755 /* MODCursor.m in Sources */,
 				02BDC3EC141D83A7000EF755 /* MODServer_utils.m in Sources */,
 				02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */,
-				0272D1C0142D48AF000091A4 /* MODJsonParser.m in Sources */,
 				028CE606142E10BE0099B1F7 /* MODTimestamp.m in Sources */,
 				02CF87EA142F8AA3000C4C7F /* MODRegex.m in Sources */,
 				02411ABA1432D02700A5FFCA /* MODBinary.m in Sources */,
@@ -901,6 +968,7 @@
 				02F121CC1410F01B00197811 /* MODServer.m in Sources */,
 				02F121CD1410F01D00197811 /* MODQuery.m in Sources */,
 				02F121CE1410F07200197811 /* bson.c in Sources */,
+				0299B61417F39FA900FB40A2 /* MODRagelJsonParser.m in Sources */,
 				02F121CF1410F07200197811 /* encoding.c in Sources */,
 				02F121D01410F07200197811 /* gridfs.c in Sources */,
 				02F121D11410F07200197811 /* md5.c in Sources */,
@@ -911,7 +979,6 @@
 				02BDC3EA141D6938000EF755 /* MODCursor.m in Sources */,
 				02BDC3ED141D83A7000EF755 /* MODServer_utils.m in Sources */,
 				02AB057814296F9000B7CD19 /* MODObjectId.m in Sources */,
-				0272D1C2142D5A5C000091A4 /* MODJsonParser.m in Sources */,
 				028CE608142E4A1A0099B1F7 /* MODTimestamp.m in Sources */,
 				02CF87EC142F91CA000C4C7F /* MODRegex.m in Sources */,
 				02411ABB1432D02700A5FFCA /* MODBinary.m in Sources */,
@@ -941,6 +1008,16 @@
 			target = 02216F151412D39200789BD1 /* Submodules */;
 			targetProxy = 02216F1D1412D43C00789BD1 /* PBXContainerItemProxy */;
 		};
+		02C4B0E617F3A93500663C06 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0299B61B17F3A8B800FB40A2 /* Ragel */;
+			targetProxy = 02C4B0E517F3A93500663C06 /* PBXContainerItemProxy */;
+		};
+		02C4B0E817F3A93C00663C06 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0299B61B17F3A8B800FB40A2 /* Ragel */;
+			targetProxy = 02C4B0E717F3A93C00663C06 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -963,6 +1040,20 @@
 			name = Debug;
 		};
 		02216F181412D39200789BD1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		0299B61D17F3A8B800FB40A2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		0299B61E17F3A8B800FB40A2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1063,6 +1154,15 @@
 			buildConfigurations = (
 				02216F171412D39200789BD1 /* Debug */,
 				02216F181412D39200789BD1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0299B61C17F3A8B800FB40A2 /* Build configuration list for PBXAggregateTarget "Ragel" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0299B61D17F3A8B800FB40A2 /* Debug */,
+				0299B61E17F3A8B800FB40A2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

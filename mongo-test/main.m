@@ -72,7 +72,7 @@ static void testObjects(NSString *json, id shouldEqual)
     bson bsonResult;
     
     bson_init(&bsonResult);
-    [MODJsonToBsonParser bsonFromJson:&bsonResult json:json error:&error];
+    [MODRagelJsonParser bsonFromJson:&bsonResult json:json error:&error];
     bson_finish(&bsonResult);
     if (error) {
         NSLog(@"***** parsing errors for:");
@@ -90,7 +90,7 @@ static void testObjects(NSString *json, id shouldEqual)
         assert(0);
     }
     bson_destroy(&bsonResult);
-    objects = [MODJsonToObjectParser objectsFromJson:json error:&error];
+    objects = [MODRagelJsonParser objectsFromJson:json error:&error];
     if (error) {
         NSLog(@"***** parsing errors for:");
         NSLog(@"%@", json);
@@ -150,9 +150,9 @@ static void testBsonArrayIndex(bson *bsonObject)
 
 static void testJson()
 {
-    MODJsonToObjectParser *parser;
+//    MODRagelJsonParser *parser;
     NSError *error;
-    id value;
+//    id value;
     
     testObjects(@"{\"minkey\":{\"$minKey\":1}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMinKey alloc] init] autorelease], @"minkey", nil]);
     testObjects(@"{\"maxkey\":{\"$maxKey\":1}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMaxKey alloc] init] autorelease], @"maxkey", nil]);
@@ -177,7 +177,8 @@ static void testJson()
     testObjects(@"{\"undefined value\":{\"$undefined\":\"$undefined\"}}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODUndefined alloc] init] autorelease], @"undefined value", nil]);
     
     // test if can parse json in chunks, and we should get an error at the end of json
-    parser = [[MODJsonToObjectParser alloc] init];
+#if 0
+    parser = [[MODRagelJsonParser alloc] init];
     parser.multiPartParsing = YES;
     [parser parseJsonWithString:@"{\"_id\":\"x\"" error:&error];
     assert(error == nil);
@@ -188,6 +189,7 @@ static void testJson()
     assert([[error domain] isEqualToString:MODJsonErrorDomain]);
     value = [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"x", @"_id", [NSArray arrayWithObjects:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:2], @"1", nil], nil], @"toto", nil];
     assert([(id)[parser mainObject] isEqual:value]);
+#endif
     
     // test to make sure each items in an array has the correct index
     // https://github.com/fotonauts/MongoHub-Mac/issues/28
@@ -195,7 +197,7 @@ static void testJson()
         bson bsonObject;
         
         bson_init(&bsonObject);
-        [MODJsonToBsonParser bsonFromJson:&bsonObject json:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
+        [MODRagelJsonParser bsonFromJson:&bsonObject json:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
         bson_finish(&bsonObject);
         testBsonArrayIndex(&bsonObject);
         bson_destroy(&bsonObject);
@@ -207,7 +209,7 @@ static void testJson()
         id objects;
         bson bsonObject;
         
-        objects = [MODJsonToObjectParser objectsFromJson:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
+        objects = [MODRagelJsonParser objectsFromJson:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
         bson_init(&bsonObject);
         [MODServer appendObject:objects toBson:&bsonObject];
         bson_finish(&bsonObject);
