@@ -59,6 +59,7 @@
 @property (nonatomic, retain) NSMutableDictionary *timestampElement_memo;
 @property (nonatomic, retain) NSMutableDictionary *valueElement_memo;
 @property (nonatomic, retain) NSMutableDictionary *objectIdElement_memo;
+@property (nonatomic, retain) NSMutableDictionary *regexpElement_memo;
 @property (nonatomic, retain) NSMutableDictionary *quotedStringToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *wordToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *numberToken_memo;
@@ -81,7 +82,8 @@
 @property (nonatomic, retain) NSMutableDictionary *commaToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *colonToken_memo;
 @property (nonatomic, retain) NSMutableDictionary *openParentheseToken_memo;
-@property (nonatomic, retain) NSMutableDictionary *closeParenthesetoken_memo;
+@property (nonatomic, retain) NSMutableDictionary *closeParentheseToken_memo;
+@property (nonatomic, retain) NSMutableDictionary *regexpToken_memo;
 @end
 
 @implementation MODPKJsonParser
@@ -100,6 +102,7 @@
         self._tokenKindTab[@"new"] = @(MODPKJSON_TOKEN_KIND_JSNEWTOKEN);
         self._tokenKindTab[@"Symbol"] = @(MODPKJSON_TOKEN_KIND_SYMBOLTOKEN);
         self._tokenKindTab[@"Timestamp"] = @(MODPKJSON_TOKEN_KIND_TIMESTAMPTOKEN);
+        self._tokenKindTab[@"/,/"] = @(MODPKJSON_TOKEN_KIND_REGEXPTOKEN);
         self._tokenKindTab[@"["] = @(MODPKJSON_TOKEN_KIND_OPENBRACKETTOKEN);
         self._tokenKindTab[@"Date"] = @(MODPKJSON_TOKEN_KIND_DATETOKEN);
         self._tokenKindTab[@"false"] = @(MODPKJSON_TOKEN_KIND_FALSETOKEN);
@@ -121,6 +124,7 @@
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_JSNEWTOKEN] = @"new";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_SYMBOLTOKEN] = @"Symbol";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_TIMESTAMPTOKEN] = @"Timestamp";
+        self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_REGEXPTOKEN] = @"/,/";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_OPENBRACKETTOKEN] = @"[";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_DATETOKEN] = @"Date";
         self._tokenKindNameTab[MODPKJSON_TOKEN_KIND_FALSETOKEN] = @"false";
@@ -149,6 +153,7 @@
         self.timestampElement_memo = [NSMutableDictionary dictionary];
         self.valueElement_memo = [NSMutableDictionary dictionary];
         self.objectIdElement_memo = [NSMutableDictionary dictionary];
+        self.regexpElement_memo = [NSMutableDictionary dictionary];
         self.quotedStringToken_memo = [NSMutableDictionary dictionary];
         self.wordToken_memo = [NSMutableDictionary dictionary];
         self.numberToken_memo = [NSMutableDictionary dictionary];
@@ -171,7 +176,8 @@
         self.commaToken_memo = [NSMutableDictionary dictionary];
         self.colonToken_memo = [NSMutableDictionary dictionary];
         self.openParentheseToken_memo = [NSMutableDictionary dictionary];
-        self.closeParenthesetoken_memo = [NSMutableDictionary dictionary];
+        self.closeParentheseToken_memo = [NSMutableDictionary dictionary];
+        self.regexpToken_memo = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -193,6 +199,7 @@
     self.timestampElement_memo = nil;
     self.valueElement_memo = nil;
     self.objectIdElement_memo = nil;
+    self.regexpElement_memo = nil;
     self.quotedStringToken_memo = nil;
     self.wordToken_memo = nil;
     self.numberToken_memo = nil;
@@ -215,7 +222,8 @@
     self.commaToken_memo = nil;
     self.colonToken_memo = nil;
     self.openParentheseToken_memo = nil;
-    self.closeParenthesetoken_memo = nil;
+    self.closeParentheseToken_memo = nil;
+    self.regexpToken_memo = nil;
 
     [super dealloc];
 }
@@ -237,6 +245,7 @@
     [_timestampElement_memo removeAllObjects];
     [_valueElement_memo removeAllObjects];
     [_objectIdElement_memo removeAllObjects];
+    [_regexpElement_memo removeAllObjects];
     [_quotedStringToken_memo removeAllObjects];
     [_wordToken_memo removeAllObjects];
     [_numberToken_memo removeAllObjects];
@@ -259,7 +268,8 @@
     [_commaToken_memo removeAllObjects];
     [_colonToken_memo removeAllObjects];
     [_openParentheseToken_memo removeAllObjects];
-    [_closeParenthesetoken_memo removeAllObjects];
+    [_closeParentheseToken_memo removeAllObjects];
+    [_regexpToken_memo removeAllObjects];
 }
 
 - (void)_start {
@@ -395,7 +405,7 @@
 
 - (void)__arrayContentElement {
     
-    if ([self predicts:MODPKJSON_TOKEN_KIND_BINDATATOKEN, MODPKJSON_TOKEN_KIND_FALSETOKEN, MODPKJSON_TOKEN_KIND_JSNEWTOKEN, MODPKJSON_TOKEN_KIND_MAXKEYTOKEN, MODPKJSON_TOKEN_KIND_MINKEYTOKEN, MODPKJSON_TOKEN_KIND_NULLTOKEN, MODPKJSON_TOKEN_KIND_OBJECTIDTOKEN, MODPKJSON_TOKEN_KIND_OPENBRACKETTOKEN, MODPKJSON_TOKEN_KIND_OPENCURLYTOKEN, MODPKJSON_TOKEN_KIND_SYMBOLTOKEN, MODPKJSON_TOKEN_KIND_TIMESTAMPTOKEN, MODPKJSON_TOKEN_KIND_TRUETOKEN, MODPKJSON_TOKEN_KIND_UNDEFINEDTOKEN, TOKEN_KIND_BUILTIN_NUMBER, TOKEN_KIND_BUILTIN_QUOTEDSTRING, 0]) {
+    if ([self predicts:MODPKJSON_TOKEN_KIND_BINDATATOKEN, MODPKJSON_TOKEN_KIND_FALSETOKEN, MODPKJSON_TOKEN_KIND_JSNEWTOKEN, MODPKJSON_TOKEN_KIND_MAXKEYTOKEN, MODPKJSON_TOKEN_KIND_MINKEYTOKEN, MODPKJSON_TOKEN_KIND_NULLTOKEN, MODPKJSON_TOKEN_KIND_OBJECTIDTOKEN, MODPKJSON_TOKEN_KIND_OPENBRACKETTOKEN, MODPKJSON_TOKEN_KIND_OPENCURLYTOKEN, MODPKJSON_TOKEN_KIND_REGEXPTOKEN, MODPKJSON_TOKEN_KIND_SYMBOLTOKEN, MODPKJSON_TOKEN_KIND_TIMESTAMPTOKEN, MODPKJSON_TOKEN_KIND_TRUETOKEN, MODPKJSON_TOKEN_KIND_UNDEFINEDTOKEN, TOKEN_KIND_BUILTIN_NUMBER, TOKEN_KIND_BUILTIN_QUOTEDSTRING, 0]) {
         [self actualArrayElement]; 
     }
 
@@ -449,9 +459,9 @@
         if ([self predicts:TOKEN_KIND_BUILTIN_QUOTEDSTRING, 0]) {
             [self quotedStringToken]; 
         }
-        [self closeParenthesetoken]; 
+        [self closeParentheseToken]; 
     } completion:^{ 
-        [self closeParenthesetoken]; 
+        [self closeParentheseToken]; 
     }];
 
     [self fireAssemblerSelector:@selector(parser:didMatchDateElement:)];
@@ -471,9 +481,9 @@
     }];
     [self quotedStringToken]; 
     [self tryAndRecover:MODPKJSON_TOKEN_KIND_CLOSEPARENTHESETOKEN block:^{ 
-        [self closeParenthesetoken]; 
+        [self closeParentheseToken]; 
     } completion:^{ 
-        [self closeParenthesetoken]; 
+        [self closeParentheseToken]; 
     }];
 
     [self fireAssemblerSelector:@selector(parser:didMatchSymbolElement:)];
@@ -497,7 +507,7 @@
     } completion:^{ 
         [self quotedStringToken]; 
     }];
-    [self closeParenthesetoken]; 
+    [self closeParentheseToken]; 
 
     [self fireAssemblerSelector:@selector(parser:didMatchDataElement:)];
 }
@@ -522,9 +532,9 @@
     }];
     [self numberToken]; 
     [self tryAndRecover:MODPKJSON_TOKEN_KIND_CLOSEPARENTHESETOKEN block:^{ 
-        [self closeParenthesetoken]; 
+        [self closeParentheseToken]; 
     } completion:^{ 
-        [self closeParenthesetoken]; 
+        [self closeParentheseToken]; 
     }];
 
     [self fireAssemblerSelector:@selector(parser:didMatchTimestampElement:)];
@@ -566,6 +576,8 @@
         [self dataElement]; 
     } else if ([self predicts:MODPKJSON_TOKEN_KIND_TIMESTAMPTOKEN, 0]) {
         [self timestampElement]; 
+    } else if ([self predicts:MODPKJSON_TOKEN_KIND_REGEXPTOKEN, 0]) {
+        [self regexpElement]; 
     } else {
         [self raise:@"No viable alternative found in rule 'valueElement'."];
     }
@@ -587,9 +599,9 @@
     }];
     [self quotedStringToken]; 
     [self tryAndRecover:MODPKJSON_TOKEN_KIND_CLOSEPARENTHESETOKEN block:^{ 
-        [self closeParenthesetoken]; 
+        [self closeParentheseToken]; 
     } completion:^{ 
-        [self closeParenthesetoken]; 
+        [self closeParentheseToken]; 
     }];
 
     [self fireAssemblerSelector:@selector(parser:didMatchObjectIdElement:)];
@@ -597,6 +609,17 @@
 
 - (void)objectIdElement {
     [self parseRule:@selector(__objectIdElement) withMemo:_objectIdElement_memo];
+}
+
+- (void)__regexpElement {
+    
+    [self regexpToken]; 
+
+    [self fireAssemblerSelector:@selector(parser:didMatchRegexpElement:)];
+}
+
+- (void)regexpElement {
+    [self parseRule:@selector(__regexpElement) withMemo:_regexpElement_memo];
 }
 
 - (void)__quotedStringToken {
@@ -841,15 +864,26 @@
     [self parseRule:@selector(__openParentheseToken) withMemo:_openParentheseToken_memo];
 }
 
-- (void)__closeParenthesetoken {
+- (void)__closeParentheseToken {
     
     [self match:MODPKJSON_TOKEN_KIND_CLOSEPARENTHESETOKEN discard:NO]; 
 
-    [self fireAssemblerSelector:@selector(parser:didMatchCloseParenthesetoken:)];
+    [self fireAssemblerSelector:@selector(parser:didMatchCloseParentheseToken:)];
 }
 
-- (void)closeParenthesetoken {
-    [self parseRule:@selector(__closeParenthesetoken) withMemo:_closeParenthesetoken_memo];
+- (void)closeParentheseToken {
+    [self parseRule:@selector(__closeParentheseToken) withMemo:_closeParentheseToken_memo];
+}
+
+- (void)__regexpToken {
+    
+    [self match:MODPKJSON_TOKEN_KIND_REGEXPTOKEN discard:NO]; 
+
+    [self fireAssemblerSelector:@selector(parser:didMatchRegexpToken:)];
+}
+
+- (void)regexpToken {
+    [self parseRule:@selector(__regexpToken) withMemo:_regexpToken_memo];
 }
 
 @end

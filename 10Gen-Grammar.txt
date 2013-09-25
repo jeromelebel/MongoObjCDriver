@@ -19,17 +19,19 @@ arrayContentElement  = Empty | actualArrayElement;
 actualArrayElement   = valueElement commaValueElement*;
 commaValueElement    = commaToken valueElement;
 
-dateElement          = jsnewToken dateToken openParentheseToken quotedStringToken? closeParenthesetoken;
+dateElement          = jsnewToken dateToken openParentheseToken quotedStringToken? closeParentheseToken;
 
-symbolElement        = symbolToken openParentheseToken quotedStringToken closeParenthesetoken;
+symbolElement        = symbolToken openParentheseToken quotedStringToken closeParentheseToken;
 
-dataElement          = binDataToken openParentheseToken numberToken quotedStringToken closeParenthesetoken;
+dataElement          = binDataToken openParentheseToken numberToken quotedStringToken closeParentheseToken;
 
-timestampElement     = timestampToken openParentheseToken numberToken commaToken numberToken closeParenthesetoken;
+timestampElement     = timestampToken openParentheseToken numberToken commaToken numberToken closeParentheseToken;
 
-valueElement         = nullToken | trueToken | falseToken | arrayElement | objectElement | numberToken | quotedStringToken | undefinedToken | objectIdElement | minKeyToken | maxKeyToken | symbolElement | dateElement | dataElement | timestampElement;
+valueElement         = nullToken | trueToken | falseToken | arrayElement | objectElement | numberToken | quotedStringToken | undefinedToken | objectIdElement | minKeyToken | maxKeyToken | symbolElement | dateElement | dataElement | timestampElement | regexpElement;
 
-objectIdElement      = objectIdToken openParentheseToken quotedStringToken closeParenthesetoken;
+objectIdElement      = objectIdToken openParentheseToken quotedStringToken closeParentheseToken;
+
+regexpElement        = regexpToken;
 
 quotedStringToken    = QuotedString;
 wordToken            = Word;
@@ -54,4 +56,5 @@ closeBracketToken    = ']';
 commaToken           = ',';
 colonToken           = ':';
 openParentheseToken  = '(';
-closeParenthesetoken = ')';
+closeParentheseToken = ')';
+regexpToken          = %{'/', '/'};
