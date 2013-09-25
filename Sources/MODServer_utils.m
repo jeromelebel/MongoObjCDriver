@@ -387,8 +387,8 @@
         bson_append_binary(bson, keyString, [value binaryType], [[value data] bytes], [[value data] length]);
     } else if ([value isKindOfClass:[MODUndefined class]]) {
         bson_append_undefined(bson, keyString);
-    } else if ([value isKindOfClass:[MODUndefined class]]) {
-        bson_append_undefined(bson, keyString);
+    } else if ([value isKindOfClass:[MODSymbol class]]) {
+        bson_append_symbol(bson, keyString, [[value value] UTF8String]);
     } else if ([value isKindOfClass:[MODUndefined class]]) {
         bson_append_undefined(bson, keyString);
     } else if ([value isKindOfClass:[MODMinKey class]]) {
