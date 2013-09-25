@@ -392,6 +392,10 @@
         bson_append_undefined(bson, keyString);
     } else if ([value isKindOfClass:[MODUndefined class]]) {
         bson_append_undefined(bson, keyString);
+    } else if ([value isKindOfClass:[MODMinKey class]]) {
+        bson_append_minkey(bson, keyString);
+    } else if ([value isKindOfClass:[MODMaxKey class]]) {
+        bson_append_maxkey(bson, keyString);
     } else {
         NSLog(@"*********************** class %@ key %@ %d", NSStringFromClass([value class]), key, __LINE__);
         NSAssert(NO, @"class %@ key %@ line %d", NSStringFromClass([value class]), key, __LINE__);
