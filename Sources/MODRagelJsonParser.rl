@@ -65,9 +65,6 @@
     Vnull               = 'null';
     Vfalse              = 'false';
     Vtrue               = 'true';
-    VNaN                = 'NaN';
-    VInfinity           = 'Infinity';
-    VMinusInfinity      = '-Infinity';
     VMinKey             = 'MinKey';
     VMaxKey             = 'MaxKey';
     begin_value         = [nftM\"\-\[\{NI] | digit;
@@ -95,22 +92,6 @@
    action parse_true {
        *result = [NSNumber numberWithBool:YES];
    }
-   action parse_nan {
-       assert(NO); // not implemented
-//       if (_allowNan) {
-//           *result = CNaN;
-//       } else {
-//           [NSException raise:@"ParserError" format:@"%u: unexpected token at '%s'", __LINE__, p - 2];
-//       }
-   }
-    action parse_infinity {
-        assert(NO); // not implemented
-        if (_allowNan) {
-//           *result = CInfinity;
-        } else {
-//           [NSException raise:@"ParserError" format:"%u: unexpected token at '%s'", __LINE__, p - 8];
-        }
-    }
 
     action parse_min_key {
         *result = [[[MODMinKey alloc] init] autorelease];
@@ -165,8 +146,6 @@
         Vnull @parse_null |
         Vfalse @parse_false |
         Vtrue @parse_true |
-        VNaN @parse_nan |
-        VInfinity @parse_infinity |
         VMinKey @parse_min_key |
         VMaxKey @parse_max_key |
         begin_number >parse_number |
