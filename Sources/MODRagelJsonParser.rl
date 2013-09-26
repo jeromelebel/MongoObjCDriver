@@ -243,13 +243,15 @@
     %% write exec;
 
     if (cs >= JSON_float_first_final) {
-        assert(0);
-        *result = [NSNumber numberWithLong:0];
-//        long len = p - _memo;
-//        fbuffer_clear(json->fbuffer);
-//        fbuffer_append(json->fbuffer, _memo, len);
-//        fbuffer_append_char(json->fbuffer, '\0');
-//        *result = rb_float_new(rb_cstr_to_dbl(FBUFFER_PTR(json->fbuffer), 1));
+        NSUInteger length = p - _memo;
+        char *buffer;
+        double value;
+        
+        buffer = malloc(length + 1);
+        strncpy(buffer, _memo, length);
+        sscanf(buffer, "%lf", &value);
+        *result = [NSNumber numberWithDouble:value];
+        free(buffer);
         return p + 1;
     } else {
         return NULL;
