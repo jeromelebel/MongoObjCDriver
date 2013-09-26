@@ -162,7 +162,7 @@ static void testJson()
     
     testObjects(@"{\"minkey\":{\"$minKey\":1}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMinKey alloc] init] autorelease], @"minkey", nil]);
     testObjects(@"{\"maxkey\":{\"$maxKey\":1}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMaxKey alloc] init] autorelease], @"maxkey", nil]);
-    testObjects(@"{\"undefined\":{\"$undefined\":true}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODUndefined alloc] init] autorelease], @"undefined", nil]);
+    testObjects(@"{\"undefined\":{\"$undefined\":true}}", @"{\"undefined\":undefined}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODUndefined alloc] init] autorelease], @"undefined", nil]);
     testObjects(@"{\"minkey\":MinKey}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMinKey alloc] init] autorelease], @"minkey", nil]);
     testObjects(@"{\"maxkey\":MaxKey}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMaxKey alloc] init] autorelease], @"maxkey", nil]);
     testObjects(@"{\"undefined\":undefined}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODUndefined alloc] init] autorelease], @"undefined", nil]);
