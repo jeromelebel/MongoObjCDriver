@@ -142,7 +142,7 @@
             case MONGO_CURSOR_BSON_ERROR:
                 description = @"Something is wrong with the BSON provided.";
                 break;
-            case MONGO_CURSOR_OVERFLOW:
+            case MONGO_CURSOR_BSON_TOO_LARGE:
                 description = @"the message to send is too long";
                 break;
             default:

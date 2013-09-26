@@ -292,7 +292,6 @@
 		02A02F1016B9E7C0002A4305 /* write_concern_test.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = write_concern_test.c; sourceTree = "<group>"; };
 		02A85F0314103D4D004F3FE9 /* .astylerc */ = {isa = PBXFileReference; lastKnownFileType = text; path = .astylerc; sourceTree = "<group>"; };
 		02A85F0414103D4D004F3FE9 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		02A85F0514103D4D004F3FE9 /* APACHE-2.0.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "APACHE-2.0.txt"; sourceTree = "<group>"; };
 		02A85F1514103D4D004F3FE9 /* doxygenConfig */ = {isa = PBXFileReference; lastKnownFileType = text; path = doxygenConfig; sourceTree = "<group>"; };
 		02A85F1614103D4D004F3FE9 /* HISTORY.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = HISTORY.md; sourceTree = "<group>"; };
 		02A85F1714103D4D004F3FE9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
@@ -579,7 +578,6 @@
 			children = (
 				02A85F0314103D4D004F3FE9 /* .astylerc */,
 				02A85F0414103D4D004F3FE9 /* .gitignore */,
-				02A85F0514103D4D004F3FE9 /* APACHE-2.0.txt */,
 				02A85F1514103D4D004F3FE9 /* doxygenConfig */,
 				02A85F1614103D4D004F3FE9 /* HISTORY.md */,
 				02A85F1714103D4D004F3FE9 /* README.md */,
