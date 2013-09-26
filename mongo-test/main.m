@@ -111,6 +111,7 @@ static void testObjects(NSString *jsonToParse, NSString *jsonExpected, id should
                     NSLog(@"different value for %@", key);
                     NSLog(@"received %@ expected %@", [objects objectForKey:key], [shouldEqual objectForKey:key]);
                     NSLog(@"received %@ expected %@", [[objects objectForKey:key] class], [[shouldEqual objectForKey:key] class]);
+                    assert(0);
                 }
             }
         }
