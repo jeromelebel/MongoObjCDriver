@@ -10,6 +10,7 @@
 #import "MODSortedMutableDictionary.h"
 #import "MODMaxKey.h"
 #import "MODMinKey.h"
+#import "MODUndefined.h"
 #import "MOD_internal.h"
 
 @interface MODRagelJsonParser ()
@@ -62,12 +63,13 @@
     ignore              = ws | comment;
     name_separator      = ':';
     value_separator     = ',';
+    Vundefined          = 'undefined';
     Vnull               = 'null';
     Vfalse              = 'false';
     Vtrue               = 'true';
     VMinKey             = 'MinKey';
     VMaxKey             = 'MaxKey';
-    begin_value         = [nftM\"\-\[\{NI] | digit;
+    begin_value         = [unftM\"\-\[\{NI] | digit;
     begin_object        = '{';
     end_object          = '}';
     begin_array         = '[';
@@ -99,6 +101,10 @@
 
     action parse_max_key {
         *result = [[[MODMaxKey alloc] init] autorelease];
+    }
+    
+    action parse_undefined {
+        *result = [[[MODUndefined alloc] init] autorelease];
     }
 
     action parse_string {
@@ -139,6 +145,7 @@
         Vtrue @parse_true |
         VMinKey @parse_min_key |
         VMaxKey @parse_max_key |
+        Vundefined @parse_undefined |
         begin_number >parse_number |
         begin_string >parse_string |
         begin_array >parse_array |
