@@ -513,7 +513,9 @@ static NSMutableString *jsonStringUnescape(NSMutableString *result, const char *
         *error = nil;
         return result;
     } else {
-        *error = [self _errorWithMessage:[NSString stringWithFormat:@"unexpected token at '%s'", p]];
+        if (!_error) {
+            _error = [self _errorWithMessage:[NSString stringWithFormat:@"unexpected token at '%s'", p]];
+        }
         return nil;
     }
 }

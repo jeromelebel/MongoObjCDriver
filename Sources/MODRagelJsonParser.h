@@ -16,6 +16,8 @@
     int                     _currentNesting;
     int                     _allowNan;
     const char              *_memo;
+    
+    NSError                 *_error;
 }
 
 + (id)objectsFromJson:(NSString *)source error:(NSError **)error;
