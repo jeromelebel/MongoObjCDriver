@@ -122,7 +122,7 @@ static void testObjects(NSString *jsonToParse, NSString *jsonExpected, id should
     if ([shouldEqual isKindOfClass:[MODSortedMutableDictionary class]]) {
         NSString *jsonFromObjects;
         
-        jsonFromObjects = [MODServer convertObjectToJson:shouldEqual pretty:NO strictJson:YES];
+        jsonFromObjects = [MODServer convertObjectToJson:shouldEqual pretty:NO strictJson:NO];
         if (![jsonFromObjects isEqualToString:jsonExpected]) {
             NSLog(@"problem to convert objects to json %@", shouldEqual);
             NSLog(@"expecting: '%@'", jsonToParse);
