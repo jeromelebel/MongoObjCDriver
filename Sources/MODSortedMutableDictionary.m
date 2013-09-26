@@ -204,7 +204,7 @@
         result = [[MODRegex alloc] initWithPattern:[self objectForKey:@"$regex"] options:nil];
     } else if (self.count == 1 && [[self objectForKey:@"$symbol"] isKindOfClass:NSString.class]) {
         result = [[MODSymbol alloc] initWithValue:[self objectForKey:@"$symbol"]];
-    } else if (self.count == 1 && [[self objectForKey:@"$undefined"] isKindOfClass:NSString.class] && [[self objectForKey:@"$undefined"] isKindOfClass:NSNumber.class] && [[self objectForKey:@"$undefined"] boolValue]) {
+    } else if (self.count == 1 && [[self objectForKey:@"$undefined"] isKindOfClass:NSNumber.class] && [[self objectForKey:@"$undefined"] boolValue]) {
         result = [[MODUndefined alloc] init];
     } else if (self.count == 1 && [[self objectForKey:@"$minKey"] isKindOfClass:NSNumber.class] && [[self objectForKey:@"$minKey"] intValue] == 1) {
         result = [[MODMinKey alloc] init];
