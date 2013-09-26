@@ -311,7 +311,7 @@ static int append_data_for_bson(void *structure, char *key, size_t key_length, i
             clear_pending_value(context, YES);
             result = 0;
         }
-    } else if (key != NULL && strcmp(key, "$undefined") == 0 && index == 0 && dataInfo->type == JSON_STRING && strcmp(dataInfo->data, "$undefined") == 0) {
+    } else if (key != NULL && strcmp(key, "$undefined") == 0 && index == 0 && dataInfo->type == JSON_TRUE) {
         result = [context->target appendUndefinedWithKey:context->pendingBsonValue.objectKeyToCreate previousStructure:context->latestStack->structure index:context->pendingBsonValue.index];
         clear_pending_value(context, YES);
         result = 0;
