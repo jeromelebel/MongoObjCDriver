@@ -78,20 +78,20 @@
 }%%
 
 %%{
-   machine JSON_value;
-   include JSON_common;
+    machine JSON_value;
+    include JSON_common;
 
-   write data;
+    write data;
 
-   action parse_null {
-       *result = [NSNull null];
-   }
-   action parse_false {
-       *result = [NSNumber numberWithBool:NO];
-   }
-   action parse_true {
-       *result = [NSNumber numberWithBool:YES];
-   }
+    action parse_null {
+        *result = [NSNull null];
+    }
+    action parse_false {
+        *result = [NSNumber numberWithBool:NO];
+    }
+    action parse_true {
+        *result = [NSNumber numberWithBool:YES];
+    }
 
     action parse_min_key {
         *result = [[[MODMinKey alloc] init] autorelease];
