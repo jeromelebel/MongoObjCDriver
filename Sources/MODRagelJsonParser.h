@@ -15,10 +15,7 @@
     int                     _maxNesting;
     int                     _currentNesting;
     int                     _allowNan;
-    int                     _quirks_mode;
     const char              *_memo;
-    char                    _create_additions;
-    char                    *_match_string;
 }
 
 + (id)objectsFromJson:(NSString *)source error:(NSError **)error;
