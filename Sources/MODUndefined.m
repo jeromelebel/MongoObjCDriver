@@ -15,9 +15,9 @@
     if (!strictJSON) {
         return @"undefined";
     } else if (pretty) {
-        return @"{ \"$undefined\": \"$undefined\" }";
+        return @"{ \"$undefined\": true }";
     } else {
-        return @"{\"$undefined\":\"$undefined\"}";
+        return @"{\"$undefined\":true}";
     }
 }
 
