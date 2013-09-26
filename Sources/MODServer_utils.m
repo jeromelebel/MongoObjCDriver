@@ -544,12 +544,12 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
 
 @implementation MODServer(utils)
 
-+ (NSString *)convertObjectToJson:(MODSortedMutableDictionary *)object pretty:(BOOL)pretty
++ (NSString *)convertObjectToJson:(MODSortedMutableDictionary *)object pretty:(BOOL)pretty strictJson:(BOOL)strictJson
 {
     NSMutableString *result;
     
     result = [NSMutableString string];
-    convertDictionaryToJson(result, 0, object, pretty, YES);
+    convertDictionaryToJson(result, 0, object, pretty, strictJson);
     return result;
 }
 
@@ -630,9 +630,9 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     convertedDocument = [MODServer objectFromBson:&bsonDocument];
     if (![document isEqual:convertedDocument]) {
         NSLog(@"%@", [MODServer findAllDifferencesInObject1:document object2:convertedDocument]);
-        NSLog(@"%@", [MODServer convertObjectToJson:convertedDocument pretty:YES]);
+        NSLog(@"%@", [MODServer convertObjectToJson:convertedDocument pretty:YES strictJson:NO]);
         NSLog(@"%@", json);
-        NSLog(@"%@", [MODServer convertObjectToJson:document pretty:YES]);
+        NSLog(@"%@", [MODServer convertObjectToJson:document pretty:YES strictJson:NO]);
         NSAssert([document isEqual:convertedDocument], @"Error to parse values with %@ document id %@", [MODServer findAllDifferencesInObject1:document object2:convertedDocument], [document objectForKey:@"_id"]);
     }
     bson_destroy(&bsonDocument);
