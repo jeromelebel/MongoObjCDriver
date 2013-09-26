@@ -108,15 +108,6 @@
 
     action parse_number {
         const char *np;
-//       if(pe > fpc + 9 - json->quirks_mode && !strncmp(MinusInfinity, fpc, 9)) {
-//           if (_allowNan) {
-//               *result = CMinusInfinity;
-//               fexec p + 10;
-//               fhold; fbreak;
-//           } else {
-//               [NSException raise:@"ParserError" format:@"%u: unexpected token at '%s'", __LINE__, p];
-//           }
-//       }
         np = [self _parseFloatWithPointer:fpc endPointer:pe result:result];
         if (np != NULL) fexec np;
         np = [self _parseIntegerWithPointer:fpc endPointer:pe result:result];
