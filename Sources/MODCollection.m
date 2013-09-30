@@ -315,11 +315,12 @@
             
             bson_init(&bsonDocument);
             [MODJsonToBsonParser bsonFromJson:&bsonDocument json:document error:&error];
-            bson_finish(&bsonDocument);
             bson_init(&bsonCriteria);
             if (error == nil) {
                 bson_iterator iterator;
-                
+              
+                // finish the bson only of the json was parsed correctly (otherwise there is a crash)
+                bson_finish(&bsonDocument);
                 bson_iterator_init(&iterator, &bsonDocument);
                 while (bson_iterator_next(&iterator)) {
                     if (strcmp(bson_iterator_key(&iterator), "_id") == 0) {
