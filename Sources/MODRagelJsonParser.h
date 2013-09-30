@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 
+@class MODObjectId;
+
 @interface MODRagelJsonParser : NSObject
 {
     NSMutableArray          *_stack;
-    BOOL                    _parsingName;
     int                     _maxNesting;
     int                     _currentNesting;
     int                     _allowNan;
@@ -20,5 +21,7 @@
     NSError                 *_error;
 }
 
-+ (id)objectsFromJson:(NSString *)source error:(NSError **)error;
++ (id)objectsFromJson:(NSString *)source withError:(NSError **)error;
+- (const char *)_parseValueWithPointer:(const char *)p endPointer:(const char *)pe result:(id *)result;
+- (const char *)_parseObjectIdWithPointer:(const char *)p endPointer:(const char *)pe result:(MODObjectId **)result;
 @end

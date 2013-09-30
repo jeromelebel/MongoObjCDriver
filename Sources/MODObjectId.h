@@ -8,12 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
+#define OBJECT_ID_SIZE 12
+
 @interface MODObjectId : NSObject
 {
     const unsigned char _bytes[12];
 }
-- (id)initWithBytes:(const unsigned char[12])bytes;
++ (BOOL)isCStringValid:(const char *)cString;
++ (BOOL)isStringValid:(NSString *)string;
+
+- (id)initWithBytes:(const unsigned char[OBJECT_ID_SIZE])bytes;
 - (id)initWithCString:(const char *)bytes;
+- (id)initWithString:(NSString *)string;
 - (const unsigned char *)bytes;
 - (NSString *)stringValue;
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;

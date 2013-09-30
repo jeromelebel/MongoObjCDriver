@@ -11,17 +11,19 @@
 #import "MODMaxKey.h"
 #import "MODMinKey.h"
 #import "MODUndefined.h"
+#import "MODObjectId.h"
 #import "MOD_internal.h"
 
 @interface MODRagelJsonParser ()
-- (id)parseJson:(NSString *)source withError:(NSError **)error;
+- (id)parseJson:(NSString *)source;
+- (NSError *)error;
 @end
 
 @implementation MODRagelJsonParser (private)
 
 + (void)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error
 {
-    id object = [self objectsFromJson:json error:error];
+    id object = [self objectsFromJson:json withError:error];
     
     if (object && !*error && [object isKindOfClass:NSArray.class]) {
         object = [MODSortedMutableDictionary sortedDictionaryWithObject:object forKey:@"array"];
@@ -35,20 +37,20 @@
 
 @implementation MODRagelJsonParser
 
-+ (id)objectsFromJson:(NSString *)source error:(NSError **)error
++ (id)objectsFromJson:(NSString *)source withError:(NSError **)error
 {
-    //
     MODRagelJsonParser *parser = [[self alloc] init];
     id result;
-
-    result = [parser parseJson:source withError:error];
+    
+    result = [parser parseJson:source];
+    *error = [parser error];
     [parser release];
     return result;
 }
 
 - (NSError *)_errorWithMessage:(NSString *)message
 {
-    return [NSError errorWithDomain:@"error" code:0 userInfo:nil];
+    return [NSError errorWithDomain:@"error" code:0 userInfo:@{ NSLocalizedDescriptionKey: message }];
 }
 
 %%{
@@ -69,7 +71,7 @@
     Vtrue               = 'true';
     VMinKey             = 'MinKey';
     VMaxKey             = 'MaxKey';
-    begin_value         = [unftM\"\-\[\{NI] | digit;
+    begin_value         = [unftMO\"\-\[\{NI] | digit;
     begin_object        = '{';
     end_object          = '}';
     begin_array         = '[';
@@ -77,6 +79,8 @@
     begin_string        = '"';
     begin_name          = begin_string;
     begin_number        = digit | '-';
+    begin_object_id     = 'O';
+    object_id_keyword   = 'ObjectId';
 }%%
 
 %%{
@@ -105,6 +109,11 @@
     
     action parse_undefined {
         *result = [[[MODUndefined alloc] init] autorelease];
+    }
+    
+    action parse_object_id {
+        const char *np = [self _parseObjectIdWithPointer:fpc endPointer:pe result:result];
+        if (np == NULL) { fhold; fbreak; } else fexec np;
     }
 
     action parse_string {
@@ -146,6 +155,7 @@
         VMinKey @parse_min_key |
         VMaxKey @parse_max_key |
         Vundefined @parse_undefined |
+        begin_object_id >parse_object_id |
         begin_number >parse_number |
         begin_string >parse_string |
         begin_array >parse_array |
@@ -312,9 +322,7 @@ static NSMutableString *jsonStringUnescape(NSMutableString *result, const char *
 
     action parse_name {
         const char *np;
-        _parsingName = YES;
         np = [self _parseStringWithPointer:fpc endPointer:pe result:&lastName];
-        _parsingName = NO;
         if (np == NULL) { fhold; fbreak; } else fexec np;
     }
 
@@ -333,7 +341,7 @@ static NSMutableString *jsonStringUnescape(NSMutableString *result, const char *
 - (const char *)_parseObjectWithPointer:(const char *)p endPointer:(const char *)pe result:(MODSortedMutableDictionary **)result
 {
     int cs = 0;
-    NSMutableString *lastName;
+    NSString *lastName;
     
     if (_maxNesting && _currentNesting > _maxNesting) {
         [NSException raise:@"NestingError" format:@"nesting of %d is too deep", _currentNesting];
@@ -363,14 +371,48 @@ static NSMutableString *jsonStringUnescape(NSMutableString *result, const char *
 }
 
 %%{
+    machine JSON_object_id;
+    include JSON_common;
+
+    write data;
+    
+    action parse_id_value {
+        const char *np;
+        np = [self _parseStringWithPointer:fpc endPointer:pe result:&idStringValue];
+        if (np == NULL) { fhold; fbreak; } else fexec np;
+    }
+
+    action exit { fhold; fbreak; }
+
+    main := (object_id_keyword ignore* '(' ignore* begin_string >parse_id_value ignore* ')') @exit;
+}%%
+
+- (const char *)_parseObjectIdWithPointer:(const char *)p endPointer:(const char *)pe result:(MODObjectId **)result
+{
+    NSString *idStringValue;
+    int cs = 0;
+
+    %% write init;
+    %% write exec;
+
+    if (cs >= JSON_object_id_first_final && [MODObjectId isStringValid:idStringValue]) {
+        *result = [[[MODObjectId alloc] initWithString:idStringValue] autorelease];
+        return p + 1;
+    } else {
+        *result = nil;
+        return NULL;
+    }
+}
+
+%%{
    machine JSON_string;
    include JSON_common;
    
    write data;
    
    action parse_string {
-       *result = jsonStringUnescape(*result, _memo + 1, p);
-       if (*result == nil) {
+       string = jsonStringUnescape(string, _memo + 1, p);
+       if (string == nil) {
            fhold;
            fbreak;
        } else {
@@ -383,16 +425,17 @@ static NSMutableString *jsonStringUnescape(NSMutableString *result, const char *
    main := '"' ((^([\"\\] | 0..0x1f) | '\\'[\"\\/bfnrt] | '\\u'[0-9a-fA-F]{4} | '\\'^([\"\\/bfnrtu]|0..0x1f))* %parse_string) '"' @exit;
 }%%
 
-- (const char *)_parseStringWithPointer:(const char *)p endPointer:(const char *)pe result:(NSMutableString **)result
+- (const char *)_parseStringWithPointer:(const char *)p endPointer:(const char *)pe result:(NSString **)result
 {
     int cs = 0;
-   
-    *result = [NSMutableString string];
+    NSMutableString *string = [NSMutableString string];
+    
     %% write init;
     _memo = p;
     %% write exec;
    
     if (cs >= JSON_string_first_final) {
+        *result = string;
         return p + 1;
     } else {
         *result = nil;
@@ -474,7 +517,7 @@ static NSMutableString *jsonStringUnescape(NSMutableString *result, const char *
     ) ignore*;
 }%%
 
-- (id)parseJson:(NSString *)source withError:(NSError **)error
+- (id)parseJson:(NSString *)source
 {
     const char *p, *pe;
     id result = nil;
@@ -487,7 +530,6 @@ static NSMutableString *jsonStringUnescape(NSMutableString *result, const char *
     %% write exec;
     
     if (cs >= JSON_first_final && p == pe) {
-        *error = nil;
         return result;
     } else {
         if (!_error) {
@@ -495,6 +537,11 @@ static NSMutableString *jsonStringUnescape(NSMutableString *result, const char *
         }
         return nil;
     }
+}
+                    
+- (NSError *)error
+{
+    return _error;
 }
 
 @end

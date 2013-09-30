@@ -637,7 +637,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     }
     bson_destroy(&bsonDocument);
     
-    convertedDocument = [MODRagelJsonParser objectsFromJson:json error:&error];
+    convertedDocument = [MODRagelJsonParser objectsFromJson:json withError:&error];
     NSAssert(error == nil, @"Error while parsing to objects %@, %@", json, error);
     NSAssert([document isEqual:convertedDocument], @"Error to conver json %@ to %@ (got %@)", json, document, convertedDocument);
 }

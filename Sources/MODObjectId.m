@@ -9,7 +9,32 @@
 #import "MODObjectId.h"
 #import "bson.h"
 
+#define valueFromHexa(value) ((value >= '1' && value <= '9')?(value - '1' + 1):((value >= 'a' && value <= 'f')?(value - 'a' + 10):((value >= 'A' && value <= 'F')?(value - 'A' + 10):0)))
+
 @implementation MODObjectId
+
++ (BOOL)isCStringValid:(const char *)cString
+{
+    BOOL isValid;
+    
+    isValid = strlen(cString) == (OBJECT_ID_SIZE * 2);
+    if (isValid) {
+        size_t ii = 0;
+        
+        while (ii < OBJECT_ID_SIZE * 2 && isValid) {
+            char character = cString[ii];
+            
+            isValid = (character >= '1' && character <= '9') || (character >= 'a' || character <= 'f') || (character >= 'A' || character <= 'F');
+            ii++;
+        }
+    }
+    return isValid;
+}
+
++ (BOOL)isStringValid:(NSString *)string
+{
+    return [self isCStringValid:string.UTF8String];
+}
 
 - (id)initWithOid:(bson_oid_t *)oid
 {
@@ -25,11 +50,9 @@
     return self;
 }
 
-#define valueFromHexa(value) ((value >= '1' && value <= '9')?(value - '1' + 1):((value >= 'a' && value <= 'f')?(value - 'a' + 10):((value >= 'A' && value <= 'F')?(value - 'A' + 10):0)))
-
 - (id)initWithCString:(const char *)cString
 {
-    NSAssert(strlen(cString) == (sizeof(_bytes) * 2), @"wrong size for the cString expecting %d. received %d", (int)sizeof(_bytes), (int)strlen(cString));
+    NSAssert([self.class isCStringValid:cString], @"wrong size for the cString expecting %d. received %d", (int)sizeof(_bytes), (int)strlen(cString));
     if (self = [self init]) {
         size_t ii, count;
         
@@ -40,6 +63,14 @@
             
             ((unsigned char *)_bytes)[ii] = valueFromHexa(character1) * 16 + valueFromHexa(character2);
         }
+    }
+    return self;
+}
+
+- (id)initWithString:(NSString *)string
+{
+    if (self = [self initWithCString:string.UTF8String]) {
+        
     }
     return self;
 }

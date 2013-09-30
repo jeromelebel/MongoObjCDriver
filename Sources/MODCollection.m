@@ -429,7 +429,7 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
         NSDictionary *objects;
         
         if ([indexDocument isKindOfClass:[NSString class]]) {
-            objects = [MODRagelJsonParser objectsFromJson:indexDocument error:NULL];
+            objects = [MODRagelJsonParser objectsFromJson:indexDocument withError:NULL];
         } else {
             objects = indexDocument;
         }
