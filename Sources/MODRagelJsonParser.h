@@ -19,9 +19,8 @@
     const char              *_memo;
     
     NSError                 *_error;
+    const char              *cStringBuffer;
 }
 
 + (id)objectsFromJson:(NSString *)source withError:(NSError **)error;
-- (const char *)_parseValueWithPointer:(const char *)p endPointer:(const char *)pe result:(id *)result;
-- (const char *)_parseObjectIdWithPointer:(const char *)p endPointer:(const char *)pe result:(MODObjectId **)result;
 @end
