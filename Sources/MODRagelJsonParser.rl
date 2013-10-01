@@ -73,7 +73,7 @@
     Vtrue               = 'true';
     VMinKey             = 'MinKey';
     VMaxKey             = 'MaxKey';
-    begin_value         = [unftMO\"\-\[\{NI] | '/' | digit;
+    begin_value         = [/unftMO\"\-\[\{NI] | digit;
     begin_object        = '{';
     end_object          = '}';
     begin_array         = '[';
