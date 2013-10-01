@@ -63,7 +63,7 @@
 }
 
 
-#line 87 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 89 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
 
 
@@ -72,27 +72,27 @@ static const char _JSON_value_actions[] = {
 	0, 1, 0, 1, 1, 1, 2, 1, 
 	3, 1, 4, 1, 5, 1, 6, 1, 
 	7, 1, 8, 1, 9, 1, 10, 1, 
-	11, 1, 12
+	11, 1, 12, 1, 13
 };
 
 static const char _JSON_value_key_offsets[] = {
-	0, 0, 14, 16, 17, 18, 19, 20, 
-	21, 22, 23, 24, 25, 26, 27, 28, 
-	29, 30, 31, 32, 33, 34, 35, 36, 
-	37, 38, 39, 40, 41, 42
+	0, 0, 15, 17, 18, 19, 20, 21, 
+	22, 23, 24, 25, 26, 27, 28, 29, 
+	30, 31, 32, 33, 34, 35, 36, 37, 
+	38, 39, 40, 41, 42, 43
 };
 
 static const char _JSON_value_trans_keys[] = {
-	34, 39, 45, 47, 77, 79, 91, 102, 
-	110, 116, 117, 123, 48, 57, 97, 105, 
-	120, 75, 101, 121, 110, 75, 101, 121, 
-	97, 108, 115, 101, 117, 108, 108, 114, 
-	117, 101, 110, 100, 101, 102, 105, 110, 
-	101, 100, 0
+	34, 39, 45, 47, 77, 79, 84, 91, 
+	102, 110, 116, 117, 123, 48, 57, 97, 
+	105, 120, 75, 101, 121, 110, 75, 101, 
+	121, 97, 108, 115, 101, 117, 108, 108, 
+	114, 117, 101, 110, 100, 101, 102, 105, 
+	110, 101, 100, 0
 };
 
 static const char _JSON_value_single_lengths[] = {
-	0, 12, 2, 1, 1, 1, 1, 1, 
+	0, 13, 2, 1, 1, 1, 1, 1, 
 	1, 1, 1, 1, 1, 1, 1, 1, 
 	1, 1, 1, 1, 1, 1, 1, 1, 
 	1, 1, 1, 1, 1, 0
@@ -106,41 +106,41 @@ static const char _JSON_value_range_lengths[] = {
 };
 
 static const char _JSON_value_index_offsets[] = {
-	0, 0, 14, 17, 19, 21, 23, 25, 
-	27, 29, 31, 33, 35, 37, 39, 41, 
-	43, 45, 47, 49, 51, 53, 55, 57, 
-	59, 61, 63, 65, 67, 69
+	0, 0, 15, 18, 20, 22, 24, 26, 
+	28, 30, 32, 34, 36, 38, 40, 42, 
+	44, 46, 48, 50, 52, 54, 56, 58, 
+	60, 62, 64, 66, 68, 70
 };
 
 static const char _JSON_value_trans_targs[] = {
-	29, 29, 29, 29, 2, 29, 29, 11, 
-	15, 18, 21, 29, 29, 0, 3, 7, 
-	0, 4, 0, 5, 0, 6, 0, 29, 
-	0, 8, 0, 9, 0, 10, 0, 29, 
-	0, 12, 0, 13, 0, 14, 0, 29, 
-	0, 16, 0, 17, 0, 29, 0, 19, 
-	0, 20, 0, 29, 0, 22, 0, 23, 
-	0, 24, 0, 25, 0, 26, 0, 27, 
-	0, 28, 0, 29, 0, 0, 0
+	29, 29, 29, 29, 2, 29, 29, 29, 
+	11, 15, 18, 21, 29, 29, 0, 3, 
+	7, 0, 4, 0, 5, 0, 6, 0, 
+	29, 0, 8, 0, 9, 0, 10, 0, 
+	29, 0, 12, 0, 13, 0, 14, 0, 
+	29, 0, 16, 0, 17, 0, 29, 0, 
+	19, 0, 20, 0, 29, 0, 22, 0, 
+	23, 0, 24, 0, 25, 0, 26, 0, 
+	27, 0, 28, 0, 29, 0, 0, 0
 };
 
 static const char _JSON_value_trans_actions[] = {
-	15, 15, 17, 23, 0, 13, 19, 0, 
-	0, 0, 0, 21, 17, 0, 0, 0, 
-	0, 0, 0, 0, 0, 0, 0, 9, 
-	0, 0, 0, 0, 0, 0, 0, 7, 
-	0, 0, 0, 0, 0, 0, 0, 3, 
-	0, 0, 0, 0, 0, 1, 0, 0, 
-	0, 0, 0, 5, 0, 0, 0, 0, 
+	15, 15, 17, 23, 0, 13, 25, 19, 
+	0, 0, 0, 0, 21, 17, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
-	0, 0, 0, 11, 0, 0, 0
+	9, 0, 0, 0, 0, 0, 0, 0, 
+	7, 0, 0, 0, 0, 0, 0, 0, 
+	3, 0, 0, 0, 0, 0, 1, 0, 
+	0, 0, 0, 0, 5, 0, 0, 0, 
+	0, 0, 0, 0, 0, 0, 0, 0, 
+	0, 0, 0, 0, 11, 0, 0, 0
 };
 
 static const char _JSON_value_from_state_actions[] = {
 	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
 	0, 0, 0, 0, 0, 0, 0, 0, 
-	0, 0, 0, 0, 0, 25
+	0, 0, 0, 0, 0, 27
 };
 
 static const int JSON_value_start = 1;
@@ -150,7 +150,7 @@ static const int JSON_value_error = 0;
 static const int JSON_value_en_main = 1;
 
 
-#line 173 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 181 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
 
 - (const char *)_parseValueWithPointer:(const char *)p endPointer:(const char *)pe result:(id *)result
@@ -163,7 +163,7 @@ static const int JSON_value_en_main = 1;
 	cs = JSON_value_start;
 	}
 
-#line 180 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 188 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
     
 #line 169 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 	{
@@ -182,8 +182,8 @@ _resume:
 	_nacts = (unsigned int) *_acts++;
 	while ( _nacts-- > 0 ) {
 		switch ( *_acts++ ) {
-	case 12:
-#line 157 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+	case 13:
+#line 164 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{ p--; {p++; goto _out; } }
 	break;
 #line 190 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
@@ -251,57 +251,57 @@ _match:
 		switch ( *_acts++ )
 		{
 	case 0:
-#line 95 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 97 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         *result = [NSNull null];
     }
 	break;
 	case 1:
-#line 98 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 100 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         *result = [NSNumber numberWithBool:NO];
     }
 	break;
 	case 2:
-#line 101 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 103 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         *result = [NSNumber numberWithBool:YES];
     }
 	break;
 	case 3:
-#line 105 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 107 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         *result = [[[MODMinKey alloc] init] autorelease];
     }
 	break;
 	case 4:
-#line 109 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 111 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         *result = [[[MODMaxKey alloc] init] autorelease];
     }
 	break;
 	case 5:
-#line 113 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 115 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         *result = [[[MODUndefined alloc] init] autorelease];
     }
 	break;
 	case 6:
-#line 117 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 119 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         const char *np = [self _parseObjectIdWithPointer:p endPointer:pe result:result];
         if (np == NULL) { p--; {p++; goto _out; } } else {p = (( np))-1;}
     }
 	break;
 	case 7:
-#line 122 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 124 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         const char *np = [self _parseStringWithPointer:p endPointer:pe result:result];
         if (np == NULL) { p--; {p++; goto _out; } } else {p = (( np))-1;}
     }
 	break;
 	case 8:
-#line 127 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 129 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         const char *np;
         np = [self _parseFloatWithPointer:p endPointer:pe result:result];
@@ -312,7 +312,7 @@ _match:
     }
 	break;
 	case 9:
-#line 136 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 138 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         const char *np;
         _currentNesting++;
@@ -322,7 +322,7 @@ _match:
     }
 	break;
 	case 10:
-#line 144 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 146 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         const char *np;
         _currentNesting++;
@@ -332,13 +332,20 @@ _match:
     }
 	break;
 	case 11:
-#line 152 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 154 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         const char *np = [self _parseRegexpWithPointer:p endPointer:pe result:result];
         if (np == NULL) { p--; {p++; goto _out; } } else {p = (( np))-1;}
     }
 	break;
-#line 342 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+	case 12:
+#line 159 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+	{
+        const char *np = [self _parseTimestampWithPointer:p endPointer:pe result:result];
+        if (np == NULL) { p--; {p++; goto _out; } } else {p = (( np))-1;}
+    }
+	break;
+#line 349 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 		}
 	}
 
@@ -351,7 +358,7 @@ _again:
 	_out: {}
 	}
 
-#line 181 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 189 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
     if (cs >= JSON_value_first_final) {
         return p;
@@ -361,7 +368,7 @@ _again:
 }
 
 
-#line 365 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 372 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 static const char _JSON_integer_actions[] = {
 	0, 1, 0
 };
@@ -407,7 +414,7 @@ static const int JSON_integer_error = 0;
 static const int JSON_integer_en_main = 1;
 
 
-#line 197 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 205 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
 
 - (const char *)_parseIntegerWithPointer:(const char *)p endPointer:(const char *)pe result:(NSNumber **)result
@@ -416,15 +423,15 @@ static const int JSON_integer_en_main = 1;
     const char *memo;
 
     
-#line 420 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 427 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 	{
 	cs = JSON_integer_start;
 	}
 
-#line 205 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 213 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
     memo = p;
     
-#line 428 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 435 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 	{
 	int _klen;
 	unsigned int _trans;
@@ -499,10 +506,10 @@ _match:
 		switch ( *_acts++ )
 		{
 	case 0:
-#line 194 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 202 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{ p--; {p++; goto _out; } }
 	break;
-#line 506 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 513 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 		}
 	}
 
@@ -515,7 +522,7 @@ _again:
 	_out: {}
 	}
 
-#line 207 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 215 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
     if (cs >= JSON_integer_first_final) {
         NSString *buffer;
@@ -530,7 +537,7 @@ _again:
 }
 
 
-#line 534 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 541 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 static const char _JSON_float_actions[] = {
 	0, 1, 0
 };
@@ -588,7 +595,7 @@ static const int JSON_float_error = 0;
 static const int JSON_float_en_main = 1;
 
 
-#line 232 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 240 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
 
 - (const char *)_parseFloatWithPointer:(const char *)p endPointer:(const char *)pe result:(NSNumber **)result
@@ -597,15 +604,15 @@ static const int JSON_float_en_main = 1;
     const char *memo;
 
     
-#line 601 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 608 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 	{
 	cs = JSON_float_start;
 	}
 
-#line 240 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 248 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
     memo = p;
     
-#line 609 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 616 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 	{
 	int _klen;
 	unsigned int _trans;
@@ -680,10 +687,10 @@ _match:
 		switch ( *_acts++ )
 		{
 	case 0:
-#line 226 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 234 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{ p--; {p++; goto _out; } }
 	break;
-#line 687 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 694 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 		}
 	}
 
@@ -696,7 +703,7 @@ _again:
 	_out: {}
 	}
 
-#line 242 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 250 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
     if (cs >= JSON_float_first_final) {
         NSUInteger length = p - memo;
@@ -715,26 +722,26 @@ _again:
 }
 
 
-#line 719 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 726 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 static const char _JSON_object_actions[] = {
 	0, 1, 0, 1, 1, 1, 2
 };
 
 static const char _JSON_object_key_offsets[] = {
-	0, 0, 1, 8, 13, 31, 37, 43
+	0, 0, 1, 8, 13, 32, 38, 44
 };
 
 static const char _JSON_object_trans_keys[] = {
 	123, 13, 32, 34, 39, 125, 9, 10, 
 	13, 32, 58, 9, 10, 13, 32, 34, 
-	39, 45, 73, 91, 102, 110, 123, 9, 
-	10, 47, 57, 77, 79, 116, 117, 13, 
-	32, 44, 125, 9, 10, 13, 32, 34, 
-	39, 9, 10, 0
+	39, 45, 73, 84, 91, 102, 110, 123, 
+	9, 10, 47, 57, 77, 79, 116, 117, 
+	13, 32, 44, 125, 9, 10, 13, 32, 
+	34, 39, 9, 10, 0
 };
 
 static const char _JSON_object_single_lengths[] = {
-	0, 1, 5, 3, 10, 4, 4, 0
+	0, 1, 5, 3, 11, 4, 4, 0
 };
 
 static const char _JSON_object_range_lengths[] = {
@@ -742,16 +749,16 @@ static const char _JSON_object_range_lengths[] = {
 };
 
 static const char _JSON_object_index_offsets[] = {
-	0, 0, 2, 9, 14, 29, 35, 41
+	0, 0, 2, 9, 14, 30, 36, 42
 };
 
 static const char _JSON_object_indicies[] = {
 	0, 1, 0, 0, 2, 2, 3, 0, 
 	1, 4, 4, 5, 4, 1, 5, 5, 
 	6, 6, 6, 6, 6, 6, 6, 6, 
-	5, 6, 6, 6, 1, 7, 7, 8, 
-	3, 7, 1, 8, 8, 2, 2, 8, 
-	1, 1, 0
+	6, 5, 6, 6, 6, 1, 7, 7, 
+	8, 3, 7, 1, 8, 8, 2, 2, 
+	8, 1, 1, 0
 };
 
 static const char _JSON_object_trans_targs[] = {
@@ -771,7 +778,7 @@ static const int JSON_object_error = 0;
 static const int JSON_object_en_main = 1;
 
 
-#line 292 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 300 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
 
 - (const char *)_parseObjectWithPointer:(const char *)p endPointer:(const char *)pe result:(MODSortedMutableDictionary **)result
@@ -786,14 +793,14 @@ static const int JSON_object_en_main = 1;
     *result = [[MODSortedMutableDictionary alloc] init];
     
     
-#line 790 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 797 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 	{
 	cs = JSON_object_start;
 	}
 
-#line 306 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 314 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
     
-#line 797 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 804 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 	{
 	int _klen;
 	unsigned int _trans;
@@ -868,7 +875,7 @@ _match:
 		switch ( *_acts++ )
 		{
 	case 0:
-#line 265 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 273 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         id value = nil;
         const char *np = [self _parseValueWithPointer:p endPointer:pe result:&value];
@@ -881,7 +888,7 @@ _match:
     }
 	break;
 	case 1:
-#line 276 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 284 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         const char *np;
         np = [self _parseStringWithPointer:p endPointer:pe result:&lastName];
@@ -889,10 +896,10 @@ _match:
     }
 	break;
 	case 2:
-#line 282 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 290 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{ p--; {p++; goto _out; } }
 	break;
-#line 896 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 903 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 		}
 	}
 
@@ -905,7 +912,7 @@ _again:
 	_out: {}
 	}
 
-#line 307 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 315 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
     
     if (cs >= JSON_object_first_final) {
         MODSortedMutableDictionary *tengen;
@@ -926,7 +933,7 @@ _again:
 }
 
 
-#line 930 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 937 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 static const char _JSON_object_id_actions[] = {
 	0, 1, 0, 1, 1
 };
@@ -983,7 +990,7 @@ static const int JSON_object_id_error = 0;
 static const int JSON_object_id_en_main = 1;
 
 
-#line 341 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 349 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
 
 - (const char *)_parseObjectIdWithPointer:(const char *)p endPointer:(const char *)pe result:(MODObjectId **)result
@@ -992,14 +999,14 @@ static const int JSON_object_id_en_main = 1;
     int cs = 0;
 
     
-#line 996 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 1003 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 	{
 	cs = JSON_object_id_start;
 	}
 
-#line 349 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 357 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
     
-#line 1003 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 1010 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 	{
 	int _klen;
 	unsigned int _trans;
@@ -1074,7 +1081,7 @@ _match:
 		switch ( *_acts++ )
 		{
 	case 0:
-#line 332 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 340 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         const char *np;
         np = [self _parseStringWithPointer:p endPointer:pe result:&idStringValue];
@@ -1082,10 +1089,10 @@ _match:
     }
 	break;
 	case 1:
-#line 338 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 346 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{ p--; {p++; goto _out; } }
 	break;
-#line 1089 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 1096 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 		}
 	}
 
@@ -1098,7 +1105,7 @@ _again:
 	_out: {}
 	}
 
-#line 350 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 358 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
     if (cs >= JSON_object_id_first_final && [MODObjectId isStringValid:idStringValue]) {
         *result = [[[MODObjectId alloc] initWithString:idStringValue] autorelease];
@@ -1145,6 +1152,11 @@ _again:
         _error = [self _errorWithMessage:@"cannot find end of regex" atPosition:cursor];
     }
     return cursor;
+}
+
+- (const char *)_parseTimestampWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(MODTimestamp **)result
+{
+    return NULL;
 }
 
 - (const char *)_parseStringWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(NSString **)result
@@ -1221,26 +1233,26 @@ _again:
 }
 
 
-#line 1225 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 1237 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 static const char _JSON_array_actions[] = {
 	0, 1, 0, 1, 1
 };
 
 static const char _JSON_array_key_offsets[] = {
-	0, 0, 1, 20, 26, 44
+	0, 0, 1, 21, 27, 46
 };
 
 static const char _JSON_array_trans_keys[] = {
-	91, 13, 32, 34, 39, 45, 73, 91, 
-	93, 102, 110, 123, 9, 10, 47, 57, 
-	77, 79, 116, 117, 13, 32, 44, 93, 
-	9, 10, 13, 32, 34, 39, 45, 73, 
-	91, 102, 110, 123, 9, 10, 47, 57, 
-	77, 79, 116, 117, 0
+	91, 13, 32, 34, 39, 45, 73, 84, 
+	91, 93, 102, 110, 123, 9, 10, 47, 
+	57, 77, 79, 116, 117, 13, 32, 44, 
+	93, 9, 10, 13, 32, 34, 39, 45, 
+	73, 84, 91, 102, 110, 123, 9, 10, 
+	47, 57, 77, 79, 116, 117, 0
 };
 
 static const char _JSON_array_single_lengths[] = {
-	0, 1, 11, 4, 10, 0
+	0, 1, 12, 4, 11, 0
 };
 
 static const char _JSON_array_range_lengths[] = {
@@ -1248,16 +1260,16 @@ static const char _JSON_array_range_lengths[] = {
 };
 
 static const char _JSON_array_index_offsets[] = {
-	0, 0, 2, 18, 24, 39
+	0, 0, 2, 19, 25, 41
 };
 
 static const char _JSON_array_indicies[] = {
 	0, 1, 0, 0, 2, 2, 2, 2, 
-	2, 3, 2, 2, 2, 0, 2, 2, 
-	2, 1, 4, 4, 5, 3, 4, 1, 
-	5, 5, 2, 2, 2, 2, 2, 2, 
-	2, 2, 5, 2, 2, 2, 1, 1, 
-	0
+	2, 2, 3, 2, 2, 2, 0, 2, 
+	2, 2, 1, 4, 4, 5, 3, 4, 
+	1, 5, 5, 2, 2, 2, 2, 2, 
+	2, 2, 2, 2, 5, 2, 2, 2, 
+	1, 1, 0
 };
 
 static const char _JSON_array_trans_targs[] = {
@@ -1275,7 +1287,7 @@ static const int JSON_array_error = 0;
 static const int JSON_array_en_main = 1;
 
 
-#line 496 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 509 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
 
 - (const char *)_parseArrayWithPointer:(const char *)p endPointer:(const char *)pe result:(NSMutableArray **)result
@@ -1288,14 +1300,14 @@ static const int JSON_array_en_main = 1;
     *result = [[[NSMutableArray alloc] init] autorelease];
     
     
-#line 1292 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 1304 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 	{
 	cs = JSON_array_start;
 	}
 
-#line 508 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 521 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
     
-#line 1299 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 1311 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 	{
 	int _klen;
 	unsigned int _trans;
@@ -1370,7 +1382,7 @@ _match:
 		switch ( *_acts++ )
 		{
 	case 0:
-#line 477 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 490 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         id value;
         const char *np = [self _parseValueWithPointer:p endPointer:pe result:&value];
@@ -1383,10 +1395,10 @@ _match:
     }
 	break;
 	case 1:
-#line 488 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 501 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{ p--; {p++; goto _out; } }
 	break;
-#line 1390 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 1402 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 		}
 	}
 
@@ -1399,7 +1411,7 @@ _again:
 	_out: {}
 	}
 
-#line 509 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 522 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
     
     if(cs >= JSON_array_first_final) {
         return p + 1;
@@ -1410,7 +1422,7 @@ _again:
 }
 
 
-#line 1414 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 1426 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 static const char _JSON_actions[] = {
 	0, 1, 0, 1, 1
 };
@@ -1453,7 +1465,7 @@ static const int JSON_error = 0;
 static const int JSON_en_main = 1;
 
 
-#line 543 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 556 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
 
 - (id)parseJson:(NSString *)source
@@ -1464,16 +1476,16 @@ static const int JSON_en_main = 1;
     
     cStringBuffer = [source UTF8String];
     
-#line 1468 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 1480 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 	{
 	cs = JSON_start;
 	}
 
-#line 553 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 566 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
     p = cStringBuffer;
     pe = p + strlen(p);
     
-#line 1477 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 1489 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 	{
 	int _klen;
 	unsigned int _trans;
@@ -1547,7 +1559,7 @@ _match:
 		switch ( *_acts++ )
 		{
 	case 0:
-#line 525 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 538 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         const char *np;
         _currentNesting = 1;
@@ -1556,7 +1568,7 @@ _match:
     }
 	break;
 	case 1:
-#line 532 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 545 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 	{
         const char *np;
         _currentNesting = 1;
@@ -1564,7 +1576,7 @@ _match:
         if (np == NULL) { p--; {p++; goto _out; } } else {p = (( np))-1;}
     }
 	break;
-#line 1568 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
+#line 1580 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.m"
 		}
 	}
 
@@ -1577,7 +1589,7 @@ _again:
 	_out: {}
 	}
 
-#line 556 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
+#line 569 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
     
     if (cs >= JSON_first_final && p == pe) {
         return result;

@@ -73,7 +73,7 @@
     Vtrue               = 'true';
     VMinKey             = 'MinKey';
     VMaxKey             = 'MaxKey';
-    begin_value         = [/unftMO'\"\-\[\{NI] | digit;
+    begin_value         = [/unftTMO'\"\-\[\{NI] | digit;
     begin_object        = '{';
     end_object          = '}';
     begin_array         = '[';
@@ -81,9 +81,11 @@
     begin_string        = '"' | '\'';
     begin_name          = begin_string;
     begin_number        = digit | '-';
-    begin_object_id     = 'O';
     begin_regexp        = '/';
+    begin_object_id     = 'O';
     object_id_keyword   = 'ObjectId';
+    begin_timestamp     = 'T';
+    timestamp_keyword   = 'Timestamp';
 }%%
 
 %%{
@@ -153,6 +155,11 @@
         const char *np = [self _parseRegexpWithPointer:fpc endPointer:pe result:result];
         if (np == NULL) { fhold; fbreak; } else fexec np;
     }
+    
+    action parse_timestamp {
+        const char *np = [self _parseTimestampWithPointer:fpc endPointer:pe result:result];
+        if (np == NULL) { fhold; fbreak; } else fexec np;
+    }
 
     action exit { fhold; fbreak; }
 
@@ -168,7 +175,8 @@
         begin_string >parse_string |
         begin_array >parse_array |
         begin_object >parse_object |
-        begin_regexp >parse_regexp
+        begin_regexp >parse_regexp |
+        begin_timestamp >parse_timestamp
     ) %*exit;
 }%%
 
@@ -393,6 +401,11 @@
         _error = [self _errorWithMessage:@"cannot find end of regex" atPosition:cursor];
     }
     return cursor;
+}
+
+- (const char *)_parseTimestampWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(MODTimestamp **)result
+{
+    return NULL;
 }
 
 - (const char *)_parseStringWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(NSString **)result
