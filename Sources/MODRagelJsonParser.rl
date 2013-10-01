@@ -199,15 +199,16 @@
 - (const char *)_parseIntegerWithPointer:(const char *)p endPointer:(const char *)pe result:(NSNumber **)result
 {
     int cs = 0;
+    const char *memo;
 
     %% write init;
-    _memo = p;
+    memo = p;
     %% write exec;
 
     if (cs >= JSON_integer_first_final) {
         NSString *buffer;
         
-        buffer = [[NSString alloc] initWithBytesNoCopy:(void *)_memo length:p - _memo encoding:NSUTF8StringEncoding freeWhenDone:NO];
+        buffer = [[NSString alloc] initWithBytesNoCopy:(void *)memo length:p - memo encoding:NSUTF8StringEncoding freeWhenDone:NO];
         *result = [NSNumber numberWithLongLong:[buffer longLongValue]];
         [buffer release];
         return p + 1;
@@ -233,18 +234,19 @@
 - (const char *)_parseFloatWithPointer:(const char *)p endPointer:(const char *)pe result:(NSNumber **)result
 {
     int cs = 0;
+    const char *memo;
 
     %% write init;
-    _memo = p;
+    memo = p;
     %% write exec;
 
     if (cs >= JSON_float_first_final) {
-        NSUInteger length = p - _memo;
+        NSUInteger length = p - memo;
         char *buffer;
         double value;
         
         buffer = malloc(length + 1);
-        strncpy(buffer, _memo, length);
+        strncpy(buffer, memo, length);
         sscanf(buffer, "%lf", &value);
         *result = [NSNumber numberWithDouble:value];
         free(buffer);

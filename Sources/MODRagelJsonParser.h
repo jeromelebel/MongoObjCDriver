@@ -16,7 +16,6 @@
     int                     _maxNesting;
     int                     _currentNesting;
     int                     _allowNan;
-    const char              *_memo;
     
     NSError                 *_error;
     const char              *cStringBuffer;
