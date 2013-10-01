@@ -31,7 +31,11 @@
 {
     NSString *result;
     
-    if (pretty) {
+    if (!strictJSON && pretty) {
+        result = [NSString stringWithFormat:@"BinData(%x, \"%@\")", (int)_binaryType, [_data base64String]];
+    } else if (!strictJSON) {
+        result = [NSString stringWithFormat:@"BinData(%x,\"%@\")", (int)_binaryType, [_data base64String]];
+    } else if (pretty) {
         result = [NSString stringWithFormat:@"{ \"$binary\" : \"%@\", \"$type\" : \"%d\" }", [_data base64String], (int)_binaryType];
     } else {
         result = [NSString stringWithFormat:@"{\"$binary\":\"%@\",\"$type\":\"%d\"}", [_data base64String], (int)_binaryType];
