@@ -12,6 +12,7 @@
 #import "MODMinKey.h"
 #import "MODUndefined.h"
 #import "MODObjectId.h"
+#import "MODRegex.h"
 #import "MOD_internal.h"
 
 @interface MODRagelJsonParser ()
@@ -48,21 +49,22 @@
     return result;
 }
 
-- (NSError *)_errorWithMessage:(NSString *)message
+- (NSError *)_errorWithMessage:(NSString *)message atPosition:(const char *)position
 {
-    return [NSError errorWithDomain:@"error" code:0 userInfo:@{ NSLocalizedDescriptionKey: message }];
+    NSUInteger length;
+    
+    length = strlen(position);
+    if (length > 10) {
+        length = 10;
+    }
+    return [NSError errorWithDomain:@"error" code:0 userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%@ %@", message, [[[NSString alloc] initWithBytes:position length:length encoding:NSUTF8StringEncoding] autorelease]] }];
 }
 
 %%{
     machine JSON_common;
 
-    cr                  = '\n';
-    cr_neg              = [^\n];
     ws                  = [ \t\r\n];
-    c_comment           = '/*' ( any* - (any* '*/' any* ) ) '*/';
-    cpp_comment         = '//' cr_neg* cr;
-    comment             = c_comment | cpp_comment;
-    ignore              = ws | comment;
+    ignore              = ws;
     name_separator      = ':';
     value_separator     = ',';
     Vundefined          = 'undefined';
@@ -71,7 +73,7 @@
     Vtrue               = 'true';
     VMinKey             = 'MinKey';
     VMaxKey             = 'MaxKey';
-    begin_value         = [unftMO\"\-\[\{NI] | digit;
+    begin_value         = [unftMO\"\-\[\{NI] | '/' | digit;
     begin_object        = '{';
     end_object          = '}';
     begin_array         = '[';
@@ -80,6 +82,7 @@
     begin_name          = begin_string;
     begin_number        = digit | '-';
     begin_object_id     = 'O';
+    begin_regexp        = '/';
     object_id_keyword   = 'ObjectId';
 }%%
 
@@ -145,6 +148,11 @@
         _currentNesting--;
         if (np == NULL) { fhold; fbreak; } else fexec np;
     }
+    
+    action parse_regexp {
+        const char *np = [self _parseRegexpWithPointer:fpc endPointer:pe result:result];
+        if (np == NULL) { fhold; fbreak; } else fexec np;
+    }
 
     action exit { fhold; fbreak; }
 
@@ -159,7 +167,8 @@
         begin_number >parse_number |
         begin_string >parse_string |
         begin_array >parse_array |
-        begin_object >parse_object
+        begin_object >parse_object |
+        begin_regexp >parse_regexp
     ) %*exit;
 }%%
 
@@ -243,64 +252,6 @@
     } else {
         return NULL;
     }
-}
-
-static NSMutableString *jsonStringUnescape(NSMutableString *result, const char *string, const char *stringEnd)
-{
-    const char *p = string, *pe = string, *unescape;
-    int unescape_len;
-    NSString *buffer;
-
-    while (pe < stringEnd) {
-        if (*pe == '\\') {
-            unescape = (char *) "?";
-            unescape_len = 1;
-            if (pe > p) {
-                buffer = [[NSString alloc] initWithBytesNoCopy:(void *)p length:pe - p encoding:NSUTF8StringEncoding freeWhenDone:NO];
-                [result appendString:buffer];
-                [buffer release];
-            }
-            switch (*++pe) {
-                case 'n':
-                    unescape = (char *) "\n";
-                    break;
-                case 'r':
-                    unescape = (char *) "\r";
-                    break;
-                case 't':
-                    unescape = (char *) "\t";
-                    break;
-                case '"':
-                    unescape = (char *) "\"";
-                    break;
-                case '\'':
-                    unescape = (char *) "'";
-                    break;
-                case '\\':
-                    unescape = (char *) "\\";
-                    break;
-                case 'b':
-                    unescape = (char *) "\b";
-                    break;
-                case 'f':
-                    unescape = (char *) "\f";
-                    break;
-                default:
-                    p = pe;
-                    continue;
-            }
-            buffer = [[NSString alloc] initWithBytesNoCopy:(void *)unescape length:unescape_len encoding:NSUTF8StringEncoding freeWhenDone:NO];
-            [result appendString:buffer];
-            [buffer release];
-            p = ++pe;
-        } else {
-            pe++;
-        }
-    }
-    buffer = [[NSString alloc] initWithBytesNoCopy:(void *)p length:pe - p encoding:NSUTF8StringEncoding freeWhenDone:NO];
-    [result appendString:buffer];
-    [buffer release];
-    return result;
 }
 
 %%{
@@ -404,43 +355,82 @@ static NSMutableString *jsonStringUnescape(NSMutableString *result, const char *
     }
 }
 
-%%{
-   machine JSON_string;
-   include JSON_common;
-   
-   write data;
-   
-   action parse_string {
-       string = jsonStringUnescape(string, _memo + 1, p);
-       if (string == nil) {
-           fhold;
-           fbreak;
-       } else {
-           fexec p + 1;
-       }
-   }
-   
-   action exit { fhold; fbreak; }
-   
-   main := '"' ((^([\"\\] | 0..0x1f) | '\\'[\"\\/bfnrt] | '\\u'[0-9a-fA-F]{4} | '\\'^([\"\\/bfnrtu]|0..0x1f))* %parse_string) '"' @exit;
-}%%
-
-- (const char *)_parseStringWithPointer:(const char *)p endPointer:(const char *)pe result:(NSString **)result
+- (const char *)_parseRegexpWithPointer:(const char *)p endPointer:(const char *)pe result:(MODRegex **)result
 {
-    int cs = 0;
-    NSMutableString *string = [NSMutableString string];
+    return NULL;
+}
+
+- (const char *)_parseStringWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(NSString **)result
+{
+    NSMutableString *mutableResult;
+    const char *unescape, *bookmark, *cursor;
+    int unescapeLength;
+    char quoteString;
+    NSString *buffer;
     
-    %% write init;
-    _memo = p;
-    %% write exec;
-   
-    if (cs >= JSON_string_first_final) {
-        *result = string;
-        return p + 1;
-    } else {
-        *result = nil;
-        return NULL;
+    mutableResult = [[NSMutableString alloc] init];
+    quoteString = string[0];
+    cursor = string + 1;
+    bookmark = cursor;
+    while (cursor < stringEnd && *cursor != quoteString) {
+        if (*cursor == '\\') {
+            unescape = (char *) "?";
+            unescapeLength = 1;
+            if (cursor > bookmark) {
+                // if the string starts with a \, there is no need to add anything
+                buffer = [[NSString alloc] initWithBytesNoCopy:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding freeWhenDone:NO];
+                [mutableResult appendString:buffer];
+                [buffer release];
+            }
+            switch (*++cursor) {
+                case 'n':
+                    unescape = (char *) "\n";
+                    break;
+                case 'r':
+                    unescape = (char *) "\r";
+                    break;
+                case 't':
+                    unescape = (char *) "\t";
+                    break;
+                case '"':
+                    unescape = (char *) "\"";
+                    break;
+                case '\'':
+                    unescape = (char *) "'";
+                    break;
+                case '\\':
+                    unescape = (char *) "\\";
+                    break;
+                case 'b':
+                    unescape = (char *) "\b";
+                    break;
+                case 'f':
+                    unescape = (char *) "\f";
+                    break;
+                default:
+                    // take it as a regular character
+                    bookmark = cursor;
+                    continue;
+            }
+            buffer = [[NSString alloc] initWithBytesNoCopy:(void *)unescape length:unescapeLength encoding:NSUTF8StringEncoding freeWhenDone:NO];
+            [mutableResult appendString:buffer];
+            [buffer release];
+            bookmark = ++cursor;
+        } else {
+            cursor++;
+        }
     }
+    if (*cursor == quoteString) {
+        buffer = [[NSString alloc] initWithBytesNoCopy:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding freeWhenDone:NO];
+        [mutableResult appendString:buffer];
+        [buffer release];
+        *result = [mutableResult autorelease];
+        cursor++;
+    } else {
+        cursor = NULL;
+        _error = [self _errorWithMessage:@"cannot find end of string" atPosition:cursor];
+    }
+    return cursor;
 }
 
 %%{
@@ -522,10 +512,10 @@ static NSMutableString *jsonStringUnescape(NSMutableString *result, const char *
     const char *p, *pe;
     id result = nil;
     int cs = 0;
-    const char *cString = [source UTF8String];
     
+    cStringBuffer = [source UTF8String];
     %% write init;
-    p = cString;
+    p = cStringBuffer;
     pe = p + strlen(p);
     %% write exec;
     
@@ -533,7 +523,7 @@ static NSMutableString *jsonStringUnescape(NSMutableString *result, const char *
         return result;
     } else {
         if (!_error) {
-            _error = [self _errorWithMessage:[NSString stringWithFormat:@"unexpected token at '%s'", p]];
+            _error = [self _errorWithMessage:@"unexpected token" atPosition:p];
         }
         return nil;
     }
