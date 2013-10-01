@@ -15,7 +15,6 @@
     NSMutableArray          *_stack;
     int                     _maxNesting;
     int                     _currentNesting;
-    int                     _allowNan;
     
     NSError                 *_error;
     const char              *cStringBuffer;
