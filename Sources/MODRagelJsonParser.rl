@@ -73,12 +73,12 @@
     Vtrue               = 'true';
     VMinKey             = 'MinKey';
     VMaxKey             = 'MaxKey';
-    begin_value         = [/unftMO\"\-\[\{NI] | digit;
+    begin_value         = [/unftMO'\"\-\[\{NI] | digit;
     begin_object        = '{';
     end_object          = '}';
     begin_array         = '[';
     end_array           = ']';
-    begin_string        = '"';
+    begin_string        = '"' | '\'';
     begin_name          = begin_string;
     begin_number        = digit | '-';
     begin_object_id     = 'O';
