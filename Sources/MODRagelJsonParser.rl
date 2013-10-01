@@ -355,9 +355,42 @@
     }
 }
 
-- (const char *)_parseRegexpWithPointer:(const char *)p endPointer:(const char *)pe result:(MODRegex **)result
+- (const char *)_parseRegexpWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(MODRegex **)result
 {
-    return NULL;
+    const char *bookmark, *cursor;
+    BOOL backslashJustBefore = NO;
+    
+    cursor = string + 1;
+    bookmark = cursor;
+    while (cursor < stringEnd && *cursor != '/' && !backslashJustBefore) {
+        if (*cursor == '\\') {
+            backslashJustBefore = YES;
+        } else {
+            backslashJustBefore = NO;
+        }
+        cursor++;
+    }
+    if (*cursor == '/') {
+        NSString *buffer;
+        NSString *options;
+        
+        buffer = [[NSString alloc] initWithBytesNoCopy:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding freeWhenDone:NO];
+        cursor++;
+        
+        bookmark = cursor;
+        while (cursor < stringEnd && (*cursor == 'i' || *cursor == 'm' || *cursor == 's' || *cursor == 'x')) {
+            cursor++;
+        }
+        options = [[NSString alloc] initWithBytesNoCopy:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding freeWhenDone:NO];
+        
+        *result = [[[MODRegex alloc] initWithPattern:buffer options:options] autorelease];
+        [buffer release];
+        [options release];
+    } else {
+        cursor = NULL;
+        _error = [self _errorWithMessage:@"cannot find end of regex" atPosition:cursor];
+    }
+    return cursor;
 }
 
 - (const char *)_parseStringWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(NSString **)result
