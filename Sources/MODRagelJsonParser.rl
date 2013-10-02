@@ -14,6 +14,7 @@
 #import "MODObjectId.h"
 #import "MODRegex.h"
 #import "MOD_internal.h"
+#import "MODBinary.h"
 
 @interface MODRagelJsonParser ()
 - (id)parseJson:(NSString *)source;
@@ -49,15 +50,17 @@
     return result;
 }
 
-- (NSError *)_errorWithMessage:(NSString *)message atPosition:(const char *)position
+- (void)_makeErrorWithMessage:(NSString *)message atPosition:(const char *)position
 {
-    NSUInteger length;
-    
-    length = strlen(position);
-    if (length > 10) {
-        length = 10;
+    if (!_error) {
+        NSUInteger length;
+        
+        length = strlen(position);
+        if (length > 10) {
+            length = 10;
+        }
+        _error = [NSError errorWithDomain:@"error" code:0 userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%@: \"%@\"", message, [[[NSString alloc] initWithBytes:position length:length encoding:NSUTF8StringEncoding] autorelease]] }];
     }
-    return [NSError errorWithDomain:@"error" code:0 userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%@ %@", message, [[[NSString alloc] initWithBytes:position length:length encoding:NSUTF8StringEncoding] autorelease]] }];
 }
 
 %%{
@@ -73,7 +76,7 @@
     Vtrue               = 'true';
     VMinKey             = 'MinKey';
     VMaxKey             = 'MaxKey';
-    begin_value         = [/unftTMO'\"\-\[\{NI] | digit;
+    begin_value         = [/unftTMBO'\"\-\[\{NI] | digit;
     begin_object        = '{';
     end_object          = '}';
     begin_array         = '[';
@@ -86,6 +89,8 @@
     object_id_keyword   = 'ObjectId';
     begin_timestamp     = 'T';
     timestamp_keyword   = 'Timestamp';
+    begin_bindata       = 'B';
+    bindata_keyword     = 'BinData';
 }%%
 
 %%{
@@ -160,6 +165,15 @@
         const char *np = [self _parseTimestampWithPointer:fpc endPointer:pe result:result];
         if (np == NULL) { fhold; fbreak; } else fexec np;
     }
+    
+    action parse_binary {
+        const char *np = [self _parseBinaryWithPointer:fpc endPointer:pe result:result];
+        if (np == NULL) {
+            fhold; fbreak;
+        } else {
+            fexec np;
+        }
+    }
 
     action exit { fhold; fbreak; }
 
@@ -176,7 +190,8 @@
         begin_array >parse_array |
         begin_object >parse_object |
         begin_regexp >parse_regexp |
-        begin_timestamp >parse_timestamp
+        begin_timestamp >parse_timestamp |
+        begin_bindata >parse_binary
     ) %*exit;
 }%%
 
@@ -187,10 +202,11 @@
     %% write init;
     %% write exec;
 
-    if (cs >= JSON_value_first_final) {
-        return p;
-    } else {
+    if (*result == nil || cs < JSON_value_first_final) {
+        [self _makeErrorWithMessage:@"cannot parse value" atPosition:p];
         return NULL;
+    } else {
+        return p;
     }
 }
 
@@ -388,7 +404,7 @@
         cursor++;
         
         bookmark = cursor;
-        while (cursor < stringEnd && (*cursor == 'i' || *cursor == 'm' || *cursor == 's' || *cursor == 'x')) {
+        while (cursor < stringEnd && strchr("imsx", *cursor) != NULL) {
             cursor++;
         }
         options = [[NSString alloc] initWithBytesNoCopy:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding freeWhenDone:NO];
@@ -398,12 +414,17 @@
         [options release];
     } else {
         cursor = NULL;
-        _error = [self _errorWithMessage:@"cannot find end of regex" atPosition:cursor];
+        [self _makeErrorWithMessage:@"cannot find end of regex" atPosition:cursor];
     }
     return cursor;
 }
 
 - (const char *)_parseTimestampWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(MODTimestamp **)result
+{
+    return NULL;
+}
+
+- (const char *)_parseBinaryWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(MODBinary **)result
 {
     return NULL;
 }
@@ -476,7 +497,7 @@
         cursor++;
     } else {
         cursor = NULL;
-        _error = [self _errorWithMessage:@"cannot find end of string" atPosition:cursor];
+        [self _makeErrorWithMessage:@"cannot find end of string" atPosition:cursor];
     }
     return cursor;
 }
@@ -571,7 +592,7 @@
         return result;
     } else {
         if (!_error) {
-            _error = [self _errorWithMessage:@"unexpected token" atPosition:p];
+            [self _makeErrorWithMessage:@"unexpected token" atPosition:p];
         }
         return nil;
     }
