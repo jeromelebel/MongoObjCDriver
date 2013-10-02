@@ -13,12 +13,32 @@
 
 @synthesize data = _data, binaryType = _binaryType;
 
-- (id)initWithData:(NSData *)data binaryType:(char)binaryType
++ (BOOL)isValidDataType:(unsigned char)dataType
+{
+    BOOL result = NO;
+    
+    switch (dataType) {
+        case BSON_BIN_BINARY:
+        case BSON_BIN_FUNC:
+        case BSON_BIN_BINARY_OLD:
+        case BSON_BIN_UUID:
+        case BSON_BIN_MD5:
+        case BSON_BIN_USER:
+            result = YES;
+            break;
+            
+        default:
+            break;
+    }
+    return result;
+}
+
+- (id)initWithData:(NSData *)data binaryType:(unsigned char)binaryType
 {
     return [self initWithBytes:[data bytes] length:[data length] binaryType:binaryType];
 }
 
-- (id)initWithBytes:(const void *)bytes length:(NSUInteger)length binaryType:(char)binaryType
+- (id)initWithBytes:(const void *)bytes length:(NSUInteger)length binaryType:(unsigned char)binaryType
 {
     if (self = [self init]) {
         _data = [[NSData alloc] initWithBytes:bytes length:length];
