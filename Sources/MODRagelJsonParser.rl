@@ -15,6 +15,7 @@
 #import "MODRegex.h"
 #import "MOD_internal.h"
 #import "MODBinary.h"
+#import "NSString+Base64.h"
 
 @interface MODRagelJsonParser ()
 - (id)parseJson:(NSString *)source;
@@ -90,7 +91,7 @@
     begin_timestamp     = 'T';
     timestamp_keyword   = 'Timestamp';
     begin_bindata       = 'B';
-    bindata_keyword     = 'BinData';
+    bin_data_keyword     = 'BinData';
 }%%
 
 %%{
@@ -166,8 +167,8 @@
         if (np == NULL) { fhold; fbreak; } else fexec np;
     }
     
-    action parse_binary {
-        const char *np = [self _parseBinaryWithPointer:fpc endPointer:pe result:result];
+    action parse_bin_data {
+        const char *np = [self _parseBinDataWithPointer:fpc endPointer:pe result:result];
         if (np == NULL) {
             fhold; fbreak;
         } else {
@@ -191,7 +192,7 @@
         begin_object >parse_object |
         begin_regexp >parse_regexp |
         begin_timestamp >parse_timestamp |
-        begin_bindata >parse_binary
+        begin_bindata >parse_bin_data
     ) %*exit;
 }%%
 
@@ -348,6 +349,49 @@
 }
 
 %%{
+    machine JSON_bin_data;
+    include JSON_common;
+
+    write data;
+    
+    action parse_data_value {
+        const char *np;
+        np = [self _parseStringWithPointer:fpc endPointer:pe result:&dataStringValue];
+        if (np == NULL) { fhold; fbreak; } else fexec np;
+    }
+    
+    action parse_type_value {
+        const char *np;
+        np = [self _parseIntegerWithPointer:fpc endPointer:pe result:&typeValue];
+        if (np == NULL) { fhold; fbreak; } else { np--; fexec np; }
+    }
+
+    action exit { fhold; fbreak; }
+
+    main := (bin_data_keyword ignore* '(' ignore* begin_number >parse_type_value ignore* ',' ignore* begin_string >parse_data_value ignore* ')') @exit;
+}%%
+
+- (const char *)_parseBinDataWithPointer:(const char *)p endPointer:(const char *)pe result:(MODBinary **)result
+{
+    NSString *dataStringValue = nil;
+    NSNumber *typeValue = nil;
+    NSData *dataValue = nil;
+    int cs = 0;
+
+    %% write init;
+    %% write exec;
+
+    dataValue = [dataStringValue dataFromBase64];
+    if (cs >= JSON_bin_data_first_final && dataValue && [MODBinary isValidDataType:typeValue.unsignedCharValue] ) {
+        *result = [[[MODBinary alloc] initWithData:dataValue binaryType:typeValue.unsignedCharValue] autorelease];
+        return p + 1;
+    } else {
+        *result = nil;
+        return NULL;
+    }
+}
+
+%%{
     machine JSON_object_id;
     include JSON_common;
 
@@ -366,7 +410,7 @@
 
 - (const char *)_parseObjectIdWithPointer:(const char *)p endPointer:(const char *)pe result:(MODObjectId **)result
 {
-    NSString *idStringValue;
+    NSString *idStringValue = nil;
     int cs = 0;
 
     %% write init;
@@ -420,11 +464,6 @@
 }
 
 - (const char *)_parseTimestampWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(MODTimestamp **)result
-{
-    return NULL;
-}
-
-- (const char *)_parseBinaryWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(MODBinary **)result
 {
     return NULL;
 }
