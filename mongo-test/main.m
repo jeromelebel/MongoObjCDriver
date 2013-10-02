@@ -168,9 +168,6 @@ static void testJson()
     testObjects(@"{\"minkey\":{\"$minKey\":1}}", @"{\"minkey\":MinKey}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMinKey alloc] init] autorelease], @"minkey", nil]);
     testObjects(@"{\"maxkey\":{\"$maxKey\":1}}", @"{\"maxkey\":MaxKey}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMaxKey alloc] init] autorelease], @"maxkey", nil]);
     testObjects(@"{\"undefined\":{\"$undefined\":true}}", @"{\"undefined\":undefined}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODUndefined alloc] init] autorelease], @"undefined", nil]);
-    testObjects(@"{\"minkey\":MinKey}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMinKey alloc] init] autorelease], @"minkey", nil]);
-    testObjects(@"{\"maxkey\":MaxKey}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMaxKey alloc] init] autorelease], @"maxkey", nil]);
-    testObjects(@"{\"undefined\":undefined}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODUndefined alloc] init] autorelease], @"undefined", nil]);
     testObjects(@"{\"number\":16.039199999999993906}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:16.039199999999994], @"number", nil]);
     testObjects(@"{\"number\":1.2345678909999999728}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:1.234567891], @"number", nil]);
     testObjects(@"{\"number\":3.8365551715863071018e-13}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:3.8365551715863071018e-13], @"number", nil]);
