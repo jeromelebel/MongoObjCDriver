@@ -51,4 +51,9 @@
     return NO;
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@: %p, (%d, %d)>", self.class, self, _tValue, _iValue];
+}
+
 @end
