@@ -15,6 +15,7 @@
 #import "MODRegex.h"
 #import "MOD_internal.h"
 #import "MODBinary.h"
+#import "MODTimestamp.h"
 #import "NSString+Base64.h"
 
 @interface MODRagelJsonParser ()
@@ -463,9 +464,46 @@
     return cursor;
 }
 
-- (const char *)_parseTimestampWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(MODTimestamp **)result
+%%{
+    machine JSON_timestamp;
+    include JSON_common;
+
+    write data;
+
+    action parse_time_value {
+        const char *np;
+        np = [self _parseIntegerWithPointer:fpc endPointer:pe result:&timeNumber];
+        np--; // WHY???
+        if (np == NULL) { fhold; fbreak; } else fexec np;
+    }
+
+    action parse_increment_value {
+        const char *np;
+        np = [self _parseIntegerWithPointer:fpc endPointer:pe result:&incrementNumber];
+        if (np == NULL) { fhold; fbreak; } else { np--; fexec np; }
+    }
+
+    action exit { fhold; fbreak; }
+
+    main := (timestamp_keyword ignore* '(' ignore* begin_number >parse_time_value ignore* ',' ignore* begin_number >parse_increment_value ignore* ')') @exit;
+}%%
+
+- (const char *)_parseTimestampWithPointer:(const char *)p endPointer:(const char *)pe result:(MODTimestamp **)result
 {
-    return NULL;
+    NSNumber *timeNumber = nil;
+    NSNumber *incrementNumber = nil;
+    int cs = 0;
+    
+    %% write init;
+    %% write exec;
+    
+    if (cs >= JSON_object_id_first_final && timeNumber && incrementNumber) {
+        *result = [[[MODTimestamp alloc] initWithTValue:timeNumber.intValue iValue:incrementNumber.intValue] autorelease];
+        return p + 1; // why + 1 ???
+    } else {
+        *result = nil;
+        return NULL;
+    }
 }
 
 - (const char *)_parseStringWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(NSString **)result
