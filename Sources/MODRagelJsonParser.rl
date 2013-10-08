@@ -16,6 +16,7 @@
 #import "MOD_internal.h"
 #import "MODBinary.h"
 #import "MODTimestamp.h"
+#import "MODSymbol.h"
 #import "NSString+Base64.h"
 
 @interface MODRagelJsonParser ()
@@ -78,7 +79,7 @@
     Vtrue               = 'true';
     VMinKey             = 'MinKey';
     VMaxKey             = 'MaxKey';
-    begin_value         = [/unftTMBO'\"\-\[\{NI] | digit;
+    begin_value         = [/unftTMBOS'\"\-\[\{NI] | digit;
     begin_object        = '{';
     end_object          = '}';
     begin_array         = '[';
@@ -92,7 +93,9 @@
     begin_timestamp     = 'T';
     timestamp_keyword   = 'Timestamp';
     begin_bindata       = 'B';
-    bin_data_keyword     = 'BinData';
+    bin_data_keyword    = 'BinData';
+    begin_symbol        = 'S';
+    symbol_keyword      = 'Symbol';
 }%%
 
 %%{
@@ -176,6 +179,15 @@
             fexec np;
         }
     }
+    
+    action parse_symbol {
+        const char *np = [self _parseSymbolWithPointer:fpc endPointer:pe result:result];
+        if (np == NULL) {
+            fhold; fbreak;
+        } else {
+            fexec np;
+        }
+    }
 
     action exit { fhold; fbreak; }
 
@@ -193,7 +205,8 @@
         begin_object >parse_object |
         begin_regexp >parse_regexp |
         begin_timestamp >parse_timestamp |
-        begin_bindata >parse_bin_data
+        begin_bindata >parse_bin_data |
+        begin_symbol >parse_symbol
     ) %*exit;
 }%%
 
@@ -497,8 +510,42 @@
     %% write init;
     %% write exec;
     
-    if (cs >= JSON_object_id_first_final && timeNumber && incrementNumber) {
+    if (cs >= JSON_timestamp_first_final && timeNumber && incrementNumber) {
         *result = [[[MODTimestamp alloc] initWithTValue:timeNumber.intValue iValue:incrementNumber.intValue] autorelease];
+        return p + 1; // why + 1 ???
+    } else {
+        *result = nil;
+        return NULL;
+    }
+}
+
+%%{
+    machine JSON_symbol;
+    include JSON_common;
+
+    write data;
+
+    action parse_string_value {
+        const char *np;
+        np = [self _parseStringWithPointer:fpc endPointer:pe result:&symbol];
+        if (np == NULL) { fhold; fbreak; } else { fexec np; }
+    }
+
+    action exit { fhold; fbreak; }
+
+    main := (symbol_keyword ignore* '(' ignore* begin_string >parse_string_value ignore* ')') @exit;
+}%%
+
+- (const char *)_parseSymbolWithPointer:(const char *)p endPointer:(const char *)pe result:(MODSymbol **)result
+{
+    NSString *symbol = nil;
+    int cs = 0;
+    
+    %% write init;
+    %% write exec;
+    
+    if (cs >= JSON_symbol_first_final && symbol) {
+        *result = [[[MODSymbol alloc] initWithValue:symbol] autorelease];
         return p + 1; // why + 1 ???
     } else {
         *result = nil;
