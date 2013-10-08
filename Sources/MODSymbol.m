@@ -29,7 +29,7 @@
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
 {
     if (!strictJSON) {
-        return [NSString stringWithFormat:@"Symbol(%@)", [MODServer escapeSlashesForString:_value]];
+        return [NSString stringWithFormat:@"Symbol(\"%@\")", [MODServer escapeSlashesForString:_value]];
     } else if (pretty) {
         return [NSString stringWithFormat:@"{ \"$symbol\" : \"%@\" }", [MODServer escapeSlashesForString:_value]];
     } else {
