@@ -79,6 +79,7 @@
     Vtrue               = 'true';
     VMinKey             = 'MinKey';
     VMaxKey             = 'MaxKey';
+    new_keyword         = 'new';
     begin_value         = [/unftTMBOS'\"\-\[\{NI] | digit;
     begin_object        = '{';
     end_object          = '}';
@@ -188,6 +189,15 @@
             fexec np;
         }
     }
+    
+    action parse_javascript_object {
+        const char *np = [self _parseJavascriptObjectWithPointer:fpc endPointer:pe result:result];
+        if (np == NULL) {
+            fhold; fbreak;
+        } else {
+            fexec np;
+        }
+    }
 
     action exit { fhold; fbreak; }
 
@@ -206,7 +216,8 @@
         begin_regexp >parse_regexp |
         begin_timestamp >parse_timestamp |
         begin_bindata >parse_bin_data |
-        begin_symbol >parse_symbol
+        begin_symbol >parse_symbol |
+        new_keyword @parse_javascript_object
     ) %*exit;
 }%%
 
@@ -357,6 +368,44 @@
         return p + 1;
     } else {
         [*result release];
+        *result = nil;
+        return NULL;
+    }
+}
+
+%%{
+    machine JSON_javascript_object;
+    include JSON_common;
+
+    write data;
+
+    action parse_data_value {
+        const char *np;
+        np = [self _parseStringWithPointer:fpc endPointer:pe result:&dataStringValue];
+        if (np == NULL) { fhold; fbreak; } else fexec np;
+    }
+
+    action parse_type_value {
+        const char *np;
+        np = [self _parseIntegerWithPointer:fpc endPointer:pe result:&typeValue];
+        if (np == NULL) { fhold; fbreak; } else { np--; fexec np; }
+    }
+
+    action exit { fhold; fbreak; }
+
+    main := ('Date' ignore* '(' ignore* ')') | ('Date' ignore* '(' ignore* begin_number >parse_type_value ignore* ',' ignore* begin_number >parse_type_value ignore* ',' ignore* begin_number >parse_type_value ignore* ',' ignore* begin_number >parse_type_value ignore* ',' ignore* begin_number >parse_type_value ignore* ) | ( 'ISODate' ignore* '(' begin_string >parse_data_value ')' ) @exit;
+}%%
+
+- (const char *)_parseJavascriptObjectWithPointer:(const char *)p endPointer:(const char *)pe result:(id *)result
+{
+    int cs = 0;
+
+    %% write init;
+    %% write exec;
+
+    if (cs >= JSON_javascript_object_first_final && *result) {
+        return p + 1;
+    } else {
         *result = nil;
         return NULL;
     }
