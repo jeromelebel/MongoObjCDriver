@@ -423,17 +423,16 @@
     %% write init;
     %% write exec;
 
-    NSLog(@"%@", parameters);
     if (cs >= JSON_javascript_object_first_final) {
-        if (parameters.count == 1 && [parameters[0] isKindOfClass:NSString.class]) {
+        if (parameters.count == 1 && [[parameters objectAtIndex:0] isKindOfClass:NSString.class]) {
             NSDateFormatter *formater;
             
             formater = [[NSDateFormatter alloc] init];
             [formater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZZ"];
-            *result = [[[formater dateFromString:parameters[0]] retain] autorelease];
+            *result = [[[formater dateFromString:[parameters objectAtIndex:0]] retain] autorelease];
             [formater autorelease];
-        } else if (parameters.count == 1 && [parameters[0] isKindOfClass:NSNumber.class]) {
-            *result = [NSDate dateWithTimeIntervalSince1970:[parameters[0] doubleValue]];
+        } else if (parameters.count == 1 && [[parameters objectAtIndex:0] isKindOfClass:NSNumber.class]) {
+            *result = [NSDate dateWithTimeIntervalSince1970:[[parameters objectAtIndex:0] doubleValue]];
         }
     } else {
         *result = nil;
