@@ -792,9 +792,10 @@
     id result = nil;
     int cs = 0;
     
-    cStringBuffer = [source UTF8String];
+    _error = nil;
+    _cStringBuffer = [source UTF8String];
     %% write init;
-    p = cStringBuffer;
+    p = _cStringBuffer;
     pe = p + strlen(p);
     %% write exec;
     

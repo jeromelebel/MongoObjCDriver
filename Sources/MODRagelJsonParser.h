@@ -12,13 +12,14 @@
 
 @interface MODRagelJsonParser : NSObject
 {
-    NSMutableArray          *_stack;
     int                     _maxNesting;
     int                     _currentNesting;
     
     NSError                 *_error;
-    const char              *cStringBuffer;
+    const char              *_cStringBuffer;
 }
 
 + (id)objectsFromJson:(NSString *)source withError:(NSError **)error;
+
+- (id)parseJson:(NSString *)source;
 @end
