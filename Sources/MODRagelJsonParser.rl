@@ -20,8 +20,8 @@
 #import "NSString+Base64.h"
 
 @interface MODRagelJsonParser ()
-- (id)parseJson:(NSString *)source;
-- (NSError *)error;
+@property (nonatomic, strong, readwrite) NSError *error;
+
 @end
 
 @implementation MODRagelJsonParser (private)
@@ -47,22 +47,21 @@
     MODRagelJsonParser *parser = [[self alloc] init];
     id result;
     
-    result = [parser parseJson:source];
-    *error = [parser error];
+    result = [parser parseJson:source withError:error];
     [parser release];
     return result;
 }
 
 - (void)_makeErrorWithMessage:(NSString *)message atPosition:(const char *)position
 {
-    if (!_error) {
+    if (!self.error) {
         NSUInteger length;
         
         length = strlen(position);
         if (length > 10) {
             length = 10;
         }
-        _error = [NSError errorWithDomain:@"error" code:0 userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%@: \"%@\"", message, [[[NSString alloc] initWithBytes:position length:length encoding:NSUTF8StringEncoding] autorelease]] }];
+        self.error = [NSError errorWithDomain:@"error" code:0 userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%@: \"%@\"", message, [[[NSString alloc] initWithBytes:position length:length encoding:NSUTF8StringEncoding] autorelease]] }];
     }
 }
 
@@ -786,32 +785,26 @@
     ) ignore*;
 }%%
 
-- (id)parseJson:(NSString *)source
+- (id)parseJson:(NSString *)source withError:(NSError **)error
 {
     const char *p, *pe;
     id result = nil;
     int cs = 0;
     
-    _error = nil;
+    self.error = nil;
     _cStringBuffer = [source UTF8String];
     %% write init;
     p = _cStringBuffer;
     pe = p + strlen(p);
     %% write exec;
     
-    if (cs >= JSON_first_final && p == pe) {
-        return result;
-    } else {
-        if (!_error) {
+    if (cs < JSON_first_final || p != pe) {
+        result = nil;
+        if (!self.error) {
             [self _makeErrorWithMessage:@"unexpected token" atPosition:p];
         }
-        return nil;
     }
-}
-                    
-- (NSError *)error
-{
-    return _error;
+    return result;
 }
 
 @end

@@ -15,11 +15,11 @@
     int                     _maxNesting;
     int                     _currentNesting;
     
-    NSError                 *_error;
     const char              *_cStringBuffer;
 }
+@property (nonatomic, strong, readonly) NSError *error;
 
 + (id)objectsFromJson:(NSString *)source withError:(NSError **)error;
 
-- (id)parseJson:(NSString *)source;
+- (id)parseJson:(NSString *)source withError:(NSError **)error;
 @end
