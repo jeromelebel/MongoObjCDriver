@@ -42,6 +42,8 @@
 
 @implementation MODRagelJsonParser
 
+@synthesize error = _error;
+
 + (id)objectsFromJson:(NSString *)source withError:(NSError **)error
 {
     MODRagelJsonParser *parser = [[self alloc] init];

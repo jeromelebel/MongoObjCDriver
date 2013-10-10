@@ -16,6 +16,7 @@
     int                     _currentNesting;
     
     const char              *_cStringBuffer;
+    NSError                 *_error;
 }
 @property (nonatomic, strong, readonly) NSError *error;
 
