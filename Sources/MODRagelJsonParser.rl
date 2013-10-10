@@ -191,7 +191,7 @@
     }
     
     action parse_javascript_object {
-        const char *np = [self _parseJavascriptObjectWithPointer:fpc endPointer:pe result:result];
+        const char *np = [self _parseJavascriptObjectWithPointer:fpc - 2 endPointer:pe result:result];
         if (np == NULL) {
             fhold; fbreak;
         } else {
@@ -379,34 +379,71 @@
 
     write data;
 
-    action parse_data_value {
+    action parse_integer_value {
         const char *np;
-        np = [self _parseStringWithPointer:fpc endPointer:pe result:&dataStringValue];
-        if (np == NULL) { fhold; fbreak; } else fexec np;
+        NSNumber *number;
+        
+        np = [self _parseIntegerWithPointer:fpc endPointer:pe result:&number];
+        if (np != NULL && number) {
+            [parameters addObject:number];
+            np--; fexec np;
+        } else {
+            fhold; fbreak;
+        }
     }
-
-    action parse_type_value {
+    
+    action parse_string_value {
         const char *np;
-        np = [self _parseIntegerWithPointer:fpc endPointer:pe result:&typeValue];
-        if (np == NULL) { fhold; fbreak; } else { np--; fexec np; }
+        NSString *string = nil;
+        
+        np = [self _parseStringWithPointer:fpc endPointer:pe result:&string];
+        if (np != NULL && string) {
+            [parameters addObject:string];
+            fexec np;
+        } else {
+            fhold; fbreak;
+        }
     }
 
     action exit { fhold; fbreak; }
 
-    main := ('Date' ignore* '(' ignore* ')') | ('Date' ignore* '(' ignore* begin_number >parse_type_value ignore* ',' ignore* begin_number >parse_type_value ignore* ',' ignore* begin_number >parse_type_value ignore* ',' ignore* begin_number >parse_type_value ignore* ',' ignore* begin_number >parse_type_value ignore* ) | ( 'ISODate' ignore* '(' begin_string >parse_data_value ')' ) @exit;
+    main := ( new_keyword ignore*
+                (
+                    'Date' ignore* '(' ignore* ( ( begin_string >parse_string_value ) | ( begin_number >parse_integer_value ignore* ( ',' ignore* begin_number >parse_integer_value ignore* )* ) )? ')'
+//                ) | (
+//                    'ISODate' ignore* '(' ignore* begin_string >parse_string_value ignore* ')'
+                )
+             ) @exit;
 }%%
 
 - (const char *)_parseJavascriptObjectWithPointer:(const char *)p endPointer:(const char *)pe result:(id *)result
 {
     int cs = 0;
+    NSMutableArray *parameters = [[NSMutableArray alloc] init];
 
     %% write init;
     %% write exec;
 
-    if (cs >= JSON_javascript_object_first_final && *result) {
-        return p + 1;
+    NSLog(@"%@", parameters);
+    if (cs >= JSON_javascript_object_first_final) {
+        if (parameters.count == 1 && [parameters[0] isKindOfClass:NSString.class]) {
+            NSDateFormatter *formater;
+            
+            formater = [[NSDateFormatter alloc] init];
+            [formater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZZ"];
+            *result = [[[formater dateFromString:parameters[0]] retain] autorelease];
+            [formater autorelease];
+        } else if (parameters.count == 1 && [parameters[0] isKindOfClass:NSNumber.class]) {
+            *result = [NSDate dateWithTimeIntervalSince1970:[parameters[0] doubleValue]];
+        }
     } else {
         *result = nil;
+    }
+    [parameters release];
+    if (*result) {
+        return p + 1;
+    } else {
+        [self _makeErrorWithMessage:@"cannot parse javascript object" atPosition:p];
         return NULL;
     }
 }

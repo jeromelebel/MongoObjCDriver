@@ -163,6 +163,7 @@ static void testJson()
     NSError *error;
 //    id value;
     
+    testObjects(@"{\"date\":new Date(0)}", @"{\"date\":new Date(\"1970-01-01T01:00:00+0100\")}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSDate dateWithTimeIntervalSince1970:0], @"date", nil]);
     testObjects(@"{'_id':'hello'}", @"{\"_id\":\"hello\"}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"hello", @"_id", nil]);
     testObjects(@"{\"_id\":ObjectId(\"4e9807f88157f608b4000002\"),\"type\":\"Activity\"}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODObjectId alloc] initWithCString:"4e9807f88157f608b4000002"] autorelease], @"_id", @"Activity", @"type", nil]);
     testObjects(@"{\"minkey\":{\"$minKey\":1}}", @"{\"minkey\":MinKey}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMinKey alloc] init] autorelease], @"minkey", nil]);
@@ -183,7 +184,7 @@ static void testJson()
     testObjects(@"{\"empty_hash\":{},\"toto\":1,\"type\":\"Activity\"}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[MODSortedMutableDictionary sortedDictionary], @"empty_hash", [NSNumber numberWithInt:1], @"toto", @"Activity", @"type", nil]);
     testObjects(@"[{\"hello\":\"1\"},{\"zob\":\"2\"}]", nil, [NSArray arrayWithObjects:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"1", @"hello", nil], [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"2", @"zob", nil], nil]);
     testObjects(@"{\"timestamp\":{\"$timestamp\":[1,2]}}", @"{\"timestamp\":Timestamp(1, 2)}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODTimestamp alloc] initWithTValue:1 iValue:2] autorelease], @"timestamp", nil]);
-    testObjects(@"{\"mydate\":{\"$date\":1320066612000.000000}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[NSDate alloc] initWithTimeIntervalSince1970:1320066612] autorelease], @"mydate", nil]);
+    testObjects(@"{\"mydate\":{\"$date\":1320066612000.000000}}", @"{\"mydate\":new Date(\"2011-10-31T14:10:12+0100\")}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[NSDate alloc] initWithTimeIntervalSince1970:1320066612] autorelease], @"mydate", nil]);
     testObjects(@"{\"false\":false,\"true\":true}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"false", [NSNumber numberWithBool:YES], @"true", nil]);
     testObjects(@"{\"my symbol\":{\"$symbol\":\"pour fred\"}}", @"{\"my symbol\":Symbol(\"pour fred\")}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODSymbol alloc] initWithValue:@"pour fred"] autorelease], @"my symbol", nil]);
     
