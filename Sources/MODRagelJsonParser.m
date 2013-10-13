@@ -2450,6 +2450,7 @@ _again:
             [self _makeErrorWithMessage:@"unexpected token" atPosition:p];
         }
     }
+    *error = self.error;
     return result;
 }
 
