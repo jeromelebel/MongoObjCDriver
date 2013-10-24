@@ -282,7 +282,11 @@
             }
             bson_finish(&bsonUpdate);
             if (error == nil) {
-                mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonUpdate, (upsert?MONGO_UPDATE_UPSERT:0) | (multiUpdate?MONGO_UPDATE_MULTI:0), NULL);
+                int result = mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonUpdate, (upsert?MONGO_UPDATE_UPSERT:0) | (multiUpdate?MONGO_UPDATE_MULTI:0), NULL);
+                if (result != MONGO_OK) {
+                    error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:_mongoDatabase.mongo->lasterrcode descriptionDetails:[NSString stringWithUTF8String:_mongoDatabase.mongo->lasterrstr]];
+                    mongoQuery.error = error;
+                }
             } else {
                 mongoQuery.error = error;
             }
@@ -362,7 +366,11 @@
             }
             bson_finish(&bsonCriteria);
             if (error == nil) {
-                mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonDocument, MONGO_UPDATE_UPSERT, NULL);
+                int result = mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonDocument, MONGO_UPDATE_UPSERT, NULL);
+                if (result != MONGO_OK) {
+                    error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:_mongoDatabase.mongo->lasterrcode descriptionDetails:[NSString stringWithUTF8String:_mongoDatabase.mongo->lasterrstr]];
+                    mongoQuery.error = error;
+                }
             } else {
                 mongoQuery.error = error;
             }
@@ -399,7 +407,11 @@
             }
             bson_finish(&bsonCriteria);
             if (error == nil) {
-                mongo_remove(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, NULL);
+                int result = mongo_remove(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, NULL);
+                if (result != MONGO_OK) {
+                    error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:_mongoDatabase.mongo->lasterrcode descriptionDetails:[NSString stringWithUTF8String:_mongoDatabase.mongo->lasterrstr]];
+                    mongoQuery.error = error;
+                }
             } else {
                 mongoQuery.error = error;
             }
