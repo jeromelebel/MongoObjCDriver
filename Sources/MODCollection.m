@@ -282,7 +282,11 @@
             }
             bson_finish(&bsonUpdate);
             if (error == nil) {
-                mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonUpdate, (upsert?MONGO_UPDATE_UPSERT:0) | (multiUpdate?MONGO_UPDATE_MULTI:0), NULL);
+                int result = mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonUpdate, (upsert?MONGO_UPDATE_UPSERT:0) | (multiUpdate?MONGO_UPDATE_MULTI:0), NULL);
+                if (result != MONGO_OK) {
+                    error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:_mongoDatabase.mongo->lasterrcode descriptionDetails:[NSString stringWithUTF8String:_mongoDatabase.mongo->lasterrstr]];
+                    mongoQuery.error = error;
+                }
             } else {
                 mongoQuery.error = error;
             }
@@ -315,11 +319,12 @@
             
             bson_init(&bsonDocument);
             [MODRagelJsonParser bsonFromJson:&bsonDocument json:document error:&error];
-            bson_finish(&bsonDocument);
             bson_init(&bsonCriteria);
             if (error == nil) {
                 bson_iterator iterator;
-                
+              
+                // finish the bson only of the json was parsed correctly (otherwise there is a crash)
+                bson_finish(&bsonDocument);
                 bson_iterator_init(&iterator, &bsonDocument);
                 while (bson_iterator_next(&iterator)) {
                     if (strcmp(bson_iterator_key(&iterator), "_id") == 0) {
@@ -361,7 +366,11 @@
             }
             bson_finish(&bsonCriteria);
             if (error == nil) {
-                mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonDocument, MONGO_UPDATE_UPSERT, NULL);
+                int result = mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonDocument, MONGO_UPDATE_UPSERT, NULL);
+                if (result != MONGO_OK) {
+                    error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:_mongoDatabase.mongo->lasterrcode descriptionDetails:[NSString stringWithUTF8String:_mongoDatabase.mongo->lasterrstr]];
+                    mongoQuery.error = error;
+                }
             } else {
                 mongoQuery.error = error;
             }
@@ -398,7 +407,11 @@
             }
             bson_finish(&bsonCriteria);
             if (error == nil) {
-                mongo_remove(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, NULL);
+                int result = mongo_remove(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, NULL);
+                if (result != MONGO_OK) {
+                    error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:_mongoDatabase.mongo->lasterrcode descriptionDetails:[NSString stringWithUTF8String:_mongoDatabase.mongo->lasterrstr]];
+                    mongoQuery.error = error;
+                }
             } else {
                 mongoQuery.error = error;
             }
