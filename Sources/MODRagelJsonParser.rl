@@ -434,7 +434,7 @@
             *result = [[[formater dateFromString:[parameters objectAtIndex:0]] retain] autorelease];
             [formater autorelease];
         } else if (parameters.count == 1 && [[parameters objectAtIndex:0] isKindOfClass:NSNumber.class]) {
-            *result = [NSDate dateWithTimeIntervalSince1970:[[parameters objectAtIndex:0] doubleValue]];
+            *result = [NSDate dateWithTimeIntervalSince1970:[[parameters objectAtIndex:0] doubleValue] / 1000.0];
         }
     } else {
         *result = nil;

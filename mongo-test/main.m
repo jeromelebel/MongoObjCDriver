@@ -166,6 +166,8 @@ static void testJson()
     testObjects(@"{\"date\":new Date(0)}", @"{\"date\":new Date(\"1970-01-01T01:00:00+0100\")}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSDate dateWithTimeIntervalSince1970:0], @"date", nil]);
     testObjects(@"{'_id':'hello'}", @"{\"_id\":\"hello\"}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"hello", @"_id", nil]);
     testObjects(@"{\"_id\":ObjectId(\"4e9807f88157f608b4000002\"),\"type\":\"Activity\"}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODObjectId alloc] initWithCString:"4e9807f88157f608b4000002"] autorelease], @"_id", @"Activity", @"type", nil]);
+    testObjects(@"{\"someDate\":new Date(1384297199999)}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSDate dateWithTimeIntervalSince1970:1384297199.999], @"someDate", nil]);
+    testObjects(@"{\"someDate\":new Date(1384297199000)}", @"{\"someDate\":new Date(\"2013-11-12T23:59:59+0100\")}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSDate dateWithTimeIntervalSince1970:1384297199], @"someDate", nil]);
     testObjects(@"{\"minkey\":{\"$minKey\":1}}", @"{\"minkey\":MinKey}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMinKey alloc] init] autorelease], @"minkey", nil]);
     testObjects(@"{\"maxkey\":{\"$maxKey\":1}}", @"{\"maxkey\":MaxKey}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMaxKey alloc] init] autorelease], @"maxkey", nil]);
     testObjects(@"{\"undefined\":{\"$undefined\":true}}", @"{\"undefined\":undefined}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODUndefined alloc] init] autorelease], @"undefined", nil]);

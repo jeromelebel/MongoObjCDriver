@@ -239,7 +239,7 @@
             result = [NSNumber numberWithBool:bson_iterator_bool(iterator) == true];
             break;
         case BSON_DATE:
-            result = [NSDate dateWithTimeIntervalSince1970:bson_iterator_date(iterator) / 1000];
+            result = [NSDate dateWithTimeIntervalSince1970:bson_iterator_date(iterator) / 1000.0];
             break;
         case BSON_NULL:
             result = [NSNull null];
@@ -494,15 +494,17 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         [result appendString:@"\""];
     } else if ([value isKindOfClass:[NSDate class]]) {
         if (useStrictJSON && pretty) {
-            [result appendFormat:@"{ \"$date\": %f }", [value timeIntervalSince1970] * 1000];
+            [result appendFormat:@"{ \"$date\": %lld }", (int64_t)([value timeIntervalSince1970] * 1000)];
         } else if (useStrictJSON) {
-            [result appendFormat:@"{\"$date\":%f}", [value timeIntervalSince1970] * 1000];
-        } else {
+            [result appendFormat:@"{\"$date\":%lld}", (int64_t)([value timeIntervalSince1970] * 1000)];
+        } else if ([value timeIntervalSince1970] == (int64_t)[value timeIntervalSince1970]) {
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             
             [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZ"];
             [result appendFormat:@"new Date(\"%@\")", [formatter stringFromDate:value]];
             [formatter release];
+        } else {
+            [result appendFormat:@"new Date(%lld)", (int64_t)([value timeIntervalSince1970] * 1000)];
         }
     } else if ([value isKindOfClass:[NSNull class]]) {
         [result appendString:@"null"];
