@@ -219,8 +219,13 @@
             
             outputObjects = [[self class] objectFromBson:&output];
             list = [[NSMutableArray alloc] init];
-            for(NSDictionary *element in [outputObjects objectForKey:@"databases"]) {
-                [list addObject:[element objectForKey:@"name"]];
+            for(NSDictionary *databaseInfo in [outputObjects objectForKey:@"databases"]) {
+                if ([databaseInfo objectForKey:@"name"]) {
+                    [list addObject:[databaseInfo objectForKey:@"name"]];
+                } else {
+                    NSLog(@"Database with no name %@", outputObjects);
+                    NSAssert(NO, @"no name");
+                }
             }
             [mongoQuery.mutableParameters setObject:list forKey:@"databaselist"];
         }
