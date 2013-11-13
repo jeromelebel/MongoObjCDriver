@@ -495,9 +495,9 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         [result appendString:@"\""];
     } else if ([value isKindOfClass:[NSDate class]]) {
         if (pretty) {
-            [result appendFormat:@"{ \"$date\": %f }", [value timeIntervalSince1970] * 1000];
+            [result appendFormat:@"{ \"$date\": %lld }", (int64_t)([value timeIntervalSince1970] * 1000.0)];
         } else {
-            [result appendFormat:@"{\"$date\":%f}", [value timeIntervalSince1970] * 1000];
+            [result appendFormat:@"{\"$date\":%lld}", (int64_t)([value timeIntervalSince1970] * 1000.0)];
         }
     } else if ([value isKindOfClass:[NSNull class]]) {
         [result appendString:@"null"];
