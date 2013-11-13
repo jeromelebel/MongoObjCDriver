@@ -166,13 +166,13 @@
     MODQuery *query;
     mongo_host_port hostPort;
     
-    mongo_replset_init(_mongo, [replicaName UTF8String]);
+    mongo_replica_set_init(_mongo, [replicaName UTF8String]);
     for (NSString *host in hosts) {
         mongo_parse_host([host UTF8String], &hostPort);
-        mongo_replset_add_seed(_mongo, hostPort.host, hostPort.port);
+        mongo_replica_set_add_seed(_mongo, hostPort.host, hostPort.port);
     }
     query = [self addQueryInQueue:^(MODQuery *mongoQuery) {
-        if (!mongoQuery.canceled && mongo_replset_connect(_mongo) == MONGO_OK) {
+        if (!mongoQuery.canceled && mongo_replica_set_client(_mongo) == MONGO_OK) {
             [self authenticateSynchronouslyWithDatabaseName:_authDatabase userName:_userName password:_password mongoQuery:mongoQuery];
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
