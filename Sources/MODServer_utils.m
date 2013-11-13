@@ -240,7 +240,7 @@
             result = [NSNumber numberWithBool:bson_iterator_bool(iterator) == true];
             break;
         case BSON_DATE:
-            result = [NSDate dateWithTimeIntervalSince1970:bson_iterator_date(iterator) / 1000];
+            result = [NSDate dateWithTimeIntervalSince1970:bson_iterator_date(iterator) / 1000.0];
             break;
         case BSON_NULL:
             result = [NSNull null];
