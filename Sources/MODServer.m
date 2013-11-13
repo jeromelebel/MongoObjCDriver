@@ -223,8 +223,8 @@
                 if ([databaseInfo objectForKey:@"name"]) {
                     [list addObject:[databaseInfo objectForKey:@"name"]];
                 } else {
+                    // weird to have no name
                     NSLog(@"Database with no name %@", outputObjects);
-                    NSAssert(NO, @"no name");
                 }
             }
             [mongoQuery.mutableParameters setObject:list forKey:@"databaselist"];
