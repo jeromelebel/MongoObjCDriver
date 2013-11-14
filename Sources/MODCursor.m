@@ -95,7 +95,7 @@
     return *error == nil;
 }
 
-- (MODSortedMutableDictionary *)nextDocumentAsynchronouslyWithError:(NSError **)error;
+- (MODSortedMutableDictionary *)nextDocumentWithBsonData:(NSData **)bsonData error:(NSError **)error;
 {
     MODSortedMutableDictionary *result = nil;
     
@@ -109,7 +109,12 @@
     }
     if (!*error) {
         if (mongo_cursor_next(_cursor) == MONGO_OK) {
-            result = [[_mongoCollection.mongoServer class] objectFromBson:&(((mongo_cursor *)_cursor)->current)];
+            mongo_cursor *mongoCursor = (mongo_cursor *)_cursor;
+            
+            result = [[_mongoCollection.mongoServer class] objectFromBson:&(mongoCursor->current)];
+            if (bsonData) {
+                *bsonData = [[[NSData alloc] initWithBytes:mongoCursor->current.data length:bson_size(&mongoCursor->current)] autorelease];
+            }
         } else if (((mongo_cursor *)_cursor)->err != MONGO_CURSOR_EXHAUSTED) {
             NSString *details = nil;
             
@@ -138,7 +143,7 @@
             [mongoQuery.mutableParameters setObject:self forKey:@"cursor"];
             while (!cursorStopped) {
                 documentCount++;
-                document = [self nextDocumentAsynchronouslyWithError:&error];
+                document = [self nextDocumentWithBsonData:nil error:&error];
                 mongoQuery.error = error;
                 if (!document) {
                     break;
