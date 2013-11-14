@@ -61,7 +61,7 @@
     return query;
 }
 
-- (MODQuery *)indexListWithcallback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback
+- (MODQuery *)indexListWithCallback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
