@@ -101,24 +101,26 @@
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         if (!mongoQuery.canceled) {
             NSMutableArray *documents;
-            NSMutableArray *bsonData;
+            NSMutableArray *allBsonData;
+            NSData *bsonData;
             MODCursor *cursor;
             MODSortedMutableDictionary *document;
             NSError *error = nil;
             
             documents = [[NSMutableArray alloc] initWithCapacity:limit];
-            bsonData = [[NSMutableArray alloc] initWithCapacity:limit];
+            allBsonData = [[NSMutableArray alloc] initWithCapacity:limit];
             cursor = [self cursorWithCriteria:jsonCriteria fields:fields skip:skip limit:limit sort:sort];
-            while ((document = [cursor nextDocumentWithBsonData:nil error:&error]) != nil) {
+            while ((document = [cursor nextDocumentWithBsonData:&bsonData error:&error]) != nil) {
                 [documents addObject:document];
+                [allBsonData addObject:bsonData];
             }
             if (error) {
                 mongoQuery.error = error;
             }
             [mongoQuery.mutableParameters setObject:documents forKey:@"documents"];
-            [mongoQuery.mutableParameters setObject:bsonData forKey:@"dataDocuments"];
+            [mongoQuery.mutableParameters setObject:allBsonData forKey:@"dataDocuments"];
             [documents release];
-            [bsonData release];
+            [allBsonData release];
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback([mongoQuery.mutableParameters objectForKey:@"documents"], [mongoQuery.mutableParameters objectForKey:@"dataDocuments"], mongoQuery);
