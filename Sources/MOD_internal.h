@@ -58,7 +58,7 @@ enum {
 @property(nonatomic, readwrite, assign) BOOL donotReleaseCursor;
 
 - (id)initWithMongoCollection:(MODCollection *)mongoCollection;
-- (MODSortedMutableDictionary *)nextDocumentAsynchronouslyWithError:(NSError **)error;
+- (MODSortedMutableDictionary *)nextDocumentWithBsonData:(NSData **)bsonData error:(NSError **)error;
 @end
 
 @interface MODQuery()

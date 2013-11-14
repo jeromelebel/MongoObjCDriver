@@ -311,13 +311,13 @@
 
 + (MODSortedMutableDictionary *)objectFromBson:(bson *)bsonObject
 {
-    bson_iterator iterator;
     MODSortedMutableDictionary *result = nil;
     
     if (bsonObject->data) {
+        bson_iterator iterator;
+        
         result = [[MODSortedMutableDictionary alloc] init];
         bson_iterator_init(&iterator, bsonObject);
-        
         while (bson_iterator_next(&iterator) != BSON_EOO) {
             NSString *key;
             id value;
