@@ -113,7 +113,7 @@
             
             result = [[_mongoCollection.mongoServer class] objectFromBson:&(mongoCursor->current)];
             if (bsonData) {
-                *bsonData = [[[NSData alloc] initWithBytes:mongoCursor->current.data length:mongoCursor->current.dataSize] autorelease];
+                *bsonData = [[[NSData alloc] initWithBytes:mongoCursor->current.data length:bson_size(&mongoCursor->current)] autorelease];
             }
         } else if (((mongo_cursor *)_cursor)->err != MONGO_CURSOR_EXHAUSTED) {
             NSString *details = nil;

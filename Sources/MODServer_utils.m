@@ -618,6 +618,26 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     return [result autorelease];
 }
 
++ (void)compareJson:(NSString *)json bsonData:(NSData *)document
+{
+    bson bsonDocumentFromJson;
+    NSError *error;
+    
+    bson_init(&bsonDocumentFromJson);
+    [MODJsonToBsonParser bsonFromJson:&bsonDocumentFromJson json:json error:&error];
+    bson_finish(&bsonDocumentFromJson);
+    NSAssert(error == nil, @"error with document %@", document);
+    if ([document length] != bson_size(&bsonDocumentFromJson) || memcmp([document bytes], bsonDocumentFromJson.data, [document length]) != 0) {
+        NSLog(@"%@", [NSData dataWithBytes:bsonDocumentFromJson.data length:bson_size(&bsonDocumentFromJson)]);
+        NSLog(@"error with this document %@", document);
+        NSLog(@"json %@", [MODServer convertObjectToJson:[MODServer objectFromBson:&bsonDocumentFromJson] pretty:YES strictJson:NO]);
+        NSAssert([document length] == bson_size(&bsonDocumentFromJson), @"not the same size with %@", document);
+        NSAssert(memcmp([document bytes], bsonDocumentFromJson.data, [document length]) == 0, @"not the same content %@", document);
+    }
+    
+    bson_destroy(&bsonDocumentFromJson);
+}
+
 + (void)compareJson:(NSString *)json document:(id)document
 {
     bson bsonDocument;
