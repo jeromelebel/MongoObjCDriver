@@ -631,7 +631,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     NSError *error;
     
     bson_init(&bsonDocumentFromJson);
-    [MODJsonToBsonParser bsonFromJson:&bsonDocumentFromJson json:json error:&error];
+    [MODRagelJsonParser bsonFromJson:&bsonDocumentFromJson json:json error:&error];
     bson_finish(&bsonDocumentFromJson);
     NSAssert(error == nil, @"error with document %@", document);
     if ([document length] != bson_size(&bsonDocumentFromJson) || memcmp([document bytes], bsonDocumentFromJson.data, [document length]) != 0) {
