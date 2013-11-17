@@ -292,7 +292,7 @@ static void runDatabaseTests(MODServer *server)
     }];
     
     mongoCollection = [mongoDatabase collectionForName:COLLECTION_NAME_TEST];
-    [mongoCollection findWithCriteria:@"{}" fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:@"{ \"_id\": 1 }" callback:^(NSArray *documents, MODQuery *mongoQuery) {
+    [mongoCollection findWithCriteria:@"{}" fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:@"{ \"_id\": 1 }" callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
     [mongoCollection countWithCriteria:@"{ \"_id\": \"xxx\" }" callback:^(int64_t count, MODQuery *mongoQuery) {
@@ -317,11 +317,11 @@ static void runDatabaseTests(MODServer *server)
         assert(count == 1);
         logMongoQuery(mongoQuery);
     }];
-    [mongoCollection findWithCriteria:nil fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:100 sort:nil callback:^(NSArray *documents, MODQuery *mongoQuery) {
+    [mongoCollection findWithCriteria:nil fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:100 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         assert([documents count] == 2);
         logMongoQuery(mongoQuery);
     }];
-    [mongoCollection findWithCriteria:nil fields:nil skip:0 limit:0 sort:nil callback:^(NSArray *documents, MODQuery *mongoQuery) {
+    [mongoCollection findWithCriteria:nil fields:nil skip:0 limit:0 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         assert([documents count] == 3);
         logMongoQuery(mongoQuery);
     }];
@@ -339,7 +339,7 @@ static void runDatabaseTests(MODServer *server)
     [mongoCollection saveWithDocument:@"{\"_id\": \"toto\", \"y\": null}" callback:^(MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
-    [mongoCollection findWithCriteria:@"{\"_id\": \"toto\"}" fields:nil skip:1 limit:5 sort:@"{ \"_id\": 1 }" callback:^(NSArray *documents, MODQuery *mongoQuery) {
+    [mongoCollection findWithCriteria:@"{\"_id\": \"toto\"}" fields:nil skip:1 limit:5 sort:@"{ \"_id\": 1 }" callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
     [mongoCollection removeWithCriteria:@"{\"_id\": \"toto\"}" callback:^(MODQuery *mongoQuery) {
