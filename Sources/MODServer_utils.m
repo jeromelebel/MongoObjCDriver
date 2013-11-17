@@ -625,24 +625,85 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     return [result autorelease];
 }
 
-+ (void)compareJson:(NSString *)json bsonData:(NSData *)document
++ (BOOL)isEqualWithJson:(NSString *)json bsonData:(NSData *)document info:(NSDictionary **)info
 {
-    bson bsonDocumentFromJson;
+    bson jsonBsonDocument;
+    BOOL result;
+    NSMutableDictionary *context = [[[NSMutableDictionary alloc] init] autorelease];
     NSError *error;
     
-    bson_init(&bsonDocumentFromJson);
-    [MODRagelJsonParser bsonFromJson:&bsonDocumentFromJson json:json error:&error];
-    bson_finish(&bsonDocumentFromJson);
-    NSAssert(error == nil, @"error with document %@", document);
-    if ([document length] != bson_size(&bsonDocumentFromJson) || memcmp([document bytes], bsonDocumentFromJson.data, [document length]) != 0) {
-        NSLog(@"%@", [NSData dataWithBytes:bsonDocumentFromJson.data length:bson_size(&bsonDocumentFromJson)]);
-        NSLog(@"error with this document %@", document);
-        NSLog(@"json %@", [MODServer convertObjectToJson:[MODServer objectFromBson:&bsonDocumentFromJson] pretty:YES strictJson:NO]);
-        NSAssert([document length] == bson_size(&bsonDocumentFromJson), @"not the same size with %@", document);
-        NSAssert(memcmp([document bytes], bsonDocumentFromJson.data, [document length]) == 0, @"not the same content %@", document);
+    if (info) {
+        *info = context;
     }
-    
-    bson_destroy(&bsonDocumentFromJson);
+    bson_init(&jsonBsonDocument);
+    [MODRagelJsonParser bsonFromJson:&jsonBsonDocument json:json error:&error];
+    bson_finish(&jsonBsonDocument);
+    if (error) {
+        [context setObject:error forKey:@"error"];
+        result = NO;
+    } else {
+        result = [document length] == bson_size(&jsonBsonDocument) && memcmp([document bytes], jsonBsonDocument.data, [document length]) == 0;
+        if (!error) {
+            bson_iterator originalBsonIterator;
+            bson_iterator jsonBsonIterator;
+            bson_type originalType;
+            bson_type jsonType;
+            id previousOriginalKey = [NSNull null];
+            id previousJsonKey = [NSNull null];
+            NSUInteger index = 0;
+            const void *originalBsonData = document.bytes;
+            const void *jsonBsonData = NULL;
+            
+            [context setObject:[NSData dataWithBytes:jsonBsonDocument.data length:bson_size(&jsonBsonDocument)] forKey:@"bson_from_json"];
+            [context setObject:document forKey:@"original_bson"];
+            [context setObject:[MODServer convertObjectToJson:[MODServer objectFromBson:&jsonBsonDocument] pretty:YES strictJson:NO] forKey:@"json_from_bson"];
+            
+            bson_iterator_from_buffer(&originalBsonIterator, originalBsonData);
+            bson_iterator_init(&jsonBsonIterator, &jsonBsonDocument);
+            while (YES) {
+                id originalKey = [NSNull null];
+                id jsonKey = [NSNull null];
+                
+                originalType = bson_iterator_next(&originalBsonIterator);
+                jsonType = bson_iterator_next(&jsonBsonIterator);
+                if (originalType == BSON_EOO && jsonType == BSON_EOO) {
+                    // we are done
+                    break;
+                }
+                if (jsonBsonData == NULL) {
+                    jsonBsonData = jsonBsonIterator.cur;
+                    originalBsonData = originalBsonIterator.cur;
+                }
+                if (originalType != BSON_EOO) {
+                    originalKey = [NSString stringWithUTF8String:bson_iterator_key(&originalBsonIterator)];
+                }
+                if (jsonType != BSON_EOO) {
+                    jsonKey = [NSString stringWithUTF8String:bson_iterator_key(&jsonBsonIterator)];
+                }
+                if (originalType != jsonType) {
+                    [context setObject:[NSNumber numberWithInteger:originalType] forKey:@"original type"];
+                    [context setObject:[NSNumber numberWithInteger:jsonType] forKey:@"json type"];
+                    [context setObject:[NSNumber numberWithUnsignedLongLong:index] forKey:@"index"];
+                    [context setObject:originalKey forKey:@"original key"];
+                    [context setObject:jsonKey forKey:@"json key"];
+                    break;
+                }
+                if ((const void *)originalBsonIterator.cur - originalBsonData != (const void *)jsonBsonIterator.cur - jsonBsonData || memcmp(jsonBsonData, originalBsonData, (const void *)originalBsonIterator.cur - originalBsonData) != 0) {
+                    [context setObject:[NSNumber numberWithInteger:originalType] forKey:@"original type"];
+                    [context setObject:[NSNumber numberWithInteger:jsonType] forKey:@"json type"];
+                    [context setObject:[NSNumber numberWithUnsignedLongLong:index] forKey:@"index"];
+                    [context setObject:previousOriginalKey forKey:@"original key"];
+                    [context setObject:previousJsonKey forKey:@"json key"];
+                    break;
+                }
+                index++;
+                previousJsonKey = jsonKey;
+                previousOriginalKey = originalKey;
+            }
+        }
+    }
+    bson_destroy(&jsonBsonDocument);
+    return result;
 }
 
 + (void)compareJson:(NSString *)json document:(id)document
