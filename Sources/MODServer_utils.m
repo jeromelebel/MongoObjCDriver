@@ -523,6 +523,8 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
             [result appendString:[value description]];
         } else if (strcmp([value objCType], @encode(double)) == 0) {
             [result appendFormat:@"%.20g", [value doubleValue]];
+        } else if (strcmp([value objCType], @encode(long long)) == 0 || strcmp([value objCType], @encode(unsigned long long)) == 0) {
+            [result appendFormat:@"NumberLong(%@)", [value description]];
         } else {
             [result appendString:[value description]];
         }

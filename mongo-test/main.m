@@ -163,6 +163,8 @@ static void testJson()
     NSError *error;
 //    id value;
     
+    testObjects(@"{\"longlong\":NumberLong(1)}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:1], @"longlong", nil]);
+    testObjects(@"{\"int\":1}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"int", nil]);
     testObjects(@"{\"date\":new Date(0)}", @"{\"date\":new Date(\"1970-01-01T01:00:00+0100\")}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSDate dateWithTimeIntervalSince1970:0], @"date", nil]);
     testObjects(@"{'_id':'hello'}", @"{\"_id\":\"hello\"}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:@"hello", @"_id", nil]);
     testObjects(@"{\"_id\":ObjectId(\"4e9807f88157f608b4000002\"),\"type\":\"Activity\"}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODObjectId alloc] initWithCString:"4e9807f88157f608b4000002"] autorelease], @"_id", @"Activity", @"type", nil]);

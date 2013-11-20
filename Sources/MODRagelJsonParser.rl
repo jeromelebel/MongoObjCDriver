@@ -92,6 +92,8 @@
     begin_regexp        = '/';
     begin_object_id     = 'O';
     object_id_keyword   = 'ObjectId';
+    begin_numberlong    = 'N';
+    numberlong_keyword  = 'NumberLong';
     begin_timestamp     = 'T';
     timestamp_keyword   = 'Timestamp';
     begin_bindata       = 'B';
@@ -168,6 +170,11 @@
         if (np == NULL) { fhold; fbreak; } else fexec np;
     }
     
+    action parse_numberlong {
+        const char *np = [self _parseNumberLongWithPointer:fpc endPointer:pe result:result];
+        if (np == NULL) { fhold; fbreak; } else fexec np;
+    }
+    
     action parse_timestamp {
         const char *np = [self _parseTimestampWithPointer:fpc endPointer:pe result:result];
         if (np == NULL) { fhold; fbreak; } else fexec np;
@@ -215,6 +222,7 @@
         begin_array >parse_array |
         begin_object >parse_object |
         begin_regexp >parse_regexp |
+        begin_numberlong >parse_numberlong |
         begin_timestamp >parse_timestamp |
         begin_bindata >parse_bin_data |
         begin_symbol >parse_symbol |
@@ -260,7 +268,11 @@
         NSString *buffer;
         
         buffer = [[NSString alloc] initWithBytesNoCopy:(void *)memo length:p - memo encoding:NSUTF8StringEncoding freeWhenDone:NO];
-        *result = [NSNumber numberWithLongLong:[buffer longLongValue]];
+        if (buffer.longLongValue > INT_MAX) {
+            *result = [NSNumber numberWithLongLong:buffer.longLongValue];
+        } else {
+            *result = [NSNumber numberWithInt:buffer.intValue];
+        }
         [buffer release];
         return p + 1;
     } else {
@@ -561,6 +573,45 @@
         [self _makeErrorWithMessage:@"cannot find end of regex" atPosition:cursor];
     }
     return cursor;
+}
+
+%%{
+    machine JSON_numberlong;
+    include JSON_common;
+    
+    write data;
+    
+    action parse_numberlong_value {
+        const char *np;
+        np = [self _parseIntegerWithPointer:fpc endPointer:pe result:&numberValue];
+        if (strcmp(numberValue.objCType, @encode(long long)) != 0) {
+            numberValue = [NSNumber numberWithLongLong:numberValue.longLongValue];
+        }
+        np--; // WHY???
+        if (np == NULL) { fhold; fbreak; } else fexec np;
+    }
+    
+    action exit { fhold; fbreak; }
+    
+    main := (numberlong_keyword ignore* '(' ignore* begin_number >parse_numberlong_value ignore* ')') @exit;
+    
+}%%
+
+- (const char *)_parseNumberLongWithPointer:(const char *)p endPointer:(const char *)pe result:(NSNumber **)result
+{
+    NSNumber *numberValue = nil;
+    int cs = 0;
+    
+    %% write init;
+    %% write exec;
+    
+    if (cs >= JSON_numberlong_first_final && numberValue) {
+        *result = numberValue;
+        return p + 1; // why + 1 ???
+    } else {
+        *result = nil;
+        return NULL;
+    }
 }
 
 %%{
