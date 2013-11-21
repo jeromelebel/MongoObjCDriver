@@ -660,6 +660,8 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
             NSUInteger index = 0;
             const void *originalBsonData = document.bytes;
             const void *jsonBsonData = NULL;
+            const void *originalValueDataStart;
+            const void *jsonValueDataStart;
             
             [context setObject:[NSData dataWithBytes:jsonBsonDocument.data length:bson_size(&jsonBsonDocument)] forKey:@"bson_from_json"];
             [context setObject:document forKey:@"original_bson"];
@@ -679,7 +681,9 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
                 }
                 if (jsonBsonData == NULL) {
                     jsonBsonData = jsonBsonIterator.cur;
+                    jsonValueDataStart = jsonBsonDocument.data;
                     originalBsonData = originalBsonIterator.cur;
+                    originalValueDataStart = originalBsonData;
                 }
                 if (originalType != BSON_EOO) {
                     originalKey = [NSString stringWithUTF8String:bson_iterator_key(&originalBsonIterator)];
@@ -699,6 +703,8 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
                     [context setObject:[NSNumber numberWithInteger:originalType] forKey:@"original type"];
                     [context setObject:[NSNumber numberWithInteger:jsonType] forKey:@"json type"];
                     [context setObject:[NSNumber numberWithUnsignedLongLong:index] forKey:@"index"];
+                    [context setObject:[NSData dataWithBytes:jsonValueDataStart length:(const void *)jsonBsonIterator.cur - jsonValueDataStart] forKey:@"json data"];
+                    [context setObject:[NSData dataWithBytes:originalValueDataStart length:(const void *)originalBsonIterator.cur - originalValueDataStart] forKey:@"original data"];
                     [context setObject:previousOriginalKey forKey:@"original key"];
                     [context setObject:previousJsonKey forKey:@"json key"];
                     break;
@@ -706,6 +712,8 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
                 index++;
                 previousJsonKey = jsonKey;
                 previousOriginalKey = originalKey;
+                jsonValueDataStart = jsonBsonIterator.cur;
+                originalValueDataStart = originalBsonIterator.cur;
             }
         }
     }
