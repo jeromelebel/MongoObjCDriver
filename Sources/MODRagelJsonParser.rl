@@ -268,7 +268,7 @@
         NSString *buffer;
         
         buffer = [[NSString alloc] initWithBytesNoCopy:(void *)memo length:p - memo encoding:NSUTF8StringEncoding freeWhenDone:NO];
-        if (buffer.longLongValue > INT_MAX) {
+        if (buffer.longLongValue > INT_MAX || buffer.longLongValue < INT_MIN) {
             *result = [NSNumber numberWithLongLong:buffer.longLongValue];
         } else {
             *result = [NSNumber numberWithInt:buffer.intValue];
