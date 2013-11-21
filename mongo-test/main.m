@@ -159,10 +159,9 @@ static void testBsonArrayIndex(bson *bsonObject)
 
 static void testJson()
 {
-//    MODRagelJsonParser *parser;
     NSError *error;
-//    id value;
     
+    testObjects(@"{\"double\":1.0}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:1], @"double", nil]);
     testObjects(@"{\"longlong\":NumberLong(1)}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:1], @"longlong", nil]);
     testObjects(@"{\"int\":1}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"int", nil]);
     testObjects(@"{\"date\":new Date(0)}", @"{\"date\":new Date(\"1970-01-01T01:00:00+0100\")}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSDate dateWithTimeIntervalSince1970:0], @"date", nil]);
