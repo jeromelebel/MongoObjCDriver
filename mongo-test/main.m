@@ -160,6 +160,7 @@ static void testJson()
     NSError *error;
     id value;
     
+    testObjects(@"{\"double\":1.0}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:1], @"double", nil]);
     testObjects(@"{\"someDate\":{\"$date\":1384297199999}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSDate dateWithTimeIntervalSince1970:1384297199.999], @"someDate", nil]);
     testObjects(@"{\"minkey\":{\"$minKey\":1}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMinKey alloc] init] autorelease], @"minkey", nil]);
     testObjects(@"{\"maxkey\":{\"$maxKey\":1}}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODMaxKey alloc] init] autorelease], @"maxkey", nil]);

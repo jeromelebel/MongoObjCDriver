@@ -512,10 +512,15 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
             } else {
                 [result appendString:@"false"];
             }
-        } else if (strcmp([value objCType], @encode(float)) == 0) {
-            [result appendString:[value description]];
-        } else if (strcmp([value objCType], @encode(double)) == 0) {
-            [result appendFormat:@"%.20g", [value doubleValue]];
+        } else if (strcmp([value objCType], @encode(double)) == 0 || strcmp([value objCType], @encode(float)) == 0) {
+            NSMutableString *stringValue;
+          
+            // make sure a double always ends with .0 (at least)
+            stringValue = [NSMutableString stringWithFormat:@"%.20g", [value doubleValue]];
+            if ([stringValue rangeOfString:@"."].location == NSNotFound) {
+                [stringValue appendString:@".0"];
+            }
+            [result appendString:stringValue];
         } else {
             [result appendString:[value description]];
         }
