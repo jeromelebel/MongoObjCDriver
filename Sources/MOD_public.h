@@ -21,4 +21,5 @@
 #import "MODMaxKey.h"
 #import "MODSortedMutableDictionary.h"
 #import "MODUndefined.h"
+#import "MODBsonComparator.h"
 #import "MODRagelJsonParser.h"

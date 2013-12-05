@@ -649,73 +649,15 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         [context setObject:error forKey:@"error"];
         result = NO;
     } else {
-        result = [document length] == bson_size(&jsonBsonDocument) && memcmp([document bytes], jsonBsonDocument.data, [document length]) == 0;
-        if (!error) {
-            bson_iterator originalBsonIterator;
-            bson_iterator jsonBsonIterator;
-            bson_type originalType;
-            bson_type jsonType;
-            id previousOriginalKey = [NSNull null];
-            id previousJsonKey = [NSNull null];
-            NSUInteger index = 0;
-            const void *originalBsonData = document.bytes;
-            const void *jsonBsonData = NULL;
-            const void *originalValueDataStart;
-            const void *jsonValueDataStart;
-            
-            [context setObject:[NSData dataWithBytes:jsonBsonDocument.data length:bson_size(&jsonBsonDocument)] forKey:@"bson_from_json"];
-            [context setObject:document forKey:@"original_bson"];
-            [context setObject:[MODServer convertObjectToJson:[MODServer objectFromBson:&jsonBsonDocument] pretty:YES strictJson:NO] forKey:@"json_from_bson"];
-            
-            bson_iterator_from_buffer(&originalBsonIterator, originalBsonData);
-            bson_iterator_init(&jsonBsonIterator, &jsonBsonDocument);
-            while (YES) {
-                id originalKey = [NSNull null];
-                id jsonKey = [NSNull null];
-                
-                originalType = bson_iterator_next(&originalBsonIterator);
-                jsonType = bson_iterator_next(&jsonBsonIterator);
-                if (originalType == BSON_EOO && jsonType == BSON_EOO) {
-                    // we are done
-                    break;
-                }
-                if (jsonBsonData == NULL) {
-                    jsonBsonData = jsonBsonIterator.cur;
-                    jsonValueDataStart = jsonBsonDocument.data;
-                    originalBsonData = originalBsonIterator.cur;
-                    originalValueDataStart = originalBsonData;
-                }
-                if (originalType != BSON_EOO) {
-                    originalKey = [NSString stringWithUTF8String:bson_iterator_key(&originalBsonIterator)];
-                }
-                if (jsonType != BSON_EOO) {
-                    jsonKey = [NSString stringWithUTF8String:bson_iterator_key(&jsonBsonIterator)];
-                }
-                if (originalType != jsonType) {
-                    [context setObject:[NSNumber numberWithInteger:originalType] forKey:@"original type"];
-                    [context setObject:[NSNumber numberWithInteger:jsonType] forKey:@"json type"];
-                    [context setObject:[NSNumber numberWithUnsignedLongLong:index] forKey:@"index"];
-                    [context setObject:originalKey forKey:@"original key"];
-                    [context setObject:jsonKey forKey:@"json key"];
-                    break;
-                }
-                if ((const void *)originalBsonIterator.cur - originalBsonData != (const void *)jsonBsonIterator.cur - jsonBsonData || memcmp(jsonBsonData, originalBsonData, (const void *)originalBsonIterator.cur - originalBsonData) != 0) {
-                    [context setObject:[NSNumber numberWithInteger:originalType] forKey:@"original type"];
-                    [context setObject:[NSNumber numberWithInteger:jsonType] forKey:@"json type"];
-                    [context setObject:[NSNumber numberWithUnsignedLongLong:index] forKey:@"index"];
-                    [context setObject:[NSData dataWithBytes:jsonValueDataStart length:(const void *)jsonBsonIterator.cur - jsonValueDataStart] forKey:@"json data"];
-                    [context setObject:[NSData dataWithBytes:originalValueDataStart length:(const void *)originalBsonIterator.cur - originalValueDataStart] forKey:@"original data"];
-                    [context setObject:previousOriginalKey forKey:@"original key"];
-                    [context setObject:previousJsonKey forKey:@"json key"];
-                    break;
-                }
-                index++;
-                previousJsonKey = jsonKey;
-                previousOriginalKey = originalKey;
-                jsonValueDataStart = jsonBsonIterator.cur;
-                originalValueDataStart = originalBsonIterator.cur;
-            }
-        }
+        MODBsonComparator *comparator;
+        bson originalBson;
+        
+        bson_init_finished_data(&originalBson, document.bytes, 0);
+        comparator = [[MODBsonComparator alloc] initWithBson1:&jsonBsonDocument bson2:&originalBson];
+        [comparator compare];
+        [context setObject:comparator.differences forKey:@"differences"];
+        [comparator release];
+        bson_destroy(&originalBson);
     }
     bson_destroy(&jsonBsonDocument);
     return result;

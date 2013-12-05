@@ -92,6 +92,9 @@
 		02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
 		02AB057814296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
 		02ABA1C414103B37000417F4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C314103B37000417F4 /* Cocoa.framework */; };
+		02B17F35184FF2E500362A27 /* MODBsonComparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B17F33184FF2E500362A27 /* MODBsonComparator.h */; };
+		02B17F36184FF2E500362A27 /* MODBsonComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B17F34184FF2E500362A27 /* MODBsonComparator.m */; };
+		02B17F37184FF2E500362A27 /* MODBsonComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B17F34184FF2E500362A27 /* MODBsonComparator.m */; };
 		02B24273147D1BD6008A15A3 /* MODSortedMutableDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B24271147D1BD6008A15A3 /* MODSortedMutableDictionary.h */; };
 		02B24274147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */; };
 		02B24275147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */; };
@@ -322,6 +325,8 @@
 		02ABA1CB14103B37000417F4 /* mongo-objc-driver-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "mongo-objc-driver-Info.plist"; sourceTree = "<group>"; };
 		02ABA1CD14103B37000417F4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		02AC8DF6151C6B8F00F7531B /* env.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = env.h; sourceTree = "<group>"; };
+		02B17F33184FF2E500362A27 /* MODBsonComparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODBsonComparator.h; sourceTree = "<group>"; };
+		02B17F34184FF2E500362A27 /* MODBsonComparator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODBsonComparator.m; sourceTree = "<group>"; };
 		02B24271147D1BD6008A15A3 /* MODSortedMutableDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODSortedMutableDictionary.h; sourceTree = "<group>"; };
 		02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODSortedMutableDictionary.m; sourceTree = "<group>"; };
 		02BDC3E5141D6073000EF755 /* MODCursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODCursor.h; sourceTree = "<group>"; };
@@ -662,6 +667,8 @@
 				02A85F4F14103EA6004F3FE9 /* MODServer.h */,
 				02A85F5014103EA6004F3FE9 /* MODServer.m */,
 				02BDC3EB141D83A7000EF755 /* MODServer_utils.m */,
+				02B17F33184FF2E500362A27 /* MODBsonComparator.h */,
+				02B17F34184FF2E500362A27 /* MODBsonComparator.m */,
 				02688DDA14119CF50014ED51 /* MODDatabase.h */,
 				02688DDB14119CF50014ED51 /* MODDatabase.m */,
 				02688DE01411C5010014ED51 /* MODCollection.h */,
@@ -741,6 +748,7 @@
 				02A85F60141080A2004F3FE9 /* encoding.h in Headers */,
 				02A85F61141080A2004F3FE9 /* gridfs.h in Headers */,
 				02A85F62141080A2004F3FE9 /* md5.h in Headers */,
+				02B17F35184FF2E500362A27 /* MODBsonComparator.h in Headers */,
 				02A85F63141080A2004F3FE9 /* mongo.h in Headers */,
 				02688DDC14119CF50014ED51 /* MODDatabase.h in Headers */,
 				02688DE21411C5010014ED51 /* MODCollection.h in Headers */,
@@ -951,6 +959,7 @@
 				022F8C54169B5EF20024D20C /* env.c in Sources */,
 				02DB18AC172C8C5A00B26EAE /* NSData+Base64.m in Sources */,
 				02DB18B0172C8C9700B26EAE /* NSString+Base64.m in Sources */,
+				02B17F36184FF2E500362A27 /* MODBsonComparator.m in Sources */,
 				027A1DA31767E91F0048AD60 /* MODMaxKey.m in Sources */,
 				027A1DA61767E91F0048AD60 /* MODMinKey.m in Sources */,
 				027A1DA91767E91F0048AD60 /* MODUndefined.m in Sources */,
@@ -989,6 +998,7 @@
 				02DB18B2172C8E0700B26EAE /* NSString+Base64.m in Sources */,
 				027A1DA41767E91F0048AD60 /* MODMaxKey.m in Sources */,
 				027A1DA71767E91F0048AD60 /* MODMinKey.m in Sources */,
+				02B17F37184FF2E500362A27 /* MODBsonComparator.m in Sources */,
 				027A1DAA1767E91F0048AD60 /* MODUndefined.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

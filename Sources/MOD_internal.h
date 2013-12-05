@@ -84,3 +84,7 @@ enum {
 @interface MODRagelJsonParser (private)
 + (void)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error;
 @end
+
+@interface MODBsonComparator (Private)
+- (id)initWithBson1:(bson *)bson1 bson2:(bson *)bson2;
+@end
