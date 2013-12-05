@@ -41,6 +41,8 @@ typedef struct __BsonComparatorStack {
 
 @implementation MODBsonComparator
 
+@synthesize bson1 = _bson1, bson2 = _bson2, differences = _differences;
+
 - (id)initWithBsonData1:(NSData *)bson1 bsonData2:(NSData *)bson2
 {
     self = [self init];
@@ -171,9 +173,9 @@ typedef struct __BsonComparatorStack {
             NSString *newPrefix;
             
             if (prefix) {
-                newPrefix = [[NSString alloc] initWithFormat:@"%@.%ld", prefix, ii];
+                newPrefix = [[NSString alloc] initWithFormat:@"%@.%d", prefix, (int)ii];
             } else {
-                newPrefix = [[NSString alloc] initWithFormat:@"%ld", ii];
+                newPrefix = [[NSString alloc] initWithFormat:@"%d", (int)ii];
             }
             result = [self compareValueWithStack:stack prefix:newPrefix];
             [newPrefix release];
