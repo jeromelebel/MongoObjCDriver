@@ -92,3 +92,7 @@ enum {
 - (void)setBson:(bson *)bson;
 - (BOOL)isMainObjectArray;
 @end
+
+@interface MODBsonComparator (Private)
+- (id)initWithBson1:(bson *)bson1 bson2:(bson *)bson2;
+@end

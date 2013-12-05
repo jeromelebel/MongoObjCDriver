@@ -22,3 +22,4 @@
 #import "MODMaxKey.h"
 #import "MODSortedMutableDictionary.h"
 #import "MODUndefined.h"
+#import "MODBsonComparator.h"

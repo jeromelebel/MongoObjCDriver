@@ -10,6 +10,7 @@
 #import "MOD_internal.h"
 #import "NSData+Base64.h"
 #import "NSString+Base64.h"
+#import "MODBsonComparator.h"
 
 #define DATABASE_NAME_TEST @"database_test"
 #define COLLECTION_NAME_TEST @"collection_test"
@@ -358,12 +359,72 @@ static void removeTestDatabaseAndRunTests(MODServer *server)
     }];
 }
 
+static void testCompareIdenticalBson(NSString *json)
+{
+    bson bsonResult;
+    NSError *error;
+    MODBsonComparator *comparator;
+    
+    bson_init(&bsonResult);
+    [MODJsonToBsonParser bsonFromJson:&bsonResult json:json error:&error];
+    assert(error == nil);
+    bson_finish(&bsonResult);
+    comparator = [[MODBsonComparator alloc] initWithBson1:&bsonResult bson2:&bsonResult];
+    if (![comparator compare]) {
+        assert([comparator compare]);
+    }
+    [comparator release];
+    NSLog(@"%@ compare ok", json);
+}
+
+static void testCompareDifferentBson(NSString *json1, NSString *json2, NSArray *differences)
+{
+    bson bson1;
+    bson bson2;
+    NSError *error;
+    MODBsonComparator *comparator;
+    
+    bson_init(&bson1);
+    [MODJsonToBsonParser bsonFromJson:&bson1 json:json1 error:&error];
+    assert(error == nil);
+    bson_finish(&bson1);
+    bson_init(&bson2);
+    [MODJsonToBsonParser bsonFromJson:&bson2 json:json2 error:&error];
+    assert(error == nil);
+    bson_finish(&bson2);
+    comparator = [[MODBsonComparator alloc] initWithBson1:&bson1 bson2:&bson2];
+    if ([comparator compare]) {
+        NSLog(@"%@", json1);
+        NSLog(@"%@", json2);
+        assert(![comparator compare]);
+    }
+    if (![comparator.differences isEqualToArray:differences]) {
+        NSLog(@"%@", comparator.differences);
+        NSLog(@"%@", differences);
+        assert(![comparator.differences isEqualToArray:differences]);
+    }
+    NSLog(@"Different: %@ %@", json1, json2);
+    [comparator release];
+}
+
+static void testCompareBson(void)
+{
+    testCompareIdenticalBson(@"{\"teest\":1}");
+    testCompareIdenticalBson(@"{}");
+    testCompareIdenticalBson(@"{\"teest\": [1, 2, 3]}");
+    testCompareDifferentBson(@"{\"test\":[1, 2, 3]}", @"{\"test\":[1, 2, 2]}", @[ @"test.2" ]);
+    testCompareDifferentBson(@"{\"test\":{\"x\":2}}", @"{\"test\":{\"x\":3}}", @[ @"test.x" ]);
+    testCompareDifferentBson(@"{\"test\":2}", @"{\"test\":1}", @[ @"test" ]);
+    testCompareDifferentBson(@"{}", @"{\"test\":2}", @[ @"*" ]);
+}
+
 int main (int argc, const char * argv[])
 {
     @autoreleasepool {
         const char *ip;
         MODServer *server = nil;
 
+        testCompareBson();
         testBase64();
         testTypes();
         testJson();
