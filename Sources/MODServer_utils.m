@@ -652,7 +652,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         MODBsonComparator *comparator;
         bson originalBson;
         
-        bson_init_finished_data(&originalBson, document.bytes, 0);
+        bson_init_finished_data(&originalBson, (void *)document.bytes, 0);
         comparator = [[MODBsonComparator alloc] initWithBson1:&jsonBsonDocument bson2:&originalBson];
         [comparator compare];
         [context setObject:comparator.differences forKey:@"differences"];
