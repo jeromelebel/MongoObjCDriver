@@ -217,6 +217,14 @@
                 bson_init(data[ii]);
                 if ([document isKindOfClass:[NSString class]]) {
                     [MODRagelJsonParser bsonFromJson:data[ii] json:document error:&error];
+                    if (error) {
+                        NSMutableDictionary *userInfo;
+                        
+                        userInfo = error.userInfo.mutableCopy;
+                        [userInfo setObject:[NSNumber numberWithInteger:ii] forKey:@"documentIndex"];
+                        error = [NSError errorWithDomain:error.domain code:error.code userInfo:userInfo];
+                        [userInfo release];
+                    }
                 } else if ([document isKindOfClass:[MODSortedMutableDictionary class]]) {
                     [[_mongoDatabase.mongoServer class] appendObject:document toBson:data[ii]];
                 }
