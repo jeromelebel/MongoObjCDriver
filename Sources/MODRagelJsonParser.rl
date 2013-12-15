@@ -690,6 +690,25 @@
     }
 }
 
+- (const char *)_parseWordWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(NSString **)result
+{
+    NSString *buffer;
+    NSMutableString *mutableResult;
+    const char *cursor;
+    NSCharacterSet *wordCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890_$#"];
+    
+    mutableResult = [[NSMutableString alloc] init];
+    cursor = string;
+    while (cursor < stringEnd && [wordCharacterSet characterIsMember:cursor[0]]) {
+        cursor++;
+    }
+    buffer = [[NSString alloc] initWithBytesNoCopy:(void *)string length:cursor - string encoding:NSUTF8StringEncoding freeWhenDone:NO];
+    *result = buffer;
+    [buffer autorelease];
+    cursor++;
+    return cursor;
+}
+
 - (const char *)_parseStringWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(NSString **)result
 {
     NSMutableString *mutableResult;
