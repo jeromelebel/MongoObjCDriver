@@ -375,7 +375,7 @@ static void testCompareIdenticalBson(NSString *json)
     MODBsonComparator *comparator;
     
     bson_init(&bsonResult);
-    [MODJsonToBsonParser bsonFromJson:&bsonResult json:json error:&error];
+    [MODRagelJsonParser bsonFromJson:&bsonResult json:json error:&error];
     assert(error == nil);
     bson_finish(&bsonResult);
     comparator = [[MODBsonComparator alloc] initWithBson1:&bsonResult bson2:&bsonResult];
@@ -394,11 +394,11 @@ static void testCompareDifferentBson(NSString *json1, NSString *json2, NSArray *
     MODBsonComparator *comparator;
     
     bson_init(&bson1);
-    [MODJsonToBsonParser bsonFromJson:&bson1 json:json1 error:&error];
+    [MODRagelJsonParser bsonFromJson:&bson1 json:json1 error:&error];
     assert(error == nil);
     bson_finish(&bson1);
     bson_init(&bson2);
-    [MODJsonToBsonParser bsonFromJson:&bson2 json:json2 error:&error];
+    [MODRagelJsonParser bsonFromJson:&bson2 json:json2 error:&error];
     assert(error == nil);
     bson_finish(&bson2);
     comparator = [[MODBsonComparator alloc] initWithBson1:&bson1 bson2:&bson2];
