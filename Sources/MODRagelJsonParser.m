@@ -2669,7 +2669,9 @@ _again:
             [self _makeErrorWithMessage:@"unexpected token" atPosition:p];
         }
     }
-    *error = self.error;
+    if (error) {
+        *error = self.error;
+    }
     return result;
 }
 
