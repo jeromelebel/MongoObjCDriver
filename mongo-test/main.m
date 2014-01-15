@@ -161,7 +161,10 @@ static void testBsonArrayIndex(bson *bsonObject)
 static void testJson()
 {
     NSError *error;
-    
+  
+    // more digit for the json, but that's ok
+    testObjects(@"{\"number\":0.7868957519531251}", @"{\"number\":0.78689575195312511102}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:0.7868957519531251], @"number", nil]);
+    testObjects(@"{\"number\":0.786895751953125}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:0.786895751953125], @"number", nil]);
     testObjects(@"{\"int\":1}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"int", nil]);
     testObjects(@"{\"double\":1.0}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:1], @"double", nil]);
     testObjects(@"{\"longlong\":NumberLong(1)}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithLongLong:1], @"longlong", nil]);
