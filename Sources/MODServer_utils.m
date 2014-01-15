@@ -685,7 +685,13 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     
     convertedDocument = [MODRagelJsonParser objectsFromJson:json withError:&error];
     NSAssert(error == nil, @"Error while parsing to objects %@, %@", json, error);
-    NSAssert([document isEqual:convertedDocument], @"Error to conver json %@ to %@ (got %@)", json, document, convertedDocument);
+    if (![document isEqual:convertedDocument]) {
+        NSLog(@"%@", [MODServer findAllDifferencesInObject1:document object2:convertedDocument]);
+        NSLog(@"%@", [MODServer convertObjectToJson:convertedDocument pretty:YES strictJson:NO]);
+        NSLog(@"%@", json);
+        NSLog(@"%@", [MODServer convertObjectToJson:document pretty:YES strictJson:NO]);
+        NSAssert([document isEqual:convertedDocument], @"Error to parse values with %@ document id %@", [MODServer findAllDifferencesInObject1:document object2:convertedDocument], [document objectForKey:@"_id"]);
+    }
 }
 
 + (NSArray *)findAllDifferencesInArray1:(NSArray *)array1 array2:(NSArray *)array2
