@@ -11,6 +11,7 @@
 #import "NSData+Base64.h"
 #import "NSString+Base64.h"
 #import "MODBsonComparator.h"
+#import "MODDocumentComparator.h"
 
 #define DATABASE_NAME_TEST @"database_test"
 #define COLLECTION_NAME_TEST @"collection_test"
@@ -430,12 +431,67 @@ static void testCompareBson(void)
     testCompareDifferentBson(@"{}", @"{\"test\":2}", @[ @"*" ]);
 }
 
+static void testCompareIdenticalDocument(NSString *json)
+{
+    id document;
+    NSError *error;
+    MODDocumentComparator *comparator;
+    
+    document = [MODRagelJsonParser objectsFromJson:json withError:&error];
+    assert(error == nil);
+    
+    comparator = [[MODDocumentComparator alloc] initWithDocument1:document document2:document];
+    if (![comparator compare]) {
+        assert([comparator compare]);
+    }
+    [comparator release];
+    NSLog(@"%@ compare ok", json);
+}
+
+static void testCompareDifferentDocument(NSString *json1, NSString *json2, NSArray *differences)
+{
+    id document1, document2;
+    NSError *error;
+    MODDocumentComparator *comparator;
+    
+    document1 = [MODRagelJsonParser objectsFromJson:json1 withError:&error];
+    assert(error == nil);
+    document2 = [MODRagelJsonParser objectsFromJson:json2 withError:&error];
+    assert(error == nil);
+    
+    comparator = [[MODDocumentComparator alloc] initWithDocument1:document1 document2:document2];
+    if ([comparator compare]) {
+        NSLog(@"%@", json1);
+        NSLog(@"%@", json2);
+        assert(![comparator compare]);
+    }
+    if (![comparator.differences isEqualToArray:differences]) {
+        NSLog(@"%@", comparator.differences);
+        NSLog(@"%@", differences);
+        assert(![comparator.differences isEqualToArray:differences]);
+    }
+    NSLog(@"Different: %@ %@", json1, json2);
+    [comparator release];
+}
+
+static void testCompareDocument(void)
+{
+    testCompareIdenticalDocument(@"{\"teest\":1}");
+    testCompareIdenticalDocument(@"{}");
+    testCompareIdenticalDocument(@"{\"teest\": [1, 2, 3]}");
+    testCompareDifferentDocument(@"{\"test\":[1, 2, 3]}", @"{\"test\":[1, 2, 2]}", @[ @"test.2" ]);
+    testCompareDifferentDocument(@"{\"test\":{\"x\":2}}", @"{\"test\":{\"x\":3}}", @[ @"test.x" ]);
+    testCompareDifferentDocument(@"{\"test\":2}", @"{\"test\":1}", @[ @"test" ]);
+    testCompareDifferentDocument(@"{}", @"{\"test\":2}", @[ @"*" ]);
+}
+
 int main (int argc, const char * argv[])
 {
     @autoreleasepool {
         const char *ip;
         MODServer *server = nil;
 
+        testCompareDocument();
         testCompareBson();
         testBase64();
         testTypes();

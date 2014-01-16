@@ -632,7 +632,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     return [result autorelease];
 }
 
-+ (BOOL)isEqualWithJson:(NSString *)json bsonData:(NSData *)document info:(NSDictionary **)info
++ (BOOL)isEqualWithJson:(NSString *)json toBsonData:(NSData *)document info:(NSDictionary **)info
 {
     bson jsonBsonDocument;
     BOOL result;
@@ -663,28 +663,12 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     return result;
 }
 
-+ (BOOL)isEqualWithJson:(NSString *)json document:(id)document info:(NSDictionary **)info
++ (BOOL)isEqualWithJson:(NSString *)json toDocument:(id)document info:(NSDictionary **)info
 {
-    bson bsonDocument;
     NSError *error;
     id convertedDocument;
     BOOL result = YES;
   
-    bson_init(&bsonDocument);
-    [MODRagelJsonParser bsonFromJson:&bsonDocument json:json error:&error];
-    bson_finish(&bsonDocument);
-    NSAssert(error == nil, @"Error while parsing to bson %@, %@", json, error);
-    convertedDocument = [MODServer objectFromBson:&bsonDocument];
-    if (![document isEqual:convertedDocument]) {
-        NSLog(@"%@", [MODServer findAllDifferencesInObject1:document object2:convertedDocument]);
-        NSLog(@"%@", [MODServer convertObjectToJson:convertedDocument pretty:YES strictJson:NO]);
-        NSLog(@"%@", json);
-        NSLog(@"%@", [MODServer convertObjectToJson:document pretty:YES strictJson:NO]);
-//        NSAssert([document isEqual:convertedDocument], @"Error to parse values with %@ document id %@", [MODServer findAllDifferencesInObject1:document object2:convertedDocument], [document objectForKey:@"_id"]);
-        result = NO;
-    }
-    bson_destroy(&bsonDocument);
-    
     convertedDocument = [MODRagelJsonParser objectsFromJson:json withError:&error];
     NSAssert(error == nil, @"Error while parsing to objects %@, %@", json, error);
     if (![document isEqual:convertedDocument]) {

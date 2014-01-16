@@ -29,6 +29,7 @@
 - (void)removeObjectForKey:(id)aKey;
 - (id)objectForKey:(id)aKey;
 - (void)setObject:(id)anObject forKey:(id)aKey;
+- (NSEnumerator *)keyEnumerator;
 
 - (id)tengenJsonEncodedObject;
 

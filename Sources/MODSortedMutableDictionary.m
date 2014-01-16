@@ -168,6 +168,11 @@
     return NO;
 }
 
+- (NSEnumerator *)keyEnumerator
+{
+    return [_sortedKeys objectEnumerator];
+}
+
 - (NSUInteger)count
 {
     return [_content count];

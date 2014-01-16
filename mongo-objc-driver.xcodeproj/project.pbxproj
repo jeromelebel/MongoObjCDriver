@@ -48,6 +48,9 @@
 		02411AB91432D02700A5FFCA /* MODBinary.h in Headers */ = {isa = PBXBuildFile; fileRef = 02411AB71432D02600A5FFCA /* MODBinary.h */; };
 		02411ABA1432D02700A5FFCA /* MODBinary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02411AB81432D02600A5FFCA /* MODBinary.m */; };
 		02411ABB1432D02700A5FFCA /* MODBinary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02411AB81432D02600A5FFCA /* MODBinary.m */; };
+		024B0C071887DFBF00B8DCE6 /* MODDocumentComparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 024B0C051887DFBF00B8DCE6 /* MODDocumentComparator.h */; };
+		024B0C081887DFBF00B8DCE6 /* MODDocumentComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 024B0C061887DFBF00B8DCE6 /* MODDocumentComparator.m */; };
+		024B0C091887DFBF00B8DCE6 /* MODDocumentComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 024B0C061887DFBF00B8DCE6 /* MODDocumentComparator.m */; };
 		025C56201433E7E40064B010 /* MODDBRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 025C561E1433E7E40064B010 /* MODDBRef.m */; };
 		025C56211433E7E40064B010 /* MODDBRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 025C561F1433E7E40064B010 /* MODDBRef.h */; };
 		025C56231433EE0E0064B010 /* MODDBRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 025C561E1433E7E40064B010 /* MODDBRef.m */; };
@@ -229,6 +232,8 @@
 		02411AB41432B8F900A5FFCA /* MOD_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOD_public.h; sourceTree = "<group>"; };
 		02411AB71432D02600A5FFCA /* MODBinary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODBinary.h; sourceTree = "<group>"; };
 		02411AB81432D02600A5FFCA /* MODBinary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODBinary.m; sourceTree = "<group>"; };
+		024B0C051887DFBF00B8DCE6 /* MODDocumentComparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODDocumentComparator.h; sourceTree = "<group>"; };
+		024B0C061887DFBF00B8DCE6 /* MODDocumentComparator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODDocumentComparator.m; sourceTree = "<group>"; };
 		025C561E1433E7E40064B010 /* MODDBRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODDBRef.m; sourceTree = "<group>"; };
 		025C561F1433E7E40064B010 /* MODDBRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODDBRef.h; sourceTree = "<group>"; };
 		02688DDA14119CF50014ED51 /* MODDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODDatabase.h; sourceTree = "<group>"; };
@@ -669,6 +674,8 @@
 				02BDC3EB141D83A7000EF755 /* MODServer_utils.m */,
 				02B17F33184FF2E500362A27 /* MODBsonComparator.h */,
 				02B17F34184FF2E500362A27 /* MODBsonComparator.m */,
+				024B0C051887DFBF00B8DCE6 /* MODDocumentComparator.h */,
+				024B0C061887DFBF00B8DCE6 /* MODDocumentComparator.m */,
 				02688DDA14119CF50014ED51 /* MODDatabase.h */,
 				02688DDB14119CF50014ED51 /* MODDatabase.m */,
 				02688DE01411C5010014ED51 /* MODCollection.h */,
@@ -745,6 +752,7 @@
 				02A85F5914104184004F3FE9 /* MODQuery.h in Headers */,
 				02A85F5D14104373004F3FE9 /* MOD_internal.h in Headers */,
 				02A85F5F1410809F004F3FE9 /* bson.h in Headers */,
+				024B0C071887DFBF00B8DCE6 /* MODDocumentComparator.h in Headers */,
 				02A85F60141080A2004F3FE9 /* encoding.h in Headers */,
 				02A85F61141080A2004F3FE9 /* gridfs.h in Headers */,
 				02A85F62141080A2004F3FE9 /* md5.h in Headers */,
@@ -955,6 +963,7 @@
 				025C56201433E7E40064B010 /* MODDBRef.m in Sources */,
 				02B24274147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */,
 				023ECFFD14851BEE00185781 /* MODSymbol.m in Sources */,
+				024B0C081887DFBF00B8DCE6 /* MODDocumentComparator.m in Sources */,
 				022F8C52169B5EF20024D20C /* bcon.c in Sources */,
 				022F8C54169B5EF20024D20C /* env.c in Sources */,
 				02DB18AC172C8C5A00B26EAE /* NSData+Base64.m in Sources */,
@@ -985,6 +994,7 @@
 				02688DE41411C5010014ED51 /* MODCollection.m in Sources */,
 				02BDC3EA141D6938000EF755 /* MODCursor.m in Sources */,
 				02BDC3ED141D83A7000EF755 /* MODServer_utils.m in Sources */,
+				024B0C091887DFBF00B8DCE6 /* MODDocumentComparator.m in Sources */,
 				02AB057814296F9000B7CD19 /* MODObjectId.m in Sources */,
 				028CE608142E4A1A0099B1F7 /* MODTimestamp.m in Sources */,
 				02CF87EC142F91CA000C4C7F /* MODRegex.m in Sources */,
