@@ -87,7 +87,7 @@
     begin_array         = '[';
     end_array           = ']';
     begin_string        = '"' | '\'';
-    begin_name          = begin_string;
+    begin_name          = begin_string | [a-z] | [A-Z] | '$' | '_' | '#';
     begin_number        = digit | '-';
     begin_regexp        = '/';
     begin_object_id     = 'O';
@@ -338,7 +338,11 @@
 
     action parse_name {
         const char *np;
-        np = [self _parseStringWithPointer:fpc endPointer:pe result:&lastName];
+        
+        np = [self _parseWordWithPointer:fpc endPointer:pe result:&lastName];
+        if (np == NULL) {
+            np = [self _parseStringWithPointer:fpc endPointer:pe result:&lastName];
+        }
         if (np == NULL) { fhold; fbreak; } else fexec np;
     }
 
@@ -702,10 +706,14 @@
     while (cursor < stringEnd && [wordCharacterSet characterIsMember:cursor[0]]) {
         cursor++;
     }
-    buffer = [[NSString alloc] initWithBytesNoCopy:(void *)string length:cursor - string encoding:NSUTF8StringEncoding freeWhenDone:NO];
-    *result = buffer;
-    [buffer autorelease];
-    cursor++;
+    if (cursor == string) {
+        cursor = NULL;
+        *result = NULL;
+    } else {
+        buffer = [[NSString alloc] initWithBytesNoCopy:(void *)string length:cursor - string encoding:NSUTF8StringEncoding freeWhenDone:NO];
+        *result = buffer;
+        [buffer autorelease];
+    }
     return cursor;
 }
 

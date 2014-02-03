@@ -164,6 +164,8 @@ static void testJson()
     NSError *error;
   
     // more digit for the json, but that's ok
+    testObjects(@"{int:1}", @"{\"int\":1}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"int", nil]);
+    testObjects(@"{$value:1}", @"{\"$value\":1}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"$value", nil]);
     testObjects(@"{\"number\":0.7868957519531251}", @"{\"number\":0.78689575195312511102}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:0.7868957519531251], @"number", nil]);
     testObjects(@"{\"number\":0.786895751953125}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:0.786895751953125], @"number", nil]);
     testObjects(@"{\"int\":1}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"int", nil]);
@@ -491,11 +493,11 @@ int main (int argc, const char * argv[])
         const char *ip;
         MODServer *server = nil;
 
+        testJson();
         testCompareDocument();
         testCompareBson();
         testBase64();
         testTypes();
-        testJson();
         if (argc != 2) {
             NSLog(@"need to put the ip a of a mongo server as a parameter, so we can test the objective-c driver");
             exit(1);
