@@ -164,6 +164,7 @@ static void testJson()
     NSError *error;
   
     // more digit for the json, but that's ok
+    testObjects(@"{\"date\":new Date(396361048820)}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSDate dateWithTimeIntervalSince1970:396361048.820], @"date", nil]);
     testObjects(@"{int:1}", @"{\"int\":1}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"int", nil]);
     testObjects(@"{$value:1}", @"{\"$value\":1}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"$value", nil]);
     testObjects(@"{\"number\":0.7868957519531251}", @"{\"number\":0.78689575195312511102}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:0.7868957519531251], @"number", nil]);
