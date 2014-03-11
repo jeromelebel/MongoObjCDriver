@@ -156,9 +156,7 @@ static const char _JSON_value_from_state_actions[] = {
 
 static const int JSON_value_start = 1;
 static const int JSON_value_first_final = 30;
-static const int JSON_value_error = 0;
 
-static const int JSON_value_en_main = 1;
 
 
 #line 231 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
@@ -461,9 +459,6 @@ static const char _JSON_integer_trans_actions[] = {
 
 static const int JSON_integer_start = 1;
 static const int JSON_integer_first_final = 3;
-static const int JSON_integer_error = 0;
-
-static const int JSON_integer_en_main = 1;
 
 
 #line 256 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
@@ -646,9 +641,6 @@ static const char _JSON_float_trans_actions[] = {
 
 static const int JSON_float_start = 1;
 static const int JSON_float_first_final = 8;
-static const int JSON_float_error = 0;
-
-static const int JSON_float_en_main = 1;
 
 
 #line 295 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
@@ -832,9 +824,6 @@ static const char _JSON_object_trans_actions[] = {
 
 static const int JSON_object_start = 1;
 static const int JSON_object_first_final = 7;
-static const int JSON_object_error = 0;
-
-static const int JSON_object_en_main = 1;
 
 
 #line 359 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
@@ -1063,9 +1052,6 @@ static const char _JSON_javascript_object_trans_actions[] = {
 
 static const int JSON_javascript_object_start = 1;
 static const int JSON_javascript_object_first_final = 22;
-static const int JSON_javascript_object_error = 0;
-
-static const int JSON_javascript_object_en_main = 1;
 
 
 #line 434 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
@@ -1285,9 +1271,6 @@ static const char _JSON_bin_data_trans_actions[] = {
 
 static const int JSON_bin_data_start = 1;
 static const int JSON_bin_data_first_final = 13;
-static const int JSON_bin_data_error = 0;
-
-static const int JSON_bin_data_en_main = 1;
 
 
 #line 488 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
@@ -1480,9 +1463,6 @@ static const char _JSON_object_id_trans_actions[] = {
 
 static const int JSON_object_id_start = 1;
 static const int JSON_object_id_first_final = 12;
-static const int JSON_object_id_error = 0;
-
-static const int JSON_object_id_en_main = 1;
 
 
 #line 525 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
@@ -1702,9 +1682,6 @@ static const char _JSON_numberlong_trans_actions[] = {
 
 static const int JSON_numberlong_start = 1;
 static const int JSON_numberlong_first_final = 14;
-static const int JSON_numberlong_error = 0;
-
-static const int JSON_numberlong_en_main = 1;
 
 
 #line 602 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
@@ -1894,9 +1871,6 @@ static const char _JSON_timestamp_trans_actions[] = {
 
 static const int JSON_timestamp_start = 1;
 static const int JSON_timestamp_first_final = 15;
-static const int JSON_timestamp_error = 0;
-
-static const int JSON_timestamp_en_main = 1;
 
 
 #line 643 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
@@ -2086,9 +2060,6 @@ static const char _JSON_symbol_trans_actions[] = {
 
 static const int JSON_symbol_start = 1;
 static const int JSON_symbol_first_final = 10;
-static const int JSON_symbol_error = 0;
-
-static const int JSON_symbol_en_main = 1;
 
 
 #line 678 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
@@ -2364,9 +2335,6 @@ static const char _JSON_array_trans_actions[] = {
 
 static const int JSON_array_start = 1;
 static const int JSON_array_first_final = 5;
-static const int JSON_array_error = 0;
-
-static const int JSON_array_en_main = 1;
 
 
 #line 818 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
@@ -2542,9 +2510,6 @@ static const char _JSON_trans_actions[] = {
 
 static const int JSON_start = 1;
 static const int JSON_first_final = 2;
-static const int JSON_error = 0;
-
-static const int JSON_en_main = 1;
 
 
 #line 865 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
