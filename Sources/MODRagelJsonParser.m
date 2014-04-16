@@ -2191,11 +2191,9 @@ _again:
 - (const char *)_parseWordWithPointer:(const char *)string endPointer:(const char *)stringEnd result:(NSString **)result
 {
     NSString *buffer;
-    NSMutableString *mutableResult;
     const char *cursor;
     NSCharacterSet *wordCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890_$#"];
     
-    mutableResult = [[NSMutableString alloc] init];
     cursor = string;
     while (cursor < stringEnd && [wordCharacterSet characterIsMember:cursor[0]]) {
         cursor++;
