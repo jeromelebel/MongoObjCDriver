@@ -8,9 +8,14 @@
 
 #import "MOD_internal.h"
 
+@interface MODServer ()
+@property (nonatomic, readwrite, assign, getter = isMaster) BOOL master;
+
+@end
+
 @implementation MODServer
 
-@synthesize connected = _connected, mongo = _mongo, userName = _userName, password = _password, authDatabase = _authDatabase;
+@synthesize connected = _connected, mongo = _mongo, userName = _userName, password = _password, authDatabase = _authDatabase, master = _master;
 
 - (id)init
 {
@@ -149,12 +154,26 @@
         mongo_host_port hostPort;
         
         mongo_parse_host([host UTF8String], &hostPort);
-        if (!mongoQuery.canceled && mongo_client(_mongo, hostPort.host, hostPort.port) == MONGO_OK) {
-            [self authenticateSynchronouslyWithDatabaseName:_authDatabase userName:_userName password:_password mongoQuery:mongoQuery];
+        if (!mongoQuery.canceled) {
+            if (mongo_client(_mongo, hostPort.host, hostPort.port) != MONGO_OK) {
+                switch (_mongo->err) {
+                    case MONGO_CONN_NOT_MASTER:
+                        self.master = NO;
+                        _mongo->err = MONGO_CONN_SUCCESS;
+                        break;
+                        
+                    default:
+                        self.master = YES;
+                        break;
+                }
+            }
+            if (_mongo->err == MONGO_CONN_SUCCESS) {
+                [self authenticateSynchronouslyWithDatabaseName:_authDatabase userName:_userName password:_password mongoQuery:mongoQuery];
+            }
+            [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+                callback(mongoQuery.error == nil && !mongoQuery.canceled, mongoQuery);
+            }];
         }
-        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-            callback(mongoQuery.error == nil && !mongoQuery.canceled, mongoQuery);
-        }];
     }];
     [query.mutableParameters setObject:@"connecttohost" forKey:@"command"];
     [query.mutableParameters setObject:host forKey:@"hostname"];

@@ -27,12 +27,12 @@ typedef struct mongo                    *mongo_ptr;
     mongo_ptr                           _mongo;
     
     BOOL                                _connected;
+    BOOL                                _master;
     NSOperationQueue                    *_operationQueue;
     NSString                            *_authDatabase;
     NSString                            *_userName;
     NSString                            *_password;
 }
-
 - (void)copyWithCallback:(void (^)(MODServer *copyServer, MODQuery *mongoQuery))callback;
 
 - (MODQuery *)connectWithHostName:(NSString *)host callback:(void (^)(BOOL connected, MODQuery *mongoQuery))callback;
@@ -44,14 +44,15 @@ typedef struct mongo                    *mongo_ptr;
 
 - (MODDatabase *)databaseForName:(NSString *)databaseName;
 
-@property(nonatomic, readonly, assign, getter=isConnected) BOOL connected;
-@property(nonatomic, readwrite, retain) NSString *userName;
-@property(nonatomic, readwrite, retain) NSString *password;
-@property(nonatomic, readwrite, retain) NSString *authDatabase;
+@property (nonatomic, readonly, assign, getter = isConnected) BOOL connected;
+@property (nonatomic, readonly, assign, getter = isMaster) BOOL master;
+@property (nonatomic, readwrite, retain) NSString *userName;
+@property (nonatomic, readwrite, retain) NSString *password;
+@property (nonatomic, readwrite, retain) NSString *authDatabase;
 
 @end
 
-@interface MODServer(utils)
+@interface MODServer (utils)
 + (NSString *)escapeQuotesForString:(NSString *)string;
 + (NSString *)escapeSlashesForString:(NSString *)string;
 + (NSString *)convertObjectToJson:(MODSortedMutableDictionary *)object pretty:(BOOL)pretty strictJson:(BOOL)strictJson;
