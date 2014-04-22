@@ -269,10 +269,10 @@
             if (!mongoQuery.canceled && [self authenticateSynchronouslyWithDatabaseName:databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
                 mongo_cmd_drop_db(_mongo, [databaseName UTF8String]);
             }
-            [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-                callback(mongoQuery);
-            }];
         }
+        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+            callback(mongoQuery);
+        }];
     }];
     [query.mutableParameters setObject:@"dropdatabase" forKey:@"command"];
     [query.mutableParameters setObject:databaseName forKey:@"databasename"];
