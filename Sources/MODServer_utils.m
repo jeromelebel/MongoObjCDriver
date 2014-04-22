@@ -31,7 +31,7 @@
                 description = @"Cannot get an ip address with this domain name.";
                 break;
             case MONGO_CONN_NOT_MASTER:
-                description = @"Warning: connected to a non-master node (read-only).";
+                description = @"Connected to a non-master node (read-only).";
                 break;
             case MONGO_CONN_BAD_SET_NAME:
                 description = @"Given rs name doesn't match this replica set.";
