@@ -117,7 +117,9 @@
     MODQuery *query;
     
     query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
-        if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+        if (!self.mongoServer.isMaster) {
+            mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Collection add forbidden on a slave"];
+        } else if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
             mongo_cmd_create_collection(self.mongoServer.mongo, [_databaseName UTF8String], [collectionName UTF8String]);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
@@ -136,7 +138,9 @@
     MODQuery *query;
     
     query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
-        if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+        if (!self.mongoServer.isMaster) {
+            mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Collection add forbidden on a slave"];
+        } else if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
             mongo_cmd_create_capped_collection(self.mongoServer.mongo, [_databaseName UTF8String], [collectionName UTF8String], capSize);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
@@ -156,7 +160,9 @@
     MODQuery *query;
     
     query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
-        if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+        if (!self.mongoServer.isMaster) {
+            mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Collection drop forbidden on a slave"];
+        } else if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
             mongo_cmd_drop_collection(self.mongoServer.mongo, [_databaseName UTF8String], [collectionName UTF8String], NULL);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
