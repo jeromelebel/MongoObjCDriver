@@ -203,7 +203,9 @@
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!self.mongoServer.isMaster) {
+            mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Document insert is forbidden on a slave"];
+        } else if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson **data;
             bson **dataCursor;
             NSInteger countCursor;
@@ -276,7 +278,9 @@
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!self.mongoServer.isMaster) {
+            mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Document update is forbidden on a slave"];
+        } else if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson bsonCriteria;
             bson bsonUpdate;
             NSError *error = nil;
@@ -326,7 +330,9 @@
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!self.mongoServer.isMaster) {
+            mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Document save is forbidden on a slave"];
+        } else if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson bsonCriteria;
             bson bsonDocument;
             NSError *error = nil;
@@ -405,7 +411,9 @@
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!self.mongoServer.isMaster) {
+            mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Document remove is forbidden on a slave"];
+        } else if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson bsonCriteria;
             NSError *error = nil;
             
@@ -468,7 +476,9 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
         name = defaultName;
     }
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!self.mongoServer.isMaster) {
+            mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Index create is forbidden on a slave"];
+        } else if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson index;
             bson output;
             NSError *error = nil;
@@ -501,7 +511,9 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!self.mongoServer.isMaster) {
+            mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Index drop is forbidden on a slave"];
+        } else if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson index;
             NSError *error = nil;
             
@@ -549,7 +561,9 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
     MODQuery *query = nil;
     
     query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!self.mongoServer.isMaster) {
+            mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Map reduce is forbidden on a slave"];
+        } else if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson bsonQuery;
             bson bsonSort;
             bson bsonOutput;
