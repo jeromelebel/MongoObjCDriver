@@ -265,10 +265,8 @@
     query = [self addQueryInQueue:^(MODQuery *mongoQuery){
         if (!self.isMaster) {
             mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Dababase drop forbidden on a slave"];
-        } else {
-            if (!mongoQuery.canceled && [self authenticateSynchronouslyWithDatabaseName:databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
-                mongo_cmd_drop_db(_mongo, [databaseName UTF8String]);
-            }
+        } else if (!mongoQuery.canceled && [self authenticateSynchronouslyWithDatabaseName:databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+            mongo_cmd_drop_db(_mongo, [databaseName UTF8String]);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback(mongoQuery);
