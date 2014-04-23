@@ -163,9 +163,10 @@
                         break;
                         
                     default:
-                        self.master = YES;
                         break;
                 }
+            } else {
+                self.master = YES;
             }
             if (_mongo->err == MONGO_CONN_SUCCESS) {
                 [self authenticateSynchronouslyWithDatabaseName:_authDatabase userName:_userName password:_password mongoQuery:mongoQuery];
