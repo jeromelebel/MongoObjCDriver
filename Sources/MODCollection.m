@@ -7,7 +7,6 @@
 //
 
 #import "MOD_internal.h"
-#import "json.h"
 
 @implementation MODCollection
 

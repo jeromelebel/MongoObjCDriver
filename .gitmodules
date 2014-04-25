@@ -1,6 +1,3 @@
-[submodule "Libraries/libjson"]
-	path = Libraries/libjson
-	url = git@github.com:fotonauts/libjson.git
 [submodule "Libraries/mongo-c-driver-legacy"]
 	path = Libraries/mongo-c-driver-legacy
 	url = git@github.com:fotonauts/mongo-c-driver-legacy.git
