@@ -7,7 +7,6 @@
 //
 
 #import "MOD_internal.h"
-#import "json.h"
 
 @implementation MODServer(utils_internal)
 
@@ -65,54 +64,6 @@
         }
         if (descriptionDetails) {
             description = [NSString stringWithFormat:@"%@ - %@", description, descriptionDetails];
-        }
-    } else if ([errorDomain isEqualToString:MODJsonErrorDomain]) {
-        switch (code) {
-            case JSON_ERROR_NO_MEMORY:
-                description = @"running out of memory";
-                break;
-            case JSON_ERROR_BAD_CHAR:
-                description = @"character < 32, except space newline tab";
-                break;
-            case JSON_ERROR_POP_EMPTY:
-                description = @"trying to pop more object/array than pushed on the stack";
-                break;
-            case JSON_ERROR_POP_UNEXPECTED_MODE:
-                description = @"trying to pop wrong type of mode. popping array in object mode, vice versa";
-                break;
-            case JSON_ERROR_NESTING_LIMIT:
-                description = @"reach nesting limit on stack";
-                break;
-            case JSON_ERROR_DATA_LIMIT:
-                description = @"reach data limit on buffer";
-                break;
-            case JSON_ERROR_COMMENT_NOT_ALLOWED:
-                description = @"comment are not allowed with current configuration";
-                break;
-            case JSON_ERROR_UNEXPECTED_CHAR:
-                description = @"unexpected char in the current parser context";
-                break;
-            case JSON_ERROR_UNICODE_MISSING_LOW_SURROGATE:
-                description = @"unicode low surrogate missing after high surrogate";
-                break;
-            case JSON_ERROR_UNICODE_UNEXPECTED_LOW_SURROGATE:
-                description = @"unicode low surrogate missing without previous high surrogate";
-                break;
-            case JSON_ERROR_COMMA_OUT_OF_STRUCTURE:
-                description = @"found a comma not in structure (array/object)";
-                break;
-            case JSON_ERROR_END_OF_STRUCTURE_OUT_OF_STRUCTURE:
-                description = @"found end of structure out of structure (array/object)";
-                break;
-            case JSON_ERROR_CALLBACK:
-                description = @"callback returns error";
-                break;
-            default:
-                description = @"";
-                break;
-        }
-        if (descriptionDetails) {
-            description = [NSString stringWithFormat:@"%@ - \"%@\"", description, descriptionDetails];
         }
     } else if ([errorDomain isEqualToString:MODJsonParserErrorDomain]) {
         switch (code) {
