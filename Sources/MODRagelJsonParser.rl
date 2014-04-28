@@ -19,6 +19,8 @@
 #import "MODSymbol.h"
 #import "NSString+Base64.h"
 
+#pragma clang diagnostic ignored "-Wunused-variable"
+
 @interface MODRagelJsonParser ()
 @property (nonatomic, strong, readwrite) NSError *error;
 
@@ -26,7 +28,7 @@
 
 @implementation MODRagelJsonParser (private)
 
-+ (void)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error
++ (void)bsonFromJson:(bson_t *)bsonResult json:(NSString *)json error:(NSError **)error
 {
     id object = [self objectsFromJson:json withError:error];
     
@@ -298,7 +300,7 @@
 {
     int cs = 0;
     const char *memo;
-
+    
     %% write init;
     memo = p;
     %% write exec;

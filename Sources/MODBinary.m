@@ -18,12 +18,13 @@
     BOOL result = NO;
     
     switch (dataType) {
-        case BSON_BIN_BINARY:
-        case BSON_BIN_FUNC:
-        case BSON_BIN_BINARY_OLD:
-        case BSON_BIN_UUID:
-        case BSON_BIN_MD5:
-        case BSON_BIN_USER:
+        case BSON_SUBTYPE_BINARY:
+        case BSON_SUBTYPE_FUNCTION:
+        case BSON_SUBTYPE_BINARY_DEPRECATED:
+        case BSON_SUBTYPE_UUID_DEPRECATED:
+        case BSON_SUBTYPE_UUID:
+        case BSON_SUBTYPE_MD5:
+        case BSON_SUBTYPE_USER:
             result = YES;
             break;
             

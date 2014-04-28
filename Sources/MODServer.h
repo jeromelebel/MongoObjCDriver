@@ -19,12 +19,12 @@
 @class MODSortedMutableDictionary;
 
 typedef struct mongo_replset            *mongo_replset_ptr;
-typedef struct mongo                    *mongo_ptr;
+typedef struct _mongoc_client_t         *mongoc_client_ptr;
 
 @interface MODServer : NSObject
 {
     mongo_replset_ptr                   _replicaSet;
-    mongo_ptr                           _mongo;
+    mongoc_client_ptr                   _mongocClient;
     
     BOOL                                _connected;
     BOOL                                _master;
@@ -33,6 +33,7 @@ typedef struct mongo                    *mongo_ptr;
     NSString                            *_userName;
     NSString                            *_password;
 }
+
 - (void)copyWithCallback:(void (^)(MODServer *copyServer, MODQuery *mongoQuery))callback;
 
 - (MODQuery *)connectWithHostName:(NSString *)host callback:(void (^)(BOOL connected, MODQuery *mongoQuery))callback;

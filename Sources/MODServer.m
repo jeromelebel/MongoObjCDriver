@@ -15,23 +15,27 @@
 
 @implementation MODServer
 
-@synthesize connected = _connected, mongo = _mongo, userName = _userName, password = _password, authDatabase = _authDatabase, master = _master;
+@synthesize connected = _connected, mongocClient = _mongocClient, userName = _userName, password = _password, authDatabase = _authDatabase, master = _master;
+
++ (void)initialize
+{
+    mongoc_init();
+}
 
 - (id)init
 {
     if ((self = [super init]) != nil) {
         _operationQueue = [[NSOperationQueue alloc] init];
         [_operationQueue setMaxConcurrentOperationCount:1];
-        _mongo = malloc(sizeof(*_mongo));
-        mongo_init(_mongo);
+        _mongocClient = malloc(sizeof(*_mongocClient));
     }
     return self;
 }
 
 - (void)dealloc
 {
-    mongo_destroy(_mongo);
-    free(_mongo);
+    mongoc_client_destroy(mongoc_client_t *client)(_mongocClient);
+    free(_mongocClient);
     [_operationQueue release];
     [super dealloc];
 }

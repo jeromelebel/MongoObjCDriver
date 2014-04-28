@@ -10,10 +10,10 @@
 #import "bson.h"
 
 typedef struct __BsonComparatorStack {
-    bson_iterator iterator1;
-    bson_iterator iterator2;
-    bson_type type1;
-    bson_type type2;
+    bson_iter_t iterator1;
+    bson_iter_t iterator2;
+    bson_type_t type1;
+    bson_type_t type2;
 } BsonComparatorStack;
 
 @interface MODBsonComparator ()
@@ -25,7 +25,7 @@ typedef struct __BsonComparatorStack {
 
 @implementation MODBsonComparator (Private)
 
-- (id)initWithBson1:(bson *)bson1 bson2:(bson *)bson2
+- (id)initWithBson1:(bson_t *)bson1 bson2:(bson_t *)bson2
 {
     NSData *data1, *data2;
     
@@ -70,8 +70,8 @@ typedef struct __BsonComparatorStack {
         [(NSMutableArray *)self.differences addObject:prefix];
         result = NO;
     } else {
-        bson_iterator iterator1 = stack->iterator1;
-        bson_iterator iterator2 = stack->iterator2;
+        bson_iter_t iterator1 = stack->iterator1;
+        bson_iter_t iterator2 = stack->iterator2;
         
         bson_iterator_next(&iterator1);
         bson_iterator_next(&iterator2);
@@ -109,7 +109,7 @@ typedef struct __BsonComparatorStack {
     while (stillContinue) {
         stack->type1 = bson_iterator_next(&stack->iterator1);
         stack->type2 = bson_iterator_next(&stack->iterator2);
-        if (stack->type1 == BSON_EOO && stack->type2 == BSON_EOO) {
+        if (stack->type1 == BSON_TYPE_EOD && stack->type2 == BSON_TYPE_EOD) {
             stillContinue = NO;
         } else if (stack->type1 != stack->type2) {
             if (prefix) {
@@ -159,7 +159,7 @@ typedef struct __BsonComparatorStack {
     while (stillContinue) {
         stack->type1 = bson_iterator_next(&stack->iterator1);
         stack->type2 = bson_iterator_next(&stack->iterator2);
-        if (stack->type1 == BSON_EOO && stack->type2 == BSON_EOO) {
+        if (stack->type1 == BSON_TYPE_EOD && stack->type2 == BSON_TYPE_EOD) {
             stillContinue = NO;
         } else if (stack->type1 != stack->type2) {
             if (prefix) {

@@ -15,8 +15,16 @@
 - (id)initWithTValue:(int)tValue iValue:(int)iValue
 {
     if (self = [self init]) {
-        _iValue = iValue;
-        _tValue = tValue;
+        _timestamp.tv_sec = iValue;
+        _timestamp.tv_usec = tValue;
+    }
+    return self;
+}
+
+- (id)initWithTimestamp:(struct timeval *)timestamp
+{
+    if (self = [self init]) {
+        memcpy(&_timestamp, timestamp, sizeof(_timestamp));
     }
     return self;
 }
@@ -37,10 +45,9 @@
     return [NSDate dateWithTimeIntervalSince1970:_tValue];
 }
 
-- (void)getBsonTimestamp:(bson_timestamp_t *)ts
+- (void)getBsonTimestamp:(struct timeval *)ts
 {
-    ts->i = _iValue;
-    ts->t = _tValue;
+    memcpy(ts, &_timestamp, sizeof(_timestamp));
 }
 
 - (BOOL)isEqual:(id)object

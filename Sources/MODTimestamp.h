@@ -10,11 +10,11 @@
 
 @interface MODTimestamp : NSObject
 {
-    int _tValue;
-    int _iValue;
+    struct timeval _timestamp;
 }
 
 - (id)initWithTValue:(int)tValue iValue:(int)iValue;
+- (id)initWithTimestamp:(struct timeval *)timestamp;
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;
 - (NSDate *)dateValue;
 

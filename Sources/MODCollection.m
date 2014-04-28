@@ -612,9 +612,9 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
     return query;
 }
 
-- (mongo *)mongo
+- (mongoc_client_ptr)mongocClient
 {
-    return _mongoDatabase.mongo;
+    return _mongoDatabase.mongocClient;
 }
 
 - (MODServer *)mongoServer

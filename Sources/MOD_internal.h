@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MOD_public.h"
-#import "mongo.h"
+#import "mongoc.h"
 
 enum {
     JSON_PARSER_ERROR_EXPECTED_END
@@ -16,7 +16,7 @@ enum {
 
 @interface MODServer()
 @property(nonatomic, readwrite, assign, getter=isConnected) BOOL connected;
-@property(nonatomic, readwrite, assign) mongo_ptr mongo;
+@property(nonatomic, readwrite, assign) mongoc_client_ptr mongocClient;
 
 - (BOOL)authenticateSynchronouslyWithDatabaseName:(NSString *)databaseName userName:(NSString *)user password:(NSString *)password mongoQuery:(MODQuery *)mongoQuery;
 - (BOOL)authenticateSynchronouslyWithDatabaseName:(NSString *)databaseName userName:(NSString *)userName password:(NSString *)password error:(NSError **)error;
@@ -26,13 +26,13 @@ enum {
 
 @interface MODServer(utils_internal)
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails;
-+ (NSError *)errorFromMongo:(mongo_ptr)mongo;
-+ (MODSortedMutableDictionary *)objectFromBson:(bson *)bsonObject;
-+ (void)appendObject:(MODSortedMutableDictionary *)object toBson:(bson *)bson;
++ (NSError *)errorFromMongo:(mongoc_client_ptr)mongo;
++ (MODSortedMutableDictionary *)objectFromBson:(bson_t *)bsonObject;
++ (void)appendObject:(MODSortedMutableDictionary *)object toBson:(bson_t *)bson;
 @end
 
 @interface MODDatabase()
-@property(nonatomic, readonly, assign) mongo_ptr mongo;
+@property(nonatomic, readonly, assign) mongoc_client_ptr mongocClient;
 
 - (id)initWithMongoServer:(MODServer *)mongoServer databaseName:(NSString *)databaseName;
 - (BOOL)authenticateSynchronouslyWithMongoQuery:(MODQuery *)mongoQuery;
@@ -41,7 +41,7 @@ enum {
 @end
 
 @interface MODCollection()
-@property(nonatomic, readonly, assign) mongo_ptr mongo;
+@property(nonatomic, readonly, assign) mongoc_client_ptr mongocClient;
 
 - (id)initWithMongoDatabase:(MODDatabase *)mongoDatabase collectionName:(NSString *)collectionName;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock;
@@ -77,13 +77,13 @@ enum {
 @end
 
 @interface MODTimestamp()
-- (void)getBsonTimestamp:(bson_timestamp_t *)ts;
+- (void)getBsonTimestamp:(struct timeval *)ts;
 @end
 
 @interface MODRagelJsonParser (private)
-+ (void)bsonFromJson:(bson *)bsonResult json:(NSString *)json error:(NSError **)error;
++ (void)bsonFromJson:(bson_t *)bsonResult json:(NSString *)json error:(NSError **)error;
 @end
 
 @interface MODBsonComparator (Private)
-- (id)initWithBson1:(bson *)bson1 bson2:(bson *)bson2;
+- (id)initWithBson1:(bson_t *)bson1 bson2:(bson_t *)bson2;
 @end
