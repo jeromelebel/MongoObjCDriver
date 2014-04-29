@@ -12,7 +12,8 @@
 			buildConfigurationList = 02216F161412D39200789BD1 /* Build configuration list for PBXAggregateTarget "Submodules" */;
 			buildPhases = (
 				02DB18A6172C7C2200B26EAE /* Update submodules */,
-				02216F191412D3B700789BD1 /* mongo-c-driver-legacy */,
+				02216F191412D3B700789BD1 /* mongo-c-driver */,
+				0286BBE2190FC38400E4B1A5 /* libbson */,
 			);
 			dependencies = (
 			);
@@ -2904,19 +2905,33 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		02216F191412D3B700789BD1 /* mongo-c-driver-legacy */ = {
+		02216F191412D3B700789BD1 /* mongo-c-driver */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "mongo-c-driver-legacy";
+			name = "mongo-c-driver";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "module_name=\"mongo-c-driver-legacy\"\nmodule_owner=\"fotonauts\"\nmodule_branch=\"master\"\nmodule_path=\"Libraries/${module_name}\"\n\nfiles=`ls \"${module_path}\" 2> /dev/null`\nif [ \"${files}\" = \"\" ] ; then\n  if [ -d .git ] ; then\n    echo \"\"\n  else\n    cd \"${module_path}\"\n    curl -o \"${module_name}.zip\" -L \"https://nodeload.github.com/${module_owner}/${module_name}/zipball/${module_branch}\"\n    unzip \"${module_name}.zip\"\n    rm \"${module_name}.zip\"\n    module_unzip_dir=`ls`\n    cd \"${module_unzip_dir}\"\n    mv * ..\n    cd ..\n    rm -fr \"${module_unzip_dir}\"\n  fi\nfi\n";
+			shellScript = "module_name=\"mongo-c-driver\"\nmodule_owner=\"fotonauts\"\nmodule_branch=\"master\"\nmodule_path=\"Libraries/${module_name}\"\n\nfiles=`ls \"${module_path}\" 2> /dev/null`\nif [ \"${files}\" = \"\" ] ; then\n  if [ -d .git ] ; then\n    echo \"\"\n  else\n    cd \"${module_path}\"\n    curl -o \"${module_name}.zip\" -L \"https://nodeload.github.com/${module_owner}/${module_name}/zipball/${module_branch}\"\n    unzip \"${module_name}.zip\"\n    rm \"${module_name}.zip\"\n    module_unzip_dir=`ls`\n    cd \"${module_unzip_dir}\"\n    mv * ..\n    cd ..\n    rm -fr \"${module_unzip_dir}\"\n  fi\nfi\n";
+		};
+		0286BBE2190FC38400E4B1A5 /* libbson */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = libbson;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "module_name=\"libbson\"\nmodule_owner=\"mongodb\"\nmodule_branch=\"master\"\nmodule_path=\"Libraries/mongo-c-driver/src/${module_name}\"\n\nfiles=`ls \"${module_path}\" 2> /dev/null`\nif [ \"${files}\" = \"\" ] ; then\n  if [ -d .git ] ; then\n    echo \"\"\n  else\n    cd \"${module_path}\"\n    curl -o \"${module_name}.zip\" -L \"https://nodeload.github.com/${module_owner}/${module_name}/zipball/${module_branch}\"\n    unzip \"${module_name}.zip\"\n    rm \"${module_name}.zip\"\n    module_unzip_dir=`ls`\n    cd \"${module_unzip_dir}\"\n    mv * ..\n    cd ..\n    rm -fr \"${module_unzip_dir}\"\n  fi\nfi\n";
 		};
 		0299B61617F39FFA00FB40A2 /* Ragel */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -2962,7 +2977,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ -d \".git\" ] ; then\n  git submodule update --init\nfi\n";
+			shellScript = "if [ -d \".git\" ] ; then\n  git submodule update --init\n  cd Libraries/mongo-c-driver\n  git submodule update --init\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
