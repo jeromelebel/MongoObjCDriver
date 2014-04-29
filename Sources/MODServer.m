@@ -7,6 +7,7 @@
 //
 
 #import "MOD_internal.h"
+#import "bson.h"
 
 @interface MODServer ()
 @property (nonatomic, readwrite, assign, getter = isMaster) BOOL master;

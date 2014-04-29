@@ -29,8 +29,8 @@ typedef struct __BsonComparatorStack {
 {
     NSData *data1, *data2;
     
-    data1 = [[NSData alloc] initWithBytes:bson_data(bson1) length:bson_size(bson1)];
-    data2 = [[NSData alloc] initWithBytes:bson_data(bson2) length:bson_size(bson2)];
+    data1 = [[NSData alloc] initWithBytes:bson_get_data(bson1) length:bson1->len];
+    data2 = [[NSData alloc] initWithBytes:bson_get_data(bson2) length:bson2->len];
     self = [self initWithBsonData1:data1 bsonData2:data2];
     [data1 release];
     [data2 release];
@@ -73,20 +73,20 @@ typedef struct __BsonComparatorStack {
         bson_iter_t iterator1 = stack->iterator1;
         bson_iter_t iterator2 = stack->iterator2;
         
-        bson_iterator_next(&iterator1);
-        bson_iterator_next(&iterator2);
-        if (iterator1.cur - stack->iterator1.cur != iterator2.cur - stack->iterator2.cur || memcmp(stack->iterator1.cur, stack->iterator2.cur, iterator1.cur - stack->iterator1.cur) != 0) {
+        bson_iter_next(&iterator1);
+        bson_iter_next(&iterator2);
+        if (iterator1.len != iterator2.len || memcmp(stack->iterator1.raw, stack->iterator2.raw, iterator1.len) != 0) {
             BsonComparatorStack objectStack;
             
             switch (stack->type1) {
-                case BSON_OBJECT:
-                    bson_iterator_subiterator(&stack->iterator1, &objectStack.iterator1);
-                    bson_iterator_subiterator(&stack->iterator2, &objectStack.iterator2);
+                case BSON_TYPE_DOCUMENT:
+                    bson_iter_recurse(&stack->iterator1, &objectStack.iterator1);
+                    bson_iter_recurse(&stack->iterator2, &objectStack.iterator2);
                     result = [self compareObjectWithStack:&objectStack prefix:prefix];
                     break;
-                case BSON_ARRAY:
-                    bson_iterator_subiterator(&stack->iterator1, &objectStack.iterator1);
-                    bson_iterator_subiterator(&stack->iterator2, &objectStack.iterator2);
+                case BSON_TYPE_ARRAY:
+                    bson_iter_recurse(&stack->iterator1, &objectStack.iterator1);
+                    bson_iter_recurse(&stack->iterator2, &objectStack.iterator2);
                     result = [self compareArrayWithStack:&objectStack prefix:prefix];
                     break;
                 default:
@@ -107,8 +107,10 @@ typedef struct __BsonComparatorStack {
     BOOL result = YES;
     
     while (stillContinue) {
-        stack->type1 = bson_iterator_next(&stack->iterator1);
-        stack->type2 = bson_iterator_next(&stack->iterator2);
+        bson_iter_next(&stack->iterator1);
+        bson_iter_next(&stack->iterator2);
+        stack->type1 = bson_iter_type(&stack->iterator1);
+        stack->type2 = bson_iter_type(&stack->iterator2);
         if (stack->type1 == BSON_TYPE_EOD && stack->type2 == BSON_TYPE_EOD) {
             stillContinue = NO;
         } else if (stack->type1 != stack->type2) {
@@ -123,8 +125,8 @@ typedef struct __BsonComparatorStack {
             NSString *key1;
             NSString *key2;
             
-            key1 = [[NSString alloc] initWithUTF8String:bson_iterator_key(&stack->iterator1)];
-            key2 = [[NSString alloc] initWithUTF8String:bson_iterator_key(&stack->iterator2)];
+            key1 = [[NSString alloc] initWithUTF8String:bson_iter_key(&stack->iterator1)];
+            key2 = [[NSString alloc] initWithUTF8String:bson_iter_key(&stack->iterator2)];
             if (![key1 isEqualToString:key2]) {
                 [(NSMutableArray *)self.differences addObject:@"*"];
                 stillContinue = NO;
@@ -157,8 +159,10 @@ typedef struct __BsonComparatorStack {
     NSUInteger ii = 0;
     
     while (stillContinue) {
-        stack->type1 = bson_iterator_next(&stack->iterator1);
-        stack->type2 = bson_iterator_next(&stack->iterator2);
+        bson_iter_next(&stack->iterator1);
+        bson_iter_next(&stack->iterator2);
+        stack->type1 = bson_iter_type(&stack->iterator1);
+        stack->type2 = bson_iter_type(&stack->iterator2);
         if (stack->type1 == BSON_TYPE_EOD && stack->type2 == BSON_TYPE_EOD) {
             stillContinue = NO;
         } else if (stack->type1 != stack->type2) {
@@ -192,8 +196,8 @@ typedef struct __BsonComparatorStack {
 {
     BsonComparatorStack stack;
     
-    bson_iterator_from_buffer(&stack.iterator1, self.bson1.bytes);
-    bson_iterator_from_buffer(&stack.iterator2, self.bson2.bytes);
+    bson_iter_init(&stack.iterator1, self.bson1.bytes);
+    bson_iter_init(&stack.iterator2, self.bson2.bytes);
     return [self compareObjectWithStack:&stack prefix:nil];
 }
 

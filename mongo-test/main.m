@@ -149,7 +149,7 @@ static void testBsonArrayIndex(bson *bsonObject)
     assert(bson_iterator_next(&iterator) != BSON_EOO);
     assert(strcmp(bson_iterator_key(&iterator), "array") == 0);
     
-    bson_iterator_subiterator(&iterator, &subIterator);
+    bson_iter_recurse(&iterator, &subIterator);
     while (bson_iterator_next(&subIterator) != BSON_EOO) {
         assert(ii == atoi(bson_iterator_key(&subIterator)));
         ii++;

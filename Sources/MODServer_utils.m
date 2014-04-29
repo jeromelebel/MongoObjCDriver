@@ -132,20 +132,20 @@
     id result = nil;
     bson_iterator subIterator;
     
-    switch (bson_iterator_type(iterator)) {
-        case BSON_EOO:
+    switch (bson_iter_type(iterator)) {
+        case BSON_TYPE_EOD:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
-            NSAssert(NO, @"BSON_EOO");
+            NSAssert(NO, @"BSON_TYPE_EOO");
             break;
-        case BSON_DOUBLE:
+        case BSON_TYPE_DOUBLE:
             result = [NSNumber numberWithDouble:bson_iterator_double(iterator)];
             break;
-        case BSON_STRING:
+        case BSON_TYPE_TYPE_STRING:
             result = [NSString stringWithUTF8String:bson_iterator_string(iterator)];
             break;
-        case BSON_OBJECT:
+        case BSON_TYPE_DOCUMENT:
             result = [[[MODSortedMutableDictionary alloc] init] autorelease];
-            bson_iterator_subiterator(iterator, &subIterator);
+            bson_iter_recurse(iterator, &subIterator);
             while (bson_iterator_next(&subIterator)) {
                 id value;
                 
@@ -159,9 +159,9 @@
                 }
             }
             break;
-        case BSON_ARRAY:
+        case BSON_TYPE_ARRAY:
             result = [NSMutableArray array];
-            bson_iterator_subiterator(iterator, &subIterator);
+            bson_iter_recurse(iterator, &subIterator);
             while (bson_iterator_next(&subIterator)) {
                 id value;
                 
@@ -171,7 +171,7 @@
                 }
             }
             break;
-        case BSON_BINDATA:
+        case BSON_TYPE_BINDATA:
             {
                 NSData *data;
                 
@@ -180,22 +180,22 @@
                 [data release];
             }
             break;
-        case BSON_UNDEFINED:
+        case BSON_TYPE_UNDEFINED:
             result = [[[MODUndefined alloc] init] autorelease];
             break;
-        case BSON_OID:
+        case BSON_TYPE_OID:
             result = [[[MODObjectId alloc] initWithOid:bson_iterator_oid(iterator)] autorelease];
             break;
-        case BSON_BOOL:
+        case BSON_TYPE_BOOL:
             result = [NSNumber numberWithBool:bson_iterator_bool(iterator) == true];
             break;
-        case BSON_DATE:
+        case BSON_TYPE_DATE:
             result = [NSDate dateWithTimeIntervalSince1970:bson_iterator_date(iterator) / 1000.0];
             break;
-        case BSON_NULL:
+        case BSON_TYPE_NULL:
             result = [NSNull null];
             break;
-        case BSON_REGEX:
+        case BSON_TYPE_REGEX:
             {
                 const char *cString;
                 NSString *pattern = nil;
@@ -211,15 +211,15 @@
                 [options release];
             }
             break;
-        case BSON_DBREF:
+        case BSON_TYPE_DBREF:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
-            NSAssert(NO, @"BSON_DBREF");
+            NSAssert(NO, @"BSON_TYPE_DBREF");
             break;
-        case BSON_CODE:
+        case BSON_TYPE_CODE:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
-            NSAssert(NO, @"BSON_CODE");
+            NSAssert(NO, @"BSON_TYPE_CODE");
             break;
-        case BSON_SYMBOL:
+        case BSON_TYPE_SYMBOL:
             {
                 NSString *value;
                 
@@ -228,14 +228,14 @@
                 [value release];
             }
             break;
-        case BSON_CODEWSCOPE:
+        case BSON_TYPE_CODEWSCOPE:
             NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
             NSAssert(NO, @"BSON_CODEWSCOPE");
             break;
-        case BSON_INT:
+        case BSON_TYPE_INT:
             result = [NSNumber numberWithInt:bson_iterator_int(iterator)];
             break;
-        case BSON_TIMESTAMP:
+        case BSON_TYPE_TIMESTAMP:
             {
                 bson_timestamp_t ts;
                 
@@ -243,17 +243,14 @@
                 result = [[[MODTimestamp alloc] initWithTValue:ts.t iValue:ts.i] autorelease];
             }
             break;
-        case BSON_LONG:
+        case BSON_TYPE_LONG:
             result = [NSNumber numberWithLongLong:bson_iterator_long(iterator)];
             break;
-        case BSON_MINKEY:
+        case BSON_TYPE_MINKEY:
             result = [[[MODMinKey alloc] init] autorelease];
             break;
-        case BSON_MAXKEY:
+        case BSON_TYPE_MAXKEY:
             result = [[[MODMaxKey alloc] init] autorelease];
-            break;
-        default:
-            NSAssert(NO, @"unknown %d", bson_iterator_type(iterator));
             break;
     }
     return result;
