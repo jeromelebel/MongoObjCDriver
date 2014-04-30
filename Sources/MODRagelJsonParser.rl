@@ -19,6 +19,8 @@
 #import "MODSymbol.h"
 #import "NSString+Base64.h"
 
+#pragma clang diagnostic ignored "-Wunused-variable"
+
 @interface MODRagelJsonParser ()
 @property (nonatomic, strong, readwrite) NSError *error;
 
