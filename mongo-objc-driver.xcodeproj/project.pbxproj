@@ -87,6 +87,116 @@
 		02BDC3EA141D6938000EF755 /* MODCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3E6141D6073000EF755 /* MODCursor.m */; };
 		02BDC3EC141D83A7000EF755 /* MODServer_utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3EB141D83A7000EF755 /* MODServer_utils.m */; };
 		02BDC3ED141D83A7000EF755 /* MODServer_utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3EB141D83A7000EF755 /* MODServer_utils.m */; };
+		02CF0E20191112CB008C822A /* bcon.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204505F190E5EB000A80BED /* bcon.c */; };
+		02CF0E21191112CB008C822A /* bson-atomic.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045061190E5EB000A80BED /* bson-atomic.c */; };
+		02CF0E22191112CB008C822A /* bson-clock.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045063190E5EB000A80BED /* bson-clock.c */; };
+		02CF0E23191112CB008C822A /* bson-context.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045068190E5EB000A80BED /* bson-context.c */; };
+		02CF0E24191112CB008C822A /* bson-error.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204506B190E5EB000A80BED /* bson-error.c */; };
+		02CF0E25191112CB008C822A /* bson-iter.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204506D190E5EB000A80BED /* bson-iter.c */; };
+		02CF0E26191112CB008C822A /* bson-json.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204506F190E5EB000A80BED /* bson-json.c */; };
+		02CF0E27191112CB008C822A /* bson-keys.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045071190E5EB000A80BED /* bson-keys.c */; };
+		02CF0E28191112CB008C822A /* bson-md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045074190E5EB000A80BED /* bson-md5.c */; };
+		02CF0E29191112CB008C822A /* bson-memory.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045076190E5EB000A80BED /* bson-memory.c */; };
+		02CF0E2A191112CB008C822A /* bson-oid.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045078190E5EB000A80BED /* bson-oid.c */; };
+		02CF0E2B191112CB008C822A /* bson-reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204507B190E5EB000A80BED /* bson-reader.c */; };
+		02CF0E2C191112CB008C822A /* bson-string.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204507E190E5EB000A80BED /* bson-string.c */; };
+		02CF0E2D191112CB008C822A /* bson-utf8.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045082190E5EB000A80BED /* bson-utf8.c */; };
+		02CF0E2E191112CB008C822A /* bson-value.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045084190E5EB000A80BED /* bson-value.c */; };
+		02CF0E2F191112CB008C822A /* bson-writer.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045087190E5EB000A80BED /* bson-writer.c */; };
+		02CF0E30191112CB008C822A /* bson.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045089190E5EB000A80BED /* bson.c */; };
+		02CF0E31191112CE008C822A /* bcon.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204505F190E5EB000A80BED /* bcon.c */; };
+		02CF0E32191112CE008C822A /* bson-atomic.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045061190E5EB000A80BED /* bson-atomic.c */; };
+		02CF0E33191112CE008C822A /* bson-clock.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045063190E5EB000A80BED /* bson-clock.c */; };
+		02CF0E34191112CE008C822A /* bson-context.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045068190E5EB000A80BED /* bson-context.c */; };
+		02CF0E35191112CE008C822A /* bson-error.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204506B190E5EB000A80BED /* bson-error.c */; };
+		02CF0E36191112CE008C822A /* bson-iter.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204506D190E5EB000A80BED /* bson-iter.c */; };
+		02CF0E37191112CE008C822A /* bson-json.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204506F190E5EB000A80BED /* bson-json.c */; };
+		02CF0E38191112CE008C822A /* bson-keys.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045071190E5EB000A80BED /* bson-keys.c */; };
+		02CF0E39191112CE008C822A /* bson-md5.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045074190E5EB000A80BED /* bson-md5.c */; };
+		02CF0E3A191112CE008C822A /* bson-memory.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045076190E5EB000A80BED /* bson-memory.c */; };
+		02CF0E3B191112CE008C822A /* bson-oid.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045078190E5EB000A80BED /* bson-oid.c */; };
+		02CF0E3C191112CE008C822A /* bson-reader.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204507B190E5EB000A80BED /* bson-reader.c */; };
+		02CF0E3D191112CE008C822A /* bson-string.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204507E190E5EB000A80BED /* bson-string.c */; };
+		02CF0E3E191112CE008C822A /* bson-utf8.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045082190E5EB000A80BED /* bson-utf8.c */; };
+		02CF0E3F191112CE008C822A /* bson-value.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045084190E5EB000A80BED /* bson-value.c */; };
+		02CF0E40191112CE008C822A /* bson-writer.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045087190E5EB000A80BED /* bson-writer.c */; };
+		02CF0E41191112CE008C822A /* bson.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045089190E5EB000A80BED /* bson.c */; };
+		02CF0E4219111321008C822A /* mongoc-array.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044ED9190E5E4E00A80BED /* mongoc-array.c */; };
+		02CF0E4319111321008C822A /* mongoc-buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EDB190E5E4E00A80BED /* mongoc-buffer.c */; };
+		02CF0E4419111321008C822A /* mongoc-bulk-operation.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EDD190E5E4E00A80BED /* mongoc-bulk-operation.c */; };
+		02CF0E4519111321008C822A /* mongoc-client-pool.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EDF190E5E4E00A80BED /* mongoc-client-pool.c */; };
+		02CF0E4619111321008C822A /* mongoc-client.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EE2190E5E4E00A80BED /* mongoc-client.c */; };
+		02CF0E4719111321008C822A /* mongoc-cluster.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EE5190E5E4E00A80BED /* mongoc-cluster.c */; };
+		02CF0E4819111321008C822A /* mongoc-collection.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EE7190E5E4E00A80BED /* mongoc-collection.c */; };
+		02CF0E4919111321008C822A /* mongoc-counters.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EEB190E5E4E00A80BED /* mongoc-counters.c */; };
+		02CF0E4A19111321008C822A /* mongoc-cursor-array.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EEE190E5E4E00A80BED /* mongoc-cursor-array.c */; };
+		02CF0E4B19111321008C822A /* mongoc-cursor-cursorid.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EF0190E5E4E00A80BED /* mongoc-cursor-cursorid.c */; };
+		02CF0E4C19111321008C822A /* mongoc-cursor.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EF2190E5E4E00A80BED /* mongoc-cursor.c */; };
+		02CF0E4D19111321008C822A /* mongoc-database.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EF5190E5E4E00A80BED /* mongoc-database.c */; };
+		02CF0E4E19111321008C822A /* mongoc-gridfs-file-list.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EFB190E5E4E00A80BED /* mongoc-gridfs-file-list.c */; };
+		02CF0E4F19111321008C822A /* mongoc-gridfs-file-page.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EFE190E5E4E00A80BED /* mongoc-gridfs-file-page.c */; };
+		02CF0E5019111321008C822A /* mongoc-gridfs-file.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F01190E5E4E00A80BED /* mongoc-gridfs-file.c */; };
+		02CF0E5119111321008C822A /* mongoc-gridfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F04190E5E4E00A80BED /* mongoc-gridfs.c */; };
+		02CF0E5219111321008C822A /* mongoc-index.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F08190E5E4E00A80BED /* mongoc-index.c */; };
+		02CF0E5319111321008C822A /* mongoc-init.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F0A190E5E4E00A80BED /* mongoc-init.c */; };
+		02CF0E5419111321008C822A /* mongoc-list.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F0E190E5E4E00A80BED /* mongoc-list.c */; };
+		02CF0E5519111321008C822A /* mongoc-log.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F0F190E5E4E00A80BED /* mongoc-log.c */; };
+		02CF0E5619111321008C822A /* mongoc-matcher-op.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F12190E5E4E00A80BED /* mongoc-matcher-op.c */; };
+		02CF0E5719111321008C822A /* mongoc-matcher.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F14190E5E4E00A80BED /* mongoc-matcher.c */; };
+		02CF0E5819111321008C822A /* mongoc-queue.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F18190E5E4E00A80BED /* mongoc-queue.c */; };
+		02CF0E5919111321008C822A /* mongoc-read-prefs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F1A190E5E4E00A80BED /* mongoc-read-prefs.c */; };
+		02CF0E5A19111321008C822A /* mongoc-rpc.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F1D190E5E4E00A80BED /* mongoc-rpc.c */; };
+		02CF0E5B19111321008C822A /* mongoc-sasl.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F1F190E5E4E00A80BED /* mongoc-sasl.c */; };
+		02CF0E5C19111321008C822A /* mongoc-socket.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F20190E5E4E00A80BED /* mongoc-socket.c */; };
+		02CF0E5D19111321008C822A /* mongoc-ssl.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F23190E5E4E00A80BED /* mongoc-ssl.c */; };
+		02CF0E5E19111321008C822A /* mongoc-stream-buffered.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F25190E5E4E00A80BED /* mongoc-stream-buffered.c */; };
+		02CF0E5F19111321008C822A /* mongoc-stream-file.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F27190E5E4E00A80BED /* mongoc-stream-file.c */; };
+		02CF0E6019111321008C822A /* mongoc-stream-gridfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F29190E5E4E00A80BED /* mongoc-stream-gridfs.c */; };
+		02CF0E6119111321008C822A /* mongoc-stream-socket.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F2C190E5E4E00A80BED /* mongoc-stream-socket.c */; };
+		02CF0E6219111321008C822A /* mongoc-stream-tls.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F2E190E5E4E00A80BED /* mongoc-stream-tls.c */; };
+		02CF0E6319111321008C822A /* mongoc-stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F30190E5E4E00A80BED /* mongoc-stream.c */; };
+		02CF0E6419111321008C822A /* mongoc-uri.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F34190E5E4E00A80BED /* mongoc-uri.c */; };
+		02CF0E6519111321008C822A /* mongoc-util.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F37190E5E4E00A80BED /* mongoc-util.c */; };
+		02CF0E6619111321008C822A /* mongoc-write-command.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F3A190E5E4E00A80BED /* mongoc-write-command.c */; };
+		02CF0E6719111321008C822A /* mongoc-write-concern.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F3C190E5E4E00A80BED /* mongoc-write-concern.c */; };
+		02CF0E6819111321008C822A /* mongoc-array.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044ED9190E5E4E00A80BED /* mongoc-array.c */; };
+		02CF0E6919111321008C822A /* mongoc-buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EDB190E5E4E00A80BED /* mongoc-buffer.c */; };
+		02CF0E6A19111321008C822A /* mongoc-bulk-operation.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EDD190E5E4E00A80BED /* mongoc-bulk-operation.c */; };
+		02CF0E6B19111321008C822A /* mongoc-client-pool.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EDF190E5E4E00A80BED /* mongoc-client-pool.c */; };
+		02CF0E6C19111321008C822A /* mongoc-client.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EE2190E5E4E00A80BED /* mongoc-client.c */; };
+		02CF0E6D19111321008C822A /* mongoc-cluster.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EE5190E5E4E00A80BED /* mongoc-cluster.c */; };
+		02CF0E6E19111321008C822A /* mongoc-collection.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EE7190E5E4E00A80BED /* mongoc-collection.c */; };
+		02CF0E6F19111321008C822A /* mongoc-counters.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EEB190E5E4E00A80BED /* mongoc-counters.c */; };
+		02CF0E7019111321008C822A /* mongoc-cursor-array.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EEE190E5E4E00A80BED /* mongoc-cursor-array.c */; };
+		02CF0E7119111321008C822A /* mongoc-cursor-cursorid.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EF0190E5E4E00A80BED /* mongoc-cursor-cursorid.c */; };
+		02CF0E7219111321008C822A /* mongoc-cursor.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EF2190E5E4E00A80BED /* mongoc-cursor.c */; };
+		02CF0E7319111321008C822A /* mongoc-database.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EF5190E5E4E00A80BED /* mongoc-database.c */; };
+		02CF0E7419111321008C822A /* mongoc-gridfs-file-list.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EFB190E5E4E00A80BED /* mongoc-gridfs-file-list.c */; };
+		02CF0E7519111321008C822A /* mongoc-gridfs-file-page.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044EFE190E5E4E00A80BED /* mongoc-gridfs-file-page.c */; };
+		02CF0E7619111321008C822A /* mongoc-gridfs-file.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F01190E5E4E00A80BED /* mongoc-gridfs-file.c */; };
+		02CF0E7719111321008C822A /* mongoc-gridfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F04190E5E4E00A80BED /* mongoc-gridfs.c */; };
+		02CF0E7819111321008C822A /* mongoc-index.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F08190E5E4E00A80BED /* mongoc-index.c */; };
+		02CF0E7919111321008C822A /* mongoc-init.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F0A190E5E4E00A80BED /* mongoc-init.c */; };
+		02CF0E7A19111321008C822A /* mongoc-list.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F0E190E5E4E00A80BED /* mongoc-list.c */; };
+		02CF0E7B19111321008C822A /* mongoc-log.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F0F190E5E4E00A80BED /* mongoc-log.c */; };
+		02CF0E7C19111321008C822A /* mongoc-matcher-op.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F12190E5E4E00A80BED /* mongoc-matcher-op.c */; };
+		02CF0E7D19111321008C822A /* mongoc-matcher.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F14190E5E4E00A80BED /* mongoc-matcher.c */; };
+		02CF0E7E19111321008C822A /* mongoc-queue.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F18190E5E4E00A80BED /* mongoc-queue.c */; };
+		02CF0E7F19111321008C822A /* mongoc-read-prefs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F1A190E5E4E00A80BED /* mongoc-read-prefs.c */; };
+		02CF0E8019111321008C822A /* mongoc-rpc.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F1D190E5E4E00A80BED /* mongoc-rpc.c */; };
+		02CF0E8119111321008C822A /* mongoc-sasl.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F1F190E5E4E00A80BED /* mongoc-sasl.c */; };
+		02CF0E8219111321008C822A /* mongoc-socket.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F20190E5E4E00A80BED /* mongoc-socket.c */; };
+		02CF0E8319111321008C822A /* mongoc-ssl.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F23190E5E4E00A80BED /* mongoc-ssl.c */; };
+		02CF0E8419111321008C822A /* mongoc-stream-buffered.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F25190E5E4E00A80BED /* mongoc-stream-buffered.c */; };
+		02CF0E8519111321008C822A /* mongoc-stream-file.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F27190E5E4E00A80BED /* mongoc-stream-file.c */; };
+		02CF0E8619111321008C822A /* mongoc-stream-gridfs.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F29190E5E4E00A80BED /* mongoc-stream-gridfs.c */; };
+		02CF0E8719111321008C822A /* mongoc-stream-socket.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F2C190E5E4E00A80BED /* mongoc-stream-socket.c */; };
+		02CF0E8819111321008C822A /* mongoc-stream-tls.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F2E190E5E4E00A80BED /* mongoc-stream-tls.c */; };
+		02CF0E8919111321008C822A /* mongoc-stream.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F30190E5E4E00A80BED /* mongoc-stream.c */; };
+		02CF0E8A19111321008C822A /* mongoc-uri.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F34190E5E4E00A80BED /* mongoc-uri.c */; };
+		02CF0E8B19111321008C822A /* mongoc-util.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F37190E5E4E00A80BED /* mongoc-util.c */; };
+		02CF0E8C19111321008C822A /* mongoc-write-command.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F3A190E5E4E00A80BED /* mongoc-write-command.c */; };
+		02CF0E8D19111321008C822A /* mongoc-write-concern.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F3C190E5E4E00A80BED /* mongoc-write-concern.c */; };
 		02CF87E9142F8AA3000C4C7F /* MODRegex.h in Headers */ = {isa = PBXBuildFile; fileRef = 02CF87E7142F8AA3000C4C7F /* MODRegex.h */; };
 		02CF87EA142F8AA3000C4C7F /* MODRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87E8142F8AA3000C4C7F /* MODRegex.m */; };
 		02CF87EC142F91CA000C4C7F /* MODRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87E8142F8AA3000C4C7F /* MODRegex.m */; };
@@ -2986,27 +3096,82 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02CF0E22191112CB008C822A /* bson-clock.c in Sources */,
+				02CF0E8119111321008C822A /* mongoc-sasl.c in Sources */,
 				02A85F5214103EA6004F3FE9 /* MODServer.m in Sources */,
+				02CF0E7919111321008C822A /* mongoc-init.c in Sources */,
 				02688DDD14119CF50014ED51 /* MODDatabase.m in Sources */,
+				02CF0E7319111321008C822A /* mongoc-database.c in Sources */,
+				02CF0E7D19111321008C822A /* mongoc-matcher.c in Sources */,
+				02CF0E8419111321008C822A /* mongoc-stream-buffered.c in Sources */,
+				02CF0E7C19111321008C822A /* mongoc-matcher-op.c in Sources */,
 				0299B61517F39FAA00FB40A2 /* MODRagelJsonParser.m in Sources */,
+				02CF0E2F191112CB008C822A /* bson-writer.c in Sources */,
+				02CF0E6B19111321008C822A /* mongoc-client-pool.c in Sources */,
+				02CF0E8A19111321008C822A /* mongoc-uri.c in Sources */,
+				02CF0E8219111321008C822A /* mongoc-socket.c in Sources */,
+				02CF0E8819111321008C822A /* mongoc-stream-tls.c in Sources */,
+				02CF0E28191112CB008C822A /* bson-md5.c in Sources */,
+				02CF0E20191112CB008C822A /* bcon.c in Sources */,
 				02688DE31411C5010014ED51 /* MODCollection.m in Sources */,
+				02CF0E6E19111321008C822A /* mongoc-collection.c in Sources */,
 				02A85F5A14104184004F3FE9 /* MODQuery.m in Sources */,
+				02CF0E7519111321008C822A /* mongoc-gridfs-file-page.c in Sources */,
+				02CF0E7A19111321008C822A /* mongoc-list.c in Sources */,
 				02BDC3E8141D6073000EF755 /* MODCursor.m in Sources */,
+				02CF0E2E191112CB008C822A /* bson-value.c in Sources */,
 				02BDC3EC141D83A7000EF755 /* MODServer_utils.m in Sources */,
 				02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */,
 				028CE606142E10BE0099B1F7 /* MODTimestamp.m in Sources */,
 				02CF87EA142F8AA3000C4C7F /* MODRegex.m in Sources */,
 				02411ABA1432D02700A5FFCA /* MODBinary.m in Sources */,
+				02CF0E26191112CB008C822A /* bson-json.c in Sources */,
+				02CF0E8C19111321008C822A /* mongoc-write-command.c in Sources */,
 				025C56201433E7E40064B010 /* MODDBRef.m in Sources */,
+				02CF0E7819111321008C822A /* mongoc-index.c in Sources */,
 				02B24274147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */,
 				023ECFFD14851BEE00185781 /* MODSymbol.m in Sources */,
+				02CF0E7219111321008C822A /* mongoc-cursor.c in Sources */,
+				02CF0E2C191112CB008C822A /* bson-string.c in Sources */,
+				02CF0E30191112CB008C822A /* bson.c in Sources */,
+				02CF0E8919111321008C822A /* mongoc-stream.c in Sources */,
+				02CF0E8719111321008C822A /* mongoc-stream-socket.c in Sources */,
+				02CF0E27191112CB008C822A /* bson-keys.c in Sources */,
+				02CF0E6A19111321008C822A /* mongoc-bulk-operation.c in Sources */,
+				02CF0E23191112CB008C822A /* bson-context.c in Sources */,
 				024B0C081887DFBF00B8DCE6 /* MODDocumentComparator.m in Sources */,
+				02CF0E24191112CB008C822A /* bson-error.c in Sources */,
+				02CF0E7E19111321008C822A /* mongoc-queue.c in Sources */,
+				02CF0E7619111321008C822A /* mongoc-gridfs-file.c in Sources */,
+				02CF0E6919111321008C822A /* mongoc-buffer.c in Sources */,
+				02CF0E7419111321008C822A /* mongoc-gridfs-file-list.c in Sources */,
+				02CF0E2A191112CB008C822A /* bson-oid.c in Sources */,
+				02CF0E7B19111321008C822A /* mongoc-log.c in Sources */,
+				02CF0E25191112CB008C822A /* bson-iter.c in Sources */,
+				02CF0E6D19111321008C822A /* mongoc-cluster.c in Sources */,
+				02CF0E8019111321008C822A /* mongoc-rpc.c in Sources */,
 				02DB18AC172C8C5A00B26EAE /* NSData+Base64.m in Sources */,
 				02DB18B0172C8C9700B26EAE /* NSString+Base64.m in Sources */,
+				02CF0E8619111321008C822A /* mongoc-stream-gridfs.c in Sources */,
+				02CF0E21191112CB008C822A /* bson-atomic.c in Sources */,
+				02CF0E2D191112CB008C822A /* bson-utf8.c in Sources */,
+				02CF0E7019111321008C822A /* mongoc-cursor-array.c in Sources */,
+				02CF0E6F19111321008C822A /* mongoc-counters.c in Sources */,
 				02B17F36184FF2E500362A27 /* MODBsonComparator.m in Sources */,
+				02CF0E6C19111321008C822A /* mongoc-client.c in Sources */,
+				02CF0E7F19111321008C822A /* mongoc-read-prefs.c in Sources */,
+				02CF0E8319111321008C822A /* mongoc-ssl.c in Sources */,
 				027A1DA31767E91F0048AD60 /* MODMaxKey.m in Sources */,
+				02CF0E7719111321008C822A /* mongoc-gridfs.c in Sources */,
+				02CF0E8D19111321008C822A /* mongoc-write-concern.c in Sources */,
+				02CF0E8B19111321008C822A /* mongoc-util.c in Sources */,
+				02CF0E6819111321008C822A /* mongoc-array.c in Sources */,
+				02CF0E29191112CB008C822A /* bson-memory.c in Sources */,
 				027A1DA61767E91F0048AD60 /* MODMinKey.m in Sources */,
 				027A1DA91767E91F0048AD60 /* MODUndefined.m in Sources */,
+				02CF0E2B191112CB008C822A /* bson-reader.c in Sources */,
+				02CF0E8519111321008C822A /* mongoc-stream-file.c in Sources */,
+				02CF0E7119111321008C822A /* mongoc-cursor-cursorid.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3014,28 +3179,83 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02CF0E41191112CE008C822A /* bson.c in Sources */,
 				02F121C31410EF5200197811 /* main.m in Sources */,
+				02CF0E4419111321008C822A /* mongoc-bulk-operation.c in Sources */,
+				02CF0E4E19111321008C822A /* mongoc-gridfs-file-list.c in Sources */,
+				02CF0E4F19111321008C822A /* mongoc-gridfs-file-page.c in Sources */,
 				02F121CC1410F01B00197811 /* MODServer.m in Sources */,
+				02CF0E6619111321008C822A /* mongoc-write-command.c in Sources */,
+				02CF0E32191112CE008C822A /* bson-atomic.c in Sources */,
+				02CF0E6019111321008C822A /* mongoc-stream-gridfs.c in Sources */,
 				02F121CD1410F01D00197811 /* MODQuery.m in Sources */,
 				0299B61417F39FA900FB40A2 /* MODRagelJsonParser.m in Sources */,
+				02CF0E5719111321008C822A /* mongoc-matcher.c in Sources */,
 				02688DDE14119CF50014ED51 /* MODDatabase.m in Sources */,
+				02CF0E3F191112CE008C822A /* bson-value.c in Sources */,
+				02CF0E4519111321008C822A /* mongoc-client-pool.c in Sources */,
+				02CF0E6519111321008C822A /* mongoc-util.c in Sources */,
+				02CF0E4D19111321008C822A /* mongoc-database.c in Sources */,
 				02688DE41411C5010014ED51 /* MODCollection.m in Sources */,
+				02CF0E40191112CE008C822A /* bson-writer.c in Sources */,
+				02CF0E4B19111321008C822A /* mongoc-cursor-cursorid.c in Sources */,
 				02BDC3EA141D6938000EF755 /* MODCursor.m in Sources */,
+				02CF0E5A19111321008C822A /* mongoc-rpc.c in Sources */,
+				02CF0E31191112CE008C822A /* bcon.c in Sources */,
 				02BDC3ED141D83A7000EF755 /* MODServer_utils.m in Sources */,
+				02CF0E4C19111321008C822A /* mongoc-cursor.c in Sources */,
+				02CF0E33191112CE008C822A /* bson-clock.c in Sources */,
+				02CF0E6219111321008C822A /* mongoc-stream-tls.c in Sources */,
+				02CF0E4A19111321008C822A /* mongoc-cursor-array.c in Sources */,
 				024B0C091887DFBF00B8DCE6 /* MODDocumentComparator.m in Sources */,
+				02CF0E5119111321008C822A /* mongoc-gridfs.c in Sources */,
+				02CF0E5F19111321008C822A /* mongoc-stream-file.c in Sources */,
+				02CF0E4719111321008C822A /* mongoc-cluster.c in Sources */,
+				02CF0E5819111321008C822A /* mongoc-queue.c in Sources */,
 				02AB057814296F9000B7CD19 /* MODObjectId.m in Sources */,
 				028CE608142E4A1A0099B1F7 /* MODTimestamp.m in Sources */,
 				02CF87EC142F91CA000C4C7F /* MODRegex.m in Sources */,
+				02CF0E37191112CE008C822A /* bson-json.c in Sources */,
 				02411ABB1432D02700A5FFCA /* MODBinary.m in Sources */,
+				02CF0E5E19111321008C822A /* mongoc-stream-buffered.c in Sources */,
+				02CF0E5919111321008C822A /* mongoc-read-prefs.c in Sources */,
 				025C56231433EE0E0064B010 /* MODDBRef.m in Sources */,
+				02CF0E4819111321008C822A /* mongoc-collection.c in Sources */,
+				02CF0E4619111321008C822A /* mongoc-client.c in Sources */,
+				02CF0E5B19111321008C822A /* mongoc-sasl.c in Sources */,
 				02B24275147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */,
+				02CF0E5019111321008C822A /* mongoc-gridfs-file.c in Sources */,
+				02CF0E4319111321008C822A /* mongoc-buffer.c in Sources */,
+				02CF0E4219111321008C822A /* mongoc-array.c in Sources */,
 				023ECFFF1485237000185781 /* MODSymbol.m in Sources */,
+				02CF0E36191112CE008C822A /* bson-iter.c in Sources */,
+				02CF0E6119111321008C822A /* mongoc-stream-socket.c in Sources */,
+				02CF0E34191112CE008C822A /* bson-context.c in Sources */,
+				02CF0E3A191112CE008C822A /* bson-memory.c in Sources */,
 				02DB18B1172C8DFA00B26EAE /* NSData+Base64.m in Sources */,
+				02CF0E3C191112CE008C822A /* bson-reader.c in Sources */,
+				02CF0E39191112CE008C822A /* bson-md5.c in Sources */,
+				02CF0E5519111321008C822A /* mongoc-log.c in Sources */,
 				02DB18B2172C8E0700B26EAE /* NSString+Base64.m in Sources */,
+				02CF0E5C19111321008C822A /* mongoc-socket.c in Sources */,
 				027A1DA41767E91F0048AD60 /* MODMaxKey.m in Sources */,
+				02CF0E5419111321008C822A /* mongoc-list.c in Sources */,
+				02CF0E6419111321008C822A /* mongoc-uri.c in Sources */,
+				02CF0E5619111321008C822A /* mongoc-matcher-op.c in Sources */,
+				02CF0E38191112CE008C822A /* bson-keys.c in Sources */,
+				02CF0E5219111321008C822A /* mongoc-index.c in Sources */,
+				02CF0E35191112CE008C822A /* bson-error.c in Sources */,
+				02CF0E3B191112CE008C822A /* bson-oid.c in Sources */,
 				027A1DA71767E91F0048AD60 /* MODMinKey.m in Sources */,
+				02CF0E6719111321008C822A /* mongoc-write-concern.c in Sources */,
 				02B17F37184FF2E500362A27 /* MODBsonComparator.m in Sources */,
+				02CF0E4919111321008C822A /* mongoc-counters.c in Sources */,
+				02CF0E5319111321008C822A /* mongoc-init.c in Sources */,
+				02CF0E5D19111321008C822A /* mongoc-ssl.c in Sources */,
 				027A1DAA1767E91F0048AD60 /* MODUndefined.m in Sources */,
+				02CF0E3E191112CE008C822A /* bson-utf8.c in Sources */,
+				02CF0E3D191112CE008C822A /* bson-string.c in Sources */,
+				02CF0E6319111321008C822A /* mongoc-stream.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3126,6 +3346,10 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = (
+					"-DMONGOC_COMPILATION",
+					"-DBSON_COMPILATION",
+				);
 			};
 			name = Debug;
 		};
@@ -3145,6 +3369,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = (
+					"-DMONGOC_COMPILATION",
+					"-DBSON_COMPILATION",
+				);
 			};
 			name = Release;
 		};
