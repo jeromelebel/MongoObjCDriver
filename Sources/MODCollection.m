@@ -49,7 +49,7 @@
         if (!mongoQuery.canceled && [self.mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson_t output = BSON_INITIALIZER;
             
-            if (mongo_simple_str_command(self.mongocClient, self.mongoDatabase.databaseName.UTF8String, "collstats", self.collectionName.UTF8String, &output) == MONGO_OK) {
+            if (mongoc_client_command_simple(self.mongocClient, self.mongoDatabase.databaseName.UTF8String, "collstats", self.collectionName.UTF8String, &output) == MONGO_OK) {
                 stats = [[self.mongoServer class] objectFromBson:&output];
                 [mongoQuery.mutableParameters setObject:stats forKey:@"collectionstats"];
             }
@@ -164,7 +164,7 @@
         int64_t count = 0;
         
         if (!mongoQuery.canceled && [self.mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
-            bson *bsonQuery = NULL;
+            bson_t *bsonQuery = NULL;
             NSError *error = nil;
             
             bsonQuery = malloc(sizeof(*bsonQuery));
