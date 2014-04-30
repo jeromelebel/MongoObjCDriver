@@ -44,10 +44,10 @@ enum MOD_INDEX_OPTIONS {
 
 - (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction reduceFunction:(NSString *)reduceFunction query:(id)mapReduceQuery sort:(id)sort limit:(int64_t)limit output:(id)output keepTemp:(BOOL)keepTemp finalizeFunction:(NSString *)finalizeFunction scope:(id)scope jsmode:(BOOL)jsmode verbose:(BOOL)verbose callback:(void (^)(MODQuery *mongoQuery))callback;
 
-@property(nonatomic, readonly, retain) MODServer *mongoServer;
-@property(nonatomic, retain, readonly) MODDatabase *mongoDatabase;
-@property(nonatomic, retain, readonly) NSString *collectionName;
-@property(nonatomic, assign, readonly) NSString *databaseName;
-@property(nonatomic, retain, readonly) NSString *absoluteCollectionName;
+@property (nonatomic, retain, readonly) MODServer *mongoServer;
+@property (nonatomic, retain, readonly) MODDatabase *mongoDatabase;
+@property (nonatomic, retain, readonly) NSString *collectionName;
+@property (nonatomic, assign, readonly) NSString *databaseName;
+@property (nonatomic, retain, readonly) NSString *absoluteCollectionName;
 
 @end

@@ -16,23 +16,25 @@ enum {
 
 @interface MODServer()
 @property(nonatomic, readwrite, assign, getter=isConnected) BOOL connected;
-@property(nonatomic, readwrite, assign) mongoc_client_ptr mongocClient;
+@property(nonatomic, readwrite, assign) mongoc_client_t *mongocClient;
 
 - (BOOL)authenticateSynchronouslyWithDatabaseName:(NSString *)databaseName userName:(NSString *)user password:(NSString *)password mongoQuery:(MODQuery *)mongoQuery;
 - (BOOL)authenticateSynchronouslyWithDatabaseName:(NSString *)databaseName userName:(NSString *)userName password:(NSString *)password error:(NSError **)error;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock;
 - (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block;
+
+- (MODQuery *)connectWithMongocURI:(const mongoc_uri_t *)mongocURI callback:(void (^)(BOOL connected, MODQuery *mongoQuery))callback;
 @end
 
 @interface MODServer(utils_internal)
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails;
-+ (NSError *)errorFromMongo:(mongoc_client_ptr)mongo;
++ (NSError *)errorFromMongo:(mongoc_client_t *)mongo;
 + (MODSortedMutableDictionary *)objectFromBson:(bson_t *)bsonObject;
 + (void)appendObject:(MODSortedMutableDictionary *)object toBson:(bson_t *)bson;
 @end
 
 @interface MODDatabase()
-@property(nonatomic, readonly, assign) mongoc_client_ptr mongocClient;
+@property(nonatomic, readonly, assign) mongoc_client_t *mongocClient;
 
 - (id)initWithMongoServer:(MODServer *)mongoServer databaseName:(NSString *)databaseName;
 - (BOOL)authenticateSynchronouslyWithMongoQuery:(MODQuery *)mongoQuery;
@@ -41,7 +43,7 @@ enum {
 @end
 
 @interface MODCollection()
-@property(nonatomic, readonly, assign) mongoc_client_ptr mongocClient;
+@property(nonatomic, readonly, assign) mongoc_client_t *mongocClient;
 
 - (id)initWithMongoDatabase:(MODDatabase *)mongoDatabase collectionName:(NSString *)collectionName;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock;

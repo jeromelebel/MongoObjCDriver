@@ -17,7 +17,7 @@
     if (self = [self init]) {
         _mongoDatabase = [mongoDatabase retain];
         _collectionName = [collectionName retain];
-        _absoluteCollectionName = [[NSString alloc] initWithFormat:@"%@.%@", _mongoDatabase.databaseName, _collectionName];
+        _absoluteCollectionName = [[NSString alloc] initWithFormat:@"%@.%@", self.mongoDatabase.databaseName, self.collectionName];
     }
     return self;
 }
@@ -25,28 +25,31 @@
 - (void)dealloc
 {
     [_mongoDatabase release];
+    _mongoDatabase = nil;
     [_absoluteCollectionName release];
+    _absoluteCollectionName = nil;
     [_collectionName release];
+    _collectionName = nil;
     [super dealloc];
 }
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock
 {
     [mongoQuery.mutableParameters setObject:self forKey:@"collection"];
-    [_mongoDatabase mongoQueryDidFinish:mongoQuery withCallbackBlock:callbackBlock];
+    [self.mongoDatabase mongoQueryDidFinish:mongoQuery withCallbackBlock:callbackBlock];
 }
 
 - (MODQuery *)fetchCollectionStatsWithCallback:(void (^)(MODSortedMutableDictionary *stats, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
-    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         MODSortedMutableDictionary *stats = nil;
         
-        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
-            bson output = { NULL, 0 };
+        if (!mongoQuery.canceled && [self.mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+            bson_t output = BSON_INITIALIZER;
             
-            if (mongo_simple_str_command(_mongoDatabase.mongo, [_mongoDatabase.databaseName UTF8String], "collstats", [_collectionName UTF8String], &output) == MONGO_OK) {
+            if (mongo_simple_str_command(self.mongocClient, self.mongoDatabase.databaseName.UTF8String, "collstats", self.collectionName.UTF8String, &output) == MONGO_OK) {
                 stats = [[self.mongoServer class] objectFromBson:&output];
                 [mongoQuery.mutableParameters setObject:stats forKey:@"collectionstats"];
             }
@@ -64,7 +67,7 @@
 {
     MODQuery *query = nil;
     
-    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         if (!mongoQuery.canceled) {
             NSMutableArray *documents;
             MODCursor *cursor;
@@ -73,7 +76,7 @@
             
             documents = [[NSMutableArray alloc] init];
             cursor = [[MODCursor alloc] initWithMongoCollection:self];
-            cursor.cursor = mongo_index_list(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], 0, 0);
+            cursor.cursor = mongo_index_list(self.mongocClient, self.absoluteCollectionName.UTF8String, 0, 0);
             cursor.donotReleaseCursor = YES;
             while ((document = [cursor nextDocumentWithBsonData:nil error:&error]) != nil) {
                 [documents addObject:document];
@@ -97,7 +100,7 @@
 {
     MODQuery *query = nil;
     
-    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         if (!mongoQuery.canceled) {
             NSMutableArray *documents;
             NSMutableArray *allBsonData;
@@ -157,10 +160,10 @@
 {
     MODQuery *query = nil;
     
-    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         int64_t count = 0;
         
-        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        if (!mongoQuery.canceled && [self.mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson *bsonQuery = NULL;
             NSError *error = nil;
             
@@ -176,7 +179,7 @@
             } else {
                 NSNumber *response;
                 
-                count = mongo_count(_mongoDatabase.mongo, [_mongoDatabase.databaseName UTF8String], [_collectionName UTF8String], bsonQuery);
+                count = mongo_count(self.mongocClient, self.mongoDatabase.databaseName.UTF8String, self.collectionName.UTF8String, bsonQuery);
                 response = [[NSNumber alloc] initWithUnsignedLongLong:count];
                 [mongoQuery.mutableParameters setObject:response forKey:@"count"];
                 [response release];
@@ -201,10 +204,10 @@
 {
     MODQuery *query = nil;
     
-    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         if (!self.mongoServer.isMaster) {
             mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Document insert is forbidden on a slave"];
-        } else if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        } else if (!mongoQuery.canceled && [self.mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson **data;
             bson **dataCursor;
             NSInteger countCursor;
@@ -227,7 +230,7 @@
                         [userInfo release];
                     }
                 } else if ([document isKindOfClass:[MODSortedMutableDictionary class]]) {
-                    [[_mongoDatabase.mongoServer class] appendObject:document toBson:data[ii]];
+                    [[self.mongoServer class] appendObject:document toBson:data[ii]];
                 }
                 bson_finish(data[ii]);
                 ii++;
@@ -239,16 +242,16 @@
                 dataCursor = data;
                 countCursor = documentCount;
                 while (countCursor > INT32_MAX) {
-                    if (mongo_insert_batch(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], (const bson **)dataCursor, INT32_MAX, NULL, 0) != MONGO_OK) {
-                        error = [[_mongoDatabase.mongoServer class] errorFromMongo:_mongoDatabase.mongo];
+                    if (mongo_insert_batch(self.mongocClient, self.absoluteCollectionName.UTF8String, (const bson **)dataCursor, INT32_MAX, NULL, 0) != MONGO_OK) {
+                        error = [[self.mongoServer class] errorFromMongo:self.mongocClient];
                         break;
                     }
                     countCursor -= INT32_MAX;
                     dataCursor += INT32_MAX;
                 }
                 if (!error) {
-                    if (mongo_insert_batch(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], (const bson **)dataCursor, (int32_t)countCursor, NULL, 0) != MONGO_OK) {
-                        error = [[_mongoDatabase.mongoServer class] errorFromMongo:_mongoDatabase.mongo];
+                    if (mongo_insert_batch(self.mongocClient, self.absoluteCollectionName.UTF8String, (const bson **)dataCursor, (int32_t)countCursor, NULL, 0) != MONGO_OK) {
+                        error = [[self.mongoServer class] errorFromMongo:self.mongocClient];
                     }
                 }
             }
@@ -276,10 +279,10 @@
 {
     MODQuery *query = nil;
     
-    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         if (!self.mongoServer.isMaster) {
             mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Document update is forbidden on a slave"];
-        } else if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        } else if (!mongoQuery.canceled && [self.mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson bsonCriteria;
             bson bsonUpdate;
             NSError *error = nil;
@@ -299,9 +302,9 @@
             }
             bson_finish(&bsonUpdate);
             if (error == nil) {
-                int result = mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonUpdate, (upsert?MONGO_UPDATE_UPSERT:0) | (multiUpdate?MONGO_UPDATE_MULTI:0), NULL);
+                int result = mongo_update(self.mongocClient, self.absoluteCollectionName.UTF8String, &bsonCriteria, &bsonUpdate, (upsert?MONGO_UPDATE_UPSERT:0) | (multiUpdate?MONGO_UPDATE_MULTI:0), NULL);
                 if (result != MONGO_OK) {
-                    error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:_mongoDatabase.mongo->lasterrcode descriptionDetails:[NSString stringWithUTF8String:_mongoDatabase.mongo->lasterrstr]];
+                    error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:self.mongocClient->lasterrcode descriptionDetails:[NSString stringWithUTF8String:self.mongocClient->lasterrstr]];
                     mongoQuery.error = error;
                 }
             } else {
@@ -328,10 +331,10 @@
 {
     MODQuery *query = nil;
     
-    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         if (!self.mongoServer.isMaster) {
             mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Document save is forbidden on a slave"];
-        } else if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        } else if (!mongoQuery.canceled && [self.mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson bsonCriteria;
             bson bsonDocument;
             NSError *error = nil;
@@ -376,7 +379,7 @@
                                 bson_append_oid(&bsonCriteria, "_id", bson_iterator_oid(&iterator));
                                 break;
                             default:
-                                error = [[_mongoDatabase.mongoServer class] errorWithErrorDomain:MODMongoErrorDomain code:MONGO_BSON_INVALID descriptionDetails:@"_id missing in document"];
+                                error = [[self.mongoServer class] errorWithErrorDomain:MODMongoErrorDomain code:MONGO_BSON_INVALID descriptionDetails:@"_id missing in document"];
                                 break;
                         }
                         break;
@@ -385,9 +388,9 @@
             }
             bson_finish(&bsonCriteria);
             if (error == nil) {
-                int result = mongo_update(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, &bsonDocument, MONGO_UPDATE_UPSERT, NULL);
+                int result = mongo_update(self.mongocClient, self.absoluteCollectionName.UTF8String, &bsonCriteria, &bsonDocument, MONGO_UPDATE_UPSERT, NULL);
                 if (result != MONGO_OK) {
-                    error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:_mongoDatabase.mongo->lasterrcode descriptionDetails:[NSString stringWithUTF8String:_mongoDatabase.mongo->lasterrstr]];
+                    error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:self.mongocClient->lasterrcode descriptionDetails:[NSString stringWithUTF8String:self.mongocClient->lasterrstr]];
                     mongoQuery.error = error;
                 }
             } else {
@@ -409,10 +412,10 @@
 {
     MODQuery *query = nil;
     
-    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         if (!self.mongoServer.isMaster) {
             mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Document remove is forbidden on a slave"];
-        } else if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        } else if (!mongoQuery.canceled && [self.mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson bsonCriteria;
             NSError *error = nil;
             
@@ -422,15 +425,15 @@
                     [MODRagelJsonParser bsonFromJson:&bsonCriteria json:criteria error:&error];
                 }
             } else if (criteria && [criteria isKindOfClass:[MODSortedMutableDictionary class]]) {
-                [[_mongoDatabase.mongoServer class] appendObject:criteria toBson:&bsonCriteria];
+                [[self.mongoServer class] appendObject:criteria toBson:&bsonCriteria];
             } else {
                 error = [MODServer errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
             }
             bson_finish(&bsonCriteria);
             if (error == nil) {
-                int result = mongo_remove(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &bsonCriteria, NULL);
+                int result = mongo_remove(self.mongocClient, self.absoluteCollectionName.UTF8String, &bsonCriteria, NULL);
                 if (result != MONGO_OK) {
-                    error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:_mongoDatabase.mongo->lasterrcode descriptionDetails:[NSString stringWithUTF8String:_mongoDatabase.mongo->lasterrstr]];
+                    error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:self.mongocClient->lasterrcode descriptionDetails:[NSString stringWithUTF8String:self.mongocClient->lasterrstr]];
                     mongoQuery.error = error;
                 }
             } else {
@@ -474,10 +477,10 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
         }
         name = defaultName;
     }
-    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         if (!self.mongoServer.isMaster) {
             mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Index create is forbidden on a slave"];
-        } else if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        } else if (!mongoQuery.canceled && [self.mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson index;
             bson output;
             NSError *error = nil;
@@ -486,10 +489,10 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
             if ([indexDocument isKindOfClass:[NSString class]]) {
                 [MODRagelJsonParser bsonFromJson:&index json:indexDocument error:&error];
             } else {
-                [[_mongoDatabase.mongoServer class] appendObject:indexDocument toBson:&index];
+                [[self.mongoServer class] appendObject:indexDocument toBson:&index];
             }
             bson_finish(&index);
-            mongo_create_index(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &index, [name UTF8String], convertIndexOptions(options), -1, &output);
+            mongo_create_index(self.mongocClient, self.absoluteCollectionName.UTF8String, &index, name.UTF8String, convertIndexOptions(options), -1, &output);
             bson_destroy(&index);
             bson_destroy(&output);
         }
@@ -509,10 +512,10 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
 {
     MODQuery *query = nil;
     
-    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         if (!self.mongoServer.isMaster) {
             mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Index drop is forbidden on a slave"];
-        } else if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        } else if (!mongoQuery.canceled && [self.mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson index;
             NSError *error = nil;
             
@@ -520,11 +523,11 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
             if ([indexDocument isKindOfClass:[NSString class]]) {
                 [MODRagelJsonParser bsonFromJson:&index json:indexDocument error:&error];
             } else {
-                [[_mongoDatabase.mongoServer class] appendObject:indexDocument toBson:&index];
+                [[self.mongoServer class] appendObject:indexDocument toBson:&index];
             }
             bson_finish(&index);
             if (error == nil) {
-                mongo_drop_indexes(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], &index);
+                mongo_drop_indexes(self.mongocClient, self.absoluteCollectionName.UTF8String, &index);
             } else {
                 mongoQuery.error = error;
             }
@@ -543,9 +546,9 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
 {
     MODQuery *query = nil;
     
-    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
-            mongo_reindex(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String]);
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        if (!mongoQuery.canceled && [self.mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+            mongo_reindex(self.mongocClient, self.absoluteCollectionName.UTF8String);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback(mongoQuery);
@@ -559,10 +562,10 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
 {
     MODQuery *query = nil;
     
-    query = [_mongoDatabase.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
         if (!self.mongoServer.isMaster) {
             mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Map reduce is forbidden on a slave"];
-        } else if (!mongoQuery.canceled && [_mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
+        } else if (!mongoQuery.canceled && [self.mongoDatabase authenticateSynchronouslyWithMongoQuery:mongoQuery]) {
             bson bsonQuery;
             bson bsonSort;
             bson bsonOutput;
@@ -597,7 +600,7 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
                 bson_finish(&bsonScope);
             }
             if (!error) {
-                mongo_map_reduce(_mongoDatabase.mongo, [_absoluteCollectionName UTF8String], [mapFunction UTF8String], [reduceFunction UTF8String], &bsonQuery, &bsonSort, limit, &bsonOutput, keepTemp?1:0, [finalizeFunction UTF8String], &bsonScope, jsmode?1:0, verbose?1:0, &bsonResult);
+                mongo_map_reduce(self.mongocClient, self.absoluteCollectionName.UTF8String, mapFunction.UTF8String, reduceFunction.UTF8String, &bsonQuery, &bsonSort, limit, &bsonOutput, keepTemp?1:0, finalizeFunction.UTF8String, &bsonScope, jsmode?1:0, verbose?1:0, &bsonResult);
                 NSLog(@"%@", [MODServer objectFromBson:&bsonResult]);
             } else {
                 mongoQuery.error = error;
@@ -612,19 +615,19 @@ static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
     return query;
 }
 
-- (mongoc_client_ptr)mongocClient
+- (mongoc_client_t *)mongocClient
 {
-    return _mongoDatabase.mongocClient;
+    return self.mongoDatabase.mongocClient;
 }
 
 - (MODServer *)mongoServer
 {
-    return _mongoDatabase.mongoServer;
+    return self.mongoDatabase.mongoServer;
 }
 
 - (NSString *)databaseName
 {
-    return _mongoDatabase.databaseName;
+    return self.mongoDatabase.databaseName;
 }
 
 @end

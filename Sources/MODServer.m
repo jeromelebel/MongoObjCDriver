@@ -8,6 +8,7 @@
 
 #import "MOD_internal.h"
 #import "bson.h"
+#import "mongoc.h"
 
 @interface MODServer ()
 @property (nonatomic, readwrite, assign, getter = isMaster) BOOL master;
@@ -28,57 +29,37 @@
     if ((self = [super init]) != nil) {
         _operationQueue = [[NSOperationQueue alloc] init];
         [_operationQueue setMaxConcurrentOperationCount:1];
-        _mongocClient = malloc(sizeof(*_mongocClient));
     }
     return self;
 }
 
 - (void)dealloc
 {
-    mongoc_client_destroy(mongoc_client_t *client)(_mongocClient);
-    free(_mongocClient);
+    if (self.mongocClient) {
+        mongoc_client_destroy(self.mongocClient);
+        self.mongocClient = nil;
+    }
     [_operationQueue release];
     [super dealloc];
 }
 
-- (void)copyWithCallback:(void (^)(MODServer *copyServer, MODQuery *mongoQuery))callback
+- (MODQuery *)copyWithCallback:(void (^)(MODServer *copyServer, MODQuery *mongoQuery))callback
 {
     MODServer *copy;
+    const mongoc_uri_t *mongocURI;
     
     copy = [[MODServer alloc] init];
-    copy.userName = self.userName;
-    copy.password = self.password;
-    if (_mongo->replica_set) {
-        NSString *replicaName;
-        NSMutableArray *hosts;
-        mongo_host_port *hostPort;
-        
-        replicaName = [[NSString alloc] initWithUTF8String:_mongo->replica_set->name];
-        hosts = [[NSMutableArray alloc] init];
-        hostPort = _mongo->replica_set->seeds;
-        while (hostPort != NULL) {
-            NSString *hostName;
-            
-            hostName = [[NSString alloc] initWithFormat:@"%s:%d", hostPort->host, hostPort->port];
-            [hosts addObject:hostName];
-            [hostName release];
-            hostPort = hostPort->next;
+    mongocURI = mongoc_client_get_uri(self.mongocClient);
+    callback = [callback copy];
+    return [copy connectWithMongocURI:mongocURI callback:^(BOOL connected, MODQuery *mongoQuery) {
+        if (connected) {
+            callback(copy, mongoQuery);
+        } else {
+            callback(nil, mongoQuery);
         }
-        [copy connectWithReplicaName:replicaName hosts:hosts callback:^(BOOL connected, MODQuery *mongoQuery) {
-            callback(copy, mongoQuery);
-        }];
-        [replicaName release];
-        [hosts release];
-    } else {
-        NSString *hostName;
-        
-        hostName = [[NSString alloc] initWithFormat:@"%s:%d", _mongo->primary->host, _mongo->primary->port];
-        [copy connectWithHostName:hostName callback:^(BOOL connected, MODQuery *mongoQuery) {
-            callback(copy, mongoQuery);
-        }];
-        [hostName release];
-    }
-    [copy release];
+        [callback release];
+        [copy autorelease];
+    }];
 }
 
 - (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block
@@ -111,9 +92,9 @@
         } else {
             dbName = "admin";
         }
-        result = mongo_cmd_authenticate(_mongo, dbName, [userName UTF8String], [password UTF8String]) == MONGO_OK;
+        result = mongo_cmd_authenticate(self.mongocClient, dbName, [userName UTF8String], [password UTF8String]) == MONGO_OK;
         if (!result) {
-            *error = [[self class] errorWithErrorDomain:MODMongoErrorDomain code:_mongo->err descriptionDetails:_mongo->lasterrstr?[NSString stringWithUTF8String:_mongo->lasterrstr]:NULL];
+            *error = [[self class] errorWithErrorDomain:MODMongoErrorDomain code:self.mongocClient->err descriptionDetails:self.mongocClient->lasterrstr?[NSString stringWithUTF8String:self.mongocClient->lasterrstr]:NULL];
         }
     }
     return result;
@@ -134,9 +115,9 @@
 {
     [mongoQuery.mutableParameters setObject:self forKey:@"mongoserver"];
     [mongoQuery ends];
-    if (_mongo->err != MONGO_CONN_SUCCESS) {
-        mongoQuery.error = [[self class] errorWithErrorDomain:MODMongoErrorDomain code:_mongo->err descriptionDetails:_mongo->lasterrstr?[NSString stringWithUTF8String:_mongo->lasterrstr]:NULL];
-        _mongo->err = MONGO_CONN_SUCCESS;
+    if (self.mongocClient->err != MONGO_CONN_SUCCESS) {
+        mongoQuery.error = [[self class] errorWithErrorDomain:MODMongoErrorDomain code:self.mongocClient->err descriptionDetails:self.mongocClient->lasterrstr?[NSString stringWithUTF8String:self.mongocClient->lasterrstr]:NULL];
+        self.mongocClient->err = MONGO_CONN_SUCCESS;
     }
 }
 
@@ -160,11 +141,11 @@
         
         mongo_parse_host([host UTF8String], &hostPort);
         if (!mongoQuery.canceled) {
-            if (mongo_client(_mongo, hostPort.host, hostPort.port) != MONGO_OK) {
-                switch (_mongo->err) {
+            if (mongo_client(self.mongocClient, hostPort.host, hostPort.port) != MONGO_OK) {
+                switch (self.mongocClient->err) {
                     case MONGO_CONN_NOT_MASTER:
                         self.master = NO;
-                        _mongo->err = MONGO_CONN_SUCCESS;
+                        self.mongocClient->err = MONGO_CONN_SUCCESS;
                         break;
                         
                     default:
@@ -173,7 +154,7 @@
             } else {
                 self.master = YES;
             }
-            if (_mongo->err == MONGO_CONN_SUCCESS) {
+            if (self.mongocClient->err == MONGO_CONN_SUCCESS) {
                 [self authenticateSynchronouslyWithDatabaseName:_authDatabase userName:_userName password:_password mongoQuery:mongoQuery];
             }
             [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
@@ -191,13 +172,13 @@
     MODQuery *query;
     mongo_host_port hostPort;
     
-    mongo_replica_set_init(_mongo, [replicaName UTF8String]);
+    mongo_replica_set_init(self.mongocClient, [replicaName UTF8String]);
     for (NSString *host in hosts) {
         mongo_parse_host([host UTF8String], &hostPort);
-        mongo_replica_set_add_seed(_mongo, hostPort.host, hostPort.port);
+        mongo_replica_set_add_seed(self.mongocClient, hostPort.host, hostPort.port);
     }
     query = [self addQueryInQueue:^(MODQuery *mongoQuery) {
-        if (!mongoQuery.canceled && mongo_replica_set_client(_mongo) == MONGO_OK) {
+        if (!mongoQuery.canceled && mongo_replica_set_client(self.mongocClient) == MONGO_OK) {
             [self authenticateSynchronouslyWithDatabaseName:_authDatabase userName:_userName password:_password mongoQuery:mongoQuery];
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
@@ -210,6 +191,11 @@
     return query;
 }
 
+- (MODQuery *)connectWithMongocURI:(const mongoc_uri_t *)mongocURI callback:(void (^)(BOOL connected, MODQuery *mongoQuery))callback
+{
+    
+}
+
 - (MODQuery *)fetchServerStatusWithCallback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback
 {
     MODQuery *query;
@@ -218,7 +204,7 @@
         bson output = { NULL, 0 };
         MODSortedMutableDictionary *outputObjects = nil;
         
-        if (!mongoQuery.canceled && mongo_simple_int_command(_mongo, "admin", "serverStatus", 1, &output) == MONGO_OK) {
+        if (!mongoQuery.canceled && mongo_simple_int_command(self.mongocClient, "admin", "serverStatus", 1, &output) == MONGO_OK) {
             outputObjects = [[self class] objectFromBson:&output];
             [mongoQuery.mutableParameters setObject:outputObjects forKey:@"serverstatus"];
         }
@@ -239,7 +225,7 @@
         bson output = { NULL, 0 };
         NSMutableArray *list = nil;
         
-        if (!mongoQuery.canceled && mongo_simple_int_command(_mongo, "admin", "listDatabases", 1, &output) == MONGO_OK) {
+        if (!mongoQuery.canceled && mongo_simple_int_command(self.mongocClient, "admin", "listDatabases", 1, &output) == MONGO_OK) {
             MODSortedMutableDictionary *outputObjects;
             
             outputObjects = [[self class] objectFromBson:&output];
@@ -272,7 +258,7 @@
         if (!self.isMaster) {
             mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Dababase drop forbidden on a slave"];
         } else if (!mongoQuery.canceled && [self authenticateSynchronouslyWithDatabaseName:databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
-            mongo_cmd_drop_db(_mongo, [databaseName UTF8String]);
+            mongo_cmd_drop_db(self.mongocClient, [databaseName UTF8String]);
         }
         [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
             callback(mongoQuery);
