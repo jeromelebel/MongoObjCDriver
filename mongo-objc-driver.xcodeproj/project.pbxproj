@@ -197,6 +197,24 @@
 		02CF0E8B19111321008C822A /* mongoc-util.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F37190E5E4E00A80BED /* mongoc-util.c */; };
 		02CF0E8C19111321008C822A /* mongoc-write-command.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F3A190E5E4E00A80BED /* mongoc-write-command.c */; };
 		02CF0E8D19111321008C822A /* mongoc-write-concern.c in Sources */ = {isa = PBXBuildFile; fileRef = 02044F3C190E5E4E00A80BED /* mongoc-write-concern.c */; };
+		02CF0E8E19112271008C822A /* yajl.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045095190E5EB000A80BED /* yajl.c */; };
+		02CF0E8F19112271008C822A /* yajl_alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045096190E5EB000A80BED /* yajl_alloc.c */; };
+		02CF0E9019112271008C822A /* yajl_buf.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045098190E5EB000A80BED /* yajl_buf.c */; };
+		02CF0E9119112271008C822A /* yajl_encode.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204509C190E5EB000A80BED /* yajl_encode.c */; };
+		02CF0E9219112271008C822A /* yajl_gen.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204509E190E5EB000A80BED /* yajl_gen.c */; };
+		02CF0E9319112271008C822A /* yajl_lex.c in Sources */ = {isa = PBXBuildFile; fileRef = 020450A0190E5EB000A80BED /* yajl_lex.c */; };
+		02CF0E9419112271008C822A /* yajl_parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 020450A3190E5EB000A80BED /* yajl_parser.c */; };
+		02CF0E9519112271008C822A /* yajl_tree.c in Sources */ = {isa = PBXBuildFile; fileRef = 020450A5190E5EB000A80BED /* yajl_tree.c */; };
+		02CF0E9619112271008C822A /* yajl_version.c in Sources */ = {isa = PBXBuildFile; fileRef = 020450A7190E5EB000A80BED /* yajl_version.c */; };
+		02CF0E9719112271008C822A /* yajl.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045095190E5EB000A80BED /* yajl.c */; };
+		02CF0E9819112271008C822A /* yajl_alloc.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045096190E5EB000A80BED /* yajl_alloc.c */; };
+		02CF0E9919112271008C822A /* yajl_buf.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045098190E5EB000A80BED /* yajl_buf.c */; };
+		02CF0E9A19112271008C822A /* yajl_encode.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204509C190E5EB000A80BED /* yajl_encode.c */; };
+		02CF0E9B19112271008C822A /* yajl_gen.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204509E190E5EB000A80BED /* yajl_gen.c */; };
+		02CF0E9C19112271008C822A /* yajl_lex.c in Sources */ = {isa = PBXBuildFile; fileRef = 020450A0190E5EB000A80BED /* yajl_lex.c */; };
+		02CF0E9D19112271008C822A /* yajl_parser.c in Sources */ = {isa = PBXBuildFile; fileRef = 020450A3190E5EB000A80BED /* yajl_parser.c */; };
+		02CF0E9E19112271008C822A /* yajl_tree.c in Sources */ = {isa = PBXBuildFile; fileRef = 020450A5190E5EB000A80BED /* yajl_tree.c */; };
+		02CF0E9F19112271008C822A /* yajl_version.c in Sources */ = {isa = PBXBuildFile; fileRef = 020450A7190E5EB000A80BED /* yajl_version.c */; };
 		02CF87E9142F8AA3000C4C7F /* MODRegex.h in Headers */ = {isa = PBXBuildFile; fileRef = 02CF87E7142F8AA3000C4C7F /* MODRegex.h */; };
 		02CF87EA142F8AA3000C4C7F /* MODRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87E8142F8AA3000C4C7F /* MODRegex.m */; };
 		02CF87EC142F91CA000C4C7F /* MODRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87E8142F8AA3000C4C7F /* MODRegex.m */; };
@@ -3130,6 +3148,7 @@
 				025C56201433E7E40064B010 /* MODDBRef.m in Sources */,
 				02CF0E7819111321008C822A /* mongoc-index.c in Sources */,
 				02B24274147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */,
+				02CF0E9F19112271008C822A /* yajl_version.c in Sources */,
 				023ECFFD14851BEE00185781 /* MODSymbol.m in Sources */,
 				02CF0E7219111321008C822A /* mongoc-cursor.c in Sources */,
 				02CF0E2C191112CB008C822A /* bson-string.c in Sources */,
@@ -3143,6 +3162,7 @@
 				02CF0E24191112CB008C822A /* bson-error.c in Sources */,
 				02CF0E7E19111321008C822A /* mongoc-queue.c in Sources */,
 				02CF0E7619111321008C822A /* mongoc-gridfs-file.c in Sources */,
+				02CF0E9E19112271008C822A /* yajl_tree.c in Sources */,
 				02CF0E6919111321008C822A /* mongoc-buffer.c in Sources */,
 				02CF0E7419111321008C822A /* mongoc-gridfs-file-list.c in Sources */,
 				02CF0E2A191112CB008C822A /* bson-oid.c in Sources */,
@@ -3155,22 +3175,29 @@
 				02CF0E8619111321008C822A /* mongoc-stream-gridfs.c in Sources */,
 				02CF0E21191112CB008C822A /* bson-atomic.c in Sources */,
 				02CF0E2D191112CB008C822A /* bson-utf8.c in Sources */,
+				02CF0E9A19112271008C822A /* yajl_encode.c in Sources */,
 				02CF0E7019111321008C822A /* mongoc-cursor-array.c in Sources */,
 				02CF0E6F19111321008C822A /* mongoc-counters.c in Sources */,
 				02B17F36184FF2E500362A27 /* MODBsonComparator.m in Sources */,
+				02CF0E9C19112271008C822A /* yajl_lex.c in Sources */,
 				02CF0E6C19111321008C822A /* mongoc-client.c in Sources */,
 				02CF0E7F19111321008C822A /* mongoc-read-prefs.c in Sources */,
 				02CF0E8319111321008C822A /* mongoc-ssl.c in Sources */,
+				02CF0E9819112271008C822A /* yajl_alloc.c in Sources */,
 				027A1DA31767E91F0048AD60 /* MODMaxKey.m in Sources */,
 				02CF0E7719111321008C822A /* mongoc-gridfs.c in Sources */,
 				02CF0E8D19111321008C822A /* mongoc-write-concern.c in Sources */,
 				02CF0E8B19111321008C822A /* mongoc-util.c in Sources */,
+				02CF0E9D19112271008C822A /* yajl_parser.c in Sources */,
 				02CF0E6819111321008C822A /* mongoc-array.c in Sources */,
 				02CF0E29191112CB008C822A /* bson-memory.c in Sources */,
 				027A1DA61767E91F0048AD60 /* MODMinKey.m in Sources */,
 				027A1DA91767E91F0048AD60 /* MODUndefined.m in Sources */,
 				02CF0E2B191112CB008C822A /* bson-reader.c in Sources */,
+				02CF0E9719112271008C822A /* yajl.c in Sources */,
 				02CF0E8519111321008C822A /* mongoc-stream-file.c in Sources */,
+				02CF0E9919112271008C822A /* yajl_buf.c in Sources */,
+				02CF0E9B19112271008C822A /* yajl_gen.c in Sources */,
 				02CF0E7119111321008C822A /* mongoc-cursor-cursorid.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3189,6 +3216,7 @@
 				02CF0E32191112CE008C822A /* bson-atomic.c in Sources */,
 				02CF0E6019111321008C822A /* mongoc-stream-gridfs.c in Sources */,
 				02F121CD1410F01D00197811 /* MODQuery.m in Sources */,
+				02CF0E9119112271008C822A /* yajl_encode.c in Sources */,
 				0299B61417F39FA900FB40A2 /* MODRagelJsonParser.m in Sources */,
 				02CF0E5719111321008C822A /* mongoc-matcher.c in Sources */,
 				02688DDE14119CF50014ED51 /* MODDatabase.m in Sources */,
@@ -3200,8 +3228,10 @@
 				02CF0E40191112CE008C822A /* bson-writer.c in Sources */,
 				02CF0E4B19111321008C822A /* mongoc-cursor-cursorid.c in Sources */,
 				02BDC3EA141D6938000EF755 /* MODCursor.m in Sources */,
+				02CF0E9219112271008C822A /* yajl_gen.c in Sources */,
 				02CF0E5A19111321008C822A /* mongoc-rpc.c in Sources */,
 				02CF0E31191112CE008C822A /* bcon.c in Sources */,
+				02CF0E9019112271008C822A /* yajl_buf.c in Sources */,
 				02BDC3ED141D83A7000EF755 /* MODServer_utils.m in Sources */,
 				02CF0E4C19111321008C822A /* mongoc-cursor.c in Sources */,
 				02CF0E33191112CE008C822A /* bson-clock.c in Sources */,
@@ -3210,7 +3240,9 @@
 				024B0C091887DFBF00B8DCE6 /* MODDocumentComparator.m in Sources */,
 				02CF0E5119111321008C822A /* mongoc-gridfs.c in Sources */,
 				02CF0E5F19111321008C822A /* mongoc-stream-file.c in Sources */,
+				02CF0E9419112271008C822A /* yajl_parser.c in Sources */,
 				02CF0E4719111321008C822A /* mongoc-cluster.c in Sources */,
+				02CF0E9619112271008C822A /* yajl_version.c in Sources */,
 				02CF0E5819111321008C822A /* mongoc-queue.c in Sources */,
 				02AB057814296F9000B7CD19 /* MODObjectId.m in Sources */,
 				028CE608142E4A1A0099B1F7 /* MODTimestamp.m in Sources */,
@@ -3230,9 +3262,11 @@
 				023ECFFF1485237000185781 /* MODSymbol.m in Sources */,
 				02CF0E36191112CE008C822A /* bson-iter.c in Sources */,
 				02CF0E6119111321008C822A /* mongoc-stream-socket.c in Sources */,
+				02CF0E9519112271008C822A /* yajl_tree.c in Sources */,
 				02CF0E34191112CE008C822A /* bson-context.c in Sources */,
 				02CF0E3A191112CE008C822A /* bson-memory.c in Sources */,
 				02DB18B1172C8DFA00B26EAE /* NSData+Base64.m in Sources */,
+				02CF0E9319112271008C822A /* yajl_lex.c in Sources */,
 				02CF0E3C191112CE008C822A /* bson-reader.c in Sources */,
 				02CF0E39191112CE008C822A /* bson-md5.c in Sources */,
 				02CF0E5519111321008C822A /* mongoc-log.c in Sources */,
@@ -3244,6 +3278,7 @@
 				02CF0E5619111321008C822A /* mongoc-matcher-op.c in Sources */,
 				02CF0E38191112CE008C822A /* bson-keys.c in Sources */,
 				02CF0E5219111321008C822A /* mongoc-index.c in Sources */,
+				02CF0E8E19112271008C822A /* yajl.c in Sources */,
 				02CF0E35191112CE008C822A /* bson-error.c in Sources */,
 				02CF0E3B191112CE008C822A /* bson-oid.c in Sources */,
 				027A1DA71767E91F0048AD60 /* MODMinKey.m in Sources */,
@@ -3254,6 +3289,7 @@
 				02CF0E5D19111321008C822A /* mongoc-ssl.c in Sources */,
 				027A1DAA1767E91F0048AD60 /* MODUndefined.m in Sources */,
 				02CF0E3E191112CE008C822A /* bson-utf8.c in Sources */,
+				02CF0E8F19112271008C822A /* yajl_alloc.c in Sources */,
 				02CF0E3D191112CE008C822A /* bson-string.c in Sources */,
 				02CF0E6319111321008C822A /* mongoc-stream.c in Sources */,
 			);
@@ -3344,6 +3380,11 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"Libraries/mongo-c-driver/src/libbson/src/bson/**",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
@@ -3368,6 +3409,11 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"Libraries/mongo-c-driver/src/libbson/src/bson/**",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_CFLAGS = (
 					"-DMONGOC_COMPILATION",
@@ -3381,13 +3427,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = "";
 				FRAMEWORK_VERSION = A;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"Libraries/mongo-c-driver/src/libbson/src/bson",
-				);
 				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
@@ -3399,13 +3439,7 @@
 			buildSettings = {
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_SEARCH_PATHS = "";
 				FRAMEWORK_VERSION = A;
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"Libraries/mongo-c-driver/src/libbson/src/bson",
-				);
 				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
