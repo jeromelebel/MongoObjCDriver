@@ -117,6 +117,11 @@
     return error;
 }
 
++ (NSError *)errorFromBsonError:(bson_error_t)error
+{
+    error = [NSError errorWithDomain:[NSString stringWithFormat:@"bson-%d", error.domain] code:error.code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithUTF8String:error.message],NSLocalizedDescriptionKey, nil]];
+}
+
 + (NSError *)errorFromMongo:(mongo_ptr)mongo
 {
     NSError *result = nil;

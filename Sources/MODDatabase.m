@@ -8,40 +8,41 @@
 
 #import "MOD_internal.h"
 
+@interface MODDatabase ()
+@property (nonatomic, readwrite, retain) MODServer *mongoServer;
+@property (nonatomic, readwrite, copy) NSString *name;
+
+@end
+
 @implementation MODDatabase
 
-@synthesize mongoServer = _mongoServer, databaseName = _databaseName, userName = _userName, password = _password;
+@synthesize mongoServer = _mongoServer, name = _name;
 
-- (id)initWithMongoServer:(MODServer *)mongoServer databaseName:(NSString *)databaseName
+- (id)initWithMongoServer:(MODServer *)mongoServer name:(NSString *)name
 {
     if (self = [self init]) {
-        _mongoServer = [mongoServer retain];
-        _databaseName = [databaseName retain];
+        self.mongoServer = mongoServer;
+        self.name = name;
+        self.mongocDatabase = mongoc_client_get_database(mongoServer.mongocClient, self.name.UTF8String);
+        
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [_mongoServer release];
-    [_databaseName release];
+    self.mongoServer = nil;
+    if (self.mongocDatabase) {
+        mongoc_database_destroy(self.mongocDatabase);
+        self.mongocDatabase = nil;
+    }
     [super dealloc];
 }
 
-- (BOOL)authenticateSynchronouslyWithMongoQuery:(MODQuery *)mongoQuery
-{
-    return [_mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery];
-}
-
-- (BOOL)authenticateSynchronouslyWithError:(NSError **)error
-{
-    return [_mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password error:error];
-}
-
-- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock
 {
     [mongoQuery.mutableParameters setObject:self forKey:@"mongodatabase"];
-    [_mongoServer mongoQueryDidFinish:mongoQuery withCallbackBlock:callbackBlock];
+    [self.mongoServer mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
 }
 
 - (MODQuery *)fetchDatabaseStatsWithCallback:(void (^)(MODSortedMutableDictionary *databaseStats, MODQuery *mongoQuery))callback;
@@ -50,17 +51,22 @@
     
     query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
         MODSortedMutableDictionary *stats = nil;
+        bson_error_t error;
         
-        if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
-            bson output = { NULL, 0 };
+        if (!mongoQuery.canceled) {
+            bson_t cmd = BSON_INITIALIZER;
+            bson_t output;
             
-            if (mongo_simple_int_command(self.mongoServer.mongo, [_databaseName UTF8String], "dbstats", 1, &output) == MONGO_OK) {
+            bson_init (&cmd);
+            BSON_APPEND_INT32(&cmd, "dbstats", 1);
+            if (mongoc_database_command_simple(self.mongocDatabase, &cmd, NULL, &output, &error)) {
                 stats = [[self.mongoServer class] objectFromBson:&output];
                 [mongoQuery.mutableParameters setObject:stats forKey:@"databasestats"];
             }
+            bson_destroy(&cmd);
             bson_destroy(&output);
         }
-        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             if (callback) {
                 callback(stats, mongoQuery);
             }
@@ -76,27 +82,23 @@
     
     query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
         NSMutableArray *collections = nil;
+        bson_error_t error;
         
-        if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
-            char command[256];
-            mongo_cursor cursor[1];
+        if (!mongoQuery.canceled) {
+            char **cStringCollections;
             
-            snprintf(command, sizeof(command), "%s.system.namespaces", [_databaseName UTF8String]);
-            mongo_cursor_init(cursor, self.mongoServer.mongo, command);
-            
-            collections = [[NSMutableArray alloc] init];
-            while (mongo_cursor_next(cursor) == MONGO_OK) {
-                NSString *collection;
+            cStringCollections = mongoc_database_get_collection_names(self.mongocDatabase, &error);
+            if (cStringCollections) {
+                char **cursor = cStringCollections;
                 
-                collection = [[[self.mongoServer class] objectFromBson:&cursor->current] objectForKey:@"name"];
-                if ([collection rangeOfString:@"$"].location == NSNotFound) {
-                    [collections addObject:[collection substringFromIndex:[_databaseName length] + 1]];
+                collections = [[NSMutableArray alloc] init];
+                while (*cursor != NULL) {
+                    [collections addObject:[NSString stringWithUTF8String:*cursor]];
+                    cursor++;
                 }
             }
-            [mongoQuery.mutableParameters setObject:collections forKey:@"collectionlist"];
-            mongo_cursor_destroy(cursor);
         }
-        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             if (callback) {
                 callback(collections, mongoQuery);
             }
@@ -112,7 +114,7 @@
     return [[[MODCollection alloc] initWithMongoDatabase:self collectionName:name] autorelease];
 }
 
-- (MODQuery *)createCollectionWithName:(NSString *)collectionName callback:(void (^)(MODQuery *mongoQuery))callback;
+- (MODQuery *)createCollectionWithName:(NSString *)collectionName callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query;
     
@@ -155,30 +157,29 @@
     return query;
 }
 
-- (MODQuery *)dropCollectionWithName:(NSString *)collectionName callback:(void (^)(MODQuery *mongoQuery))callback
+- (MODQuery *)dropWithCallback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query;
     
-    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
-        if (!self.mongoServer.isMaster) {
-            mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Collection drop forbidden on a slave"];
-        } else if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
-            mongo_cmd_drop_collection(self.mongoServer.mongo, [_databaseName UTF8String], [collectionName UTF8String], NULL);
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        bson_error_t error;
+        
+        if (!mongoQuery.canceled) {
+            mongoc_database_drop(self.mongocDatabase, &error);
         }
-        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             if (callback) {
                 callback(mongoQuery);
             }
         }];
     }];
-    [query.mutableParameters setObject:@"dropcollection" forKey:@"command"];
-    [query.mutableParameters setObject:collectionName forKey:@"collectionname"];
+    [query.mutableParameters setObject:@"dropdatabase" forKey:@"command"];
     return query;
 }
 
-- (mongo *)mongo
+- (mongoc_client_t *)mongocClient
 {
-    return _mongoServer.mongo;
+    return self.mongoServer.mongocClient;
 }
 
 @end

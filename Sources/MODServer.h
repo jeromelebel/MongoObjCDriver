@@ -28,26 +28,18 @@ typedef struct mongo_replset            *mongo_replset_ptr;
     BOOL                                _connected;
     BOOL                                _master;
     NSOperationQueue                    *_operationQueue;
-    NSString                            *_authDatabase;
-    NSString                            *_userName;
-    NSString                            *_password;
 }
+@property (nonatomic, readonly, assign, getter = isConnected) BOOL connected;
+@property (nonatomic, readonly, assign, getter = isMaster) BOOL master;
 
-- (void)copyWithCallback:(void (^)(MODServer *copyServer, MODQuery *mongoQuery))callback;
++ (MODServer *)clientWihtURLString:(NSString *)urlString;
 
-- (MODQuery *)connectWithURLString:(NSString *)host callback:(void (^)(BOOL connected, MODQuery *mongoQuery))callback;
+- (MODQuery *)copy;
+
 - (MODQuery *)fetchServerStatusWithCallback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback;
 - (MODQuery *)fetchDatabaseListWithCallback:(void (^)(NSArray *list, MODQuery *mongoQuery))callback;
 
-- (MODQuery *)dropDatabaseWithName:(NSString *)databaseName callback:(void (^)(MODQuery *mongoQuery))callback;
-
 - (MODDatabase *)databaseForName:(NSString *)databaseName;
-
-@property (nonatomic, readonly, assign, getter = isConnected) BOOL connected;
-@property (nonatomic, readonly, assign, getter = isMaster) BOOL master;
-@property (nonatomic, readwrite, retain) NSString *userName;
-@property (nonatomic, readwrite, retain) NSString *password;
-@property (nonatomic, readwrite, retain) NSString *authDatabase;
 
 @end
 

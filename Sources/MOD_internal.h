@@ -18,16 +18,13 @@ enum {
 @property(nonatomic, readwrite, assign, getter=isConnected) BOOL connected;
 @property(nonatomic, readwrite, assign) mongoc_client_t *mongocClient;
 
-- (BOOL)authenticateSynchronouslyWithDatabaseName:(NSString *)databaseName userName:(NSString *)user password:(NSString *)password mongoQuery:(MODQuery *)mongoQuery;
-- (BOOL)authenticateSynchronouslyWithDatabaseName:(NSString *)databaseName userName:(NSString *)userName password:(NSString *)password error:(NSError **)error;
-- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock;
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
 - (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block;
-
-- (MODQuery *)connectWithMongocURI:(const mongoc_uri_t *)mongocURI callback:(void (^)(BOOL connected, MODQuery *mongoQuery))callback;
 @end
 
 @interface MODServer(utils_internal)
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails;
++ (NSError *)errorFromBsonError:(bson_error_t)error;
 + (NSError *)errorFromMongo:(mongoc_client_t *)mongo;
 + (MODSortedMutableDictionary *)objectFromBson:(bson_t *)bsonObject;
 + (void)appendObject:(MODSortedMutableDictionary *)object toBson:(bson_t *)bson;
@@ -35,11 +32,10 @@ enum {
 
 @interface MODDatabase()
 @property(nonatomic, readonly, assign) mongoc_client_t *mongocClient;
+@property(nonatomic, readwrite, assign) mongoc_database_t *mongocDatabase;
 
-- (id)initWithMongoServer:(MODServer *)mongoServer databaseName:(NSString *)databaseName;
-- (BOOL)authenticateSynchronouslyWithMongoQuery:(MODQuery *)mongoQuery;
-- (BOOL)authenticateSynchronouslyWithError:(NSError **)error;
-- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock;
+- (id)initWithMongoServer:(MODServer *)mongoServer name:(NSString *)databaseName;
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
 @end
 
 @interface MODCollection()

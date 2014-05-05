@@ -16,24 +16,20 @@
 
 @interface MODDatabase : NSObject
 {
-    MODServer                   *_mongoServer;
-    NSString                    *_databaseName;
-    NSString                    *_userName;
-    NSString                    *_password;
+    MODServer                           *_mongoServer;
+    NSString                            *_name;
+    void                                *_mongocDatabase;
 }
+@property(nonatomic, readonly, retain) MODServer *mongoServer;
+@property(nonatomic, readonly, copy) NSString *name;
 
 - (MODQuery *)fetchDatabaseStatsWithCallback:(void (^)(MODSortedMutableDictionary *databaseStats, MODQuery *mongoQuery))callback;
 - (MODQuery *)fetchCollectionListWithCallback:(void (^)(NSArray *collectionList, MODQuery *mongoQuery))callback;
 
 - (MODQuery *)createCollectionWithName:(NSString *)collectionName callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)createCappedCollectionWithName:(NSString *)collectionName capSize:(int64_t)capSize callback:(void (^)(MODQuery *mongoQuery))callback;
-- (MODQuery *)dropCollectionWithName:(NSString *)collectionName callback:(void (^)(MODQuery *mongoQuery))callback;
+- (MODQuery *)dropWithCallback:(void (^)(MODQuery *mongoQuery))callback;
 
 - (MODCollection *)collectionForName:(NSString *)name;
-
-@property(nonatomic, readonly, retain) MODServer *mongoServer;
-@property(nonatomic, readonly, retain) NSString *databaseName;
-@property(nonatomic, readwrite, retain) NSString *userName;
-@property(nonatomic, readwrite, retain) NSString *password;
 
 @end
