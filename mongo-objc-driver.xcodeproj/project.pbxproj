@@ -75,7 +75,6 @@
 		02AB057614296F9000B7CD19 /* MODObjectId.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB057414296F9000B7CD19 /* MODObjectId.h */; };
 		02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
 		02AB057814296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
-		02ABA1C414103B37000417F4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C314103B37000417F4 /* Cocoa.framework */; };
 		02B17F35184FF2E500362A27 /* MODBsonComparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B17F33184FF2E500362A27 /* MODBsonComparator.h */; };
 		02B17F36184FF2E500362A27 /* MODBsonComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B17F34184FF2E500362A27 /* MODBsonComparator.m */; };
 		02B17F37184FF2E500362A27 /* MODBsonComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B17F34184FF2E500362A27 /* MODBsonComparator.m */; };
@@ -215,6 +214,10 @@
 		02CF0E9F19112271008C822A /* yajl_version.c in Sources */ = {isa = PBXBuildFile; fileRef = 020450A7190E5EB000A80BED /* yajl_version.c */; };
 		02CF0EA21911326B008C822A /* mongoc-stream-mac-tls.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CF0EA01911326B008C822A /* mongoc-stream-mac-tls.c */; };
 		02CF0EA31911326B008C822A /* mongoc-stream-mac-tls.c in Sources */ = {isa = PBXBuildFile; fileRef = 02CF0EA01911326B008C822A /* mongoc-stream-mac-tls.c */; };
+		02CF0EA619191117008C822A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02CF0EA519191117008C822A /* Security.framework */; };
+		02CF0EA71919115D008C822A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02CF0EA519191117008C822A /* Security.framework */; };
+		02CF0EA81919116A008C822A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C814103B37000417F4 /* Foundation.framework */; };
+		02CF0EAA19192608008C822A /* libsasl2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02CF0EA919192608008C822A /* libsasl2.dylib */; };
 		02CF87E9142F8AA3000C4C7F /* MODRegex.h in Headers */ = {isa = PBXBuildFile; fileRef = 02CF87E7142F8AA3000C4C7F /* MODRegex.h */; };
 		02CF87EA142F8AA3000C4C7F /* MODRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87E8142F8AA3000C4C7F /* MODRegex.m */; };
 		02CF87EC142F91CA000C4C7F /* MODRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87E8142F8AA3000C4C7F /* MODRegex.m */; };
@@ -1407,6 +1410,8 @@
 		02BDC3E6141D6073000EF755 /* MODCursor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODCursor.m; sourceTree = "<group>"; };
 		02BDC3EB141D83A7000EF755 /* MODServer_utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODServer_utils.m; sourceTree = "<group>"; };
 		02CF0EA01911326B008C822A /* mongoc-stream-mac-tls.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mongoc-stream-mac-tls.c"; sourceTree = "<group>"; };
+		02CF0EA519191117008C822A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		02CF0EA919192608008C822A /* libsasl2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsasl2.dylib; path = usr/lib/libsasl2.dylib; sourceTree = SDKROOT; };
 		02CF87E7142F8AA3000C4C7F /* MODRegex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODRegex.h; sourceTree = "<group>"; };
 		02CF87E8142F8AA3000C4C7F /* MODRegex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODRegex.m; sourceTree = "<group>"; };
 		02DB18A9172C8C5A00B26EAE /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
@@ -1424,7 +1429,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02ABA1C414103B37000417F4 /* Cocoa.framework in Frameworks */,
+				02CF0EAA19192608008C822A /* libsasl2.dylib in Frameworks */,
+				02CF0EA81919116A008C822A /* Foundation.framework in Frameworks */,
+				02CF0EA619191117008C822A /* Security.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1432,6 +1439,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02CF0EA71919115D008C822A /* Security.framework in Frameworks */,
 				02F121C01410EF5200197811 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2827,6 +2835,8 @@
 		02ABA1C214103B37000417F4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				02CF0EA919192608008C822A /* libsasl2.dylib */,
+				02CF0EA519191117008C822A /* Security.framework */,
 				02ABA1C314103B37000417F4 /* Cocoa.framework */,
 				02F121BF1410EF5200197811 /* Foundation.framework */,
 				02ABA1C514103B37000417F4 /* Other Frameworks */,
