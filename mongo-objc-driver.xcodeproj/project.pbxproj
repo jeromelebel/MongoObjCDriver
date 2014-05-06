@@ -218,6 +218,7 @@
 		02CF0EA71919115D008C822A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02CF0EA519191117008C822A /* Security.framework */; };
 		02CF0EA81919116A008C822A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C814103B37000417F4 /* Foundation.framework */; };
 		02CF0EAA19192608008C822A /* libsasl2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02CF0EA919192608008C822A /* libsasl2.dylib */; };
+		02CF0EAB191926E4008C822A /* libsasl2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02CF0EA919192608008C822A /* libsasl2.dylib */; };
 		02CF87E9142F8AA3000C4C7F /* MODRegex.h in Headers */ = {isa = PBXBuildFile; fileRef = 02CF87E7142F8AA3000C4C7F /* MODRegex.h */; };
 		02CF87EA142F8AA3000C4C7F /* MODRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87E8142F8AA3000C4C7F /* MODRegex.m */; };
 		02CF87EC142F91CA000C4C7F /* MODRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87E8142F8AA3000C4C7F /* MODRegex.m */; };
@@ -1439,6 +1440,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02CF0EAB191926E4008C822A /* libsasl2.dylib in Frameworks */,
 				02CF0EA71919115D008C822A /* Security.framework in Frameworks */,
 				02F121C01410EF5200197811 /* Foundation.framework in Frameworks */,
 			);
