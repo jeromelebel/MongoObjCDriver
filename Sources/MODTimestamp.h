@@ -10,15 +10,15 @@
 
 @interface MODTimestamp : NSObject
 {
-    struct timeval _timestamp;
+    uint32_t                    _tValue;
+    uint32_t                    _iValue;
 }
 
-- (id)initWithTValue:(int)tValue iValue:(int)iValue;
-- (id)initWithTimestamp:(struct timeval *)timestamp;
+- (id)initWithTValue:(uint32_t)tValue iValue:(uint32_t)iValue;
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;
 - (NSDate *)dateValue;
 
-@property(nonatomic, readonly, assign) int tValue;
-@property(nonatomic, readonly, assign) int iValue;
+@property(nonatomic, readonly, assign) uint32_t tValue;
+@property(nonatomic, readonly, assign) uint32_t iValue;
 
 @end

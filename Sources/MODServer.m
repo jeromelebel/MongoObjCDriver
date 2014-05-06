@@ -124,19 +124,12 @@
     MODQuery *query;
     
     query = [self addQueryInQueue:^(MODQuery *mongoQuery){
-        bson_t output = BSON_INITIALIZER;
+        bson_t output;
         bson_error_t error;
         MODSortedMutableDictionary *outputObjects = nil;
         
         if (!mongoQuery.canceled) {
-            bson_t cmd = BSON_INITIALIZER;
-            
-            BSON_APPEND_INT32 (&cmd, "serverStatus", 1);
-            if (mongoc_client_command_simple(self.mongocClient, "admin", &cmd, NULL, &output, &error)) {
-                outputObjects = [self.class objectFromBson:&output];
-                [mongoQuery.mutableParameters setObject:outputObjects forKey:@"serverstatus"];
-            }
-            bson_destroy(&cmd);
+            mongoc_client_get_server_status(self.mongocClient, NULL, &output, &error);
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             callback(outputObjects, mongoQuery);
@@ -157,25 +150,21 @@
         bson_error_t error;
         
         if (!mongoQuery.canceled) {
-            bson_t cmd = BSON_INITIALIZER;
+            char **cStringName;
             
-            BSON_APPEND_INT32 (&cmd, "listDatabases", 1);
-            if (mongoc_client_command_simple(self.mongocClient, "admin", &cmd, NULL, &output, &error)) {
-                MODSortedMutableDictionary *outputObjects;
+            cStringName = mongoc_client_get_database_names(self.mongocClient, &error);
+            if (cStringName) {
+                char **cursor = cStringName;
                 
-                outputObjects = [self.class objectFromBson:&output];
                 list = [[NSMutableArray alloc] init];
-                for(NSDictionary *databaseInfo in [outputObjects objectForKey:@"databases"]) {
-                    if ([databaseInfo objectForKey:@"name"]) {
-                        [list addObject:[databaseInfo objectForKey:@"name"]];
-                    } else {
-                        // weird to have no name
-                        NSLog(@"Database with no name %@", outputObjects);
-                    }
+                while (*cursor != NULL) {
+                    [list addObject:[NSString stringWithUTF8String:*cursor]];
+                    bson_free(*cursor);
+                    cursor++;
                 }
-                [mongoQuery.mutableParameters setObject:list forKey:@"databaselist"];
+                bson_free(cStringName);
             }
-            bson_destroy(&cmd);
+
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             callback(list, mongoQuery);

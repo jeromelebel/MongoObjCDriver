@@ -12,153 +12,154 @@
 
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails
 {
-    NSError *error;
-    NSString *description = nil;
-    
-    if ([errorDomain isEqualToString:MODMongoErrorDomain]) {
-        switch (code) {
-            case MONGO_CONN_SUCCESS:
-                description = @"Connection success!";
-                break;
-            case MONGO_CONN_NO_SOCKET:
-                description = @"Could not create a socket.";
-                break;
-            case MONGO_CONN_FAIL:
-                description = @"An error occured while calling connect().";
-                break;
-            case MONGO_CONN_ADDR_FAIL:
-                description = @"Cannot get an ip address with this domain name.";
-                break;
-            case MONGO_CONN_NOT_MASTER:
-                description = @"Connected to a non-master node (read-only).";
-                break;
-            case MONGO_CONN_BAD_SET_NAME:
-                description = @"Given rs name doesn't match this replica set.";
-                break;
-            case MONGO_CONN_NO_PRIMARY:
-                description = @"Can't find primary in replica set. Connection closed.";
-                break;
-            case MONGO_IO_ERROR:
-                description = @"An error occurred while reading or writing on the socket.";
-                break;
-            case MONGO_READ_SIZE_ERROR:
-                description = @"The response is not the expected length.";
-                break;
-            case MONGO_COMMAND_FAILED:
-                if (descriptionDetails) {
-                    description = [NSString stringWithFormat:@"Error returned by the server: \"%@\"", descriptionDetails];
-                    descriptionDetails = nil;
-                } else {
-                    description = @"The command returned with 'ok' value of 0.";
-                }
-                break;
-            case MONGO_BSON_INVALID:
-                description = @"BSON not valid for the specified op.";
-                break;
-            case MONGO_BSON_NOT_FINISHED:
-                description = @"BSON object has not been finished.";
-                break;
-            default:
-                description = @"";
-                break;
-        }
-        if (descriptionDetails) {
-            description = [NSString stringWithFormat:@"%@ - %@", description, descriptionDetails];
-        }
-    } else if ([errorDomain isEqualToString:MODJsonParserErrorDomain]) {
-        switch (code) {
-            case JSON_PARSER_ERROR_EXPECTED_END:
-                description = @"json end is unexpected";
-                break;
-            default:
-                break;
-        }
-        if (descriptionDetails) {
-            description = [NSString stringWithFormat:@"%@ - \"%@\"", description, descriptionDetails];
-        }
-    } else if ([errorDomain isEqualToString:MODMongoCursorErrorDomain]) {
-        switch (code) {
-            case MONGO_CURSOR_EXHAUSTED:
-                description = @"The cursor has no more results.";
-                break;
-            case MONGO_CURSOR_INVALID:
-                description = @"The cursor has timed out or is not recognized.";
-                break;
-            case MONGO_CURSOR_PENDING:
-                description = @"Tailable cursor still alive but no data.";
-                break;
-            case MONGO_CURSOR_QUERY_FAIL:
-                description = @"The server returned an '$err' object, indicating query failure.";
-                break;
-            case MONGO_CURSOR_BSON_ERROR:
-                description = @"Something is wrong with the BSON provided.";
-                break;
-            case MONGO_CURSOR_BSON_TOO_LARGE:
-                description = @"the message to send is too long";
-                break;
-            default:
-                description = @"";
-                break;
-        }
-        if (descriptionDetails) {
-            description = [NSString stringWithFormat:@"%@ - \"%@\"", description, descriptionDetails];
-        }
-    } else {
-        if (descriptionDetails) {
-            description = [NSString stringWithFormat:@"Unknown error %ld (%@) - %@", (long)code, errorDomain, descriptionDetails];
-        } else {
-            description = [NSString stringWithFormat:@"Unknown error %ld (%@)", (long)code, errorDomain];
-        }
-    }
-    if (!description) {
-        description = [NSString stringWithFormat:@"Unknown error %ld - %@", (long)code, errorDomain];
-    }
-    error = [NSError errorWithDomain:errorDomain code:code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:description, NSLocalizedDescriptionKey, nil]];
-    return error;
+    return nil;
+//    NSError *error;
+//    NSString *description = nil;
+//    
+//    if ([errorDomain isEqualToString:MODMongoErrorDomain]) {
+//        switch (code) {
+//            case MONGO_CONN_SUCCESS:
+//                description = @"Connection success!";
+//                break;
+//            case MONGO_CONN_NO_SOCKET:
+//                description = @"Could not create a socket.";
+//                break;
+//            case MONGO_CONN_FAIL:
+//                description = @"An error occured while calling connect().";
+//                break;
+//            case MONGO_CONN_ADDR_FAIL:
+//                description = @"Cannot get an ip address with this domain name.";
+//                break;
+//            case MONGO_CONN_NOT_MASTER:
+//                description = @"Connected to a non-master node (read-only).";
+//                break;
+//            case MONGO_CONN_BAD_SET_NAME:
+//                description = @"Given rs name doesn't match this replica set.";
+//                break;
+//            case MONGO_CONN_NO_PRIMARY:
+//                description = @"Can't find primary in replica set. Connection closed.";
+//                break;
+//            case MONGO_IO_ERROR:
+//                description = @"An error occurred while reading or writing on the socket.";
+//                break;
+//            case MONGO_READ_SIZE_ERROR:
+//                description = @"The response is not the expected length.";
+//                break;
+//            case MONGO_COMMAND_FAILED:
+//                if (descriptionDetails) {
+//                    description = [NSString stringWithFormat:@"Error returned by the server: \"%@\"", descriptionDetails];
+//                    descriptionDetails = nil;
+//                } else {
+//                    description = @"The command returned with 'ok' value of 0.";
+//                }
+//                break;
+//            case MONGO_BSON_INVALID:
+//                description = @"BSON not valid for the specified op.";
+//                break;
+//            case MONGO_BSON_NOT_FINISHED:
+//                description = @"BSON object has not been finished.";
+//                break;
+//            default:
+//                description = @"";
+//                break;
+//        }
+//        if (descriptionDetails) {
+//            description = [NSString stringWithFormat:@"%@ - %@", description, descriptionDetails];
+//        }
+//    } else if ([errorDomain isEqualToString:MODJsonParserErrorDomain]) {
+//        switch (code) {
+//            case JSON_PARSER_ERROR_EXPECTED_END:
+//                description = @"json end is unexpected";
+//                break;
+//            default:
+//                break;
+//        }
+//        if (descriptionDetails) {
+//            description = [NSString stringWithFormat:@"%@ - \"%@\"", description, descriptionDetails];
+//        }
+//    } else if ([errorDomain isEqualToString:MODMongoCursorErrorDomain]) {
+//        switch (code) {
+//            case MONGO_CURSOR_EXHAUSTED:
+//                description = @"The cursor has no more results.";
+//                break;
+//            case MONGO_CURSOR_INVALID:
+//                description = @"The cursor has timed out or is not recognized.";
+//                break;
+//            case MONGO_CURSOR_PENDING:
+//                description = @"Tailable cursor still alive but no data.";
+//                break;
+//            case MONGO_CURSOR_QUERY_FAIL:
+//                description = @"The server returned an '$err' object, indicating query failure.";
+//                break;
+//            case MONGO_CURSOR_BSON_ERROR:
+//                description = @"Something is wrong with the BSON provided.";
+//                break;
+//            case MONGO_CURSOR_BSON_TOO_LARGE:
+//                description = @"the message to send is too long";
+//                break;
+//            default:
+//                description = @"";
+//                break;
+//        }
+//        if (descriptionDetails) {
+//            description = [NSString stringWithFormat:@"%@ - \"%@\"", description, descriptionDetails];
+//        }
+//    } else {
+//        if (descriptionDetails) {
+//            description = [NSString stringWithFormat:@"Unknown error %ld (%@) - %@", (long)code, errorDomain, descriptionDetails];
+//        } else {
+//            description = [NSString stringWithFormat:@"Unknown error %ld (%@)", (long)code, errorDomain];
+//        }
+//    }
+//    if (!description) {
+//        description = [NSString stringWithFormat:@"Unknown error %ld - %@", (long)code, errorDomain];
+//    }
+//    error = [NSError errorWithDomain:errorDomain code:code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:description, NSLocalizedDescriptionKey, nil]];
+//    return error;
 }
 
 + (NSError *)errorFromBsonError:(bson_error_t)error
 {
-    error = [NSError errorWithDomain:[NSString stringWithFormat:@"bson-%d", error.domain] code:error.code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithUTF8String:error.message],NSLocalizedDescriptionKey, nil]];
+    return [NSError errorWithDomain:[NSString stringWithFormat:@"bson-%d", error.domain] code:error.code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithUTF8String:error.message],NSLocalizedDescriptionKey, nil]];
 }
 
-+ (NSError *)errorFromMongo:(mongo_ptr)mongo
-{
-    NSError *result = nil;
-    
-    if (mongo->err != MONGO_CONN_SUCCESS) {
-        result = [self errorWithErrorDomain:MODMongoErrorDomain code:mongo->err descriptionDetails:nil];
-    }
-    return result;
-}
+//+ (NSError *)errorFromMongo:(mongo_ptr)mongo
+//{
+//    NSError *result = nil;
+//    
+//    if (mongo->err != MONGO_CONN_SUCCESS) {
+//        result = [self errorWithErrorDomain:MODMongoErrorDomain code:mongo->err descriptionDetails:nil];
+//    }
+//    return result;
+//}
 
-+ (id)objectFromBsonIterator:(bson_iterator *)iterator
++ (id)objectFromBsonIterator:(bson_iter_t *)iterator
 {
     id result = nil;
-    bson_iterator subIterator;
+    bson_iter_t subIterator;
     
     switch (bson_iter_type(iterator)) {
         case BSON_TYPE_EOD:
-            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+            NSLog(@"*********************** %d %d", bson_iter_type(iterator), __LINE__);
             NSAssert(NO, @"BSON_TYPE_EOO");
             break;
         case BSON_TYPE_DOUBLE:
-            result = [NSNumber numberWithDouble:bson_iterator_double(iterator)];
+            result = [NSNumber numberWithDouble:bson_iter_double(iterator)];
             break;
-        case BSON_TYPE_TYPE_STRING:
-            result = [NSString stringWithUTF8String:bson_iterator_string(iterator)];
+        case BSON_TYPE_UTF8:
+            result = [NSString stringWithUTF8String:bson_iter_utf8(iterator, NULL)];
             break;
         case BSON_TYPE_DOCUMENT:
             result = [[[MODSortedMutableDictionary alloc] init] autorelease];
             bson_iter_recurse(iterator, &subIterator);
-            while (bson_iterator_next(&subIterator)) {
+            while (bson_iter_next(&subIterator)) {
                 id value;
                 
                 value = [self objectFromBsonIterator:&subIterator];
                 if (value) {
                     NSString *key;
                     
-                    key = [[NSString alloc] initWithUTF8String:bson_iterator_key(&subIterator)];
+                    key = [[NSString alloc] initWithUTF8String:bson_iter_key(&subIterator)];
                     [result setObject:value forKey:key];
                     [key release];
                 }
@@ -167,7 +168,7 @@
         case BSON_TYPE_ARRAY:
             result = [NSMutableArray array];
             bson_iter_recurse(iterator, &subIterator);
-            while (bson_iterator_next(&subIterator)) {
+            while (bson_iter_next(&subIterator)) {
                 id value;
                 
                 value = [self objectFromBsonIterator:&subIterator];
@@ -176,12 +177,16 @@
                 }
             }
             break;
-        case BSON_TYPE_BINDATA:
+        case BSON_TYPE_BINARY:
             {
                 NSData *data;
+                bson_subtype_t subType;
+                uint32_t length;
+                const uint8_t *binary;
                 
-                data = [[NSData alloc] initWithBytes:bson_iterator_bin_data(iterator) length:bson_iterator_bin_len(iterator)];
-                result = [[[MODBinary alloc] initWithData:data binaryType:bson_iterator_bin_type(iterator)] autorelease];
+                bson_iter_binary(iterator, &subType, &length, &binary);
+                data = [[NSData alloc] initWithBytes:binary length:length];
+                result = [[[MODBinary alloc] initWithData:data binaryType:subType] autorelease];
                 [data release];
             }
             break;
@@ -189,67 +194,66 @@
             result = [[[MODUndefined alloc] init] autorelease];
             break;
         case BSON_TYPE_OID:
-            result = [[[MODObjectId alloc] initWithOid:bson_iterator_oid(iterator)] autorelease];
+            result = [[[MODObjectId alloc] initWithOid:bson_iter_oid(iterator)] autorelease];
             break;
         case BSON_TYPE_BOOL:
-            result = [NSNumber numberWithBool:bson_iterator_bool(iterator) == true];
+            result = [NSNumber numberWithBool:bson_iter_bool(iterator) == true];
             break;
-        case BSON_TYPE_DATE:
-            result = [NSDate dateWithTimeIntervalSince1970:bson_iterator_date(iterator) / 1000.0];
+        case BSON_TYPE_DATE_TIME:
+            result = [NSDate dateWithTimeIntervalSince1970:bson_iter_date_time(iterator) / 1000.0];
             break;
         case BSON_TYPE_NULL:
             result = [NSNull null];
             break;
         case BSON_TYPE_REGEX:
             {
-                const char *cString;
+                const char *cStringOptions;
                 NSString *pattern = nil;
                 NSString *options = nil;
                 
-                pattern = [[NSString alloc] initWithUTF8String:bson_iterator_regex(iterator)];
-                cString = bson_iterator_regex_opts(iterator);
-                if (cString) {
-                    options = [[NSString alloc] initWithUTF8String:cString];
+                pattern = [[NSString alloc] initWithUTF8String:bson_iter_regex(iterator, &cStringOptions)];
+                if (cStringOptions) {
+                    options = [[NSString alloc] initWithUTF8String:cStringOptions];
                 }
                 result = [[[MODRegex alloc] initWithPattern:pattern options:options] autorelease];
                 [pattern release];
                 [options release];
             }
             break;
-        case BSON_TYPE_DBREF:
-            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+        case BSON_TYPE_DBPOINTER:
+            NSLog(@"*********************** %d %d", bson_iter_type(iterator), __LINE__);
             NSAssert(NO, @"BSON_TYPE_DBREF");
             break;
         case BSON_TYPE_CODE:
-            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+            NSLog(@"*********************** %d %d", bson_iter_type(iterator), __LINE__);
             NSAssert(NO, @"BSON_TYPE_CODE");
             break;
         case BSON_TYPE_SYMBOL:
             {
                 NSString *value;
                 
-                value = [[NSString alloc] initWithUTF8String:bson_iterator_string(iterator)];
+                value = [[NSString alloc] initWithUTF8String:bson_iter_symbol(iterator, NULL)];
                 result = [[[MODSymbol alloc] initWithValue:value] autorelease];
                 [value release];
             }
             break;
         case BSON_TYPE_CODEWSCOPE:
-            NSLog(@"*********************** %d %d", bson_iterator_type(iterator), __LINE__);
+            NSLog(@"*********************** %d %d", bson_iter_type(iterator), __LINE__);
             NSAssert(NO, @"BSON_CODEWSCOPE");
             break;
-        case BSON_TYPE_INT:
-            result = [NSNumber numberWithInt:bson_iterator_int(iterator)];
+        case BSON_TYPE_INT32:
+            result = [NSNumber numberWithInt:bson_iter_int32(iterator)];
             break;
         case BSON_TYPE_TIMESTAMP:
             {
-                bson_timestamp_t ts;
+                uint32_t timestamp, increment;
                 
-                ts = bson_iterator_timestamp(iterator);
-                result = [[[MODTimestamp alloc] initWithTValue:ts.t iValue:ts.i] autorelease];
+                bson_iter_timestamp(iterator, &timestamp, &increment);
+                result = [[[MODTimestamp alloc] initWithTValue:timestamp iValue:increment] autorelease];
             }
             break;
-        case BSON_TYPE_LONG:
-            result = [NSNumber numberWithLongLong:bson_iterator_long(iterator)];
+        case BSON_TYPE_INT64:
+            result = [NSNumber numberWithLongLong:bson_iter_int64(iterator)];
             break;
         case BSON_TYPE_MINKEY:
             result = [[[MODMinKey alloc] init] autorelease];
@@ -261,46 +265,48 @@
     return result;
 }
 
-+ (MODSortedMutableDictionary *)objectFromBson:(bson *)bsonObject
++ (MODSortedMutableDictionary *)objectFromBson:(bson_t *)bsonObject
 {
     MODSortedMutableDictionary *result = nil;
+    bson_iter_t iterator;
     
-    if (bsonObject->data) {
-        bson_iterator iterator;
+    result = [[MODSortedMutableDictionary alloc] init];
+    bson_iter_init(&iterator, bsonObject);
+    while (bson_iter_next(&iterator)) {
+        NSString *key;
+        id value;
         
-        result = [[MODSortedMutableDictionary alloc] init];
-        bson_iterator_init(&iterator, bsonObject);
-        while (bson_iterator_next(&iterator) != BSON_EOO) {
-            NSString *key;
-            id value;
-            
-            key = [[NSString alloc] initWithUTF8String:bson_iterator_key(&iterator)];
-            value = [self objectFromBsonIterator:&iterator];
-            if (value) {
-                [result setObject:value forKey:key];
-            }
-            [key release];
+        key = [[NSString alloc] initWithUTF8String:bson_iter_key(&iterator)];
+        value = [self objectFromBsonIterator:&iterator];
+        if (value) {
+            [result setObject:value forKey:key];
         }
+        [key release];
     }
     return [result autorelease];
 }
 
-+ (void)appendValue:(id)value key:(NSString *)key toBson:(bson *)bson
++ (void)appendValue:(id)value key:(NSString *)key toBson:(bson_t *)bson
 {
-    const char *keyString = [key UTF8String];
+    const char *keyString = key.UTF8String;
     
-    if ([value isKindOfClass:[NSNull class]]) {
-        bson_append_null(bson, keyString);
-    } else if ([value isKindOfClass:[NSString class]]) {
-        bson_append_string(bson, keyString, [value UTF8String]);
+    if ([value isKindOfClass:NSNull.class]) {
+        bson_append_null(bson, keyString, (int)strlen(keyString));
+    } else if ([value isKindOfClass:NSString.class]) {
+        const char *cStringValue = [value UTF8String];
+        
+        bson_append_utf8(bson, keyString, (int)strlen(keyString), cStringValue, (int)strlen(cStringValue));
     } else if ([value isKindOfClass:[MODSortedMutableDictionary class]]) {
-        bson_append_start_object(bson, keyString);
-        [self appendObject:value toBson:bson];
-        bson_append_finish_object(bson);
+        bson_t childBson = BSON_INITIALIZER;
+        
+        bson_append_document_begin(bson, keyString, (int)strlen(keyString), &childBson);
+        [self appendObject:value toBson:&childBson];
+        bson_append_document_end(bson, &childBson);
     } else if ([value isKindOfClass:[NSArray class]]) {
         size_t ii = 0;
+        bson_t childBson = BSON_INITIALIZER;
         
-        bson_append_start_array(bson, keyString);
+        bson_append_array_begin(bson, keyString, (int)strlen(keyString), &childBson);
         for (id arrayValue in value) {
             NSString *arrayKey;
             
@@ -309,52 +315,49 @@
             [arrayKey release];
             ii++;
         }
-        bson_append_finish_array(bson);
+        bson_append_array_end(bson, &childBson);
     } else if ([value isKindOfClass:[MODObjectId class]]) {
-        bson_append_oid(bson, keyString, [value bsonObjectId]);
+        bson_append_oid(bson, keyString, (int)strlen(keyString), [value bsonObjectId]);
     } else if ([value isKindOfClass:[MODRegex class]]) {
-        bson_append_regex(bson, keyString, [[value pattern] UTF8String], [[(MODRegex *)value options] UTF8String]);
+        bson_append_regex(bson, keyString, (int)strlen(keyString), [value pattern].UTF8String, [(MODRegex *)value options].UTF8String);
     } else if ([value isKindOfClass:[MODTimestamp class]]) {
-        bson_timestamp_t ts;
-        
-        [value getBsonTimestamp:&ts];
-        bson_append_timestamp(bson, keyString, &ts);
+        bson_append_timestamp(bson, keyString, (int)strlen(keyString), [value tValue], [value iValue]);
     } else if ([value isKindOfClass:[NSNumber class]]) {
         if (strcmp([value objCType], @encode(BOOL)) == 0) {
-            bson_append_bool(bson, keyString, [value boolValue]);
+            bson_append_bool(bson, keyString, (int)strlen(keyString), [value boolValue]);
         } else if (strcmp([value objCType], @encode(int8_t)) == 0
                    || strcmp([value objCType], @encode(uint8_t)) == 0
                    || strcmp([value objCType], @encode(int32_t)) == 0) {
-            bson_append_int(bson, keyString, [value intValue]);
+            bson_append_int32(bson, keyString, (int)strlen(keyString), [value intValue]);
         } else if (strcmp([value objCType], @encode(float)) == 0
                    || strcmp([value objCType], @encode(double)) == 0) {
-            bson_append_double(bson, keyString, [value doubleValue]);
+            bson_append_double(bson, keyString, (int)strlen(keyString), [value doubleValue]);
         } else {
-            bson_append_long(bson, keyString, [value longLongValue]);
+            bson_append_int64(bson, keyString, (int)strlen(keyString), [value longLongValue]);
         }
     } else if ([value isKindOfClass:[NSDate class]]) {
-        bson_append_date(bson, keyString, llround([value timeIntervalSince1970] * 1000.0));
+        bson_append_date_time(bson, keyString, (int)strlen(keyString), llround([value timeIntervalSince1970] * 1000.0));
     } else if ([value isKindOfClass:[NSData class]]) {
-        bson_append_binary(bson, keyString, BSON_BIN_BINARY, [value bytes], [value length]);
+        bson_append_binary(bson, keyString, (int)strlen(keyString), BSON_SUBTYPE_BINARY, [value bytes], (int)[value length]);
     } else if ([value isKindOfClass:[MODBinary class]]) {
-        bson_append_binary(bson, keyString, [value binaryType], [[value data] bytes], [[value data] length]);
+        bson_append_binary(bson, keyString, (int)strlen(keyString), [value binaryType], [[value data] bytes], (int)[[value data] length]);
     } else if ([value isKindOfClass:[MODUndefined class]]) {
-        bson_append_undefined(bson, keyString);
+        bson_append_undefined(bson, keyString, (int)strlen(keyString));
     } else if ([value isKindOfClass:[MODSymbol class]]) {
-        bson_append_symbol(bson, keyString, [[value value] UTF8String]);
+        bson_append_symbol(bson, keyString, (int)strlen(keyString), [value value].UTF8String, (int)strlen([value value].UTF8String));
     } else if ([value isKindOfClass:[MODUndefined class]]) {
-        bson_append_undefined(bson, keyString);
+        bson_append_undefined(bson, keyString, (int)strlen(keyString));
     } else if ([value isKindOfClass:[MODMinKey class]]) {
-        bson_append_minkey(bson, keyString);
+        bson_append_minkey(bson, keyString, (int)strlen(keyString));
     } else if ([value isKindOfClass:[MODMaxKey class]]) {
-        bson_append_maxkey(bson, keyString);
+        bson_append_maxkey(bson, keyString, (int)strlen(keyString));
     } else {
         NSLog(@"*********************** class %@ key %@ %d", NSStringFromClass([value class]), key, __LINE__);
         NSAssert(NO, @"class %@ key %@ line %d", NSStringFromClass([value class]), key, __LINE__);
     }
 }
 
-+ (void)appendObject:(MODSortedMutableDictionary *)object toBson:(bson *)bson
++ (void)appendObject:(MODSortedMutableDictionary *)object toBson:(bson_t *)bson
 {
     for (NSString *key in object.sortedKeys) {
         id value = [object objectForKey:key];
@@ -587,7 +590,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
 
 + (BOOL)isEqualWithJson:(NSString *)json toBsonData:(NSData *)document info:(NSDictionary **)info
 {
-    bson jsonBsonDocument;
+    bson_t jsonBsonDocument = BSON_INITIALIZER;
     BOOL result;
     NSMutableDictionary *context = [[[NSMutableDictionary alloc] init] autorelease];
     NSError *error;
@@ -595,22 +598,20 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     if (info) {
         *info = context;
     }
-    bson_init(&jsonBsonDocument);
     [MODRagelJsonParser bsonFromJson:&jsonBsonDocument json:json error:&error];
-    bson_finish(&jsonBsonDocument);
     if (error) {
         [context setObject:error forKey:@"error"];
         result = NO;
     } else {
         MODBsonComparator *comparator;
-        bson originalBson;
+        bson_t *originalBson;
         
-        bson_init_finished_data(&originalBson, (void *)document.bytes, 0);
-        comparator = [[MODBsonComparator alloc] initWithBson1:&jsonBsonDocument bson2:&originalBson];
+        originalBson = bson_new_from_data((void *)document.bytes, (uint32_t)document.length);
+        comparator = [[MODBsonComparator alloc] initWithBson1:&jsonBsonDocument bson2:originalBson];
         result = [comparator compare];
         [context setObject:comparator.differences forKey:@"differences"];
         [comparator release];
-        bson_destroy(&originalBson);
+        bson_destroy(originalBson);
     }
     bson_destroy(&jsonBsonDocument);
     return result;

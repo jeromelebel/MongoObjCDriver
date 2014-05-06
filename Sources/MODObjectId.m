@@ -36,7 +36,7 @@
     return [self isCStringValid:string.UTF8String];
 }
 
-- (id)initWithOid:(bson_oid_t *)oid
+- (id)initWithOid:(const bson_oid_t *)oid
 {
     NSAssert(sizeof(bson_oid_t) == sizeof(_bytes), @"problem with types");
     return [self initWithBytes:(const unsigned char *)oid];
@@ -85,9 +85,9 @@
     return _bytes;
 }
 
-- (bson_oid_t *)bsonObjectId
+- (const bson_oid_t *)bsonObjectId
 {
-    return (bson_oid_t *)_bytes;
+    return (const bson_oid_t *)_bytes;
 }
 
 - (NSString *)stringValue

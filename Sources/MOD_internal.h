@@ -25,7 +25,7 @@ enum {
 @interface MODServer(utils_internal)
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails;
 + (NSError *)errorFromBsonError:(bson_error_t)error;
-+ (NSError *)errorFromMongo:(mongoc_client_t *)mongo;
+//+ (NSError *)errorFromMongo:(mongoc_client_t *)mongo;
 + (MODSortedMutableDictionary *)objectFromBson:(bson_t *)bsonObject;
 + (void)appendObject:(MODSortedMutableDictionary *)object toBson:(bson_t *)bson;
 @end
@@ -42,7 +42,7 @@ enum {
 @property(nonatomic, readonly, assign) mongoc_client_t *mongocClient;
 
 - (id)initWithMongoDatabase:(MODDatabase *)mongoDatabase collectionName:(NSString *)collectionName;
-- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock;
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
 @end
 
 @interface MODCursor()
@@ -55,7 +55,7 @@ enum {
 @property(nonatomic, readwrite, assign) BOOL donotReleaseCursor;
 
 - (id)initWithMongoCollection:(MODCollection *)mongoCollection;
-- (MODSortedMutableDictionary *)nextDocumentWithBsonData:(NSData **)bsonData error:(NSError **)error;
+//- (MODSortedMutableDictionary *)nextDocumentWithBsonData:(NSData **)bsonData error:(NSError **)error;
 @end
 
 @interface MODQuery()
@@ -70,12 +70,11 @@ enum {
 @end
 
 @interface MODObjectId()
-- (id)initWithOid:(bson_oid_t *)oid;
-- (bson_oid_t *)bsonObjectId;
+- (id)initWithOid:(const bson_oid_t *)oid;
+- (const bson_oid_t *)bsonObjectId;
 @end
 
 @interface MODTimestamp()
-- (void)getBsonTimestamp:(struct timeval *)ts;
 @end
 
 @interface MODRagelJsonParser (private)

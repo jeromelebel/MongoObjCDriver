@@ -12,19 +12,11 @@
 
 @synthesize tValue = _tValue, iValue = _iValue;
 
-- (id)initWithTValue:(int)tValue iValue:(int)iValue
+- (id)initWithTValue:(uint32_t)tValue iValue:(uint32_t)iValue
 {
     if (self = [self init]) {
-        _timestamp.tv_sec = iValue;
-        _timestamp.tv_usec = tValue;
-    }
-    return self;
-}
-
-- (id)initWithTimestamp:(struct timeval *)timestamp
-{
-    if (self = [self init]) {
-        memcpy(&_timestamp, timestamp, sizeof(_timestamp));
+        _iValue = iValue;
+        _tValue = tValue;
     }
     return self;
 }
@@ -43,11 +35,6 @@
 - (NSDate *)dateValue
 {
     return [NSDate dateWithTimeIntervalSince1970:_tValue];
-}
-
-- (void)getBsonTimestamp:(struct timeval *)ts
-{
-    memcpy(ts, &_timestamp, sizeof(_timestamp));
 }
 
 - (BOOL)isEqual:(id)object
