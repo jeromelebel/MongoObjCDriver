@@ -33,7 +33,7 @@ static void testTypes(void)
     MODSortedMutableDictionary *document;
     MODBinary *binary;
     NSData *data;
-    bson myBson;
+    bson_t myBson = BSON_INITIALIZER;
     bson_oid_t bsonOid;
     MODObjectId *objectOid;
     const char *oid = "4e9807f88157f608b4000002";
@@ -46,16 +46,14 @@ static void testTypes(void)
     [data release];
     [binary release];
     
-    bson_init(&myBson);
     [MODServer appendObject:document toBson:&myBson];
-    bson_finish(&myBson);
     
     if (![document isEqualTo:[MODServer objectFromBson:&myBson]]) {
         NSLog(@"********* ERROR ************");
     }
     bson_destroy(&myBson);
     
-    bson_oid_from_string(&bsonOid, oid);
+    bson_oid_init_from_string(&bsonOid, oid);
     objectOid = [[MODObjectId alloc] initWithOid:&bsonOid];
     if (strcmp(oid, [[objectOid stringValue] UTF8String]) != 0) {
         NSLog(@"error with objectid, expecting %s, recieved %s", oid, [[objectOid stringValue] UTF8String]);
@@ -71,14 +69,12 @@ static void testObjects(NSString *jsonToParse, NSString *jsonExpected, id should
     MODSortedMutableDictionary *objectsFromBson;
     NSError *error;
     id objects;
-    bson bsonResult;
+    bson_t bsonResult = BSON_INITIALIZER;
     
     if (!jsonExpected) {
         jsonExpected = jsonToParse;
     }
-    bson_init(&bsonResult);
     [MODRagelJsonParser bsonFromJson:&bsonResult json:jsonToParse error:&error];
-    bson_finish(&bsonResult);
     if (error) {
         NSLog(@"***** parsing errors for:");
         NSLog(@"%@", jsonToParse);
@@ -138,25 +134,25 @@ static void testObjects(NSString *jsonToParse, NSString *jsonExpected, id should
     }
 }
 
-static void testBsonArrayIndex(bson *bsonObject)
+static void testBsonArrayIndex(bson_t *bsonObject)
 {
-    bson_iterator iterator;
-    bson_iterator subIterator;
+    bson_iter_t iterator;
+    bson_iter_t subIterator;
     unsigned int ii = 0;
     
-    bson_iterator_init(&iterator, bsonObject);
+    bson_iter_init(&iterator, bsonObject);
     
-    assert(bson_iterator_next(&iterator) != BSON_EOO);
-    assert(strcmp(bson_iterator_key(&iterator), "array") == 0);
+    assert(bson_iter_next(&iterator));
+    assert(strcmp(bson_iter_key(&iterator), "array") == 0);
     
     bson_iter_recurse(&iterator, &subIterator);
-    while (bson_iterator_next(&subIterator) != BSON_EOO) {
-        assert(ii == atoi(bson_iterator_key(&subIterator)));
+    while (bson_iter_next(&subIterator)) {
+        assert(ii == atoi(bson_iter_key(&subIterator)));
         ii++;
     }
     assert(ii == 3);
     
-    assert(bson_iterator_next(&iterator) == BSON_EOO);
+    assert(bson_iter_next(&iterator));
 }
 
 static void testJson()
@@ -218,11 +214,9 @@ static void testJson()
     // test to make sure each items in an array has the correct index
     // https://github.com/fotonauts/MongoHub-Mac/issues/28
     {
-        bson bsonObject;
+        bson_t bsonObject = BSON_INITIALIZER;
         
-        bson_init(&bsonObject);
         [MODRagelJsonParser bsonFromJson:&bsonObject json:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" error:&error];
-        bson_finish(&bsonObject);
         testBsonArrayIndex(&bsonObject);
         bson_destroy(&bsonObject);
     }
@@ -231,12 +225,11 @@ static void testJson()
     // https://github.com/fotonauts/MongoHub-Mac/issues/39
     {
         id objects;
-        bson bsonObject;
+        bson_t bsonObject = BSON_INITIALIZER;
         
         objects = [MODRagelJsonParser objectsFromJson:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" withError:&error];
         bson_init(&bsonObject);
         [MODServer appendObject:objects toBson:&bsonObject];
-        bson_finish(&bsonObject);
         testBsonArrayIndex(&bsonObject);
         bson_destroy(&bsonObject);
     }
@@ -286,128 +279,123 @@ static void testBase64(void)
 
 static void runDatabaseTests(MODServer *server)
 {
-    MODDatabase *mongoDatabase;
-    MODCollection *mongoCollection;
-    MODCursor *cursor;
-    
-    mongoDatabase = [server databaseForName:DATABASE_NAME_TEST];
-    [mongoDatabase fetchDatabaseStatsWithCallback:^(MODSortedMutableDictionary *stats, MODQuery *mongoQuery) {
-        logMongoQuery(mongoQuery);
-    }];
-    [mongoDatabase createCollectionWithName:COLLECTION_NAME_TEST callback:^(MODQuery *mongoQuery) {
-        logMongoQuery(mongoQuery);
-    }];
-    [mongoDatabase fetchCollectionListWithCallback:^(NSArray *collectionList, MODQuery *mongoQuery) {
-        logMongoQuery(mongoQuery);
-    }];
-    
-    mongoCollection = [mongoDatabase collectionForName:COLLECTION_NAME_TEST];
-    [mongoCollection findWithCriteria:@"{}" fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:@"{ \"_id\": 1 }" callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
-        logMongoQuery(mongoQuery);
-    }];
-    [mongoCollection countWithCriteria:@"{ \"_id\": \"xxx\" }" callback:^(int64_t count, MODQuery *mongoQuery) {
-        assert(count == 0);
-        logMongoQuery(mongoQuery);
-    }];
-    [mongoCollection countWithCriteria:nil callback:^(int64_t count, MODQuery *mongoQuery) {
-        assert(count == 0);
-        logMongoQuery(mongoQuery);
-    }];
-    [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\": \"toto\" }", nil] callback:^(MODQuery *mongoQuery) {
-        logMongoQuery(mongoQuery);
-    }];
-    [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\": \"toto1\" }", @"{ \"_id\": { \"$oid\": \"123456789012345678901234\" } }", nil] callback:^(MODQuery *mongoQuery) {
-        logMongoQuery(mongoQuery);
-    }];
-    [mongoCollection countWithCriteria:nil callback:^(int64_t count, MODQuery *mongoQuery) {
-        assert(count == 3);
-        logMongoQuery(mongoQuery);
-    }];
-    [mongoCollection countWithCriteria:@"{ \"_id\": \"toto\" }" callback:^(int64_t count, MODQuery *mongoQuery) {
-        assert(count == 1);
-        logMongoQuery(mongoQuery);
-    }];
-    [mongoCollection findWithCriteria:nil fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:100 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
-        assert([documents count] == 2);
-        logMongoQuery(mongoQuery);
-    }];
-    [mongoCollection findWithCriteria:nil fields:nil skip:0 limit:0 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
-        assert([documents count] == 3);
-        logMongoQuery(mongoQuery);
-    }];
-    cursor = [mongoCollection cursorWithCriteria:nil fields:nil skip:0 limit:0 sort:nil];
-    [cursor forEachDocumentWithCallbackDocumentCallback:^(uint64_t index, MODSortedMutableDictionary *document) {
-        NSLog(@"++++ %@", document);
-        return YES;
-    } endCallback:^(uint64_t count, BOOL stopped, MODQuery *query) {
-        NSLog(@"++++ ");
-        logMongoQuery(query);
-    }];
-    [mongoCollection updateWithCriteria:@"{\"_id\": \"toto\"}" update:@"{\"$inc\": {\"x\": 1}}" upsert:NO multiUpdate:NO callback:^(MODQuery *mongoQuery) {
-        logMongoQuery(mongoQuery);
-    }];
-    [mongoCollection saveWithDocument:@"{\"_id\": \"toto\", \"y\": null}" callback:^(MODQuery *mongoQuery) {
-        logMongoQuery(mongoQuery);
-    }];
-    [mongoCollection findWithCriteria:@"{\"_id\": \"toto\"}" fields:nil skip:1 limit:5 sort:@"{ \"_id\": 1 }" callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
-        logMongoQuery(mongoQuery);
-    }];
-    [mongoCollection removeWithCriteria:@"{\"_id\": \"toto\"}" callback:^(MODQuery *mongoQuery) {
-        logMongoQuery(mongoQuery);
-    }];
-    
-    [mongoDatabase dropCollectionWithName:COLLECTION_NAME_TEST callback:^(MODQuery *mongoQuery) {
-        logMongoQuery(mongoQuery);
-    }];
-    [server dropDatabaseWithName:DATABASE_NAME_TEST callback:^(MODQuery *mongoQuery) {
-        logMongoQuery(mongoQuery);
-        NSLog(@"Everything is cool");
-        exit(0);
-    }];
-    [server release];
+//    MODDatabase *mongoDatabase;
+//    MODCollection *mongoCollection;
+//    MODCursor *cursor;
+//    
+//    mongoDatabase = [server databaseForName:DATABASE_NAME_TEST];
+//    [mongoDatabase fetchDatabaseStatsWithCallback:^(MODSortedMutableDictionary *stats, MODQuery *mongoQuery) {
+//        logMongoQuery(mongoQuery);
+//    }];
+//    [mongoDatabase createCollectionWithName:COLLECTION_NAME_TEST callback:^(MODQuery *mongoQuery) {
+//        logMongoQuery(mongoQuery);
+//    }];
+//    [mongoDatabase fetchCollectionListWithCallback:^(NSArray *collectionList, MODQuery *mongoQuery) {
+//        logMongoQuery(mongoQuery);
+//    }];
+//    
+//    mongoCollection = [mongoDatabase collectionForName:COLLECTION_NAME_TEST];
+//    [mongoCollection findWithCriteria:@"{}" fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:@"{ \"_id\": 1 }" callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+//        logMongoQuery(mongoQuery);
+//    }];
+//    [mongoCollection countWithCriteria:@"{ \"_id\": \"xxx\" }" callback:^(int64_t count, MODQuery *mongoQuery) {
+//        assert(count == 0);
+//        logMongoQuery(mongoQuery);
+//    }];
+//    [mongoCollection countWithCriteria:nil callback:^(int64_t count, MODQuery *mongoQuery) {
+//        assert(count == 0);
+//        logMongoQuery(mongoQuery);
+//    }];
+//    [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\": \"toto\" }", nil] callback:^(MODQuery *mongoQuery) {
+//        logMongoQuery(mongoQuery);
+//    }];
+//    [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\": \"toto1\" }", @"{ \"_id\": { \"$oid\": \"123456789012345678901234\" } }", nil] callback:^(MODQuery *mongoQuery) {
+//        logMongoQuery(mongoQuery);
+//    }];
+//    [mongoCollection countWithCriteria:nil callback:^(int64_t count, MODQuery *mongoQuery) {
+//        assert(count == 3);
+//        logMongoQuery(mongoQuery);
+//    }];
+//    [mongoCollection countWithCriteria:@"{ \"_id\": \"toto\" }" callback:^(int64_t count, MODQuery *mongoQuery) {
+//        assert(count == 1);
+//        logMongoQuery(mongoQuery);
+//    }];
+//    [mongoCollection findWithCriteria:nil fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:100 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+//        assert([documents count] == 2);
+//        logMongoQuery(mongoQuery);
+//    }];
+//    [mongoCollection findWithCriteria:nil fields:nil skip:0 limit:0 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+//        assert([documents count] == 3);
+//        logMongoQuery(mongoQuery);
+//    }];
+//    cursor = [mongoCollection cursorWithCriteria:nil fields:nil skip:0 limit:0 sort:nil];
+//    [cursor forEachDocumentWithCallbackDocumentCallback:^(uint64_t index, MODSortedMutableDictionary *document) {
+//        NSLog(@"++++ %@", document);
+//        return YES;
+//    } endCallback:^(uint64_t count, BOOL stopped, MODQuery *query) {
+//        NSLog(@"++++ ");
+//        logMongoQuery(query);
+//    }];
+//    [mongoCollection updateWithCriteria:@"{\"_id\": \"toto\"}" update:@"{\"$inc\": {\"x\": 1}}" upsert:NO multiUpdate:NO callback:^(MODQuery *mongoQuery) {
+//        logMongoQuery(mongoQuery);
+//    }];
+//    [mongoCollection saveWithDocument:@"{\"_id\": \"toto\", \"y\": null}" callback:^(MODQuery *mongoQuery) {
+//        logMongoQuery(mongoQuery);
+//    }];
+//    [mongoCollection findWithCriteria:@"{\"_id\": \"toto\"}" fields:nil skip:1 limit:5 sort:@"{ \"_id\": 1 }" callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+//        logMongoQuery(mongoQuery);
+//    }];
+//    [mongoCollection removeWithCriteria:@"{\"_id\": \"toto\"}" callback:^(MODQuery *mongoQuery) {
+//        logMongoQuery(mongoQuery);
+//    }];
+//    
+//    [mongoDatabase dropCollectionWithName:COLLECTION_NAME_TEST callback:^(MODQuery *mongoQuery) {
+//        logMongoQuery(mongoQuery);
+//    }];
+//    [server dropDatabaseWithName:DATABASE_NAME_TEST callback:^(MODQuery *mongoQuery) {
+//        logMongoQuery(mongoQuery);
+//        NSLog(@"Everything is cool");
+//        exit(0);
+//    }];
+//    [server release];
 }
 
 static void removeTestDatabaseAndRunTests(MODServer *server)
 {
-    [server dropDatabaseWithName:DATABASE_NAME_TEST callback:^(MODQuery *mongoQuery) {
-        logMongoQuery(mongoQuery);
-        runDatabaseTests(server);
-    }];
+//    [server dropDatabaseWithName:DATABASE_NAME_TEST callback:^(MODQuery *mongoQuery) {
+//        logMongoQuery(mongoQuery);
+//        runDatabaseTests(server);
+//    }];
 }
 
 static void testCompareIdenticalBson(NSString *json)
 {
-    bson bsonResult;
+    bson_t bsonResult = BSON_INITIALIZER;
     NSError *error;
     MODBsonComparator *comparator;
     
-    bson_init(&bsonResult);
     [MODRagelJsonParser bsonFromJson:&bsonResult json:json error:&error];
     assert(error == nil);
-    bson_finish(&bsonResult);
     comparator = [[MODBsonComparator alloc] initWithBson1:&bsonResult bson2:&bsonResult];
     if (![comparator compare]) {
         assert([comparator compare]);
     }
     [comparator release];
+    bson_destroy(&bsonResult);
     NSLog(@"%@ compare ok", json);
 }
 
 static void testCompareDifferentBson(NSString *json1, NSString *json2, NSArray *differences)
 {
-    bson bson1;
-    bson bson2;
+    bson_t bson1 = BSON_INITIALIZER;
+    bson_t bson2 = BSON_INITIALIZER;
     NSError *error;
     MODBsonComparator *comparator;
     
-    bson_init(&bson1);
     [MODRagelJsonParser bsonFromJson:&bson1 json:json1 error:&error];
     assert(error == nil);
-    bson_finish(&bson1);
-    bson_init(&bson2);
     [MODRagelJsonParser bsonFromJson:&bson2 json:json2 error:&error];
     assert(error == nil);
-    bson_finish(&bson2);
     comparator = [[MODBsonComparator alloc] initWithBson1:&bson1 bson2:&bson2];
     if ([comparator compare]) {
         NSLog(@"%@", json1);
@@ -421,6 +409,8 @@ static void testCompareDifferentBson(NSString *json1, NSString *json2, NSArray *
     }
     NSLog(@"Different: %@ %@", json1, json2);
     [comparator release];
+    bson_destroy(&bson1);
+    bson_destroy(&bson2);
 }
 
 static void testCompareBson(void)
@@ -505,22 +495,22 @@ int main (int argc, const char * argv[])
         }
         ip = argv[1];
         server = [[MODServer alloc] init];
-        [server connectWithHostName:[NSString stringWithUTF8String:ip] callback:^(BOOL connected, MODQuery *mongoQuery) {
-            NSLog(@"connecting to %s…", ip);
-            logMongoQuery(mongoQuery);
-        }];
-        [server fetchServerStatusWithCallback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {
-            logMongoQuery(mongoQuery);
-        }];
-        [server fetchDatabaseListWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
-            logMongoQuery(mongoQuery);
-            if ([list indexOfObject:DATABASE_NAME_TEST] != NSNotFound) {
-                removeTestDatabaseAndRunTests(server);
-            } else {
-                runDatabaseTests(server);
-            }
-        }];
-        
+//        [server connectWithHostName:[NSString stringWithUTF8String:ip] callback:^(BOOL connected, MODQuery *mongoQuery) {
+//            NSLog(@"connecting to %s…", ip);
+//            logMongoQuery(mongoQuery);
+//        }];
+//        [server fetchServerStatusWithCallback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {
+//            logMongoQuery(mongoQuery);
+//        }];
+//        [server fetchDatabaseListWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
+//            logMongoQuery(mongoQuery);
+//            if ([list indexOfObject:DATABASE_NAME_TEST] != NSNotFound) {
+//                removeTestDatabaseAndRunTests(server);
+//            } else {
+//                runDatabaseTests(server);
+//            }
+//        }];
+        [server release];
     }
     @autoreleasepool {
         [[NSRunLoop mainRunLoop] run];
