@@ -17,23 +17,32 @@ typedef struct __BsonComparatorStack {
 } BsonComparatorStack;
 
 @interface MODBsonComparator ()
-@property (nonatomic, readwrite, strong) NSData *bson1;
-@property (nonatomic, readwrite, strong) NSData *bson2;
+@property (nonatomic, readwrite, assign) void *bson1;
+@property (nonatomic, readwrite, assign) void *bson2;
+@property (nonatomic, readwrite, assign) void *bson1ToDestroy;
+@property (nonatomic, readwrite, assign) void *bson2ToDestroy;
 @property (nonatomic, readwrite, strong) NSMutableArray *differences;
 
 @end
 
 @implementation MODBsonComparator (Private)
 
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        self.differences = [NSMutableArray array];
+    }
+    return self;
+}
+
 - (id)initWithBson1:(bson_t *)bson1 bson2:(bson_t *)bson2
 {
-    NSData *data1, *data2;
-    
-    data1 = [[NSData alloc] initWithBytes:bson_get_data(bson1) length:bson1->len];
-    data2 = [[NSData alloc] initWithBytes:bson_get_data(bson2) length:bson2->len];
-    self = [self initWithBsonData1:data1 bsonData2:data2];
-    [data1 release];
-    [data2 release];
+    self = [self init];
+    if (self) {
+        self.bson1 = bson1;
+        self.bson2 = bson2;
+    }
     return self;
 }
 
@@ -43,13 +52,14 @@ typedef struct __BsonComparatorStack {
 
 @synthesize bson1 = _bson1, bson2 = _bson2, differences = _differences;
 
-- (id)initWithBsonData1:(NSData *)bson1 bsonData2:(NSData *)bson2
+- (id)initWithBsonData1:(NSData *)bsonData1 bsonData2:(NSData *)bsonData2
 {
     self = [self init];
     if (self) {
-        self.differences = [NSMutableArray array];
-        self.bson1 = bson1;
-        self.bson2 = bson2;
+        self.bson1ToDestroy = bson_new_from_data(bsonData1.bytes, (int)bsonData1.length);
+        self.bson2ToDestroy = bson_new_from_data(bsonData2.bytes, (int)bsonData2.length);
+        self.bson1 = self.bson1ToDestroy;
+        self.bson2 = self.bson2ToDestroy;
     }
     return self;
 }
@@ -58,6 +68,12 @@ typedef struct __BsonComparatorStack {
 {
     self.bson1 = nil;
     self.bson2 = nil;
+    if (self.bson1ToDestroy) {
+        bson_destroy(self.bson1ToDestroy);
+    }
+    if (self.bson2ToDestroy) {
+        bson_destroy(self.bson2ToDestroy);
+    }
     self.differences = nil;
     [super dealloc];
 }
@@ -75,7 +91,7 @@ typedef struct __BsonComparatorStack {
         
         bson_iter_next(&iterator1);
         bson_iter_next(&iterator2);
-        if (iterator1.len != iterator2.len || memcmp(stack->iterator1.raw, stack->iterator2.raw, iterator1.len) != 0) {
+        if (stack->iterator1.len - iterator1.len != stack->iterator2.len - iterator2.len || memcmp(stack->iterator1.raw, stack->iterator2.raw, stack->iterator1.len - iterator1.len) != 0) {
             BsonComparatorStack objectStack;
             
             switch (stack->type1) {
@@ -107,10 +123,16 @@ typedef struct __BsonComparatorStack {
     BOOL result = YES;
     
     while (stillContinue) {
-        bson_iter_next(&stack->iterator1);
-        bson_iter_next(&stack->iterator2);
-        stack->type1 = bson_iter_type(&stack->iterator1);
-        stack->type2 = bson_iter_type(&stack->iterator2);
+        if (bson_iter_next(&stack->iterator1)) {
+            stack->type1 = bson_iter_type(&stack->iterator1);
+        } else {
+            stack->type1 = BSON_TYPE_EOD;
+        }
+        if (bson_iter_next(&stack->iterator2)) {
+            stack->type2 = bson_iter_type(&stack->iterator2);
+        } else {
+            stack->type2 = BSON_TYPE_EOD;
+        }
         if (stack->type1 == BSON_TYPE_EOD && stack->type2 == BSON_TYPE_EOD) {
             stillContinue = NO;
         } else if (stack->type1 != stack->type2) {
@@ -196,8 +218,8 @@ typedef struct __BsonComparatorStack {
 {
     BsonComparatorStack stack;
     
-    bson_iter_init(&stack.iterator1, self.bson1.bytes);
-    bson_iter_init(&stack.iterator2, self.bson2.bytes);
+    bson_iter_init(&stack.iterator1, self.bson1);
+    bson_iter_init(&stack.iterator2, self.bson2);
     return [self compareObjectWithStack:&stack prefix:nil];
 }
 
