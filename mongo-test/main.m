@@ -152,7 +152,7 @@ static void testBsonArrayIndex(bson_t *bsonObject)
     }
     assert(ii == 3);
     
-    assert(bson_iter_next(&iterator));
+    assert(bson_iter_next(&iterator) == false);
 }
 
 static void testJson()
