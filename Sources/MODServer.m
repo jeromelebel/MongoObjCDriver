@@ -25,8 +25,8 @@
     MODServer *result;
     
     mongoc_init();
-    result = [[MODServer alloc] initWithURLString:urlString];
-    return result;
+    result = [[MODServer alloc] initWithURIString:urlString];
+    return [result autorelease];
 }
 
 - (id)init
@@ -38,12 +38,12 @@
     return self;
 }
 
-- (id)initWithURLString:(NSString *)urlString
+- (id)initWithURIString:(NSString *)urlString
 {
-    return [self initWithURLCString:urlString.UTF8String];
+    return [self initWithURICString:urlString.UTF8String];
 }
 
-- (id)initWithURLCString:(const char *)urlCString
+- (id)initWithURICString:(const char *)urlCString
 {
     if ((self = [self init]) != nil) {
         self.mongocClient = mongoc_client_new(urlCString);
