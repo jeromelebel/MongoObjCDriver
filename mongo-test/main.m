@@ -481,7 +481,7 @@ static void testCompareDocument(void)
 int main (int argc, const char * argv[])
 {
     @autoreleasepool {
-        const char *ip;
+        const char *uri;
         MODServer *server = nil;
 
         testJson();
@@ -493,23 +493,19 @@ int main (int argc, const char * argv[])
             NSLog(@"need to put the ip a of a mongo server as a parameter, so we can test the objective-c driver");
             exit(1);
         }
-        ip = argv[1];
-        server = [[MODServer alloc] init];
-//        [server connectWithHostName:[NSString stringWithUTF8String:ip] callback:^(BOOL connected, MODQuery *mongoQuery) {
-//            NSLog(@"connecting to %s…", ip);
-//            logMongoQuery(mongoQuery);
-//        }];
-//        [server fetchServerStatusWithCallback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {
-//            logMongoQuery(mongoQuery);
-//        }];
-//        [server fetchDatabaseListWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
-//            logMongoQuery(mongoQuery);
-//            if ([list indexOfObject:DATABASE_NAME_TEST] != NSNotFound) {
-//                removeTestDatabaseAndRunTests(server);
-//            } else {
-//                runDatabaseTests(server);
-//            }
-//        }];
+        uri = argv[1];
+        server = [[MODServer alloc] initWithURICString:uri];
+        [server fetchServerStatusWithCallback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {
+            logMongoQuery(mongoQuery);
+        }];
+        [server fetchDatabaseListWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
+            logMongoQuery(mongoQuery);
+            if ([list indexOfObject:DATABASE_NAME_TEST] != NSNotFound) {
+                removeTestDatabaseAndRunTests(server);
+            } else {
+                runDatabaseTests(server);
+            }
+        }];
         [server release];
     }
     @autoreleasepool {
