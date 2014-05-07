@@ -34,6 +34,10 @@ typedef struct mongo_replset            *mongo_replset_ptr;
 
 + (MODServer *)clientWihtURLString:(NSString *)urlString;
 
+// can return nil if the URI is invalid
+- (id)initWithURIString:(NSString *)urlString;
+- (id)initWithURICString:(const char *)urlCString;
+
 - (MODQuery *)copy;
 
 - (MODQuery *)fetchServerStatusWithCallback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback;
