@@ -311,7 +311,7 @@
             NSString *arrayKey;
             
             arrayKey = [[NSString alloc] initWithFormat:@"%ld", ii];
-            [self appendValue:arrayValue key:arrayKey toBson:bson];
+            [self appendValue:arrayValue key:arrayKey toBson:&childBson];
             [arrayKey release];
             ii++;
         }
