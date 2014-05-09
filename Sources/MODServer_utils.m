@@ -10,128 +10,144 @@
 
 @implementation MODServer(utils_internal)
 
-+ (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails
-{
-    return nil;
-//    NSError *error;
-//    NSString *description = nil;
-//    
-//    if ([errorDomain isEqualToString:MODMongoErrorDomain]) {
-//        switch (code) {
-//            case MONGO_CONN_SUCCESS:
-//                description = @"Connection success!";
-//                break;
-//            case MONGO_CONN_NO_SOCKET:
-//                description = @"Could not create a socket.";
-//                break;
-//            case MONGO_CONN_FAIL:
-//                description = @"An error occured while calling connect().";
-//                break;
-//            case MONGO_CONN_ADDR_FAIL:
-//                description = @"Cannot get an ip address with this domain name.";
-//                break;
-//            case MONGO_CONN_NOT_MASTER:
-//                description = @"Connected to a non-master node (read-only).";
-//                break;
-//            case MONGO_CONN_BAD_SET_NAME:
-//                description = @"Given rs name doesn't match this replica set.";
-//                break;
-//            case MONGO_CONN_NO_PRIMARY:
-//                description = @"Can't find primary in replica set. Connection closed.";
-//                break;
-//            case MONGO_IO_ERROR:
-//                description = @"An error occurred while reading or writing on the socket.";
-//                break;
-//            case MONGO_READ_SIZE_ERROR:
-//                description = @"The response is not the expected length.";
-//                break;
-//            case MONGO_COMMAND_FAILED:
-//                if (descriptionDetails) {
-//                    description = [NSString stringWithFormat:@"Error returned by the server: \"%@\"", descriptionDetails];
-//                    descriptionDetails = nil;
-//                } else {
-//                    description = @"The command returned with 'ok' value of 0.";
-//                }
-//                break;
-//            case MONGO_BSON_INVALID:
-//                description = @"BSON not valid for the specified op.";
-//                break;
-//            case MONGO_BSON_NOT_FINISHED:
-//                description = @"BSON object has not been finished.";
-//                break;
-//            default:
-//                description = @"";
-//                break;
-//        }
-//        if (descriptionDetails) {
-//            description = [NSString stringWithFormat:@"%@ - %@", description, descriptionDetails];
-//        }
-//    } else if ([errorDomain isEqualToString:MODJsonParserErrorDomain]) {
-//        switch (code) {
-//            case JSON_PARSER_ERROR_EXPECTED_END:
-//                description = @"json end is unexpected";
-//                break;
-//            default:
-//                break;
-//        }
-//        if (descriptionDetails) {
-//            description = [NSString stringWithFormat:@"%@ - \"%@\"", description, descriptionDetails];
-//        }
-//    } else if ([errorDomain isEqualToString:MODMongoCursorErrorDomain]) {
-//        switch (code) {
-//            case MONGO_CURSOR_EXHAUSTED:
-//                description = @"The cursor has no more results.";
-//                break;
-//            case MONGO_CURSOR_INVALID:
-//                description = @"The cursor has timed out or is not recognized.";
-//                break;
-//            case MONGO_CURSOR_PENDING:
-//                description = @"Tailable cursor still alive but no data.";
-//                break;
-//            case MONGO_CURSOR_QUERY_FAIL:
-//                description = @"The server returned an '$err' object, indicating query failure.";
-//                break;
-//            case MONGO_CURSOR_BSON_ERROR:
-//                description = @"Something is wrong with the BSON provided.";
-//                break;
-//            case MONGO_CURSOR_BSON_TOO_LARGE:
-//                description = @"the message to send is too long";
-//                break;
-//            default:
-//                description = @"";
-//                break;
-//        }
-//        if (descriptionDetails) {
-//            description = [NSString stringWithFormat:@"%@ - \"%@\"", description, descriptionDetails];
-//        }
-//    } else {
-//        if (descriptionDetails) {
-//            description = [NSString stringWithFormat:@"Unknown error %ld (%@) - %@", (long)code, errorDomain, descriptionDetails];
-//        } else {
-//            description = [NSString stringWithFormat:@"Unknown error %ld (%@)", (long)code, errorDomain];
-//        }
-//    }
-//    if (!description) {
-//        description = [NSString stringWithFormat:@"Unknown error %ld - %@", (long)code, errorDomain];
-//    }
-//    error = [NSError errorWithDomain:errorDomain code:code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:description, NSLocalizedDescriptionKey, nil]];
-//    return error;
-}
-
 + (NSError *)errorFromBsonError:(bson_error_t)error
 {
-    return [NSError errorWithDomain:[NSString stringWithFormat:@"bson-%d", error.domain] code:error.code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:[NSString stringWithUTF8String:error.message],NSLocalizedDescriptionKey, nil]];
+    NSString *domain = nil;
+    NSString *errorMessage = nil;
+    
+    switch (error.domain) {
+        case MONGOC_ERROR_CLIENT:
+            domain = @"MONGOC_ERROR_CLIENT";
+            break;
+        case MONGOC_ERROR_STREAM:
+            domain = @"MONGOC_ERROR_STREAM";
+            break;
+        case MONGOC_ERROR_PROTOCOL:
+            domain = @"MONGOC_ERROR_PROTOCOL";
+            break;
+        case MONGOC_ERROR_CURSOR:
+            domain = @"MONGOC_ERROR_CURSOR";
+            break;
+        case MONGOC_ERROR_QUERY:
+            domain = @"MONGOC_ERROR_QUERY";
+            break;
+        case MONGOC_ERROR_INSERT:
+            domain = @"MONGOC_ERROR_INSERT";
+            break;
+        case MONGOC_ERROR_SASL:
+            domain = @"MONGOC_ERROR_SASL";
+            break;
+        case MONGOC_ERROR_BSON:
+            domain = @"MONGOC_ERROR_BSON";
+            break;
+        case MONGOC_ERROR_MATCHER:
+            domain = @"MONGOC_ERROR_MATCHER";
+            break;
+        case MONGOC_ERROR_NAMESPACE:
+            domain = @"MONGOC_ERROR_NAMESPACE";
+            break;
+        case MONGOC_ERROR_COMMAND:
+            domain = @"MONGOC_ERROR_COMMAND";
+            break;
+        case MONGOC_ERROR_COLLECTION:
+            domain = @"MONGOC_ERROR_COLLECTION";
+            break;
+    }
+    NSAssert(domain != nil, @"no domain found %d", error.domain);
+    switch ((mongoc_error_code_t)error.code) {
+        case MONGOC_ERROR_STREAM_INVALID_TYPE:
+            errorMessage = @"MONGOC_ERROR_STREAM_INVALID_TYPE";
+            break;
+        case MONGOC_ERROR_STREAM_INVALID_STATE:
+            errorMessage = @"MONGOC_ERROR_STREAM_INVALID_STATE";
+            break;
+        case MONGOC_ERROR_STREAM_NAME_RESOLUTION:
+            errorMessage = @"MONGOC_ERROR_STREAM_NAME_RESOLUTION";
+            break;
+        case MONGOC_ERROR_STREAM_SOCKET:
+            errorMessage = @"MONGOC_ERROR_STREAM_SOCKET";
+            break;
+        case MONGOC_ERROR_STREAM_CONNECT:
+            errorMessage = @"MONGOC_ERROR_STREAM_CONNECT";
+            break;
+        case MONGOC_ERROR_STREAM_NOT_ESTABLISHED:
+            errorMessage = @"MONGOC_ERROR_STREAM_NOT_ESTABLISHED";
+            break;
+        
+        case MONGOC_ERROR_CLIENT_NOT_READY:
+            errorMessage = @"MONGOC_ERROR_CLIENT_NOT_READY";
+            break;
+        case MONGOC_ERROR_CLIENT_TOO_BIG:
+            errorMessage = @"MONGOC_ERROR_CLIENT_TOO_BIG";
+            break;
+        case MONGOC_ERROR_CLIENT_TOO_SMALL:
+            errorMessage = @"MONGOC_ERROR_CLIENT_TOO_SMALL";
+            break;
+        case MONGOC_ERROR_CLIENT_GETNONCE:
+            errorMessage = @"MONGOC_ERROR_CLIENT_GETNONCE";
+            break;
+        case MONGOC_ERROR_CLIENT_AUTHENTICATE:
+            errorMessage = @"MONGOC_ERROR_CLIENT_AUTHENTICATE";
+            break;
+        case MONGOC_ERROR_CLIENT_NO_ACCEPTABLE_PEER:
+            errorMessage = @"MONGOC_ERROR_CLIENT_NO_ACCEPTABLE_PEER";
+            break;
+        case MONGOC_ERROR_CLIENT_IN_EXHAUST:
+            errorMessage = @"MONGOC_ERROR_CLIENT_IN_EXHAUST";
+            break;
+        
+        case MONGOC_ERROR_PROTOCOL_INVALID_REPLY:
+            errorMessage = @"MONGOC_ERROR_PROTOCOL_INVALID_REPLY";
+            break;
+        case MONGOC_ERROR_PROTOCOL_BAD_WIRE_VERSION:
+            errorMessage = @"MONGOC_ERROR_PROTOCOL_BAD_WIRE_VERSION";
+            break;
+        
+        case MONGOC_ERROR_CURSOR_INVALID_CURSOR:
+            errorMessage = @"MONGOC_ERROR_CURSOR_INVALID_CURSOR";
+            break;
+        
+        case MONGOC_ERROR_QUERY_FAILURE:
+            errorMessage = @"MONGOC_ERROR_QUERY_FAILURE";
+            break;
+        
+        case MONGOC_ERROR_BSON_INVALID:
+            errorMessage = @"MONGOC_ERROR_BSON_INVALID";
+            break;
+        
+        case MONGOC_ERROR_MATCHER_INVALID:
+            errorMessage = @"MONGOC_ERROR_MATCHER_INVALID";
+            break;
+        
+        case MONGOC_ERROR_NAMESPACE_INVALID:
+            errorMessage = @"MONGOC_ERROR_NAMESPACE_INVALID";
+            break;
+        
+        case MONGOC_ERROR_COMMAND_INVALID_ARG:
+            errorMessage = @"MONGOC_ERROR_COMMAND_INVALID_ARG";
+            break;
+        
+        case MONGOC_ERROR_COLLECTION_INSERT_FAILED:
+            errorMessage = @"MONGOC_ERROR_COLLECTION_INSERT_FAILED";
+            break;
+        
+        case MONGOC_ERROR_QUERY_COMMAND_NOT_FOUND:
+            errorMessage = @"MONGOC_ERROR_QUERY_COMMAND_NOT_FOUND";
+            break;
+            
+        case MONGOC_ERROR_QUERY_NOT_TAILABLE:
+            errorMessage = @"MONGOC_ERROR_QUERY_NOT_TAILABLE";
+            break;
+//        case MONGOC_ERROR_PROTOCOL_ERROR:
+//            errorMessage = @"MONGOC_ERROR_PROTOCOL_ERROR";
+//            break;
+    }
+    if (strlen(error.message) > 0) {
+        errorMessage = [NSString stringWithCString:error.message encoding:NSUTF8StringEncoding];
+    }
+    NSAssert(domain != nil, @"no error message found %d %@ %d", error.domain, domain, error.code);
+    return [NSError errorWithDomain:domain code:error.code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:errorMessage,NSLocalizedDescriptionKey, nil]];
 }
-
-//+ (NSError *)errorFromMongo:(mongo_ptr)mongo
-//{
-//    NSError *result = nil;
-//    
-//    if (mongo->err != MONGO_CONN_SUCCESS) {
-//        result = [self errorWithErrorDomain:MODMongoErrorDomain code:mongo->err descriptionDetails:nil];
-//    }
-//    return result;
-//}
 
 + (id)objectFromBsonIterator:(bson_iter_t *)iterator
 {

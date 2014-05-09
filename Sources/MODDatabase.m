@@ -115,11 +115,11 @@
 {
     return [[[MODCollection alloc] initWithMongoDatabase:self collectionName:name] autorelease];
 }
-//
-//- (MODQuery *)createCollectionWithName:(NSString *)collectionName callback:(void (^)(MODQuery *mongoQuery))callback
-//{
-//    MODQuery *query;
-//    
+
+- (MODQuery *)createCollectionWithName:(NSString *)collectionName callback:(void (^)(MODQuery *mongoQuery))callback
+{
+    MODQuery *query = nil;
+    
 //    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
 //        if (!self.mongoServer.isMaster) {
 //            mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Collection add forbidden on a slave"];
@@ -134,9 +134,9 @@
 //    }];
 //    [query.mutableParameters setObject:@"createcollection" forKey:@"command"];
 //    [query.mutableParameters setObject:collectionName forKey:@"collectionname"];
-//    return query;
-//}
-//
+    return query;
+}
+
 //- (MODQuery *)createCappedCollectionWithName:(NSString *)collectionName capSize:(int64_t)capSize callback:(void (^)(MODQuery *mongoQuery))callback
 //{
 //    MODQuery *query;
