@@ -495,6 +495,10 @@ int main (int argc, const char * argv[])
         }
         uri = argv[1];
         server = [[MODServer alloc] initWithURICString:uri];
+        if (server == nil) {
+            NSLog(@"Can't parse uri %s", uri);
+            assert(false);
+        }
         [server fetchServerStatusWithCallback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
         }];
