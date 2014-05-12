@@ -125,7 +125,7 @@
     
     query = [self addQueryInQueue:^(MODQuery *mongoQuery){
         bson_t output;
-        bson_error_t error;
+        bson_error_t error = BSON_NO_ERROR;
         MODSortedMutableDictionary *outputObjects = nil;
         
         if (!mongoQuery.canceled) {
@@ -147,7 +147,7 @@
     query = [self addQueryInQueue:^(MODQuery *mongoQuery) {
         bson_t output = BSON_INITIALIZER;
         NSMutableArray *list = nil;
-        bson_error_t error;
+        bson_error_t error = BSON_NO_ERROR;
         
         if (!mongoQuery.canceled) {
             char **cStringName;

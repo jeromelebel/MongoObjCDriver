@@ -10,6 +10,8 @@
 #import "MOD_public.h"
 #import "mongoc.h"
 
+#define BSON_NO_ERROR { 0, 0, 0 }
+
 enum {
     JSON_PARSER_ERROR_EXPECTED_END
 };

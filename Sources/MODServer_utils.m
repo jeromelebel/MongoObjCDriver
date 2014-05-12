@@ -53,6 +53,7 @@
             domain = @"MONGOC_ERROR_COLLECTION";
             break;
     }
+    
     NSAssert(domain != nil, @"no domain found %d", error.domain);
     switch ((mongoc_error_code_t)error.code) {
         case MONGOC_ERROR_STREAM_INVALID_TYPE:
