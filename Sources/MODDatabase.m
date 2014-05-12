@@ -51,7 +51,7 @@
     
     query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
         MODSortedMutableDictionary *stats = nil;
-        bson_error_t error;
+        bson_error_t error = BSON_NO_ERROR;
         
         if (!mongoQuery.canceled) {
             bson_t cmd = BSON_INITIALIZER;
@@ -82,7 +82,7 @@
     
     query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
         NSMutableArray *collections = nil;
-        bson_error_t error;
+        bson_error_t error = BSON_NO_ERROR;
         
         if (!mongoQuery.canceled) {
             char **cStringCollections;
@@ -120,7 +120,7 @@
 {
     MODQuery *query = nil;
     
-//    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
 //        if (!self.mongoServer.isMaster) {
 //            mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Collection add forbidden on a slave"];
 //        } else if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
@@ -131,9 +131,9 @@
 //                callback(mongoQuery);
 //            }
 //        }];
-//    }];
-//    [query.mutableParameters setObject:@"createcollection" forKey:@"command"];
-//    [query.mutableParameters setObject:collectionName forKey:@"collectionname"];
+    }];
+    [query.mutableParameters setObject:@"createcollection" forKey:@"command"];
+    [query.mutableParameters setObject:collectionName forKey:@"collectionname"];
     return query;
 }
 
@@ -164,7 +164,7 @@
     MODQuery *query;
     
     query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-        bson_error_t error;
+        bson_error_t error = BSON_NO_ERROR;
         
         if (!mongoQuery.canceled) {
             mongoc_database_drop(self.mongocDatabase, &error);

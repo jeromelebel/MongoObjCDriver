@@ -24,7 +24,12 @@ void logMongoQuery(MODQuery *mongoQuery)
         NSLog(@"********* ERROR ************");
         NSLog(@"%@", mongoQuery.error);
     }
+    if ([mongoQuery.parameters objectForKey:@"command"] == nil) {
+        NSLog(@"********* ERROR ************");
+        NSLog(@"Need to set the command name in the query parameters of mongo query");
+    }
     NSLog(@"%@", mongoQuery.parameters);
+    assert([mongoQuery.parameters objectForKey:@"command"] != nil);
     assert(mongoQuery.error == nil);
 }
 
@@ -279,17 +284,17 @@ static void testBase64(void)
 
 static void runDatabaseTests(MODServer *server)
 {
-//    MODDatabase *mongoDatabase;
+    MODDatabase *mongoDatabase;
 //    MODCollection *mongoCollection;
 //    MODCursor *cursor;
-//    
-//    mongoDatabase = [server databaseForName:DATABASE_NAME_TEST];
-//    [mongoDatabase fetchDatabaseStatsWithCallback:^(MODSortedMutableDictionary *stats, MODQuery *mongoQuery) {
-//        logMongoQuery(mongoQuery);
-//    }];
-//    [mongoDatabase createCollectionWithName:COLLECTION_NAME_TEST callback:^(MODQuery *mongoQuery) {
-//        logMongoQuery(mongoQuery);
-//    }];
+
+    mongoDatabase = [server databaseForName:DATABASE_NAME_TEST];
+    [mongoDatabase fetchDatabaseStatsWithCallback:^(MODSortedMutableDictionary *stats, MODQuery *mongoQuery) {
+        logMongoQuery(mongoQuery);
+    }];
+    [mongoDatabase createCollectionWithName:COLLECTION_NAME_TEST callback:^(MODQuery *mongoQuery) {
+        logMongoQuery(mongoQuery);
+    }];
 //    [mongoDatabase fetchCollectionListWithCallback:^(NSArray *collectionList, MODQuery *mongoQuery) {
 //        logMongoQuery(mongoQuery);
 //    }];
