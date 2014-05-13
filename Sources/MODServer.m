@@ -11,14 +11,13 @@
 #import "mongoc.h"
 
 @interface MODServer ()
-@property (nonatomic, readwrite, assign, getter = isMaster) BOOL master;
 @property (nonatomic, readwrite, retain) NSOperationQueue *operationQueue;
 
 @end
 
 @implementation MODServer
 
-@synthesize connected = _connected, mongocClient = _mongocClient, master = _master, operationQueue = _operationQueue;
+@synthesize connected = _connected, mongocClient = _mongocClient, operationQueue = _operationQueue;
 
 + (MODServer *)clientWihtURLString:(NSString *)urlString
 {

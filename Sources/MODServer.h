@@ -26,11 +26,9 @@ typedef struct mongo_replset            *mongo_replset_ptr;
     void                                *_mongocClient;
     
     BOOL                                _connected;
-    BOOL                                _master;
     NSOperationQueue                    *_operationQueue;
 }
 @property (nonatomic, readonly, assign, getter = isConnected) BOOL connected;
-@property (nonatomic, readonly, assign, getter = isMaster) BOOL master;
 
 + (MODServer *)clientWihtURLString:(NSString *)urlString;
 

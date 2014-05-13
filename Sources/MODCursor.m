@@ -8,131 +8,127 @@
 
 #import "MOD_internal.h"
 
+@interface MODCursor ()
+
+@property (nonatomic, readwrite, retain) MODCollection *mongoCollection;
+@property (nonatomic, readwrite, retain) NSString *query;
+@property (nonatomic, readwrite, retain) NSArray *fields;
+@property (nonatomic, readwrite, assign) uint32_t skip;
+@property (nonatomic, readwrite, assign) uint32_t limit;
+@property (nonatomic, readwrite, assign) uint32_t batchSize;
+@property (nonatomic, readwrite, retain) NSString * sort;
+@property (nonatomic, readwrite, assign) mongoc_cursor_t *mongocCursor;
+@property (nonatomic, readwrite, strong) NSError *error;
+
+- (void)_createMongocCursor;
+
+@end
+
 @implementation MODCursor
 
-@synthesize mongoCollection = _mongoCollection, query = _query, fields = _fields, skip = _skip, limit = _limit, sort = _sort, cursor = _cursor, donotReleaseCursor = _donotReleaseCursor, tailable = _tailable;
+@synthesize mongoCollection = _mongoCollection, query = _query, fields = _fields, skip = _skip, limit = _limit, sort = _sort, mongocCursor = _mongocCursor, tailable = _tailable, batchSize = _batchSize, error = _error;
 
 - (id)initWithMongoCollection:(MODCollection *)mongoCollection
 {
     if (self = [self init]) {
-        _mongoCollection = [mongoCollection retain];
+        self.mongoCollection = mongoCollection;
+    }
+    return self;
+}
+
+- (id)initWithMongoCollection:(MODCollection *)mongoCollection query:(NSString *)query fields:(NSArray *)fields skip:(uint32_t)skip limit:(uint32_t)limit sort:(NSString *)sort
+{
+    if (self = [self initWithMongoCollection:mongoCollection]) {
+        self.query = query;
+        self.fields = fields;
+        self.skip = skip;
+        self.limit = limit;
+        self.sort = sort;
+        [self _createMongocCursor];
     }
     return self;
 }
 
 - (void)dealloc
 {
-//    if (_cursor && !_donotReleaseCursor) {
-//        mongo_cursor_destroy(_cursor);
-//        free(_cursor);
-//    }
-    if (_bsonQuery) {
-        bson_destroy(_bsonQuery);
-        free(_bsonQuery);
-    }
-    if (_bsonFields) {
-        bson_destroy(_bsonFields);
-        free(_bsonFields);
-    }
-    [_query release];
-    [_fields release];
-    [_sort release];
-    [_mongoCollection release];
+    self.error = nil;
+    self.query = nil;
+    self.fields = nil;
+    self.sort = nil;
+    self.mongoCollection = nil;
     [super dealloc];
 }
-//
+
 //- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock
 //{
 //    [mongoQuery.mutableParameters setObject:self forKey:@"cursor"];
-//    [_mongoCollection mongoQueryDidFinish:mongoQuery withCallbackBlock:callbackBlock];
+//    [self.mongoCollection mongoQueryDidFinish:mongoQuery withCallbackBlock:callbackBlock];
 //}
-//
-//- (BOOL)_startCursorWithError:(NSError **)error
-//{
-//    int options = MONGO_AWAIT_DATA;
-//    NSAssert(error != NULL, @"please give a pointer to get the error back");
-//    NSAssert(_cursor == NULL, @"cursor already created");
-//    
-//    *error = nil;
-//    _cursor = malloc(sizeof(mongo_cursor));
-//    mongo_cursor_init(_cursor, _mongoCollection.mongo, [_mongoCollection.absoluteCollectionName UTF8String]);
-//    _bsonQuery = malloc(sizeof(bson));
-//    bson_init(_bsonQuery);
-//    
-//    bson_append_start_object(_bsonQuery, "$query");
-//    if (_query && [_query  length] > 0) {
-//        [MODRagelJsonParser bsonFromJson:_bsonQuery json:_query error:error];
-//    }
-//    bson_append_finish_object(_bsonQuery);
-//    if (*error == nil) {
-//        if ([_sort length] > 0) {
-//            bson_append_start_object(_bsonQuery, "$orderby");
-//            if (_sort) {
-//                [MODRagelJsonParser bsonFromJson:_bsonQuery json:_sort error:error];
-//            }
-//            bson_append_finish_object(_bsonQuery);
-//        }
-//    }
-//    bson_finish(_bsonQuery);
-//    mongo_cursor_set_query(_cursor, _bsonQuery);
-//    if ([_fields count] > 0 && *error == nil) {
-//        
-//        _bsonFields = malloc(sizeof(bson));
-//        bson_init(_bsonFields);
-//        for (NSString *field in _fields) {
-//            bson_append_bool(_bsonFields, [field UTF8String], 1);
-//        }
-//        bson_finish(_bsonFields);
-//        mongo_cursor_set_fields(_cursor, _bsonFields);
-//    }
-//    mongo_cursor_set_skip(_cursor, _skip);
-//    mongo_cursor_set_limit(_cursor, _limit);
-//    if (_tailable) {
-//        options |= MONGO_TAILABLE;
-//    }
-//    mongo_cursor_set_options(_cursor, options);
-//    
-//    return *error == nil;
-//}
-//
-//- (MODSortedMutableDictionary *)nextDocumentWithBsonData:(NSData **)bsonData error:(NSError **)error;
-//{
-//    MODSortedMutableDictionary *result = nil;
-//    
-//    NSAssert(error != NULL, @"please give a pointer to get the error back");
-//    *error = nil;
-//    if (!_cursor) {
-//        [self _startCursorWithError:error];
-//        if (*error == nil) {
-//            [_mongoCollection.mongoDatabase authenticateSynchronouslyWithError:error];
-//        }
-//    }
-//    if (!*error) {
-//        if (mongo_cursor_next(_cursor) == MONGO_OK) {
-//            mongo_cursor *mongoCursor = (mongo_cursor *)_cursor;
-//            
-//            result = [[_mongoCollection.mongoServer class] objectFromBson:&(mongoCursor->current)];
-//            if (bsonData) {
-//                *bsonData = [[[NSData alloc] initWithBytes:mongoCursor->current.data length:bson_size(&mongoCursor->current)] autorelease];
-//            }
-//        } else if (((mongo_cursor *)_cursor)->err != MONGO_CURSOR_EXHAUSTED) {
-//            NSString *details = nil;
-//            
-//            if (_mongoCollection.mongoServer.mongo->lasterrstr) {
-//                details = [[NSString alloc] initWithUTF8String:_mongoCollection.mongoServer.mongo->lasterrstr];
-//            }
-//            *error = [[_mongoCollection.mongoServer class] errorWithErrorDomain:MODMongoCursorErrorDomain code:((mongo_cursor *)_cursor)->err descriptionDetails:details];
-//            [details release];
-//        }
-//    }
-//    return result;
-//}
-//
+
+- (void)_createMongocCursor
+{
+    bson_t bsonQuery = BSON_INITIALIZER;
+    bson_t bsonFields = BSON_INITIALIZER;
+    NSAssert(self.mongocCursor == NULL, @"cursor already created");
+    
+    if (self.query && self.query.length > 0) {
+        NSError *error;
+        bson_t bsonQueryChild;
+        
+        bson_append_document_begin(&bsonQuery, "$query", -1, &bsonQueryChild);
+        [MODRagelJsonParser bsonFromJson:&bsonQuery json:self.query error:&error];
+        bson_append_document_end(&bsonQuery, &bsonQueryChild);
+        self.error = error;
+    }
+    if (self.error == nil) {
+        if (self.sort && self.sort.length > 0) {
+            NSError *error;
+            bson_t bsonQueryChild;
+            
+            bson_append_document_begin(&bsonQuery, "$orderby", -1, &bsonQueryChild);
+            [MODRagelJsonParser bsonFromJson:&bsonQuery json:_sort error:&error];
+            bson_append_document_end(&bsonQuery, &bsonQueryChild);
+            self.error = error;
+        }
+    }
+    if (self.error == nil && self.fields.count > 0) {
+        for (NSString *field in self.fields) {
+            bson_append_bool(&bsonFields, field.UTF8String, -1, 1);
+        }
+    }
+    self.mongocCursor = mongoc_collection_find(self.mongoCollection.mongocCollection, MONGOC_QUERY_NONE, self.skip, self.limit, self.batchSize, &bsonQuery, &bsonFields, NULL);
+    bson_destroy(&bsonQuery);
+    bson_destroy(&bsonFields);
+}
+
+- (MODSortedMutableDictionary *)nextDocumentWithBsonData:(NSData **)bsonData error:(NSError **)error;
+{
+    MODSortedMutableDictionary *result = nil;
+    const bson_t *bson;
+    
+    NSAssert(error != NULL, @"please give a pointer to get the error back");
+    *error = nil;
+    if (self.error) {
+        *error = self.error;
+    } else if (mongoc_cursor_next(self.mongocCursor, &bson)) {
+        result = [[self.mongoCollection.mongoServer class] objectFromBson:bson];
+        if (bsonData) {
+            //*bsonData = [[[NSData alloc] initWithBytes:self.mongoCursor->current.data length:bson_size(&mongoCursor->current)] autorelease];
+        }
+    } else {
+        bson_error_t error;
+        
+        mongoc_cursor_error(self.mongocCursor, &error);
+        self.error = [self.mongoCollection.mongoServer.class errorFromBsonError:error];
+    }
+    return result;
+}
+
 //- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, MODSortedMutableDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback
 //{
 //    MODQuery *query = nil;
 //    
-//    query = [_mongoCollection.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+//    query = [self.mongoCollection.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
 //        uint64_t documentCount = 0;
 //        BOOL cursorStopped = NO;
 //        

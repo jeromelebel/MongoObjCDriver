@@ -285,7 +285,7 @@ static void testBase64(void)
 static void runDatabaseTests(MODServer *server)
 {
     MODDatabase *mongoDatabase;
-//    MODCollection *mongoCollection;
+    MODCollection *mongoCollection;
 //    MODCursor *cursor;
 
     mongoDatabase = [server databaseForName:DATABASE_NAME_TEST];
@@ -295,14 +295,14 @@ static void runDatabaseTests(MODServer *server)
     [mongoDatabase createCollectionWithName:COLLECTION_NAME_TEST callback:^(MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
-//    [mongoDatabase fetchCollectionListWithCallback:^(NSArray *collectionList, MODQuery *mongoQuery) {
-//        logMongoQuery(mongoQuery);
-//    }];
-//    
-//    mongoCollection = [mongoDatabase collectionForName:COLLECTION_NAME_TEST];
-//    [mongoCollection findWithCriteria:@"{}" fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:@"{ \"_id\": 1 }" callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
-//        logMongoQuery(mongoQuery);
-//    }];
+    [mongoDatabase fetchCollectionListWithCallback:^(NSArray *collectionList, MODQuery *mongoQuery) {
+        logMongoQuery(mongoQuery);
+    }];
+    
+    mongoCollection = [mongoDatabase collectionForName:COLLECTION_NAME_TEST];
+    [mongoCollection findWithCriteria:@"{}" fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:@"{ \"_id\": 1 }" callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+        logMongoQuery(mongoQuery);
+    }];
 //    [mongoCollection countWithCriteria:@"{ \"_id\": \"xxx\" }" callback:^(int64_t count, MODQuery *mongoQuery) {
 //        assert(count == 0);
 //        logMongoQuery(mongoQuery);

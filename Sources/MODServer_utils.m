@@ -282,7 +282,7 @@
     return result;
 }
 
-+ (MODSortedMutableDictionary *)objectFromBson:(bson_t *)bsonObject
++ (MODSortedMutableDictionary *)objectFromBson:(const bson_t *)bsonObject
 {
     MODSortedMutableDictionary *result = nil;
     bson_iter_t iterator;

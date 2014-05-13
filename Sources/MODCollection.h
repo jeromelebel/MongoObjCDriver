@@ -25,13 +25,19 @@ enum MOD_INDEX_OPTIONS {
 {
     MODDatabase                         *_mongoDatabase;
     NSString                            *_absoluteCollectionName;
-    NSString                            *_collectionName;
+    NSString                            *_name;
+    void                                *_mongocCollection;
 }
+
+@property (nonatomic, retain, readonly) MODServer *mongoServer;
+@property (nonatomic, retain, readonly) MODDatabase *mongoDatabase;
+@property (nonatomic, retain, readonly) NSString *name;
+@property (nonatomic, retain, readonly) NSString *absoluteCollectionName;
 
 - (MODQuery *)fetchCollectionStatsWithCallback:(void (^)(MODSortedMutableDictionary *stats, MODQuery *mongoQuery))callback;
 - (MODCursor *)cursorWithCriteria:(NSString *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort;
 //- (MODQuery *)indexListWithCallback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback;
-//- (MODQuery *)findWithCriteria:(NSString *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort callback:(void (^)(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery))callback;
+- (MODQuery *)findWithCriteria:(NSString *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort callback:(void (^)(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery))callback;
 //- (MODQuery *)countWithCriteria:(NSString *)jsonCriteria callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback;
 //- (MODQuery *)insertWithDocuments:(NSArray *)documents callback:(void (^)(MODQuery *mongoQuery))callback;
 //- (MODQuery *)updateWithCriteria:(NSString *)jsonCriteria update:(NSString *)update upsert:(BOOL)upsert multiUpdate:(BOOL)multiUpdate callback:(void (^)(MODQuery *mongoQuery))callback;
@@ -43,11 +49,5 @@ enum MOD_INDEX_OPTIONS {
 //- (MODQuery *)reIndexWithCallback:(void (^)(MODQuery *mongoQuery))callback;
 
 //- (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction reduceFunction:(NSString *)reduceFunction query:(id)mapReduceQuery sort:(id)sort limit:(int64_t)limit output:(id)output keepTemp:(BOOL)keepTemp finalizeFunction:(NSString *)finalizeFunction scope:(id)scope jsmode:(BOOL)jsmode verbose:(BOOL)verbose callback:(void (^)(MODQuery *mongoQuery))callback;
-
-@property (nonatomic, retain, readonly) MODServer *mongoServer;
-@property (nonatomic, retain, readonly) MODDatabase *mongoDatabase;
-@property (nonatomic, retain, readonly) NSString *collectionName;
-@property (nonatomic, assign, readonly) NSString *databaseName;
-@property (nonatomic, retain, readonly) NSString *absoluteCollectionName;
 
 @end
