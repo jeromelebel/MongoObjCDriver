@@ -308,22 +308,22 @@
     const char *keyString = key.UTF8String;
     
     if ([value isKindOfClass:NSNull.class]) {
-        bson_append_null(bson, keyString, (int)strlen(keyString));
+        bson_append_null(bson, keyString, strlen(keyString));
     } else if ([value isKindOfClass:NSString.class]) {
         const char *cStringValue = [value UTF8String];
         
-        bson_append_utf8(bson, keyString, (int)strlen(keyString), cStringValue, (int)strlen(cStringValue));
+        bson_append_utf8(bson, keyString, strlen(keyString), cStringValue, strlen(cStringValue));
     } else if ([value isKindOfClass:[MODSortedMutableDictionary class]]) {
         bson_t childBson = BSON_INITIALIZER;
         
-        bson_append_document_begin(bson, keyString, (int)strlen(keyString), &childBson);
+        bson_append_document_begin(bson, keyString, strlen(keyString), &childBson);
         [self appendObject:value toBson:&childBson];
         bson_append_document_end(bson, &childBson);
     } else if ([value isKindOfClass:[NSArray class]]) {
         size_t ii = 0;
         bson_t childBson = BSON_INITIALIZER;
         
-        bson_append_array_begin(bson, keyString, (int)strlen(keyString), &childBson);
+        bson_append_array_begin(bson, keyString, strlen(keyString), &childBson);
         for (id arrayValue in value) {
             NSString *arrayKey;
             
@@ -334,40 +334,40 @@
         }
         bson_append_array_end(bson, &childBson);
     } else if ([value isKindOfClass:[MODObjectId class]]) {
-        bson_append_oid(bson, keyString, (int)strlen(keyString), [value bsonObjectId]);
+        bson_append_oid(bson, keyString, strlen(keyString), [value bsonObjectId]);
     } else if ([value isKindOfClass:[MODRegex class]]) {
-        bson_append_regex(bson, keyString, (int)strlen(keyString), [value pattern].UTF8String, [(MODRegex *)value options].UTF8String);
+        bson_append_regex(bson, keyString, strlen(keyString), [value pattern].UTF8String, [(MODRegex *)value options].UTF8String);
     } else if ([value isKindOfClass:[MODTimestamp class]]) {
-        bson_append_timestamp(bson, keyString, (int)strlen(keyString), [value tValue], [value iValue]);
+        bson_append_timestamp(bson, keyString, strlen(keyString), [value tValue], [value iValue]);
     } else if ([value isKindOfClass:[NSNumber class]]) {
         if (strcmp([value objCType], @encode(BOOL)) == 0) {
-            bson_append_bool(bson, keyString, (int)strlen(keyString), [value boolValue]);
+            bson_append_bool(bson, keyString, strlen(keyString), [value boolValue]);
         } else if (strcmp([value objCType], @encode(int8_t)) == 0
                    || strcmp([value objCType], @encode(uint8_t)) == 0
                    || strcmp([value objCType], @encode(int32_t)) == 0) {
-            bson_append_int32(bson, keyString, (int)strlen(keyString), [value intValue]);
+            bson_append_int32(bson, keyString, strlen(keyString), [value intValue]);
         } else if (strcmp([value objCType], @encode(float)) == 0
                    || strcmp([value objCType], @encode(double)) == 0) {
-            bson_append_double(bson, keyString, (int)strlen(keyString), [value doubleValue]);
+            bson_append_double(bson, keyString, strlen(keyString), [value doubleValue]);
         } else {
-            bson_append_int64(bson, keyString, (int)strlen(keyString), [value longLongValue]);
+            bson_append_int64(bson, keyString, strlen(keyString), [value longLongValue]);
         }
     } else if ([value isKindOfClass:[NSDate class]]) {
-        bson_append_date_time(bson, keyString, (int)strlen(keyString), llround([value timeIntervalSince1970] * 1000.0));
+        bson_append_date_time(bson, keyString, strlen(keyString), llround([value timeIntervalSince1970] * 1000.0));
     } else if ([value isKindOfClass:[NSData class]]) {
-        bson_append_binary(bson, keyString, (int)strlen(keyString), BSON_SUBTYPE_BINARY, [value bytes], (int)[value length]);
+        bson_append_binary(bson, keyString, strlen(keyString), BSON_SUBTYPE_BINARY, [value bytes], [value length]);
     } else if ([value isKindOfClass:[MODBinary class]]) {
-        bson_append_binary(bson, keyString, (int)strlen(keyString), [value binaryType], [[value data] bytes], (int)[[value data] length]);
+        bson_append_binary(bson, keyString, strlen(keyString), [value binaryType], [[value data] bytes], [[value data] length]);
     } else if ([value isKindOfClass:[MODUndefined class]]) {
-        bson_append_undefined(bson, keyString, (int)strlen(keyString));
+        bson_append_undefined(bson, keyString, strlen(keyString));
     } else if ([value isKindOfClass:[MODSymbol class]]) {
-        bson_append_symbol(bson, keyString, (int)strlen(keyString), [value value].UTF8String, (int)strlen([value value].UTF8String));
+        bson_append_symbol(bson, keyString, strlen(keyString), [value value].UTF8String, strlen([value value].UTF8String));
     } else if ([value isKindOfClass:[MODUndefined class]]) {
-        bson_append_undefined(bson, keyString, (int)strlen(keyString));
+        bson_append_undefined(bson, keyString, strlen(keyString));
     } else if ([value isKindOfClass:[MODMinKey class]]) {
-        bson_append_minkey(bson, keyString, (int)strlen(keyString));
+        bson_append_minkey(bson, keyString, strlen(keyString));
     } else if ([value isKindOfClass:[MODMaxKey class]]) {
-        bson_append_maxkey(bson, keyString, (int)strlen(keyString));
+        bson_append_maxkey(bson, keyString, strlen(keyString));
     } else {
         NSLog(@"*********************** class %@ key %@ %d", NSStringFromClass([value class]), key, __LINE__);
         NSAssert(NO, @"class %@ key %@ line %d", NSStringFromClass([value class]), key, __LINE__);
