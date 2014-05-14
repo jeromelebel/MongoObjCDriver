@@ -98,16 +98,14 @@
     return [mongoQuery autorelease];
 }
 
-- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(bson_error_t)error
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error
 {
     [mongoQuery.mutableParameters setObject:self forKey:@"mongoserver"];
     [mongoQuery ends];
-    if (error.code != 0) {
-        mongoQuery.error = [self.class errorFromBsonError:error];
-    }
+    mongoQuery.error = error;
 }
 
-- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock
 {
     if (![mongoQuery.parameters objectForKey:@"command"]) {
         NSLog(@"done with %@", [mongoQuery.parameters objectForKey:@"command"]);
@@ -116,6 +114,16 @@
     if (callbackBlock) {
         dispatch_async(dispatch_get_main_queue(), callbackBlock);
     }
+}
+
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)bsonError callbackBlock:(void (^)(void))callbackBlock
+{
+    NSError *error = nil;
+    
+    if (bsonError.code != 0) {
+        error = [self.class errorFromBsonError:bsonError];
+    }
+    [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
 }
 
 - (MODQuery *)fetchServerStatusWithCallback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback
@@ -130,7 +138,7 @@
         if (!mongoQuery.canceled) {
             mongoc_client_get_server_status(self.mongocClient, NULL, &output, &error);
         }
-        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             callback(outputObjects, mongoQuery);
         }];
         bson_destroy(&output);
@@ -165,7 +173,7 @@
             }
 
         }
-        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             callback(list, mongoQuery);
         }];
         bson_destroy(&output);

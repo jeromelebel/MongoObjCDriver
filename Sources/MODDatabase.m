@@ -39,7 +39,13 @@
     [super dealloc];
 }
 
-- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock
+{
+    [mongoQuery.mutableParameters setObject:self forKey:@"mongodatabase"];
+    [self.mongoServer mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:callbackBlock];
+}
+
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock
 {
     [mongoQuery.mutableParameters setObject:self forKey:@"mongodatabase"];
     [self.mongoServer mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
@@ -66,7 +72,7 @@
             bson_destroy(&cmd);
             bson_destroy(&output);
         }
-        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             if (callback) {
                 callback(stats, mongoQuery);
             }
@@ -100,7 +106,7 @@
                 bson_free(cStringCollections);
             }
         }
-        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             if (callback) {
                 callback(collections, mongoQuery);
             }
@@ -126,7 +132,7 @@
         if (!mongoQuery.canceled) {
             mongoc_database_create_collection(self.mongocDatabase, collectionName.UTF8String, NULL, &error);
         }
-        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             if (callback) {
                 callback(mongoQuery);
             }
@@ -169,7 +175,7 @@
         if (!mongoQuery.canceled) {
             mongoc_database_drop(self.mongocDatabase, &error);
         }
-        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             if (callback) {
                 callback(mongoQuery);
             }

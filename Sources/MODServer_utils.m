@@ -15,6 +15,9 @@
     NSString *domain = nil;
     NSString *errorMessage = nil;
     
+    if (error.code == 0) {
+        return nil;
+    }
     switch (error.domain) {
         case MONGOC_ERROR_CLIENT:
             domain = @"MONGOC_ERROR_CLIENT";
@@ -53,7 +56,9 @@
             domain = @"MONGOC_ERROR_COLLECTION";
             break;
     }
-    
+    if (domain == nil) {
+        NSLog(@"no domain");
+    }
     NSAssert(domain != nil, @"no domain found %d", error.domain);
     switch ((mongoc_error_code_t)error.code) {
         case MONGOC_ERROR_STREAM_INVALID_TYPE:

@@ -20,7 +20,8 @@ enum {
 @property (nonatomic, readwrite, assign, getter=isConnected) BOOL connected;
 @property (nonatomic, readwrite, assign) mongoc_client_t *mongocClient;
 
-- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock;
 - (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block;
 
 @end
@@ -38,7 +39,8 @@ enum {
 @property (nonatomic, readwrite, assign) mongoc_database_t *mongocDatabase;
 
 - (id)initWithMongoServer:(MODServer *)mongoServer name:(NSString *)databaseName;
-- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock;
 
 @end
 
@@ -47,7 +49,8 @@ enum {
 @property (nonatomic, readwrite, assign) mongoc_collection_t *mongocCollection;
 
 - (id)initWithName:(NSString *)name mongoDatabase:(MODDatabase *)mongoDatabase;
-- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock;
 
 @end
 

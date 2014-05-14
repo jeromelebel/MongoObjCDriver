@@ -86,7 +86,7 @@
             bson_t bsonQueryChild;
             
             bson_append_document_begin(&bsonQuery, "$orderby", -1, &bsonQueryChild);
-            [MODRagelJsonParser bsonFromJson:&bsonQuery json:_sort error:&error];
+            [MODRagelJsonParser bsonFromJson:&bsonQueryChild json:_sort error:&error];
             bson_append_document_end(&bsonQuery, &bsonQueryChild);
             self.error = error;
         }
@@ -116,7 +116,7 @@
             //*bsonData = [[[NSData alloc] initWithBytes:self.mongoCursor->current.data length:bson_size(&mongoCursor->current)] autorelease];
         }
     } else {
-        bson_error_t error;
+        bson_error_t error = BSON_NO_ERROR;
         
         mongoc_cursor_error(self.mongocCursor, &error);
         self.error = [self.mongoCollection.mongoServer.class errorFromBsonError:error];

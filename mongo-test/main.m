@@ -292,6 +292,9 @@ static void runDatabaseTests(MODServer *server)
     [mongoDatabase fetchDatabaseStatsWithCallback:^(MODSortedMutableDictionary *stats, MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
+    [server fetchDatabaseListWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
+        assert([list indexOfObject:DATABASE_NAME_TEST] != NSNotFound);
+    }];
     [mongoDatabase createCollectionWithName:COLLECTION_NAME_TEST callback:^(MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
@@ -303,14 +306,14 @@ static void runDatabaseTests(MODServer *server)
     [mongoCollection findWithCriteria:@"{}" fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:@"{ \"_id\": 1 }" callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
-//    [mongoCollection countWithCriteria:@"{ \"_id\": \"xxx\" }" callback:^(int64_t count, MODQuery *mongoQuery) {
-//        assert(count == 0);
-//        logMongoQuery(mongoQuery);
-//    }];
-//    [mongoCollection countWithCriteria:nil callback:^(int64_t count, MODQuery *mongoQuery) {
-//        assert(count == 0);
-//        logMongoQuery(mongoQuery);
-//    }];
+    [mongoCollection countWithCriteria:@"{ \"_id\": \"xxx\" }" callback:^(int64_t count, MODQuery *mongoQuery) {
+        assert(count == 0);
+        logMongoQuery(mongoQuery);
+    }];
+    [mongoCollection countWithCriteria:nil callback:^(int64_t count, MODQuery *mongoQuery) {
+        assert(count == 0);
+        logMongoQuery(mongoQuery);
+    }];
 //    [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\": \"toto\" }", nil] callback:^(MODQuery *mongoQuery) {
 //        logMongoQuery(mongoQuery);
 //    }];
@@ -357,20 +360,20 @@ static void runDatabaseTests(MODServer *server)
 //    [mongoDatabase dropCollectionWithName:COLLECTION_NAME_TEST callback:^(MODQuery *mongoQuery) {
 //        logMongoQuery(mongoQuery);
 //    }];
-//    [server dropDatabaseWithName:DATABASE_NAME_TEST callback:^(MODQuery *mongoQuery) {
-//        logMongoQuery(mongoQuery);
-//        NSLog(@"Everything is cool");
-//        exit(0);
-//    }];
-//    [server release];
+    [[server databaseForName:DATABASE_NAME_TEST] dropWithCallback:^(MODQuery *mongoQuery) {
+        logMongoQuery(mongoQuery);
+        NSLog(@"Everything is cool");
+        exit(0);
+    }];
+    [server release];
 }
 
 static void removeTestDatabaseAndRunTests(MODServer *server)
 {
-//    [server dropDatabaseWithName:DATABASE_NAME_TEST callback:^(MODQuery *mongoQuery) {
-//        logMongoQuery(mongoQuery);
-//        runDatabaseTests(server);
-//    }];
+    [[server databaseForName:DATABASE_NAME_TEST] dropWithCallback:^(MODQuery *mongoQuery) {
+        logMongoQuery(mongoQuery);
+        runDatabaseTests(server);
+    }];
 }
 
 static void testCompareIdenticalBson(NSString *json)
