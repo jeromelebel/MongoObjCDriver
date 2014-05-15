@@ -365,7 +365,6 @@ static void runDatabaseTests(MODServer *server)
         NSLog(@"Everything is cool");
         exit(0);
     }];
-    [server release];
 }
 
 static void removeTestDatabaseAndRunTests(MODServer *server)
