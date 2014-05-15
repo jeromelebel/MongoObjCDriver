@@ -71,7 +71,9 @@
             bson_destroy(&cmd);
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
-            callback(stats, mongoQuery);
+            if (callback) {
+                callback(stats, mongoQuery);
+            }
         }];
     }];
     [query.mutableParameters setObject:@"databasestats" forKey:@"command"];
@@ -137,7 +139,9 @@
             [allBsonData release];
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
-            callback([mongoQuery.mutableParameters objectForKey:@"documents"], [mongoQuery.mutableParameters objectForKey:@"dataDocuments"], mongoQuery);
+            if (callback) {
+                callback([mongoQuery.mutableParameters objectForKey:@"documents"], [mongoQuery.mutableParameters objectForKey:@"dataDocuments"], mongoQuery);
+            }
         }];
     }];
     if (jsonCriteria) {
