@@ -59,11 +59,11 @@
     [super dealloc];
 }
 
-//- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withCallbackBlock:(void (^)(void))callbackBlock
-//{
-//    [mongoQuery.mutableParameters setObject:self forKey:@"cursor"];
-//    [self.mongoCollection mongoQueryDidFinish:mongoQuery withCallbackBlock:callbackBlock];
-//}
+- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock
+{
+    [mongoQuery.mutableParameters setObject:self forKey:@"cursor"];
+    [self.mongoCollection mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
+}
 
 - (void)_createMongocCursor
 {
@@ -128,43 +128,43 @@
     return result;
 }
 
-//- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, MODSortedMutableDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback
-//{
-//    MODQuery *query = nil;
-//    
-//    query = [self.mongoCollection.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-//        uint64_t documentCount = 0;
-//        BOOL cursorStopped = NO;
-//        
-//        if (!mongoQuery.canceled) {
-//            MODSortedMutableDictionary *document;
-//            NSError *error;
-//            
-//            [mongoQuery.mutableParameters setObject:self forKey:@"cursor"];
-//            while (!cursorStopped) {
-//                documentCount++;
-//                document = [self nextDocumentWithBsonData:nil error:&error];
-//                mongoQuery.error = error;
-//                if (!document) {
-//                    break;
-//                }
-//                if (documentCallback) {
-//                    BOOL *cursorStoppedPtr = &cursorStopped;
-//                    
-//                    dispatch_sync(dispatch_get_main_queue(), ^(void) {
-//                        *cursorStoppedPtr = !documentCallback(documentCount, document);
-//                    });
-//                }
-//            };
-//        }
-//        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-//            if (endCallback) {
-//                endCallback(documentCount, cursorStopped, mongoQuery);
-//            }
-//        }];
-//    }];
-//    [query.mutableParameters setObject:@"eachdocument" forKey:@"command"];
-//    return query;
-//}
+- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, MODSortedMutableDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback
+{
+    MODQuery *query = nil;
+    
+    query = [self.mongoCollection.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        uint64_t documentCount = 0;
+        BOOL cursorStopped = NO;
+        NSError *error = nil;
+        
+        if (!mongoQuery.canceled) {
+            MODSortedMutableDictionary *document;
+            
+            [mongoQuery.mutableParameters setObject:self forKey:@"cursor"];
+            while (!cursorStopped) {
+                documentCount++;
+                document = [self nextDocumentWithBsonData:nil error:&error];
+                mongoQuery.error = error;
+                if (!document) {
+                    break;
+                }
+                if (documentCallback) {
+                    BOOL *cursorStoppedPtr = &cursorStopped;
+                    
+                    dispatch_sync(dispatch_get_main_queue(), ^(void) {
+                        *cursorStoppedPtr = !documentCallback(documentCount, document);
+                    });
+                }
+            };
+        }
+        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+            if (endCallback) {
+                endCallback(documentCount, cursorStopped, mongoQuery);
+            }
+        }];
+    }];
+    [query.mutableParameters setObject:@"eachdocument" forKey:@"command"];
+    return query;
+}
 
 @end
