@@ -344,24 +344,36 @@ static void runDatabaseTests(MODServer *server)
         NSLog(@"++++ ");
         logMongoQuery(query);
     }];
-//    [mongoCollection updateWithCriteria:@"{\"_id\": \"toto\"}" update:@"{\"$inc\": {\"x\": 1}}" upsert:NO multiUpdate:NO callback:^(MODQuery *mongoQuery) {
-//        logMongoQuery(mongoQuery);
-//    }];
-//    [mongoCollection saveWithDocument:@"{\"_id\": \"toto\", \"y\": null}" callback:^(MODQuery *mongoQuery) {
-//        logMongoQuery(mongoQuery);
-//    }];
+    [mongoCollection updateWithCriteria:@"{\"_id\": \"toto\"}" update:@"{\"$inc\": {\"x\": 1}}" upsert:NO multiUpdate:NO callback:^(MODQuery *mongoQuery) {
+        logMongoQuery(mongoQuery);
+    }];
+    [mongoCollection saveWithDocument:@"{\"_id\": \"toto\", \"y\": null}" callback:^(MODQuery *mongoQuery) {
+        logMongoQuery(mongoQuery);
+    }];
     [mongoCollection findWithCriteria:@"{\"_id\": \"toto\"}" fields:nil skip:1 limit:5 sort:@"{ \"_id\": 1 }" callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
-//    [mongoCollection removeWithCriteria:@"{\"_id\": \"toto\"}" callback:^(MODQuery *mongoQuery) {
-//        logMongoQuery(mongoQuery);
-//    }];
-//
-//    [mongoDatabase dropCollectionWithName:COLLECTION_NAME_TEST callback:^(MODQuery *mongoQuery) {
-//        logMongoQuery(mongoQuery);
-//    }];
-    [[server databaseForName:DATABASE_NAME_TEST] dropWithCallback:^(MODQuery *mongoQuery) {
+    [mongoCollection removeWithCriteria:@"{\"_id\": \"toto\"}" callback:^(MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
+    }];
+    [mongoCollection findWithCriteria:@"{\"_id\": \"toto\"}" fields:nil skip:1 limit:5 sort:@"{ \"_id\": 1 }" callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+        assert(documents.count == 0);
+        logMongoQuery(mongoQuery);
+    }];
+
+    [mongoCollection dropWithCallback:^(MODQuery *mongoQuery) {
+        logMongoQuery(mongoQuery);
+    }];
+    [mongoDatabase fetchCollectionListWithCallback:^(NSArray *collectionList, MODQuery *mongoQuery) {
+        assert([collectionList indexOfObject:COLLECTION_NAME_TEST] == NSNotFound);
+    }];
+    
+    [mongoDatabase dropWithCallback:^(MODQuery *mongoQuery) {
+        logMongoQuery(mongoQuery);
+    }];
+    
+    [server fetchDatabaseListWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
+        assert([list indexOfObject:DATABASE_NAME_TEST] == NSNotFound);
         NSLog(@"Everything is cool");
         exit(0);
     }];
