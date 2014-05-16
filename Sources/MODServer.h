@@ -18,6 +18,8 @@
 @class MODServer;
 @class MODSortedMutableDictionary;
 
+#define MONGO_DEFAULT_PORT              27000
+
 typedef struct mongo_replset            *mongo_replset_ptr;
 
 @interface MODServer : NSObject
@@ -36,7 +38,7 @@ typedef struct mongo_replset            *mongo_replset_ptr;
 - (id)initWithURIString:(NSString *)urlString;
 - (id)initWithURICString:(const char *)urlCString;
 
-- (MODQuery *)copy;
+- (id)copy;
 
 - (MODQuery *)fetchServerStatusWithCallback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback;
 - (MODQuery *)fetchDatabaseListWithCallback:(void (^)(NSArray *list, MODQuery *mongoQuery))callback;
