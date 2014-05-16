@@ -286,7 +286,7 @@ static void runDatabaseTests(MODServer *server)
 {
     MODDatabase *mongoDatabase;
     MODCollection *mongoCollection;
-//    MODCursor *cursor;
+    MODCursor *cursor;
 
     mongoDatabase = [server databaseForName:DATABASE_NAME_TEST];
     [mongoDatabase fetchDatabaseStatsWithCallback:^(MODSortedMutableDictionary *stats, MODQuery *mongoQuery) {
@@ -336,14 +336,14 @@ static void runDatabaseTests(MODServer *server)
         assert([documents count] == 3);
         logMongoQuery(mongoQuery);
     }];
-//    cursor = [mongoCollection cursorWithCriteria:nil fields:nil skip:0 limit:0 sort:nil];
-//    [cursor forEachDocumentWithCallbackDocumentCallback:^(uint64_t index, MODSortedMutableDictionary *document) {
-//        NSLog(@"++++ %@", document);
-//        return YES;
-//    } endCallback:^(uint64_t count, BOOL stopped, MODQuery *query) {
-//        NSLog(@"++++ ");
-//        logMongoQuery(query);
-//    }];
+    cursor = [mongoCollection cursorWithCriteria:nil fields:nil skip:0 limit:0 sort:nil];
+    [cursor forEachDocumentWithCallbackDocumentCallback:^(uint64_t index, MODSortedMutableDictionary *document) {
+        NSLog(@"++++ %@", document);
+        return YES;
+    } endCallback:^(uint64_t count, BOOL stopped, MODQuery *query) {
+        NSLog(@"++++ ");
+        logMongoQuery(query);
+    }];
 //    [mongoCollection updateWithCriteria:@"{\"_id\": \"toto\"}" update:@"{\"$inc\": {\"x\": 1}}" upsert:NO multiUpdate:NO callback:^(MODQuery *mongoQuery) {
 //        logMongoQuery(mongoQuery);
 //    }];
@@ -356,7 +356,7 @@ static void runDatabaseTests(MODServer *server)
 //    [mongoCollection removeWithCriteria:@"{\"_id\": \"toto\"}" callback:^(MODQuery *mongoQuery) {
 //        logMongoQuery(mongoQuery);
 //    }];
-//    
+//
 //    [mongoDatabase dropCollectionWithName:COLLECTION_NAME_TEST callback:^(MODQuery *mongoQuery) {
 //        logMongoQuery(mongoQuery);
 //    }];
