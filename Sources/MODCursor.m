@@ -108,12 +108,16 @@
     
     NSAssert(error != NULL, @"please give a pointer to get the error back");
     *error = nil;
+    if (bsonData) *bsonData = nil;
     if (self.error) {
         *error = self.error;
     } else if (mongoc_cursor_next(self.mongocCursor, &bson)) {
         result = [[self.mongoCollection.mongoServer class] objectFromBson:bson];
         if (bsonData) {
-            //*bsonData = [[[NSData alloc] initWithBytes:self.mongoCursor->current.data length:bson_size(&mongoCursor->current)] autorelease];
+            const bson_t *bson;
+            
+            bson = mongoc_cursor_current(self.mongocCursor);
+            *bsonData = [[[NSData alloc] initWithBytes:bson_get_data(bson) length:bson->len] autorelease];
         }
     } else {
         bson_error_t error = BSON_NO_ERROR;
