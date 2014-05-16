@@ -76,7 +76,7 @@
         bson_t bsonQueryChild;
         
         bson_append_document_begin(&bsonQuery, "$query", -1, &bsonQueryChild);
-        [MODRagelJsonParser bsonFromJson:&bsonQuery json:self.query error:&error];
+        [MODRagelJsonParser bsonFromJson:&bsonQueryChild json:self.query error:&error];
         bson_append_document_end(&bsonQuery, &bsonQueryChild);
         self.error = error;
     }
