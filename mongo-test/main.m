@@ -350,9 +350,9 @@ static void runDatabaseTests(MODServer *server)
 //    [mongoCollection saveWithDocument:@"{\"_id\": \"toto\", \"y\": null}" callback:^(MODQuery *mongoQuery) {
 //        logMongoQuery(mongoQuery);
 //    }];
-//    [mongoCollection findWithCriteria:@"{\"_id\": \"toto\"}" fields:nil skip:1 limit:5 sort:@"{ \"_id\": 1 }" callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
-//        logMongoQuery(mongoQuery);
-//    }];
+    [mongoCollection findWithCriteria:@"{\"_id\": \"toto\"}" fields:nil skip:1 limit:5 sort:@"{ \"_id\": 1 }" callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+        logMongoQuery(mongoQuery);
+    }];
 //    [mongoCollection removeWithCriteria:@"{\"_id\": \"toto\"}" callback:^(MODQuery *mongoQuery) {
 //        logMongoQuery(mongoQuery);
 //    }];
