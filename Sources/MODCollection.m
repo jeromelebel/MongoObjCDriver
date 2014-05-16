@@ -211,81 +211,71 @@
     return query;
 }
 
-//- (MODQuery *)insertWithDocuments:(NSArray *)documents callback:(void (^)(MODQuery *mongoQuery))callback
-//{
-//    MODQuery *query = nil;
-//    
-//    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-//        if (!self.mongoServer.isMaster) {
-//            mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Document insert is forbidden on a slave"];
-//        } else if (!mongoQuery.canceled) {
-//            bson_t **data;
-//            bson_t **dataCursor;
-//            NSInteger countCursor;
-//            NSInteger documentCount = [documents count];
-//            NSError *error = nil;
-//            NSInteger ii = 0;
-//            
-//            data = calloc(documentCount, sizeof(void *));
-//            for (id document in documents) {
-//                data[ii] = malloc(sizeof(bson));
-//                bson_init(data[ii]);
-//                if ([document isKindOfClass:[NSString class]]) {
-//                    [MODRagelJsonParser bsonFromJson:data[ii] json:document error:&error];
-//                    if (error) {
-//                        NSMutableDictionary *userInfo;
-//                        
-//                        userInfo = error.userInfo.mutableCopy;
-//                        [userInfo setObject:[NSNumber numberWithInteger:ii] forKey:@"documentIndex"];
-//                        error = [NSError errorWithDomain:error.domain code:error.code userInfo:userInfo];
-//                        [userInfo release];
-//                    }
-//                } else if ([document isKindOfClass:[MODSortedMutableDictionary class]]) {
-//                    [[self.mongoServer class] appendObject:document toBson:data[ii]];
-//                }
-//                bson_finish(data[ii]);
-//                ii++;
-//                if (error) {
-//                    break;
-//                }
-//            }
-//            if (!error) {
-//                dataCursor = data;
-//                countCursor = documentCount;
-//                while (countCursor > INT32_MAX) {
-//                    if (mongo_insert_batch(self.mongocClient, self.absoluteName.UTF8String, (const bson_t **)dataCursor, INT32_MAX, NULL, 0) != MONGO_OK) {
-//                        error = [[self.mongoServer class] errorFromMongo:self.mongocClient];
-//                        break;
-//                    }
-//                    countCursor -= INT32_MAX;
-//                    dataCursor += INT32_MAX;
-//                }
-//                if (!error) {
-//                    if (mongo_insert_batch(self.mongocClient, self.absoluteName.UTF8String, (const bson_t **)dataCursor, (int32_t)countCursor, NULL, 0) != MONGO_OK) {
-//                        error = [[self.mongoServer class] errorFromMongo:self.mongocClient];
-//                    }
-//                }
-//            }
-//            for (NSInteger ii = 0; ii < documentCount; ii++) {
-//                if (data[ii]) {
-//                    bson_destroy(data[ii]);
-//                    free(data[ii]);
-//                }
-//            }
-//            free(data);
-//            mongoQuery.error = error;
-//        }
-//        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-//            if (callback) {
-//                callback(mongoQuery);
-//            }
-//        }];
-//    }];
-//    [query.mutableParameters setObject:@"insertdocuments" forKey:@"command"];
-//    [query.mutableParameters setObject:documents forKey:@"documents"];
-//    return query;
-//}
-//
+- (MODQuery *)insertWithDocuments:(NSArray *)documents callback:(void (^)(MODQuery *mongoQuery))callback
+{
+    MODQuery *query = nil;
+    
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        NSError *error = nil;
+        
+        if (!mongoQuery.canceled) {
+            NSInteger ii = 0;
+            mongoc_bulk_operation_t *bulk;
+            
+            bulk = mongoc_collection_create_bulk_operation(self.mongocCollection, false, NULL);
+            for (id document in documents) {
+                bson_t bson = BSON_INITIALIZER;
+                
+                if ([document isKindOfClass:[NSString class]]) {
+                    [MODRagelJsonParser bsonFromJson:&bson json:document error:&error];
+                    if (error) {
+                        NSMutableDictionary *userInfo;
+                        
+                        userInfo = error.userInfo.mutableCopy;
+                        [userInfo setObject:[NSNumber numberWithInteger:ii] forKey:@"documentIndex"];
+                        error = [NSError errorWithDomain:error.domain code:error.code userInfo:userInfo];
+                        [userInfo release];
+                    }
+                } else if ([document isKindOfClass:[MODSortedMutableDictionary class]]) {
+                    [[self.mongoServer class] appendObject:document toBson:&bson];
+                }
+                if (error) {
+                    break;
+                }
+                mongoc_bulk_operation_insert(bulk, &bson);
+                ii++;
+                if (ii >= 50) {
+                    bson_error_t bsonError;
+                    
+                    mongoc_bulk_operation_execute(bulk, NULL, &bsonError);
+                    error = [self.mongoServer.class errorFromBsonError:bsonError];
+                    if (error) {
+                        break;
+                    }
+                    mongoc_bulk_operation_destroy(bulk);
+                    bulk = mongoc_collection_create_bulk_operation(self.mongocCollection, false, NULL);
+                }
+            }
+            if (!error) {
+                bson_error_t bsonError;
+                
+                mongoc_bulk_operation_execute(bulk, NULL, &bsonError);
+                error = [self.mongoServer.class errorFromBsonError:bsonError];
+            }
+            mongoc_bulk_operation_destroy(bulk);
+            mongoQuery.error = error;
+        }
+        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+            if (callback) {
+                callback(mongoQuery);
+            }
+        }];
+    }];
+    [query.mutableParameters setObject:@"insertdocuments" forKey:@"command"];
+    [query.mutableParameters setObject:documents forKey:@"documents"];
+    return query;
+}
+
 //- (MODQuery *)updateWithCriteria:(NSString *)jsonCriteria update:(NSString *)update upsert:(BOOL)upsert multiUpdate:(BOOL)multiUpdate callback:(void (^)(MODQuery *mongoQuery))callback
 //{
 //    MODQuery *query = nil;
