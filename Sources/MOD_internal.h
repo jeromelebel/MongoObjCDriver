@@ -27,6 +27,7 @@ enum {
 @end
 
 @interface MODServer (utils_internal)
++ (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails;
 + (NSError *)errorFromBsonError:(bson_error_t)error;
 //+ (NSError *)errorFromMongo:(mongoc_client_t *)mongo;
 + (MODSortedMutableDictionary *)objectFromBson:(const bson_t *)bsonObject;

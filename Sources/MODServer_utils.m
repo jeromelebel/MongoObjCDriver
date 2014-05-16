@@ -10,6 +10,36 @@
 
 @implementation MODServer(utils_internal)
 
++ (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails
+{
+    NSError *error;
+    NSString *description = nil;
+    
+    if ([errorDomain isEqualToString:MODJsonParserErrorDomain]) {
+        switch (code) {
+            case JSON_PARSER_ERROR_EXPECTED_END:
+                description = @"json end is unexpected";
+                break;
+            default:
+                break;
+        }
+        if (descriptionDetails) {
+            description = [NSString stringWithFormat:@"%@ - \"%@\"", description, descriptionDetails];
+        }
+    } else {
+        if (descriptionDetails) {
+            description = [NSString stringWithFormat:@"Unknown error %ld (%@) - %@", (long)code, errorDomain, descriptionDetails];
+        } else {
+            description = [NSString stringWithFormat:@"Unknown error %ld (%@)", (long)code, errorDomain];
+        }
+    }
+    if (!description) {
+        description = [NSString stringWithFormat:@"Unknown error %ld - %@", (long)code, errorDomain];
+    }
+    error = [NSError errorWithDomain:errorDomain code:code userInfo:[NSDictionary dictionaryWithObjectsAndKeys:description, NSLocalizedDescriptionKey, nil]];
+    return error;
+}
+
 + (NSError *)errorFromBsonError:(bson_error_t)error
 {
     NSString *domain = nil;
