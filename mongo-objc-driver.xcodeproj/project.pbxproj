@@ -34,40 +34,40 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		023ECFFC14851BEE00185781 /* MODSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 023ECFFA14851BEE00185781 /* MODSymbol.h */; };
+		023ECFFC14851BEE00185781 /* MODSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 023ECFFA14851BEE00185781 /* MODSymbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		023ECFFD14851BEE00185781 /* MODSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 023ECFFB14851BEE00185781 /* MODSymbol.m */; };
-		02411AB51432B8FA00A5FFCA /* MOD_public.h in Headers */ = {isa = PBXBuildFile; fileRef = 02411AB41432B8F900A5FFCA /* MOD_public.h */; };
-		02411AB91432D02700A5FFCA /* MODBinary.h in Headers */ = {isa = PBXBuildFile; fileRef = 02411AB71432D02600A5FFCA /* MODBinary.h */; };
+		02411AB51432B8FA00A5FFCA /* MOD_public.h in Headers */ = {isa = PBXBuildFile; fileRef = 02411AB41432B8F900A5FFCA /* MOD_public.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		02411AB91432D02700A5FFCA /* MODBinary.h in Headers */ = {isa = PBXBuildFile; fileRef = 02411AB71432D02600A5FFCA /* MODBinary.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02411ABA1432D02700A5FFCA /* MODBinary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02411AB81432D02600A5FFCA /* MODBinary.m */; };
-		024B0C071887DFBF00B8DCE6 /* MODDocumentComparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 024B0C051887DFBF00B8DCE6 /* MODDocumentComparator.h */; };
+		024B0C071887DFBF00B8DCE6 /* MODDocumentComparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 024B0C051887DFBF00B8DCE6 /* MODDocumentComparator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		024B0C081887DFBF00B8DCE6 /* MODDocumentComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 024B0C061887DFBF00B8DCE6 /* MODDocumentComparator.m */; };
 		025C56201433E7E40064B010 /* MODDBRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 025C561E1433E7E40064B010 /* MODDBRef.m */; };
-		025C56211433E7E40064B010 /* MODDBRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 025C561F1433E7E40064B010 /* MODDBRef.h */; };
-		02688DDC14119CF50014ED51 /* MODDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 02688DDA14119CF50014ED51 /* MODDatabase.h */; };
+		025C56211433E7E40064B010 /* MODDBRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 025C561F1433E7E40064B010 /* MODDBRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		02688DDC14119CF50014ED51 /* MODDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 02688DDA14119CF50014ED51 /* MODDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02688DDD14119CF50014ED51 /* MODDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DDB14119CF50014ED51 /* MODDatabase.m */; };
-		02688DE21411C5010014ED51 /* MODCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 02688DE01411C5010014ED51 /* MODCollection.h */; };
+		02688DE21411C5010014ED51 /* MODCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 02688DE01411C5010014ED51 /* MODCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02688DE31411C5010014ED51 /* MODCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DE11411C5010014ED51 /* MODCollection.m */; };
-		027A1DA21767E91F0048AD60 /* MODMaxKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 027A1D9C1767E91F0048AD60 /* MODMaxKey.h */; };
+		027A1DA21767E91F0048AD60 /* MODMaxKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 027A1D9C1767E91F0048AD60 /* MODMaxKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		027A1DA31767E91F0048AD60 /* MODMaxKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 027A1D9D1767E91F0048AD60 /* MODMaxKey.m */; };
-		027A1DA51767E91F0048AD60 /* MODMinKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 027A1D9E1767E91F0048AD60 /* MODMinKey.h */; };
+		027A1DA51767E91F0048AD60 /* MODMinKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 027A1D9E1767E91F0048AD60 /* MODMinKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		027A1DA61767E91F0048AD60 /* MODMinKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 027A1D9F1767E91F0048AD60 /* MODMinKey.m */; };
-		027A1DA81767E91F0048AD60 /* MODUndefined.h in Headers */ = {isa = PBXBuildFile; fileRef = 027A1DA01767E91F0048AD60 /* MODUndefined.h */; };
+		027A1DA81767E91F0048AD60 /* MODUndefined.h in Headers */ = {isa = PBXBuildFile; fileRef = 027A1DA01767E91F0048AD60 /* MODUndefined.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		027A1DA91767E91F0048AD60 /* MODUndefined.m in Sources */ = {isa = PBXBuildFile; fileRef = 027A1DA11767E91F0048AD60 /* MODUndefined.m */; };
-		028CE605142E10BE0099B1F7 /* MODTimestamp.h in Headers */ = {isa = PBXBuildFile; fileRef = 028CE603142E10BE0099B1F7 /* MODTimestamp.h */; };
+		028CE605142E10BE0099B1F7 /* MODTimestamp.h in Headers */ = {isa = PBXBuildFile; fileRef = 028CE603142E10BE0099B1F7 /* MODTimestamp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		028CE606142E10BE0099B1F7 /* MODTimestamp.m in Sources */ = {isa = PBXBuildFile; fileRef = 028CE604142E10BE0099B1F7 /* MODTimestamp.m */; };
 		0299B61517F39FAA00FB40A2 /* MODRagelJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0299B61217F39FA200FB40A2 /* MODRagelJsonParser.m */; };
 		02A85F5114103EA6004F3FE9 /* MODServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F4F14103EA6004F3FE9 /* MODServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02A85F5214103EA6004F3FE9 /* MODServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5014103EA6004F3FE9 /* MODServer.m */; };
 		02A85F5914104184004F3FE9 /* MODQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5714104184004F3FE9 /* MODQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02A85F5A14104184004F3FE9 /* MODQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5814104184004F3FE9 /* MODQuery.m */; };
-		02A85F5D14104373004F3FE9 /* MOD_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5B14104373004F3FE9 /* MOD_internal.h */; };
-		02AB057614296F9000B7CD19 /* MODObjectId.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB057414296F9000B7CD19 /* MODObjectId.h */; };
+		02A85F5D14104373004F3FE9 /* MOD_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5B14104373004F3FE9 /* MOD_internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02AB057614296F9000B7CD19 /* MODObjectId.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB057414296F9000B7CD19 /* MODObjectId.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
-		02B17F35184FF2E500362A27 /* MODBsonComparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B17F33184FF2E500362A27 /* MODBsonComparator.h */; };
+		02B17F35184FF2E500362A27 /* MODBsonComparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B17F33184FF2E500362A27 /* MODBsonComparator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02B17F36184FF2E500362A27 /* MODBsonComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B17F34184FF2E500362A27 /* MODBsonComparator.m */; };
-		02B24273147D1BD6008A15A3 /* MODSortedMutableDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B24271147D1BD6008A15A3 /* MODSortedMutableDictionary.h */; };
+		02B24273147D1BD6008A15A3 /* MODSortedMutableDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B24271147D1BD6008A15A3 /* MODSortedMutableDictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02B24274147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */; };
-		02BDC3E7141D6073000EF755 /* MODCursor.h in Headers */ = {isa = PBXBuildFile; fileRef = 02BDC3E5141D6073000EF755 /* MODCursor.h */; };
+		02BDC3E7141D6073000EF755 /* MODCursor.h in Headers */ = {isa = PBXBuildFile; fileRef = 02BDC3E5141D6073000EF755 /* MODCursor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02BDC3E8141D6073000EF755 /* MODCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3E6141D6073000EF755 /* MODCursor.m */; };
 		02BDC3EC141D83A7000EF755 /* MODServer_utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3EB141D83A7000EF755 /* MODServer_utils.m */; };
 		02CF0E20191112CB008C822A /* bcon.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204505F190E5EB000A80BED /* bcon.c */; };
@@ -139,13 +139,75 @@
 		02CF0EA81919116A008C822A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C814103B37000417F4 /* Foundation.framework */; };
 		02CF0EAA19192608008C822A /* libsasl2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02CF0EA919192608008C822A /* libsasl2.dylib */; };
 		02CF0EAB191926E4008C822A /* libsasl2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 02CF0EA919192608008C822A /* libsasl2.dylib */; };
-		02CF87E9142F8AA3000C4C7F /* MODRegex.h in Headers */ = {isa = PBXBuildFile; fileRef = 02CF87E7142F8AA3000C4C7F /* MODRegex.h */; };
+		02CF87E9142F8AA3000C4C7F /* MODRegex.h in Headers */ = {isa = PBXBuildFile; fileRef = 02CF87E7142F8AA3000C4C7F /* MODRegex.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02CF87EA142F8AA3000C4C7F /* MODRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87E8142F8AA3000C4C7F /* MODRegex.m */; };
 		02D3D2F91926631300925BE7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F121C21410EF5200197811 /* main.m */; };
 		02D3D2FA1926631D00925BE7 /* mongo-objc-driver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */; };
-		02DB18AB172C8C5A00B26EAE /* NSData+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DB18A9172C8C5A00B26EAE /* NSData+Base64.h */; };
+		02D3D3031926661000925BE7 /* mongoc-array-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044ED8190E5E4E00A80BED /* mongoc-array-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3041926661000925BE7 /* mongoc-buffer-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EDA190E5E4E00A80BED /* mongoc-buffer-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3051926661100925BE7 /* mongoc-bulk-operation-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EDC190E5E4E00A80BED /* mongoc-bulk-operation-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3061926661100925BE7 /* mongoc-bulk-operation.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EDE190E5E4E00A80BED /* mongoc-bulk-operation.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3071926661100925BE7 /* mongoc-client-pool.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EE0190E5E4E00A80BED /* mongoc-client-pool.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3081926661100925BE7 /* mongoc-client-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EE1190E5E4E00A80BED /* mongoc-client-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3091926661100925BE7 /* mongoc-client.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EE3190E5E4E00A80BED /* mongoc-client.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D30A1926661100925BE7 /* mongoc-cluster-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EE4190E5E4E00A80BED /* mongoc-cluster-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D30B1926661100925BE7 /* mongoc-collection-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EE6190E5E4E00A80BED /* mongoc-collection-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D30C1926661100925BE7 /* mongoc-collection.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EE8190E5E4E00A80BED /* mongoc-collection.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D30D1926661100925BE7 /* mongoc-counters-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EEA190E5E4E00A80BED /* mongoc-counters-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D30E1926661100925BE7 /* mongoc-cursor-array-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EED190E5E4E00A80BED /* mongoc-cursor-array-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D30F1926661100925BE7 /* mongoc-cursor-cursorid-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EEF190E5E4E00A80BED /* mongoc-cursor-cursorid-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3101926661100925BE7 /* mongoc-cursor-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EF1190E5E4E00A80BED /* mongoc-cursor-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3111926661100925BE7 /* mongoc-cursor.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EF3190E5E4E00A80BED /* mongoc-cursor.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3121926661100925BE7 /* mongoc-database-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EF4190E5E4E00A80BED /* mongoc-database-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3131926661100925BE7 /* mongoc-database.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EF6190E5E4E00A80BED /* mongoc-database.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3141926661100925BE7 /* mongoc-errno-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EF7190E5E4E00A80BED /* mongoc-errno-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3151926661100925BE7 /* mongoc-error.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EF8190E5E4E00A80BED /* mongoc-error.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3161926661100925BE7 /* mongoc-flags.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EF9190E5E4E00A80BED /* mongoc-flags.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3171926661100925BE7 /* mongoc-gridfs-file-list-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EFA190E5E4E00A80BED /* mongoc-gridfs-file-list-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3181926661100925BE7 /* mongoc-gridfs-file-list.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EFC190E5E4E00A80BED /* mongoc-gridfs-file-list.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3191926661100925BE7 /* mongoc-gridfs-file-page-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EFD190E5E4E00A80BED /* mongoc-gridfs-file-page-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D31A1926661100925BE7 /* mongoc-gridfs-file-page.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EFF190E5E4E00A80BED /* mongoc-gridfs-file-page.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D31B1926661100925BE7 /* mongoc-gridfs-file-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F00190E5E4E00A80BED /* mongoc-gridfs-file-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D31C1926661100925BE7 /* mongoc-gridfs-file.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F02190E5E4E00A80BED /* mongoc-gridfs-file.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D31D1926661100925BE7 /* mongoc-gridfs-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F03190E5E4E00A80BED /* mongoc-gridfs-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D31E1926661100925BE7 /* mongoc-gridfs.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F05190E5E4E00A80BED /* mongoc-gridfs.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D31F1926661100925BE7 /* mongoc-host-list-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F06190E5E4E00A80BED /* mongoc-host-list-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3201926661100925BE7 /* mongoc-host-list.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F07190E5E4E00A80BED /* mongoc-host-list.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3211926661100925BE7 /* mongoc-index.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F09190E5E4E00A80BED /* mongoc-index.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3221926661100925BE7 /* mongoc-init.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F0B190E5E4E00A80BED /* mongoc-init.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3231926661200925BE7 /* mongoc-iovec.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F0C190E5E4E00A80BED /* mongoc-iovec.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3241926661200925BE7 /* mongoc-list-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F0D190E5E4E00A80BED /* mongoc-list-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3251926661200925BE7 /* mongoc-log.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F10190E5E4E00A80BED /* mongoc-log.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3261926661200925BE7 /* mongoc-matcher-op-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F11190E5E4E00A80BED /* mongoc-matcher-op-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3271926661200925BE7 /* mongoc-matcher-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F13190E5E4E00A80BED /* mongoc-matcher-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3281926661200925BE7 /* mongoc-matcher.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F15190E5E4E00A80BED /* mongoc-matcher.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3291926661200925BE7 /* mongoc-opcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F16190E5E4E00A80BED /* mongoc-opcode.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D32A1926661200925BE7 /* mongoc-queue-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F17190E5E4E00A80BED /* mongoc-queue-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D32B1926661200925BE7 /* mongoc-read-prefs-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F19190E5E4E00A80BED /* mongoc-read-prefs-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D32C1926661200925BE7 /* mongoc-read-prefs.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F1B190E5E4E00A80BED /* mongoc-read-prefs.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D32D1926661200925BE7 /* mongoc-rpc-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F1C190E5E4E00A80BED /* mongoc-rpc-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D32E1926661200925BE7 /* mongoc-sasl-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F1E190E5E4E00A80BED /* mongoc-sasl-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D32F1926661200925BE7 /* mongoc-socket.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F21190E5E4E00A80BED /* mongoc-socket.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3301926661200925BE7 /* mongoc-ssl-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F22190E5E4E00A80BED /* mongoc-ssl-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3311926661300925BE7 /* mongoc-ssl.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F24190E5E4E00A80BED /* mongoc-ssl.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3321926661300925BE7 /* mongoc-stream-buffered.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F26190E5E4E00A80BED /* mongoc-stream-buffered.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3331926661300925BE7 /* mongoc-stream-file.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F28190E5E4E00A80BED /* mongoc-stream-file.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3341926661300925BE7 /* mongoc-stream-gridfs.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F2A190E5E4E00A80BED /* mongoc-stream-gridfs.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3351926661300925BE7 /* mongoc-stream-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F2B190E5E4E00A80BED /* mongoc-stream-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3361926661300925BE7 /* mongoc-stream-socket.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F2D190E5E4E00A80BED /* mongoc-stream-socket.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3371926661300925BE7 /* mongoc-stream-tls.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F2F190E5E4E00A80BED /* mongoc-stream-tls.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3381926661300925BE7 /* mongoc-stream.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F31190E5E4E00A80BED /* mongoc-stream.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3391926661300925BE7 /* mongoc-thread-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F32190E5E4E00A80BED /* mongoc-thread-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D33A1926661300925BE7 /* mongoc-trace.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F33190E5E4E00A80BED /* mongoc-trace.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D33B1926661300925BE7 /* mongoc-uri.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F35190E5E4E00A80BED /* mongoc-uri.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D33C1926661400925BE7 /* mongoc-util-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F36190E5E4E00A80BED /* mongoc-util-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D33D1926661400925BE7 /* mongoc-write-command-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F39190E5E4E00A80BED /* mongoc-write-command-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D33E1926661400925BE7 /* mongoc-write-concern-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F3B190E5E4E00A80BED /* mongoc-write-concern-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D33F1926661400925BE7 /* mongoc-write-concern.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F3D190E5E4E00A80BED /* mongoc-write-concern.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D3D3401926661400925BE7 /* mongoc.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F3E190E5E4E00A80BED /* mongoc.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02DB18AB172C8C5A00B26EAE /* NSData+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DB18A9172C8C5A00B26EAE /* NSData+Base64.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02DB18AC172C8C5A00B26EAE /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DB18AA172C8C5A00B26EAE /* NSData+Base64.m */; };
-		02DB18AF172C8C9700B26EAE /* NSString+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DB18AD172C8C9700B26EAE /* NSString+Base64.h */; };
+		02DB18AF172C8C9700B26EAE /* NSString+Base64.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DB18AD172C8C9700B26EAE /* NSString+Base64.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02DB18B0172C8C9700B26EAE /* NSString+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DB18AE172C8C9700B26EAE /* NSString+Base64.m */; };
 		02F121C01410EF5200197811 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02F121BF1410EF5200197811 /* Foundation.framework */; };
 		02F121C71410EF5200197811 /* mongo_test.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02F121C61410EF5200197811 /* mongo_test.1 */; };
@@ -2853,7 +2915,6 @@
 			files = (
 				02A85F5114103EA6004F3FE9 /* MODServer.h in Headers */,
 				02A85F5914104184004F3FE9 /* MODQuery.h in Headers */,
-				02A85F5D14104373004F3FE9 /* MOD_internal.h in Headers */,
 				024B0C071887DFBF00B8DCE6 /* MODDocumentComparator.h in Headers */,
 				02B17F35184FF2E500362A27 /* MODBsonComparator.h in Headers */,
 				02688DDC14119CF50014ED51 /* MODDatabase.h in Headers */,
@@ -2872,6 +2933,69 @@
 				027A1DA21767E91F0048AD60 /* MODMaxKey.h in Headers */,
 				027A1DA51767E91F0048AD60 /* MODMinKey.h in Headers */,
 				027A1DA81767E91F0048AD60 /* MODUndefined.h in Headers */,
+				02A85F5D14104373004F3FE9 /* MOD_internal.h in Headers */,
+				02D3D3031926661000925BE7 /* mongoc-array-private.h in Headers */,
+				02D3D3041926661000925BE7 /* mongoc-buffer-private.h in Headers */,
+				02D3D3051926661100925BE7 /* mongoc-bulk-operation-private.h in Headers */,
+				02D3D3061926661100925BE7 /* mongoc-bulk-operation.h in Headers */,
+				02D3D3071926661100925BE7 /* mongoc-client-pool.h in Headers */,
+				02D3D3081926661100925BE7 /* mongoc-client-private.h in Headers */,
+				02D3D3091926661100925BE7 /* mongoc-client.h in Headers */,
+				02D3D30A1926661100925BE7 /* mongoc-cluster-private.h in Headers */,
+				02D3D30B1926661100925BE7 /* mongoc-collection-private.h in Headers */,
+				02D3D30C1926661100925BE7 /* mongoc-collection.h in Headers */,
+				02D3D30D1926661100925BE7 /* mongoc-counters-private.h in Headers */,
+				02D3D30E1926661100925BE7 /* mongoc-cursor-array-private.h in Headers */,
+				02D3D30F1926661100925BE7 /* mongoc-cursor-cursorid-private.h in Headers */,
+				02D3D3101926661100925BE7 /* mongoc-cursor-private.h in Headers */,
+				02D3D3111926661100925BE7 /* mongoc-cursor.h in Headers */,
+				02D3D3121926661100925BE7 /* mongoc-database-private.h in Headers */,
+				02D3D3131926661100925BE7 /* mongoc-database.h in Headers */,
+				02D3D3141926661100925BE7 /* mongoc-errno-private.h in Headers */,
+				02D3D3151926661100925BE7 /* mongoc-error.h in Headers */,
+				02D3D3161926661100925BE7 /* mongoc-flags.h in Headers */,
+				02D3D3171926661100925BE7 /* mongoc-gridfs-file-list-private.h in Headers */,
+				02D3D3181926661100925BE7 /* mongoc-gridfs-file-list.h in Headers */,
+				02D3D3191926661100925BE7 /* mongoc-gridfs-file-page-private.h in Headers */,
+				02D3D31A1926661100925BE7 /* mongoc-gridfs-file-page.h in Headers */,
+				02D3D31B1926661100925BE7 /* mongoc-gridfs-file-private.h in Headers */,
+				02D3D31C1926661100925BE7 /* mongoc-gridfs-file.h in Headers */,
+				02D3D31D1926661100925BE7 /* mongoc-gridfs-private.h in Headers */,
+				02D3D31E1926661100925BE7 /* mongoc-gridfs.h in Headers */,
+				02D3D31F1926661100925BE7 /* mongoc-host-list-private.h in Headers */,
+				02D3D3201926661100925BE7 /* mongoc-host-list.h in Headers */,
+				02D3D3211926661100925BE7 /* mongoc-index.h in Headers */,
+				02D3D3221926661100925BE7 /* mongoc-init.h in Headers */,
+				02D3D3231926661200925BE7 /* mongoc-iovec.h in Headers */,
+				02D3D3241926661200925BE7 /* mongoc-list-private.h in Headers */,
+				02D3D3251926661200925BE7 /* mongoc-log.h in Headers */,
+				02D3D3261926661200925BE7 /* mongoc-matcher-op-private.h in Headers */,
+				02D3D3271926661200925BE7 /* mongoc-matcher-private.h in Headers */,
+				02D3D3281926661200925BE7 /* mongoc-matcher.h in Headers */,
+				02D3D3291926661200925BE7 /* mongoc-opcode.h in Headers */,
+				02D3D32A1926661200925BE7 /* mongoc-queue-private.h in Headers */,
+				02D3D32B1926661200925BE7 /* mongoc-read-prefs-private.h in Headers */,
+				02D3D32C1926661200925BE7 /* mongoc-read-prefs.h in Headers */,
+				02D3D32D1926661200925BE7 /* mongoc-rpc-private.h in Headers */,
+				02D3D32E1926661200925BE7 /* mongoc-sasl-private.h in Headers */,
+				02D3D32F1926661200925BE7 /* mongoc-socket.h in Headers */,
+				02D3D3301926661200925BE7 /* mongoc-ssl-private.h in Headers */,
+				02D3D3311926661300925BE7 /* mongoc-ssl.h in Headers */,
+				02D3D3321926661300925BE7 /* mongoc-stream-buffered.h in Headers */,
+				02D3D3331926661300925BE7 /* mongoc-stream-file.h in Headers */,
+				02D3D3341926661300925BE7 /* mongoc-stream-gridfs.h in Headers */,
+				02D3D3351926661300925BE7 /* mongoc-stream-private.h in Headers */,
+				02D3D3361926661300925BE7 /* mongoc-stream-socket.h in Headers */,
+				02D3D3371926661300925BE7 /* mongoc-stream-tls.h in Headers */,
+				02D3D3381926661300925BE7 /* mongoc-stream.h in Headers */,
+				02D3D3391926661300925BE7 /* mongoc-thread-private.h in Headers */,
+				02D3D33A1926661300925BE7 /* mongoc-trace.h in Headers */,
+				02D3D33B1926661300925BE7 /* mongoc-uri.h in Headers */,
+				02D3D33C1926661400925BE7 /* mongoc-util-private.h in Headers */,
+				02D3D33D1926661400925BE7 /* mongoc-write-command-private.h in Headers */,
+				02D3D33E1926661400925BE7 /* mongoc-write-concern-private.h in Headers */,
+				02D3D33F1926661400925BE7 /* mongoc-write-concern.h in Headers */,
+				02D3D3401926661400925BE7 /* mongoc.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
