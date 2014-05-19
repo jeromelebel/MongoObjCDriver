@@ -50,7 +50,7 @@ typedef struct __BsonComparatorStack {
 
 @implementation MODBsonComparator
 
-@synthesize bson1 = _bson1, bson2 = _bson2, differences = _differences;
+@synthesize bson1 = _bson1, bson2 = _bson2, differences = _differences, bson1ToDestroy = _bson1ToDestroy, bson2ToDestroy = _bson2ToDestroy;
 
 - (id)initWithBsonData1:(NSData *)bsonData1 bsonData2:(NSData *)bsonData2
 {

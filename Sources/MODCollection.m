@@ -79,38 +79,6 @@
     [query.mutableParameters setObject:@"databasestats" forKey:@"command"];
     return query;
 }
-//
-//- (MODQuery *)indexListWithCallback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback
-//{
-//    MODQuery *query = nil;
-//    
-//    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-//        if (!mongoQuery.canceled) {
-//            NSMutableArray *documents;
-//            MODCursor *cursor;
-//            MODSortedMutableDictionary *document;
-//            NSError *error = nil;
-//            
-//            documents = [[NSMutableArray alloc] init];
-//            cursor = [[MODCursor alloc] initWithMongoCollection:self];
-//            cursor.cursor = mongo_index_list(self.mongocClient, self.absoluteName.UTF8String, 0, 0);
-//            while ((document = [cursor nextDocumentWithBsonData:nil error:&error]) != nil) {
-//                [documents addObject:document];
-//            }
-//            if (error) {
-//                mongoQuery.error = error;
-//            }
-//            [mongoQuery.mutableParameters setObject:documents forKey:@"documents"];
-//            [documents release];
-//            [cursor release];
-//        }
-//        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-//            callback([mongoQuery.mutableParameters objectForKey:@"documents"], mongoQuery);
-//        }];
-//    }];
-//    [query.mutableParameters setObject:@"indexlist" forKey:@"command"];
-//    return query;
-//}
 
 - (MODQuery *)findWithCriteria:(NSString *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort callback:(void (^)(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery))callback
 {
@@ -402,118 +370,133 @@
     return query;
 }
 
-//static enum mongo_index_opts convertIndexOptions(enum MOD_INDEX_OPTIONS option)
-//{
-//    return (enum mongo_index_opts)option;
-//}
-//
-//- (MODQuery *)createIndex:(id)indexDocument name:(NSString *)name options:(enum MOD_INDEX_OPTIONS)options callback:(void (^)(MODQuery *mongoQuery))callback
-//{
-//    MODQuery *query = nil;
-//    NSMutableString *defaultName = nil;
-//    
-//    if (!name) {
-//        NSDictionary *objects;
+- (MODQuery *)indexListWithCallback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback
+{
+    MODQuery *query = nil;
+    
+    query = [self findWithCriteria:[NSString stringWithFormat:@"{ns: \"%@\"", self.absoluteName] fields:nil skip:0 limit:0 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+        callback(documents, mongoQuery);
+    }];
+    [query.mutableParameters setObject:@"indexlist" forKey:@"command"];
+    return query;
+}
+
+- (MODQuery *)createIndex:(id)indexDocument name:(NSString *)name options:(enum MOD_INDEX_OPTIONS)options callback:(void (^)(MODQuery *mongoQuery))callback
+{
+    MODQuery *query = nil;
+    NSMutableString *defaultName = nil;
+    
+    if (!name) {
+        NSDictionary *objects;
+        
+        if ([indexDocument isKindOfClass:[NSString class]]) {
+            objects = [MODRagelJsonParser objectsFromJson:indexDocument withError:NULL];
+        } else {
+            objects = indexDocument;
+        }
+        defaultName = [[NSMutableString alloc] init];
+        for (NSString *key in [objects allKeys]) {
+            [defaultName appendString:key];
+            [defaultName appendString:@"_"];
+        }
+        name = defaultName;
+    }
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        NSError *error = nil;
+        
+        if (!mongoQuery.canceled) {
+            bson_t index = BSON_INITIALIZER;
+            bson_error_t bsonError = BSON_NO_ERROR;
+            mongoc_index_opt_t indexOptions;
+            
+            memcpy(&indexOptions, mongoc_index_opt_get_default(), sizeof(indexOptions));
+            indexOptions.background = (options & MOD_INDEX_OPTIONS_BACKGROUND) == MOD_INDEX_OPTIONS_BACKGROUND;
+            indexOptions.unique = (options & MOD_INDEX_OPTIONS_UNIQUE) == MOD_INDEX_OPTIONS_UNIQUE;
+            indexOptions.sparse = (options & MOD_INDEX_OPTIONS_SPARSE) == MOD_INDEX_OPTIONS_SPARSE;
+            indexOptions.drop_dups = (options & MOD_INDEX_OPTIONS_DROP_DUPS) == MOD_INDEX_OPTIONS_DROP_DUPS;
+            if ([indexDocument isKindOfClass:[NSString class]]) {
+                [MODRagelJsonParser bsonFromJson:&index json:indexDocument error:&error];
+            } else {
+                [[self.mongoServer class] appendObject:indexDocument toBson:&index];
+            }
+            if (!error) {
+                mongoc_collection_create_index(self.mongocCollection, &index, &indexOptions, &bsonError);
+                error = [self.mongoServer.class errorFromBsonError:bsonError];
+            }
+            bson_destroy(&index);
+        }
+        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+            callback(mongoQuery);
+        }];
+    }];
+    [query.mutableParameters setObject:@"createindex" forKey:@"command"];
+    [query.mutableParameters setObject:indexDocument forKey:@"index"];
+    [query.mutableParameters setObject:[NSNumber numberWithInt:options] forKey:@"options"];
+    [query.mutableParameters setObject:name forKey:@"name"];
+    [defaultName release];
+    return query;
+}
+
+- (MODQuery *)dropIndex:(id)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback
+{
+    MODQuery *query = nil;
+    
+    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+        NSError *error = nil;
+
+        if (!mongoQuery.canceled) {
+            bson_t index = BSON_INITIALIZER;
+            
+            if ([indexDocument isKindOfClass:[NSString class]]) {
+                [MODRagelJsonParser bsonFromJson:&index json:indexDocument error:&error];
+            } else {
+                [[self.mongoServer class] appendObject:indexDocument toBson:&index];
+            }
+            if (error == nil) {
+                bson_error_t bsonError = BSON_NO_ERROR;
+                
+                mongoc_collection_drop_index(self.mongocCollection, self.absoluteName.UTF8String, &bsonError);
+                error = [self.mongoServer.class errorFromBsonError:bsonError];
+            }
+            bson_destroy(&index);
+        }
+        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+            callback(mongoQuery);
+        }];
+    }];
+    [query.mutableParameters setObject:@"dropindex" forKey:@"command"];
+    [query.mutableParameters setObject:indexDocument forKey:@"index"];
+    return query;
+}
+
+- (MODQuery *)reIndexWithCallback:(void (^)(MODQuery *mongoQuery))callback
+{
+    MODQuery *query = nil;
+    
+//    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+//        NSError *error = nil;
 //        
-//        if ([indexDocument isKindOfClass:[NSString class]]) {
-//            objects = [MODRagelJsonParser objectsFromJson:indexDocument withError:NULL];
-//        } else {
-//            objects = indexDocument;
-//        }
-//        defaultName = [[NSMutableString alloc] init];
-//        for (NSString *key in [objects allKeys]) {
-//            [defaultName appendString:key];
-//            [defaultName appendString:@"_"];
-//        }
-//        name = defaultName;
-//    }
-//    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-//        if (!self.mongoServer.isMaster) {
-//            mongoQuery.error = [self.mongoServer.class errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Index create is forbidden on a slave"];
-//        } else if (!mongoQuery.canceled) {
-//            bson_t index = BSON_INITIALIZER;
-//            bson_t output = BSON_INITIALIZER;
-//            NSError *error = nil;
-//            
-//            bson_init(&index);
-//            if ([indexDocument isKindOfClass:[NSString class]]) {
-//                [MODRagelJsonParser bsonFromJson:&index json:indexDocument error:&error];
-//            } else {
-//                [[self.mongoServer class] appendObject:indexDocument toBson:&index];
-//            }
-//            mongo_create_index(self.mongocClient, self.absoluteName.UTF8String, &index, name.UTF8String, convertIndexOptions(options), -1, &output);
-//            bson_destroy(&index);
-//            bson_destroy(&output);
-//        }
-//        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-//            callback(mongoQuery);
-//        }];
-//    }];
-//    [query.mutableParameters setObject:@"createindex" forKey:@"command"];
-//    [query.mutableParameters setObject:indexDocument forKey:@"index"];
-//    [query.mutableParameters setObject:[NSNumber numberWithInt:options] forKey:@"options"];
-//    [query.mutableParameters setObject:name forKey:@"name"];
-//    [defaultName release];
-//    return query;
-//}
-//
-//- (MODQuery *)dropIndex:(id)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback
-//{
-//    MODQuery *query = nil;
-//    
-//    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-//        if (!self.mongoServer.isMaster) {
-//            mongoQuery.error = [self.mongoServer.class errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Index drop is forbidden on a slave"];
-//        } else if (!mongoQuery.canceled) {
-//            bson_t index = BSON_INITIALIZER;
-//            NSError *error = nil;
-//            
-//            bson_init(&index);
-//            if ([indexDocument isKindOfClass:[NSString class]]) {
-//                [MODRagelJsonParser bsonFromJson:&index json:indexDocument error:&error];
-//            } else {
-//                [[self.mongoServer class] appendObject:indexDocument toBson:&index];
-//            }
-//            if (error == nil) {
-//                mongo_drop_indexes(self.mongocClient, self.absoluteName.UTF8String, &index);
-//            } else {
-//                mongoQuery.error = error;
-//            }
-//            bson_destroy(&index);
-//        }
-//        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
-//            callback(mongoQuery);
-//        }];
-//    }];
-//    [query.mutableParameters setObject:@"dropindex" forKey:@"command"];
-//    [query.mutableParameters setObject:indexDocument forKey:@"index"];
-//    return query;
-//}
-//
-//- (MODQuery *)reIndexWithCallback:(void (^)(MODQuery *mongoQuery))callback
-//{
-//    MODQuery *query = nil;
-//    
-//    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
 //        if (!mongoQuery.canceled) {
 //            mongo_reindex(self.mongocClient, self.absoluteName.UTF8String);
+//            mongoc_collection_ensure_index(self.mongocCollection, <#const bson_t *keys#>, <#const mongoc_index_opt_t *opt#>, <#bson_error_t *error#>)
+//            mongoc_collection_create_index(<#mongoc_collection_t *collection#>, <#const bson_t *keys#>, <#const mongoc_index_opt_t *opt#>, <#bson_error_t *error#>)
 //        }
-//        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+//        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
 //            callback(mongoQuery);
 //        }];
 //    }];
 //    [query.mutableParameters setObject:@"reindex" forKey:@"command"];
-//    return query;
-//}
-//
-//- (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction reduceFunction:(NSString *)reduceFunction query:(id)mapReduceQuery sort:(id)sort limit:(int64_t)limit output:(id)output keepTemp:(BOOL)keepTemp finalizeFunction:(NSString *)finalizeFunction scope:(id)scope jsmode:(BOOL)jsmode verbose:(BOOL)verbose callback:(void (^)(MODQuery *mongoQuery))callback
-//{
-//    MODQuery *query = nil;
-//    
+    return query;
+}
+
+- (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction reduceFunction:(NSString *)reduceFunction query:(id)mapReduceQuery sort:(id)sort limit:(int64_t)limit output:(id)output keepTemp:(BOOL)keepTemp finalizeFunction:(NSString *)finalizeFunction scope:(id)scope jsmode:(BOOL)jsmode verbose:(BOOL)verbose callback:(void (^)(MODQuery *mongoQuery))callback
+{
+    MODQuery *query = nil;
+    
 //    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
-//        if (!self.mongoServer.isMaster) {
-//            mongoQuery.error = [self.mongoServer.class errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Map reduce is forbidden on a slave"];
-//        } else if (!mongoQuery.canceled) {
+//        NSError *error = nil;
+//        
+//        if (!mongoQuery.canceled) {
 //            bson_t bsonQuery = BSON_INITIALIZER;
 //            bson_t bsonSort = BSON_INITIALIZER;
 //            bson_t bsonOutput = BSON_INITIALIZER;
@@ -521,29 +504,26 @@
 //            bson_t bsonResult = BSON_INITIALIZER;
 //            NSError *error = nil;
 //            
-//            bson_init(&bsonQuery);
 //            if (mapReduceQuery && [mapReduceQuery length] > 0) {
 //                [MODRagelJsonParser bsonFromJson:&bsonQuery json:mapReduceQuery error:&error];
 //            }
 //            if (!error) {
-//                bson_init(&bsonSort);
 //                if (sort) {
 //                    [MODRagelJsonParser bsonFromJson:&bsonSort json:sort error:&error];
 //                }
 //            }
 //            if (!error) {
-//                bson_init(&bsonOutput);
 //                if (output) {
 //                    [MODRagelJsonParser bsonFromJson:&bsonOutput json:output error:&error];
 //                }
 //            }
 //            if (!error) {
-//                bson_init(&bsonScope);
 //                if (scope) {
 //                    [MODRagelJsonParser bsonFromJson:&bsonScope json:scope error:&error];
 //                }
 //            }
 //            if (!error) {
+//                mongoc_collection_re
 //                mongo_map_reduce(self.mongocClient, self.absoluteName.UTF8String, mapFunction.UTF8String, reduceFunction.UTF8String, &bsonQuery, &bsonSort, limit, &bsonOutput, keepTemp?1:0, finalizeFunction.UTF8String, &bsonScope, jsmode?1:0, verbose?1:0, &bsonResult);
 //                NSLog(@"%@", [self.mongoServer.class objectFromBson:&bsonResult]);
 //            } else {
@@ -551,13 +531,13 @@
 //            }
 //            bson_destroy(&bsonResult);
 //        }
-//        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
+//        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
 //            callback(mongoQuery);
 //        }];
 //    }];
 //    [query.mutableParameters setObject:@"reindex" forKey:@"command"];
-//    return query;
-//}
+    return query;
+}
 
 - (MODQuery *)dropWithCallback:(void (^)(MODQuery *mongoQuery))callback
 {

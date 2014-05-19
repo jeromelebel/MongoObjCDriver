@@ -16,7 +16,7 @@
 
 @implementation MODDatabase
 
-@synthesize mongoServer = _mongoServer, name = _name;
+@synthesize mongoServer = _mongoServer, name = _name, mongocDatabase = _mongocDatabase;
 
 - (id)initWithMongoServer:(MODServer *)mongoServer name:(NSString *)name
 {

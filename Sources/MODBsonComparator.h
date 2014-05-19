@@ -11,10 +11,12 @@
 @interface MODBsonComparator : NSObject
 {
     NSArray                 *_differences;
+    void                    *_bson1;
+    void                    *_bson2;
+    void                    *_bson1ToDestroy;
+    void                    *_bson2ToDestroy;
 }
 
-@property (nonatomic, readonly, assign) NSData *bsonData1;
-@property (nonatomic, readonly, assign) NSData *bsonData2;
 @property (nonatomic, readonly, strong) NSArray *differences;
 
 - (id)initWithBsonData1:(NSData *)bson1 bsonData2:(NSData *)bson2;

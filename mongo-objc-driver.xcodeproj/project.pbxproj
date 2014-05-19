@@ -70,6 +70,7 @@
 		02BDC3E7141D6073000EF755 /* MODCursor.h in Headers */ = {isa = PBXBuildFile; fileRef = 02BDC3E5141D6073000EF755 /* MODCursor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02BDC3E8141D6073000EF755 /* MODCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3E6141D6073000EF755 /* MODCursor.m */; };
 		02BDC3EC141D83A7000EF755 /* MODServer_utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3EB141D83A7000EF755 /* MODServer_utils.m */; };
+		02CCE7A0192A278800A9DB1B /* MODRagelJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 0299B61117F39FA200FB40A2 /* MODRagelJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02CF0E20191112CB008C822A /* bcon.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204505F190E5EB000A80BED /* bcon.c */; };
 		02CF0E21191112CB008C822A /* bson-atomic.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045061190E5EB000A80BED /* bson-atomic.c */; };
 		02CF0E22191112CB008C822A /* bson-clock.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045063190E5EB000A80BED /* bson-clock.c */; };
@@ -2933,6 +2934,7 @@
 				027A1DA21767E91F0048AD60 /* MODMaxKey.h in Headers */,
 				027A1DA51767E91F0048AD60 /* MODMinKey.h in Headers */,
 				027A1DA81767E91F0048AD60 /* MODUndefined.h in Headers */,
+				02CCE7A0192A278800A9DB1B /* MODRagelJsonParser.h in Headers */,
 				02A85F5D14104373004F3FE9 /* MOD_internal.h in Headers */,
 				02D3D3031926661000925BE7 /* mongoc-array-private.h in Headers */,
 				02D3D3041926661000925BE7 /* mongoc-buffer-private.h in Headers */,
@@ -3321,6 +3323,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -3332,7 +3335,6 @@
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -3344,7 +3346,6 @@
 					"$(SRCROOT)/Libraries/mongo-c-driver/src/libbson/src",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
-				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-DMONGOC_COMPILATION",
 					"-DBSON_COMPILATION",
@@ -3356,13 +3357,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = "_MONGO_USE_GETADDRINFO=1";
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
