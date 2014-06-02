@@ -18,7 +18,7 @@
 @class MODServer;
 @class MODSortedMutableDictionary;
 
-#define MONGO_DEFAULT_PORT              27000
+#define MONGO_DEFAULT_PORT              27017
 
 typedef struct mongo_replset            *mongo_replset_ptr;
 
