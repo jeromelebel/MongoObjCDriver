@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class MODServer;
+@class MODClient;
 @class MODDatabase;
 @class MODCollection;
 @class MODQuery;
