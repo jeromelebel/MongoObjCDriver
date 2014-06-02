@@ -28,6 +28,11 @@
     return [result autorelease];
 }
 
++ (int)defaultPort
+{
+    return MONGOC_DEFAULT_PORT;
+}
+
 - (id)init
 {
     if ((self = [super init]) != nil) {

@@ -18,8 +18,6 @@
 @class MODServer;
 @class MODSortedMutableDictionary;
 
-#define MONGO_DEFAULT_PORT              27017
-
 typedef struct mongo_replset            *mongo_replset_ptr;
 
 @interface MODServer : NSObject
@@ -33,6 +31,7 @@ typedef struct mongo_replset            *mongo_replset_ptr;
 @property (nonatomic, readonly, assign, getter = isConnected) BOOL connected;
 
 + (MODServer *)clientWihtURLString:(NSString *)urlString;
++ (int)defaultPort;
 
 // can return nil if the URI is invalid
 - (id)initWithURIString:(NSString *)urlString;
