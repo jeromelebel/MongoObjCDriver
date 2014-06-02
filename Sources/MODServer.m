@@ -28,7 +28,7 @@
     return [result autorelease];
 }
 
-+ (int)defaultPort
++ (uint16_t)defaultPort
 {
     return MONGOC_DEFAULT_PORT;
 }

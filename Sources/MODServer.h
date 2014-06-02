@@ -31,7 +31,7 @@ typedef struct mongo_replset            *mongo_replset_ptr;
 @property (nonatomic, readonly, assign, getter = isConnected) BOOL connected;
 
 + (MODServer *)clientWihtURLString:(NSString *)urlString;
-+ (int)defaultPort;
++ (uint16_t)defaultPort;
 
 // can return nil if the URI is invalid
 - (id)initWithURIString:(NSString *)urlString;
