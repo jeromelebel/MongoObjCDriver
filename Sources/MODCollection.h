@@ -23,14 +23,14 @@ enum MOD_INDEX_OPTIONS {
 
 @interface MODCollection : NSObject
 {
-    MODDatabase                         *_mongoDatabase;
+    MODDatabase                         *_database;
     NSString                            *_absoluteName;
     NSString                            *_name;
     void                                *_mongocCollection;
 }
 
-@property (nonatomic, retain, readonly) MODClient *mongoServer;
-@property (nonatomic, retain, readonly) MODDatabase *mongoDatabase;
+@property (nonatomic, retain, readonly) MODClient *client;
+@property (nonatomic, retain, readonly) MODDatabase *database;
 @property (nonatomic, retain, readonly) NSString *name;
 @property (nonatomic, retain, readonly) NSString *absoluteName;
 

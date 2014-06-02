@@ -112,7 +112,7 @@
     if (self.error) {
         *error = self.error;
     } else if (mongoc_cursor_next(self.mongocCursor, &bson)) {
-        result = [[self.mongoCollection.mongoServer class] objectFromBson:bson];
+        result = [self.mongoCollection.client.class objectFromBson:bson];
         if (bsonData) {
             const bson_t *bson;
             
@@ -123,7 +123,7 @@
         bson_error_t error = BSON_NO_ERROR;
         
         mongoc_cursor_error(self.mongocCursor, &error);
-        self.error = [self.mongoCollection.mongoServer.class errorFromBsonError:error];
+        self.error = [self.mongoCollection.client.class errorFromBsonError:error];
     }
     return result;
 }
@@ -132,7 +132,7 @@
 {
     MODQuery *query = nil;
     
-    query = [self.mongoCollection.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.mongoCollection.client addQueryInQueue:^(MODQuery *mongoQuery) {
         uint64_t documentCount = 0;
         BOOL cursorStopped = NO;
         NSError *error = nil;

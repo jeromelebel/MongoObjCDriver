@@ -9,7 +9,7 @@
 #import "MOD_internal.h"
 
 @interface MODCollection ()
-@property (nonatomic, readwrite, retain) MODDatabase *mongoDatabase;
+@property (nonatomic, readwrite, retain) MODDatabase *database;
 @property (nonatomic, readwrite, retain) NSString *name;
 @property (nonatomic, readwrite, retain) NSString *absoluteName;
 
@@ -17,22 +17,22 @@
 
 @implementation MODCollection
 
-@synthesize mongoDatabase = _mongoDatabase, name = _name, absoluteName = _absoluteName, mongocCollection = _mongocCollection;
+@synthesize database = _database, name = _name, absoluteName = _absoluteName, mongocCollection = _mongocCollection;
 
-- (id)initWithName:(NSString *)name mongoDatabase:(MODDatabase *)mongoDatabase
+- (id)initWithName:(NSString *)name database:(MODDatabase *)database
 {
     if (self = [self init]) {
-        self.mongoDatabase = mongoDatabase;
+        self.database = database;
         self.name = [name retain];
-        self.absoluteName = [[[NSString alloc] initWithFormat:@"%@.%@", self.mongoDatabase.name, self.name] autorelease];
-        self.mongocCollection = mongoc_database_get_collection(self.mongoDatabase.mongocDatabase, name.UTF8String);
+        self.absoluteName = [[[NSString alloc] initWithFormat:@"%@.%@", self.database.name, self.name] autorelease];
+        self.mongocCollection = mongoc_database_get_collection(self.database.mongocDatabase, name.UTF8String);
     }
     return self;
 }
 
 - (void)dealloc
 {
-    self.mongoDatabase = nil;
+    self.database = nil;
     self.name = nil;
     self.absoluteName = nil;
     [super dealloc];
@@ -41,20 +41,20 @@
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock
 {
     [mongoQuery.mutableParameters setObject:self forKey:@"collection"];
-    [self.mongoDatabase mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:callbackBlock];
+    [self.database mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:callbackBlock];
 }
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock
 {
     [mongoQuery.mutableParameters setObject:self forKey:@"collection"];
-    [self.mongoDatabase mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
+    [self.database mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
 }
 
 - (MODQuery *)fetchCollectionStatsWithCallback:(void (^)(MODSortedMutableDictionary *stats, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
-    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         MODSortedMutableDictionary *stats = nil;
         bson_error_t error;
         
@@ -64,7 +64,7 @@
             
             BSON_APPEND_INT32 (&cmd, "collstats", 1);
             if (mongoc_client_command_simple(self.mongocClient, self.absoluteName.UTF8String, &cmd, NULL, &output, &error)) {
-                stats = [[self.mongoServer class] objectFromBson:&output];
+                stats = [[self.client class] objectFromBson:&output];
                 [mongoQuery.mutableParameters setObject:stats forKey:@"collectionstats"];
             }
             bson_destroy(&output);
@@ -84,7 +84,7 @@
 {
     MODQuery *query = nil;
     
-    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
         
         if (!mongoQuery.canceled) {
@@ -136,7 +136,7 @@
 {
     MODQuery *query = nil;
     
-    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         int64_t count = 0;
         NSError *error = nil;
         
@@ -157,7 +157,7 @@
                 
                 count = mongoc_collection_count(self.mongocCollection, 0, bsonQuery, 0, 0, NULL, &bsonError);
                 if (count == -1) {
-                    error = [self.mongoServer.class errorFromBsonError:bsonError];
+                    error = [self.client.class errorFromBsonError:bsonError];
                 } else {
                     response = [[NSNumber alloc] initWithUnsignedLongLong:count];
                     [mongoQuery.mutableParameters setObject:response forKey:@"count"];
@@ -183,7 +183,7 @@
 {
     MODQuery *query = nil;
     
-    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
         
         if (!mongoQuery.canceled) {
@@ -205,7 +205,7 @@
                         [userInfo release];
                     }
                 } else if ([document isKindOfClass:[MODSortedMutableDictionary class]]) {
-                    [[self.mongoServer class] appendObject:document toBson:&bson];
+                    [[self.client class] appendObject:document toBson:&bson];
                 }
                 if (error) {
                     break;
@@ -216,7 +216,7 @@
                     bson_error_t bsonError;
                     
                     mongoc_bulk_operation_execute(bulk, NULL, &bsonError);
-                    error = [self.mongoServer.class errorFromBsonError:bsonError];
+                    error = [self.client.class errorFromBsonError:bsonError];
                     if (error) {
                         break;
                     }
@@ -228,7 +228,7 @@
                 bson_error_t bsonError;
                 
                 mongoc_bulk_operation_execute(bulk, NULL, &bsonError);
-                error = [self.mongoServer.class errorFromBsonError:bsonError];
+                error = [self.client.class errorFromBsonError:bsonError];
             }
             mongoc_bulk_operation_destroy(bulk);
             mongoQuery.error = error;
@@ -248,7 +248,7 @@
 {
     MODQuery *query = nil;
     
-    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
         
         if (!mongoQuery.canceled) {
@@ -259,19 +259,19 @@
             if (jsonCriteria && [jsonCriteria length] > 0) {
                 [MODRagelJsonParser bsonFromJson:&bsonCriteria json:jsonCriteria error:&error];
             } else {
-                error = [self.mongoServer.class errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
+                error = [self.client.class errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
             }
             bson_init(&bsonUpdate);
             if (error == nil && update && [update length] > 0) {
                 [MODRagelJsonParser bsonFromJson:&bsonUpdate json:update error:&error];
             } else if (error == nil && (!update || [update length] > 0)) {
-                error = [self.mongoServer.class errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
+                error = [self.client.class errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
             }
             if (error == nil) {
                 bson_error_t bsonError = BSON_NO_ERROR;
                 
                 if (!mongoc_collection_update(self.mongocCollection, (upsert?MONGOC_UPDATE_UPSERT:0) | (multiUpdate?MONGOC_UPDATE_MULTI_UPDATE:0), &bsonCriteria, &bsonUpdate, NULL, &bsonError)) {
-                    error = [self.mongoServer.class errorFromBsonError:bsonError];
+                    error = [self.client.class errorFromBsonError:bsonError];
                     mongoQuery.error = error;
                 }
             } else {
@@ -298,7 +298,7 @@
 {
     MODQuery *query = nil;
     
-    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
         
         if (!mongoQuery.canceled) {
@@ -310,7 +310,7 @@
                 bson_error_t bsonError = BSON_NO_ERROR;
                 
                 if (!mongoc_collection_save(self.mongocCollection, &bsonDocument, NULL, &bsonError)) {
-                    error = [self.mongoServer.class errorFromBsonError:bsonError];
+                    error = [self.client.class errorFromBsonError:bsonError];
                     mongoQuery.error = error;
                 }
             } else {
@@ -331,7 +331,7 @@
 {
     MODQuery *query = nil;
     
-    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
         
         if (!mongoQuery.canceled) {
@@ -343,15 +343,15 @@
                     [MODRagelJsonParser bsonFromJson:&bsonCriteria json:criteria error:&error];
                 }
             } else if (criteria && [criteria isKindOfClass:[MODSortedMutableDictionary class]]) {
-                [[self.mongoServer class] appendObject:criteria toBson:&bsonCriteria];
+                [[self.client class] appendObject:criteria toBson:&bsonCriteria];
             } else {
-                error = [self.mongoServer.class errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
+                error = [self.client.class errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
             }
             if (error == nil) {
                 bson_error_t bsonError = BSON_NO_ERROR;
                 
                 if (!mongoc_collection_remove(self.mongocCollection, MONGOC_DELETE_NONE, &bsonCriteria, NULL, &bsonError)) {
-                    error = [self.mongoServer.class errorFromBsonError:bsonError];
+                    error = [self.client.class errorFromBsonError:bsonError];
                     mongoQuery.error = error;
                 }
             } else {
@@ -401,7 +401,7 @@
         }
         name = defaultName;
     }
-    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
         
         if (!mongoQuery.canceled) {
@@ -417,11 +417,11 @@
             if ([indexDocument isKindOfClass:[NSString class]]) {
                 [MODRagelJsonParser bsonFromJson:&index json:indexDocument error:&error];
             } else {
-                [[self.mongoServer class] appendObject:indexDocument toBson:&index];
+                [[self.client class] appendObject:indexDocument toBson:&index];
             }
             if (!error) {
                 mongoc_collection_create_index(self.mongocCollection, &index, &indexOptions, &bsonError);
-                error = [self.mongoServer.class errorFromBsonError:bsonError];
+                error = [self.client.class errorFromBsonError:bsonError];
             }
             bson_destroy(&index);
         }
@@ -441,7 +441,7 @@
 {
     MODQuery *query = nil;
     
-    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
 
         if (!mongoQuery.canceled) {
@@ -450,13 +450,13 @@
             if ([indexDocument isKindOfClass:[NSString class]]) {
                 [MODRagelJsonParser bsonFromJson:&index json:indexDocument error:&error];
             } else {
-                [[self.mongoServer class] appendObject:indexDocument toBson:&index];
+                [[self.client class] appendObject:indexDocument toBson:&index];
             }
             if (error == nil) {
                 bson_error_t bsonError = BSON_NO_ERROR;
                 
                 mongoc_collection_drop_index(self.mongocCollection, self.absoluteName.UTF8String, &bsonError);
-                error = [self.mongoServer.class errorFromBsonError:bsonError];
+                error = [self.client.class errorFromBsonError:bsonError];
             }
             bson_destroy(&index);
         }
@@ -473,7 +473,7 @@
 {
     MODQuery *query = nil;
     
-//    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+//    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
 //        NSError *error = nil;
 //        
 //        if (!mongoQuery.canceled) {
@@ -493,7 +493,7 @@
 {
     MODQuery *query = nil;
     
-//    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+//    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
 //        NSError *error = nil;
 //        
 //        if (!mongoQuery.canceled) {
@@ -525,7 +525,7 @@
 //            if (!error) {
 //                mongoc_collection_re
 //                mongo_map_reduce(self.mongocClient, self.absoluteName.UTF8String, mapFunction.UTF8String, reduceFunction.UTF8String, &bsonQuery, &bsonSort, limit, &bsonOutput, keepTemp?1:0, finalizeFunction.UTF8String, &bsonScope, jsmode?1:0, verbose?1:0, &bsonResult);
-//                NSLog(@"%@", [self.mongoServer.class objectFromBson:&bsonResult]);
+//                NSLog(@"%@", [self.client.class objectFromBson:&bsonResult]);
 //            } else {
 //                mongoQuery.error = error;
 //            }
@@ -543,7 +543,7 @@
 {
     MODQuery *query;
     
-    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         bson_error_t error = BSON_NO_ERROR;
         
         if (!mongoQuery.canceled) {
@@ -561,17 +561,17 @@
 
 - (mongoc_client_t *)mongocClient
 {
-    return self.mongoDatabase.mongocClient;
+    return self.database.mongocClient;
 }
 
-- (MODClient *)mongoServer
+- (MODClient *)client
 {
-    return self.mongoDatabase.mongoServer;
+    return self.database.client;
 }
 
 - (NSString *)databaseName
 {
-    return self.mongoDatabase.name;
+    return self.database.name;
 }
 
 @end

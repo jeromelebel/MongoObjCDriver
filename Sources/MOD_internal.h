@@ -39,7 +39,7 @@ enum {
 @property (nonatomic, readonly, assign) mongoc_client_t *mongocClient;
 @property (nonatomic, readwrite, assign) mongoc_database_t *mongocDatabase;
 
-- (id)initWithMongoServer:(MODClient *)mongoServer name:(NSString *)databaseName;
+- (id)initWithClient:(MODClient *)client name:(NSString *)databaseName;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock;
 
@@ -49,7 +49,7 @@ enum {
 @property (nonatomic, readonly, assign) mongoc_client_t *mongocClient;
 @property (nonatomic, readwrite, assign) mongoc_collection_t *mongocCollection;
 
-- (id)initWithName:(NSString *)name mongoDatabase:(MODDatabase *)mongoDatabase;
+- (id)initWithName:(NSString *)name database:(MODDatabase *)database;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock;
 

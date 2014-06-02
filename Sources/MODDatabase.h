@@ -16,11 +16,11 @@
 
 @interface MODDatabase : NSObject
 {
-    MODClient                           *_mongoServer;
+    MODClient                           *_client;
     NSString                            *_name;
     void                                *_mongocDatabase;
 }
-@property(nonatomic, readonly, retain) MODClient *mongoServer;
+@property(nonatomic, readonly, retain) MODClient *client;
 @property(nonatomic, readonly, copy) NSString *name;
 
 - (MODQuery *)fetchDatabaseStatsWithCallback:(void (^)(MODSortedMutableDictionary *databaseStats, MODQuery *mongoQuery))callback;

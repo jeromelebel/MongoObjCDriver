@@ -190,7 +190,7 @@
 
 - (MODDatabase *)databaseForName:(NSString *)databaseName
 {
-    return [[[MODDatabase alloc] initWithMongoServer:self name:databaseName] autorelease];
+    return [[[MODDatabase alloc] initWithClient:self name:databaseName] autorelease];
 }
 
 @end
