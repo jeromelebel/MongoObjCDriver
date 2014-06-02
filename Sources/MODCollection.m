@@ -350,7 +350,7 @@
             if (error == nil) {
                 bson_error_t bsonError = BSON_NO_ERROR;
                 
-                if (!mongoc_collection_delete(self.mongocCollection, MONGOC_DELETE_NONE, &bsonCriteria, NULL, &bsonError)) {
+                if (!mongoc_collection_remove(self.mongocCollection, MONGOC_DELETE_NONE, &bsonCriteria, NULL, &bsonError)) {
                     error = [self.mongoServer.class errorFromBsonError:bsonError];
                     mongoQuery.error = error;
                 }
