@@ -51,9 +51,9 @@ static void testTypes(void)
     [data release];
     [binary release];
     
-    [MODServer appendObject:document toBson:&myBson];
+    [MODClient appendObject:document toBson:&myBson];
     
-    if (![document isEqualTo:[MODServer objectFromBson:&myBson]]) {
+    if (![document isEqualTo:[MODClient objectFromBson:&myBson]]) {
         NSLog(@"********* ERROR ************");
     }
     bson_destroy(&myBson);
@@ -86,14 +86,14 @@ static void testObjects(NSString *jsonToParse, NSString *jsonExpected, id should
         NSLog(@"%@", error);
         assert(0);
     }
-    objectsFromBson = [MODServer objectFromBson:&bsonResult];
+    objectsFromBson = [MODClient objectFromBson:&bsonResult];
     if (([shouldEqual isKindOfClass:[NSArray class]] && ![[objectsFromBson objectForKey:@"array"] isEqual:shouldEqual])
         || ([shouldEqual isKindOfClass:[MODSortedMutableDictionary class]] && ![objectsFromBson isEqual:shouldEqual])) {
         NSLog(@"***** problem to convert bson to objects:");
         NSLog(@"json: %@", jsonToParse);
         NSLog(@"expecting: %@", shouldEqual);
         NSLog(@"received: %@", objectsFromBson);
-        NSLog(@"difference in: %@", [MODServer findAllDifferencesInObject1:shouldEqual object2:objectsFromBson]);
+        NSLog(@"difference in: %@", [MODClient findAllDifferencesInObject1:shouldEqual object2:objectsFromBson]);
         assert(0);
     }
     bson_destroy(&bsonResult);
@@ -125,7 +125,7 @@ static void testObjects(NSString *jsonToParse, NSString *jsonExpected, id should
     if ([shouldEqual isKindOfClass:[MODSortedMutableDictionary class]]) {
         NSString *jsonFromObjects;
         
-        jsonFromObjects = [MODServer convertObjectToJson:shouldEqual pretty:NO strictJson:NO];
+        jsonFromObjects = [MODClient convertObjectToJson:shouldEqual pretty:NO strictJson:NO];
         if (![jsonFromObjects isEqualToString:jsonExpected]) {
             NSLog(@"problem to convert objects to json %@", shouldEqual);
             NSLog(@"expecting: '%@'", jsonToParse);
@@ -234,7 +234,7 @@ static void testJson()
         
         objects = [MODRagelJsonParser objectsFromJson:@"{ \"array\": [ 1, {\"x\": 1}, [ 1 ]] }" withError:&error];
         bson_init(&bsonObject);
-        [MODServer appendObject:objects toBson:&bsonObject];
+        [MODClient appendObject:objects toBson:&bsonObject];
         testBsonArrayIndex(&bsonObject);
         bson_destroy(&bsonObject);
     }
@@ -282,7 +282,7 @@ static void testBase64(void)
     testStringInBase64("123456", "MTIzNDU2");
 }
 
-static void runDatabaseTests(MODServer *server)
+static void runDatabaseTests(MODClient *server)
 {
     MODDatabase *mongoDatabase;
     MODCollection *mongoCollection;
@@ -379,7 +379,7 @@ static void runDatabaseTests(MODServer *server)
     }];
 }
 
-static void removeTestDatabaseAndRunTests(MODServer *server)
+static void removeTestDatabaseAndRunTests(MODClient *server)
 {
     [[server databaseForName:DATABASE_NAME_TEST] dropWithCallback:^(MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
@@ -501,7 +501,7 @@ int main (int argc, const char * argv[])
 {
     @autoreleasepool {
         const char *uri;
-        MODServer *server = nil;
+        MODClient *server = nil;
 
         testJson();
         testCompareDocument();
@@ -513,7 +513,7 @@ int main (int argc, const char * argv[])
             exit(1);
         }
         uri = argv[1];
-        server = [[MODServer alloc] initWithURICString:uri];
+        server = [[MODClient alloc] initWithURICString:uri];
         if (server == nil) {
             NSLog(@"Can't parse uri %s", uri);
             assert(false);

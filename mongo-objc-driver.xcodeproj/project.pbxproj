@@ -56,8 +56,8 @@
 		028CE605142E10BE0099B1F7 /* MODTimestamp.h in Headers */ = {isa = PBXBuildFile; fileRef = 028CE603142E10BE0099B1F7 /* MODTimestamp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		028CE606142E10BE0099B1F7 /* MODTimestamp.m in Sources */ = {isa = PBXBuildFile; fileRef = 028CE604142E10BE0099B1F7 /* MODTimestamp.m */; };
 		0299B61517F39FAA00FB40A2 /* MODRagelJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0299B61217F39FA200FB40A2 /* MODRagelJsonParser.m */; };
-		02A85F5114103EA6004F3FE9 /* MODServer.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F4F14103EA6004F3FE9 /* MODServer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		02A85F5214103EA6004F3FE9 /* MODServer.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5014103EA6004F3FE9 /* MODServer.m */; };
+		02A85F5114103EA6004F3FE9 /* MODClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F4F14103EA6004F3FE9 /* MODClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		02A85F5214103EA6004F3FE9 /* MODClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5014103EA6004F3FE9 /* MODClient.m */; };
 		02A85F5914104184004F3FE9 /* MODQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5714104184004F3FE9 /* MODQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02A85F5A14104184004F3FE9 /* MODQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5814104184004F3FE9 /* MODQuery.m */; };
 		02A85F5D14104373004F3FE9 /* MOD_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5B14104373004F3FE9 /* MOD_internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -69,7 +69,7 @@
 		02B24274147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */; };
 		02BDC3E7141D6073000EF755 /* MODCursor.h in Headers */ = {isa = PBXBuildFile; fileRef = 02BDC3E5141D6073000EF755 /* MODCursor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02BDC3E8141D6073000EF755 /* MODCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3E6141D6073000EF755 /* MODCursor.m */; };
-		02BDC3EC141D83A7000EF755 /* MODServer_utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3EB141D83A7000EF755 /* MODServer_utils.m */; };
+		02BDC3EC141D83A7000EF755 /* MODClient_utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3EB141D83A7000EF755 /* MODClient_utils.m */; };
 		02CCE7A0192A278800A9DB1B /* MODRagelJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 0299B61117F39FA200FB40A2 /* MODRagelJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02CF0E20191112CB008C822A /* bcon.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204505F190E5EB000A80BED /* bcon.c */; };
 		02CF0E21191112CB008C822A /* bson-atomic.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045061190E5EB000A80BED /* bson-atomic.c */; };
@@ -1361,8 +1361,8 @@
 		0299B61117F39FA200FB40A2 /* MODRagelJsonParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MODRagelJsonParser.h; sourceTree = "<group>"; };
 		0299B61217F39FA200FB40A2 /* MODRagelJsonParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MODRagelJsonParser.m; sourceTree = "<group>"; };
 		0299B61317F39FA200FB40A2 /* MODRagelJsonParser.rl */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; path = MODRagelJsonParser.rl; sourceTree = "<group>"; };
-		02A85F4F14103EA6004F3FE9 /* MODServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODServer.h; sourceTree = "<group>"; };
-		02A85F5014103EA6004F3FE9 /* MODServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODServer.m; sourceTree = "<group>"; };
+		02A85F4F14103EA6004F3FE9 /* MODClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODClient.h; sourceTree = "<group>"; };
+		02A85F5014103EA6004F3FE9 /* MODClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODClient.m; sourceTree = "<group>"; };
 		02A85F5714104184004F3FE9 /* MODQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODQuery.h; sourceTree = "<group>"; };
 		02A85F5814104184004F3FE9 /* MODQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODQuery.m; sourceTree = "<group>"; };
 		02A85F5B14104373004F3FE9 /* MOD_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOD_internal.h; sourceTree = "<group>"; };
@@ -1381,7 +1381,7 @@
 		02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODSortedMutableDictionary.m; sourceTree = "<group>"; };
 		02BDC3E5141D6073000EF755 /* MODCursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODCursor.h; sourceTree = "<group>"; };
 		02BDC3E6141D6073000EF755 /* MODCursor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODCursor.m; sourceTree = "<group>"; };
-		02BDC3EB141D83A7000EF755 /* MODServer_utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODServer_utils.m; sourceTree = "<group>"; };
+		02BDC3EB141D83A7000EF755 /* MODClient_utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODClient_utils.m; sourceTree = "<group>"; };
 		02CF0EA01911326B008C822A /* mongoc-stream-mac-tls.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mongoc-stream-mac-tls.c"; sourceTree = "<group>"; };
 		02CF0EA519191117008C822A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		02CF0EA919192608008C822A /* libsasl2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsasl2.dylib; path = usr/lib/libsasl2.dylib; sourceTree = SDKROOT; };
@@ -2837,9 +2837,9 @@
 				0299B61317F39FA200FB40A2 /* MODRagelJsonParser.rl */,
 				02A85F5B14104373004F3FE9 /* MOD_internal.h */,
 				02411AB41432B8F900A5FFCA /* MOD_public.h */,
-				02A85F4F14103EA6004F3FE9 /* MODServer.h */,
-				02A85F5014103EA6004F3FE9 /* MODServer.m */,
-				02BDC3EB141D83A7000EF755 /* MODServer_utils.m */,
+				02A85F4F14103EA6004F3FE9 /* MODClient.h */,
+				02A85F5014103EA6004F3FE9 /* MODClient.m */,
+				02BDC3EB141D83A7000EF755 /* MODClient_utils.m */,
 				02B17F33184FF2E500362A27 /* MODBsonComparator.h */,
 				02B17F34184FF2E500362A27 /* MODBsonComparator.m */,
 				024B0C051887DFBF00B8DCE6 /* MODDocumentComparator.h */,
@@ -2914,7 +2914,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02A85F5114103EA6004F3FE9 /* MODServer.h in Headers */,
+				02A85F5114103EA6004F3FE9 /* MODClient.h in Headers */,
 				02A85F5914104184004F3FE9 /* MODQuery.h in Headers */,
 				024B0C071887DFBF00B8DCE6 /* MODDocumentComparator.h in Headers */,
 				02B17F35184FF2E500362A27 /* MODBsonComparator.h in Headers */,
@@ -3165,7 +3165,7 @@
 			files = (
 				02CF0E22191112CB008C822A /* bson-clock.c in Sources */,
 				02CF0E8119111321008C822A /* mongoc-sasl.c in Sources */,
-				02A85F5214103EA6004F3FE9 /* MODServer.m in Sources */,
+				02A85F5214103EA6004F3FE9 /* MODClient.m in Sources */,
 				02CF0E7919111321008C822A /* mongoc-init.c in Sources */,
 				02688DDD14119CF50014ED51 /* MODDatabase.m in Sources */,
 				02CF0E7319111321008C822A /* mongoc-database.c in Sources */,
@@ -3187,7 +3187,7 @@
 				02CF0E7A19111321008C822A /* mongoc-list.c in Sources */,
 				02BDC3E8141D6073000EF755 /* MODCursor.m in Sources */,
 				02CF0E2E191112CB008C822A /* bson-value.c in Sources */,
-				02BDC3EC141D83A7000EF755 /* MODServer_utils.m in Sources */,
+				02BDC3EC141D83A7000EF755 /* MODClient_utils.m in Sources */,
 				02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */,
 				028CE606142E10BE0099B1F7 /* MODTimestamp.m in Sources */,
 				02CF87EA142F8AA3000C4C7F /* MODRegex.m in Sources */,

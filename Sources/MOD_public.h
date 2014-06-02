@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "MODServer.h"
+#import "MODClient.h"
 #import "MODDatabase.h"
 #import "MODCollection.h"
 #import "MODCursor.h"

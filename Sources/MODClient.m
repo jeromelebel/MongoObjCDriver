@@ -1,5 +1,5 @@
 //
-//  MODServer.m
+//  MODClient.m
 //  mongo-objc-driver
 //
 //  Created by Jérôme Lebel on 02/09/11.
@@ -10,21 +10,21 @@
 #import "bson.h"
 #import "mongoc.h"
 
-@interface MODServer ()
+@interface MODClient ()
 @property (nonatomic, readwrite, retain) NSOperationQueue *operationQueue;
 
 @end
 
-@implementation MODServer
+@implementation MODClient
 
 @synthesize connected = _connected, mongocClient = _mongocClient, operationQueue = _operationQueue;
 
-+ (MODServer *)clientWihtURLString:(NSString *)urlString
++ (MODClient *)clientWihtURLString:(NSString *)urlString
 {
-    MODServer *result;
+    MODClient *result;
     
     mongoc_init();
-    result = [[MODServer alloc] initWithURIString:urlString];
+    result = [[MODClient alloc] initWithURIString:urlString];
     return [result autorelease];
 }
 
@@ -83,7 +83,7 @@
 
 - (id)copy
 {
-    return [[MODServer alloc] initWithMongoURI:mongoc_client_get_uri(self.mongocClient)];
+    return [[MODClient alloc] initWithMongoURI:mongoc_client_get_uri(self.mongocClient)];
 }
 
 - (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block

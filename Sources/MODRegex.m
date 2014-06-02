@@ -43,15 +43,15 @@
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
 {
     if (!strictJSON) {
-        return [NSString stringWithFormat:@"/%@/%@", [MODServer escapeSlashesForString:_pattern], [MODServer escapeSlashesForString:_options]];
+        return [NSString stringWithFormat:@"/%@/%@", [MODClient escapeSlashesForString:_pattern], [MODClient escapeSlashesForString:_options]];
     } else if (pretty && _options && [_options length] > 0) {
-        return [NSString stringWithFormat:@"{ \"$regex\": \"%@\", \"$options\": \"%@\" }", [MODServer escapeQuotesForString:_pattern], [MODServer escapeQuotesForString:_options]];
+        return [NSString stringWithFormat:@"{ \"$regex\": \"%@\", \"$options\": \"%@\" }", [MODClient escapeQuotesForString:_pattern], [MODClient escapeQuotesForString:_options]];
     } else if (pretty) {
-        return [NSString stringWithFormat:@"{ \"$regex\": \"%@\" }", [MODServer escapeQuotesForString:_pattern]];
+        return [NSString stringWithFormat:@"{ \"$regex\": \"%@\" }", [MODClient escapeQuotesForString:_pattern]];
     } else if (_options && [_options length] > 0) {
-        return [NSString stringWithFormat:@"{\"$regex\":\"%@\",\"$options\":\"%@\"}", [MODServer escapeQuotesForString:_pattern], [MODServer escapeQuotesForString:_options]];
+        return [NSString stringWithFormat:@"{\"$regex\":\"%@\",\"$options\":\"%@\"}", [MODClient escapeQuotesForString:_pattern], [MODClient escapeQuotesForString:_options]];
     } else {
-        return [NSString stringWithFormat:@"{\"$regex\":\"%@\"}", [MODServer escapeQuotesForString:_pattern]];
+        return [NSString stringWithFormat:@"{\"$regex\":\"%@\"}", [MODClient escapeQuotesForString:_pattern]];
     }
 }
 

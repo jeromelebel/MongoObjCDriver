@@ -9,7 +9,7 @@
 #import "MOD_internal.h"
 
 @interface MODDatabase ()
-@property (nonatomic, readwrite, retain) MODServer *mongoServer;
+@property (nonatomic, readwrite, retain) MODClient *mongoServer;
 @property (nonatomic, readwrite, copy) NSString *name;
 
 @end
@@ -18,7 +18,7 @@
 
 @synthesize mongoServer = _mongoServer, name = _name, mongocDatabase = _mongocDatabase;
 
-- (id)initWithMongoServer:(MODServer *)mongoServer name:(NSString *)name
+- (id)initWithMongoServer:(MODClient *)mongoServer name:(NSString *)name
 {
     if (self = [self init]) {
         self.mongoServer = mongoServer;
@@ -149,7 +149,7 @@
 //    
 //    query = [self.mongoServer addQueryInQueue:^(MODQuery *mongoQuery){
 //        if (!self.mongoServer.isMaster) {
-//            mongoQuery.error = [MODServer errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Collection add forbidden on a slave"];
+//            mongoQuery.error = [MODClient errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Collection add forbidden on a slave"];
 //        } else if (!mongoQuery.canceled && [self.mongoServer authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
 //            mongo_cmd_create_capped_collection(self.mongoServer.mongo, [_databaseName UTF8String], [collectionName UTF8String], capSize);
 //        }

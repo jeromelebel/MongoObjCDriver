@@ -1,5 +1,5 @@
 //
-//  MODServer.h
+//  MODClient.h
 //  mongo-objc-driver
 //
 //  Created by Jérôme Lebel on 02/09/11.
@@ -15,12 +15,12 @@
 
 @class MODQuery;
 @class MODDatabase;
-@class MODServer;
+@class MODClient;
 @class MODSortedMutableDictionary;
 
 typedef struct mongo_replset            *mongo_replset_ptr;
 
-@interface MODServer : NSObject
+@interface MODClient : NSObject
 {
     mongo_replset_ptr                   _replicaSet;
     void                                *_mongocClient;
@@ -30,7 +30,7 @@ typedef struct mongo_replset            *mongo_replset_ptr;
 }
 @property (nonatomic, readonly, assign, getter = isConnected) BOOL connected;
 
-+ (MODServer *)clientWihtURLString:(NSString *)urlString;
++ (MODClient *)clientWihtURLString:(NSString *)urlString;
 + (uint16_t)defaultPort;
 
 // can return nil if the URI is invalid
@@ -46,7 +46,7 @@ typedef struct mongo_replset            *mongo_replset_ptr;
 
 @end
 
-@interface MODServer (utils)
+@interface MODClient (utils)
 + (NSString *)escapeQuotesForString:(NSString *)string;
 + (NSString *)escapeSlashesForString:(NSString *)string;
 + (NSString *)convertObjectToJson:(MODSortedMutableDictionary *)object pretty:(BOOL)pretty strictJson:(BOOL)strictJson;

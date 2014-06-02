@@ -1,5 +1,5 @@
 //
-//  MODServer.m
+//  MODClient.m
 //  mongo-objc-driver
 //
 //  Created by Jérôme Lebel on 02/09/11.
@@ -8,7 +8,7 @@
 
 #import "MOD_internal.h"
 
-@implementation MODServer(utils_internal)
+@implementation MODClient(utils_internal)
 
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails
 {
@@ -489,7 +489,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     }
     if (key) {
         [result appendString:@"\""];
-        [result appendString:[MODServer escapeQuotesForString:key]];
+        [result appendString:[MODClient escapeQuotesForString:key]];
         if (pretty) {
             [result appendString:@"\": "];
         } else {
@@ -498,7 +498,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     }
     if ([value isKindOfClass:[NSString class]]) {
         [result appendString:@"\""];
-        [result appendString:[MODServer escapeQuotesForString:value]];
+        [result appendString:[MODClient escapeQuotesForString:value]];
         [result appendString:@"\""];
     } else if ([value isKindOfClass:[NSDate class]]) {
         if (useStrictJSON && pretty) {
@@ -565,7 +565,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     }
 }
 
-@implementation MODServer(utils)
+@implementation MODClient(utils)
 
 + (NSString *)convertObjectToJson:(MODSortedMutableDictionary *)object pretty:(BOOL)pretty strictJson:(BOOL)strictJson
 {
@@ -678,11 +678,11 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     convertedDocument = [MODRagelJsonParser objectsFromJson:json withError:&error];
     NSAssert(error == nil, @"Error while parsing to objects %@, %@", json, error);
     if (![document isEqual:convertedDocument]) {
-        NSLog(@"%@", [MODServer findAllDifferencesInObject1:document object2:convertedDocument]);
-        NSLog(@"%@", [MODServer convertObjectToJson:convertedDocument pretty:YES strictJson:NO]);
+        NSLog(@"%@", [MODClient findAllDifferencesInObject1:document object2:convertedDocument]);
+        NSLog(@"%@", [MODClient convertObjectToJson:convertedDocument pretty:YES strictJson:NO]);
         NSLog(@"%@", json);
-        NSLog(@"%@", [MODServer convertObjectToJson:document pretty:YES strictJson:NO]);
-//        NSAssert([document isEqual:convertedDocument], @"Error to parse values with %@ document id %@", [MODServer findAllDifferencesInObject1:document object2:convertedDocument], [document objectForKey:@"_id"]);
+        NSLog(@"%@", [MODClient convertObjectToJson:document pretty:YES strictJson:NO]);
+//        NSAssert([document isEqual:convertedDocument], @"Error to parse values with %@ document id %@", [MODClient findAllDifferencesInObject1:document object2:convertedDocument], [document objectForKey:@"_id"]);
         result = NO;
     }
     return result;

@@ -29,7 +29,7 @@ enum MOD_INDEX_OPTIONS {
     void                                *_mongocCollection;
 }
 
-@property (nonatomic, retain, readonly) MODServer *mongoServer;
+@property (nonatomic, retain, readonly) MODClient *mongoServer;
 @property (nonatomic, retain, readonly) MODDatabase *mongoDatabase;
 @property (nonatomic, retain, readonly) NSString *name;
 @property (nonatomic, retain, readonly) NSString *absoluteName;

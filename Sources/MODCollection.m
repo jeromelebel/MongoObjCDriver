@@ -564,7 +564,7 @@
     return self.mongoDatabase.mongocClient;
 }
 
-- (MODServer *)mongoServer
+- (MODClient *)mongoServer
 {
     return self.mongoDatabase.mongoServer;
 }

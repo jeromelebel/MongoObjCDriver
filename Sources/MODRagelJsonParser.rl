@@ -36,7 +36,7 @@
         object = [MODSortedMutableDictionary sortedDictionaryWithObject:object forKey:@"array"];
     }
     if (object && !*error && [object isKindOfClass:MODSortedMutableDictionary.class]) {
-        [MODServer appendObject:object toBson:bsonResult];
+        [MODClient appendObject:object toBson:bsonResult];
     }
 }
 
