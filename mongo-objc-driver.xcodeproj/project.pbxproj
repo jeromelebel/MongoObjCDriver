@@ -143,7 +143,6 @@
 		02CF87E9142F8AA3000C4C7F /* MODRegex.h in Headers */ = {isa = PBXBuildFile; fileRef = 02CF87E7142F8AA3000C4C7F /* MODRegex.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02CF87EA142F8AA3000C4C7F /* MODRegex.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CF87E8142F8AA3000C4C7F /* MODRegex.m */; };
 		02D3D2F91926631300925BE7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F121C21410EF5200197811 /* main.m */; };
-		02D3D2FA1926631D00925BE7 /* mongo-objc-driver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */; };
 		02D3D3031926661000925BE7 /* mongoc-array-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044ED8190E5E4E00A80BED /* mongoc-array-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02D3D3041926661000925BE7 /* mongoc-buffer-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EDA190E5E4E00A80BED /* mongoc-buffer-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02D3D3051926661100925BE7 /* mongoc-bulk-operation-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044EDC190E5E4E00A80BED /* mongoc-bulk-operation-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -1415,7 +1414,6 @@
 				02CF0EAB191926E4008C822A /* libsasl2.dylib in Frameworks */,
 				02CF0EA71919115D008C822A /* Security.framework in Frameworks */,
 				02F121C01410EF5200197811 /* Foundation.framework in Frameworks */,
-				02D3D2FA1926631D00925BE7 /* mongo-objc-driver.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3388,6 +3386,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
 			};
@@ -3400,6 +3399,7 @@
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
 			};
