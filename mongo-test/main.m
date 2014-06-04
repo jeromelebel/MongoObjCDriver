@@ -292,7 +292,7 @@ static void runDatabaseTests(MODClient *server)
     [mongoDatabase statsWithCallback:^(MODSortedMutableDictionary *stats, MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
-    [server fetchDatabaseListWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
+    [server databaseNamesWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
         assert([list indexOfObject:DATABASE_NAME_TEST] != NSNotFound);
     }];
     [mongoDatabase createCollectionWithName:COLLECTION_NAME_TEST callback:^(MODQuery *mongoQuery) {
@@ -372,7 +372,7 @@ static void runDatabaseTests(MODClient *server)
         logMongoQuery(mongoQuery);
     }];
     
-    [server fetchDatabaseListWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
+    [server databaseNamesWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
         assert([list indexOfObject:DATABASE_NAME_TEST] == NSNotFound);
         NSLog(@"Everything is cool");
         exit(0);
@@ -521,7 +521,7 @@ int main (int argc, const char * argv[])
         [server serverStatusWithCallback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
         }];
-        [server fetchDatabaseListWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
+        [server databaseNamesWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
             if ([list indexOfObject:DATABASE_NAME_TEST] != NSNotFound) {
                 removeTestDatabaseAndRunTests(server);
