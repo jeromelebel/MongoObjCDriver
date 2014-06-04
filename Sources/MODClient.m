@@ -142,6 +142,7 @@
         
         if (!mongoQuery.canceled) {
             mongoc_client_get_server_status(self.mongocClient, NULL, &output, &error);
+            outputObjects = [self.class objectFromBson:&output];
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             callback(outputObjects, mongoQuery);
