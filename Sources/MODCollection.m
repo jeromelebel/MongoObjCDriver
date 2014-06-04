@@ -60,15 +60,12 @@
         
         if (!mongoQuery.canceled) {
             bson_t output = BSON_INITIALIZER;
-            bson_t cmd = BSON_INITIALIZER;
             
-            BSON_APPEND_INT32 (&cmd, "collstats", 1);
-            if (mongoc_client_command_simple(self.mongocClient, self.absoluteName.UTF8String, &cmd, NULL, &output, &error)) {
+            if (mongoc_collection_stats(self.mongocCollection, NULL, &output, &error)) {
                 stats = [[self.client class] objectFromBson:&output];
                 [mongoQuery.mutableParameters setObject:stats forKey:@"collectionstats"];
             }
             bson_destroy(&output);
-            bson_destroy(&cmd);
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             if (callback) {
