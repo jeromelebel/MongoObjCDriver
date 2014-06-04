@@ -289,7 +289,7 @@ static void runDatabaseTests(MODClient *server)
     MODCursor *cursor;
 
     mongoDatabase = [server databaseForName:DATABASE_NAME_TEST];
-    [mongoDatabase fetchDatabaseStatsWithCallback:^(MODSortedMutableDictionary *stats, MODQuery *mongoQuery) {
+    [mongoDatabase statsWithCallback:^(MODSortedMutableDictionary *stats, MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
     [server fetchDatabaseListWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
@@ -518,7 +518,7 @@ int main (int argc, const char * argv[])
             NSLog(@"Can't parse uri %s", uri);
             assert(false);
         }
-        [server fetchServerStatusWithCallback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {
+        [server serverStatusWithCallback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
         }];
         [server fetchDatabaseListWithCallback:^(NSArray *list, MODQuery *mongoQuery) {

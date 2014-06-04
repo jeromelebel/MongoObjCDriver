@@ -131,7 +131,7 @@
     [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
 }
 
-- (MODQuery *)fetchServerStatusWithCallback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback
+- (MODQuery *)serverStatusWithCallback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback
 {
     MODQuery *query;
     

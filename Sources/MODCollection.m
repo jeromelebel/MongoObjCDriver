@@ -50,7 +50,7 @@
     [self.database mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
 }
 
-- (MODQuery *)fetchCollectionStatsWithCallback:(void (^)(MODSortedMutableDictionary *stats, MODQuery *mongoQuery))callback
+- (MODQuery *)statsWithCallback:(void (^)(MODSortedMutableDictionary *stats, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
