@@ -20,7 +20,7 @@
     uint32_t                            _limit;
     uint32_t                            _batchSize;
     NSString                            *_sort;
-    NSError                             *_error;
+    NSError                             *_internalError;
 
     void                                *_mongocCursor;
     BOOL                                _tailable;
