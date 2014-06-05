@@ -56,6 +56,7 @@
 		028CE605142E10BE0099B1F7 /* MODTimestamp.h in Headers */ = {isa = PBXBuildFile; fileRef = 028CE603142E10BE0099B1F7 /* MODTimestamp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		028CE606142E10BE0099B1F7 /* MODTimestamp.m in Sources */ = {isa = PBXBuildFile; fileRef = 028CE604142E10BE0099B1F7 /* MODTimestamp.m */; };
 		0299B61517F39FAA00FB40A2 /* MODRagelJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0299B61217F39FA200FB40A2 /* MODRagelJsonParser.m */; };
+		029CAA661940C2A300FD44B4 /* mongo-objc-driver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */; };
 		02A85F5114103EA6004F3FE9 /* MODClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F4F14103EA6004F3FE9 /* MODClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02A85F5214103EA6004F3FE9 /* MODClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5014103EA6004F3FE9 /* MODClient.m */; };
 		02A85F5914104184004F3FE9 /* MODQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5714104184004F3FE9 /* MODQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1411,6 +1412,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				029CAA661940C2A300FD44B4 /* mongo-objc-driver.framework in Frameworks */,
 				02CF0EAB191926E4008C822A /* libsasl2.dylib in Frameworks */,
 				02CF0EA71919115D008C822A /* Security.framework in Frameworks */,
 				02F121C01410EF5200197811 /* Foundation.framework in Frameworks */,
