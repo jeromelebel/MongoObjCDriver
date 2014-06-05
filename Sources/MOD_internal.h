@@ -56,7 +56,7 @@ enum {
 @end
 
 @interface MODCursor ()
-- (id)initWithMongoCollection:(MODCollection *)mongoCollection query:(NSString *)query fields:(NSArray *)fields skip:(uint32_t)skip limit:(uint32_t)limit sort:(NSString *)sort;
+- (id)initWithMongoCollection:(MODCollection *)mongoCollection query:(MODSortedMutableDictionary *)query fields:(NSArray *)fields skip:(uint32_t)skip limit:(uint32_t)limit sort:(MODSortedMutableDictionary *)sort;
 - (MODSortedMutableDictionary *)nextDocumentWithBsonData:(NSData **)bsonData error:(NSError **)error;
 - (BOOL)more;
 - (NSError *)error;

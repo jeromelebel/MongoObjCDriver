@@ -11,12 +11,12 @@
 @interface MODCursor ()
 
 @property (nonatomic, readwrite, retain) MODCollection *mongoCollection;
-@property (nonatomic, readwrite, retain) NSString *query;
+@property (nonatomic, readwrite, retain) MODSortedMutableDictionary *query;
 @property (nonatomic, readwrite, retain) NSArray *fields;
 @property (nonatomic, readwrite, assign) uint32_t skip;
 @property (nonatomic, readwrite, assign) uint32_t limit;
 @property (nonatomic, readwrite, assign) uint32_t batchSize;
-@property (nonatomic, readwrite, retain) NSString * sort;
+@property (nonatomic, readwrite, retain) MODSortedMutableDictionary * sort;
 @property (nonatomic, readwrite, assign) mongoc_cursor_t *mongocCursor;
 @property (nonatomic, readwrite, strong) NSError *internalError;
 
@@ -36,7 +36,7 @@
     return self;
 }
 
-- (id)initWithMongoCollection:(MODCollection *)mongoCollection query:(NSString *)query fields:(NSArray *)fields skip:(uint32_t)skip limit:(uint32_t)limit sort:(NSString *)sort
+- (id)initWithMongoCollection:(MODCollection *)mongoCollection query:(MODSortedMutableDictionary *)query fields:(NSArray *)fields skip:(uint32_t)skip limit:(uint32_t)limit sort:(MODSortedMutableDictionary *)sort
 {
     if (self = [self initWithMongoCollection:mongoCollection]) {
         self.query = query;
@@ -71,14 +71,12 @@
     bson_t bsonFields = BSON_INITIALIZER;
     NSAssert(self.mongocCursor == NULL, @"cursor already created");
     
-    if (self.query && self.query.length > 0) {
-        NSError *error;
+    if (self.query && self.query.count > 0) {
         bson_t bsonQueryChild;
         
         bson_append_document_begin(&bsonQuery, "$query", -1, &bsonQueryChild);
-        [MODRagelJsonParser bsonFromJson:&bsonQueryChild json:self.query error:&error];
+        [MODClient appendObject:self.query toBson:&bsonQueryChild];
         bson_append_document_end(&bsonQuery, &bsonQueryChild);
-        self.internalError = error;
     } else {
         bson_t bsonQueryChild;
         
@@ -86,14 +84,12 @@
         bson_append_document_end(&bsonQuery, &bsonQueryChild);
     }
     if (self.internalError == nil) {
-        if (self.sort && self.sort.length > 0) {
-            NSError *error;
+        if (self.sort && self.sort.count > 0) {
             bson_t bsonQueryChild;
             
             bson_append_document_begin(&bsonQuery, "$orderby", -1, &bsonQueryChild);
-            [MODRagelJsonParser bsonFromJson:&bsonQueryChild json:_sort error:&error];
+            [MODClient appendObject:self.sort toBson:&bsonQueryChild];
             bson_append_document_end(&bsonQuery, &bsonQueryChild);
-            self.internalError = error;
         }
     }
     if (self.internalError == nil && self.fields.count > 0) {

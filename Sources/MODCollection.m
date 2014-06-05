@@ -77,7 +77,7 @@
     return query;
 }
 
-- (MODQuery *)findWithCriteria:(NSString *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort callback:(void (^)(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery))callback
+- (MODQuery *)findWithCriteria:(MODSortedMutableDictionary *)criteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(MODSortedMutableDictionary *)sort callback:(void (^)(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -93,7 +93,7 @@
             
             documents = [[NSMutableArray alloc] initWithCapacity:limit];
             allBsonData = [[NSMutableArray alloc] initWithCapacity:limit];
-            cursor = [self cursorWithCriteria:jsonCriteria fields:fields skip:skip limit:limit sort:sort];
+            cursor = [self cursorWithCriteria:criteria fields:fields skip:skip limit:limit sort:sort];
             while ((document = [cursor nextDocumentWithBsonData:&bsonData error:&error]) != nil) {
                 [documents addObject:document];
                 [allBsonData addObject:bsonData];
@@ -109,8 +109,8 @@
             }
         }];
     }];
-    if (jsonCriteria) {
-        [query.mutableParameters setObject:jsonCriteria forKey:@"criteria"];
+    if (criteria) {
+        [query.mutableParameters setObject:criteria forKey:@"criteria"];
     }
     if (fields) {
         [query.mutableParameters setObject:fields forKey:@"fields"];
@@ -124,12 +124,12 @@
     return query;
 }
 
-- (MODCursor *)cursorWithCriteria:(NSString *)query fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(NSString *)sort
+- (MODCursor *)cursorWithCriteria:(MODSortedMutableDictionary *)query fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(MODSortedMutableDictionary *)sort
 {
     return [[[MODCursor alloc] initWithMongoCollection:self query:query fields:fields skip:skip limit:limit sort:sort] autorelease];
 }
 
-- (MODQuery *)countWithCriteria:(NSString *)jsonCriteria callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback
+- (MODQuery *)countWithCriteria:(MODSortedMutableDictionary *)criteria callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -138,12 +138,10 @@
         NSError *error = nil;
         
         if (!mongoQuery.canceled) {
-            bson_t *bsonQuery = NULL;
+            bson_t bsonQuery = BSON_INITIALIZER;
             
-            bsonQuery = bson_new();
-            bson_init(bsonQuery);
-            if (jsonCriteria && [jsonCriteria length] > 0) {
-                [MODRagelJsonParser bsonFromJson:bsonQuery json:jsonCriteria error:&error];
+            if (criteria && criteria.count > 0) {
+                [MODClient appendObject:criteria toBson:&bsonQuery];
             }
             
             if (error) {
@@ -152,7 +150,7 @@
                 NSNumber *response;
                 bson_error_t bsonError;
                 
-                count = mongoc_collection_count(self.mongocCollection, 0, bsonQuery, 0, 0, NULL, &bsonError);
+                count = mongoc_collection_count(self.mongocCollection, 0, &bsonQuery, 0, 0, NULL, &bsonError);
                 if (count == -1) {
                     error = [self.client.class errorFromBsonError:bsonError];
                 } else {
@@ -161,7 +159,7 @@
                     [response release];
                 }
             }
-            bson_destroy(bsonQuery);
+            bson_destroy(&bsonQuery);
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             if (callback) {
@@ -170,8 +168,8 @@
         }];
     }];
     [query.mutableParameters setObject:@"countdocuments" forKey:@"command"];
-    if (jsonCriteria) {
-        [query.mutableParameters setObject:jsonCriteria forKey:@"criteria"];
+    if (criteria) {
+        [query.mutableParameters setObject:criteria forKey:@"criteria"];
     }
     return query;
 }
@@ -222,7 +220,7 @@
                 }
             }
             if (!error) {
-                bson_error_t bsonError;
+                bson_error_t bsonError = BSON_NO_ERROR;
                 
                 mongoc_bulk_operation_execute(bulk, NULL, &bsonError);
                 error = [self.client.class errorFromBsonError:bsonError];
@@ -252,13 +250,11 @@
             bson_t bsonCriteria = BSON_INITIALIZER;
             bson_t bsonUpdate = BSON_INITIALIZER;
             
-            bson_init(&bsonCriteria);
             if (jsonCriteria && [jsonCriteria length] > 0) {
                 [MODRagelJsonParser bsonFromJson:&bsonCriteria json:jsonCriteria error:&error];
             } else {
                 error = [self.client.class errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
             }
-            bson_init(&bsonUpdate);
             if (error == nil && update && [update length] > 0) {
                 [MODRagelJsonParser bsonFromJson:&bsonUpdate json:update error:&error];
             } else if (error == nil && (!update || [update length] > 0)) {
@@ -301,7 +297,6 @@
         if (!mongoQuery.canceled) {
             bson_t bsonDocument = BSON_INITIALIZER;
             
-            bson_init(&bsonDocument);
             [MODRagelJsonParser bsonFromJson:&bsonDocument json:document error:&error];
             if (error == nil) {
                 bson_error_t bsonError = BSON_NO_ERROR;
@@ -334,7 +329,6 @@
         if (!mongoQuery.canceled) {
             bson_t bsonCriteria = BSON_INITIALIZER;
             
-            bson_init(&bsonCriteria);
             if (criteria && [criteria isKindOfClass:[NSString class]]) {
                 if ([criteria length] > 0) {
                     [MODRagelJsonParser bsonFromJson:&bsonCriteria json:criteria error:&error];
@@ -370,11 +364,14 @@
 - (MODQuery *)indexListWithCallback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
+    MODSortedMutableDictionary *dictionary;
     
-    query = [self findWithCriteria:[NSString stringWithFormat:@"{ns: \"%@\"", self.absoluteName] fields:nil skip:0 limit:0 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+    dictionary = [[MODSortedMutableDictionary alloc] initWithObjectsAndKeys:self.absoluteName, @"ns", nil];
+    query = [self findWithCriteria:dictionary fields:nil skip:0 limit:0 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         callback(documents, mongoQuery);
     }];
     [query.mutableParameters setObject:@"indexlist" forKey:@"command"];
+    [dictionary release];
     return query;
 }
 
