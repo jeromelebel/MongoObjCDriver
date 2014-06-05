@@ -239,7 +239,7 @@
     return query;
 }
 
-- (MODQuery *)updateWithCriteria:(NSString *)jsonCriteria update:(NSString *)update upsert:(BOOL)upsert multiUpdate:(BOOL)multiUpdate callback:(void (^)(MODQuery *mongoQuery))callback
+- (MODQuery *)updateWithCriteria:(MODSortedMutableDictionary *)criteria update:(MODSortedMutableDictionary *)update upsert:(BOOL)upsert multiUpdate:(BOOL)multiUpdate callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -250,15 +250,11 @@
             bson_t bsonCriteria = BSON_INITIALIZER;
             bson_t bsonUpdate = BSON_INITIALIZER;
             
-            if (jsonCriteria && [jsonCriteria length] > 0) {
-                [MODRagelJsonParser bsonFromJson:&bsonCriteria json:jsonCriteria error:&error];
-            } else {
-                error = [self.client.class errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
+            if (criteria && criteria.count > 0) {
+                [MODClient appendObject:criteria toBson:&bsonCriteria];
             }
-            if (error == nil && update && [update length] > 0) {
-                [MODRagelJsonParser bsonFromJson:&bsonUpdate json:update error:&error];
-            } else if (error == nil && (!update || [update length] > 0)) {
-                error = [self.client.class errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
+            if (update && update.count > 0) {
+                [MODClient appendObject:update toBson:&bsonUpdate];
             }
             if (error == nil) {
                 bson_error_t bsonError = BSON_NO_ERROR;
@@ -278,16 +274,14 @@
         }];
     }];
     [query.mutableParameters setObject:@"updatedocuments" forKey:@"command"];
-    if (jsonCriteria) {
-        [query.mutableParameters setObject:jsonCriteria forKey:@"criteria"];
-    }
-    [query.mutableParameters setObject:update forKey:@"update"];
+    if (criteria) [query.mutableParameters setObject:criteria forKey:@"criteria"];
+    if (update) [query.mutableParameters setObject:update forKey:@"update"];
     [query.mutableParameters setObject:[NSNumber numberWithBool:upsert] forKey:@"upsert"];
     [query.mutableParameters setObject:[NSNumber numberWithBool:multiUpdate] forKey:@"multiUpdate"];
     return query;
 }
 
-- (MODQuery *)saveWithDocument:(NSString *)document callback:(void (^)(MODQuery *mongoQuery))callback
+- (MODQuery *)saveWithDocument:(MODSortedMutableDictionary *)document callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -296,16 +290,11 @@
         
         if (!mongoQuery.canceled) {
             bson_t bsonDocument = BSON_INITIALIZER;
+            bson_error_t bsonError = BSON_NO_ERROR;
             
-            [MODRagelJsonParser bsonFromJson:&bsonDocument json:document error:&error];
-            if (error == nil) {
-                bson_error_t bsonError = BSON_NO_ERROR;
-                
-                if (!mongoc_collection_save(self.mongocCollection, &bsonDocument, NULL, &bsonError)) {
-                    error = [self.client.class errorFromBsonError:bsonError];
-                    mongoQuery.error = error;
-                }
-            } else {
+            [MODClient appendObject:document toBson:&bsonDocument];
+            if (!mongoc_collection_save(self.mongocCollection, &bsonDocument, NULL, &bsonError)) {
+                error = [self.client.class errorFromBsonError:bsonError];
                 mongoQuery.error = error;
             }
             bson_destroy(&bsonDocument);
