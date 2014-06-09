@@ -420,7 +420,7 @@
     return query;
 }
 
-- (MODQuery *)dropIndex:(id)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback
+- (MODQuery *)dropIndexName:(NSString *)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -428,20 +428,10 @@
         NSError *error = nil;
 
         if (!mongoQuery.canceled) {
-            bson_t index = BSON_INITIALIZER;
+            bson_error_t bsonError = BSON_NO_ERROR;
             
-            if ([indexDocument isKindOfClass:[NSString class]]) {
-                [MODRagelJsonParser bsonFromJson:&index json:indexDocument error:&error];
-            } else {
-                [[self.client class] appendObject:indexDocument toBson:&index];
-            }
-            if (error == nil) {
-                bson_error_t bsonError = BSON_NO_ERROR;
-                
-                mongoc_collection_drop_index(self.mongocCollection, self.absoluteName.UTF8String, &bsonError);
-                error = [self.client.class errorFromBsonError:bsonError];
-            }
-            bson_destroy(&index);
+            mongoc_collection_drop_index(self.mongocCollection, indexDocument.UTF8String, &bsonError);
+            error = [self.client.class errorFromBsonError:bsonError];
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             callback(mongoQuery);
