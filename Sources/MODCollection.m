@@ -442,26 +442,6 @@
     return query;
 }
 
-- (MODQuery *)reIndexWithCallback:(void (^)(MODQuery *mongoQuery))callback
-{
-    MODQuery *query = nil;
-    
-//    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
-//        NSError *error = nil;
-//        
-//        if (!mongoQuery.canceled) {
-//            mongo_reindex(self.mongocClient, self.absoluteName.UTF8String);
-//            mongoc_collection_ensure_index(self.mongocCollection, <#const bson_t *keys#>, <#const mongoc_index_opt_t *opt#>, <#bson_error_t *error#>)
-//            mongoc_collection_create_index(<#mongoc_collection_t *collection#>, <#const bson_t *keys#>, <#const mongoc_index_opt_t *opt#>, <#bson_error_t *error#>)
-//        }
-//        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
-//            callback(mongoQuery);
-//        }];
-//    }];
-//    [query.mutableParameters setObject:@"reindex" forKey:@"command"];
-    return query;
-}
-
 - (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction reduceFunction:(NSString *)reduceFunction query:(id)mapReduceQuery sort:(id)sort limit:(int64_t)limit output:(id)output keepTemp:(BOOL)keepTemp finalizeFunction:(NSString *)finalizeFunction scope:(id)scope jsmode:(BOOL)jsmode verbose:(BOOL)verbose callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
