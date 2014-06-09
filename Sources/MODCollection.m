@@ -356,7 +356,7 @@
     MODSortedMutableDictionary *dictionary;
     
     dictionary = [[MODSortedMutableDictionary alloc] initWithObjectsAndKeys:self.absoluteName, @"ns", nil];
-    query = [self findWithCriteria:dictionary fields:nil skip:0 limit:0 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+    query = [self.database.systemIndexesCollection findWithCriteria:dictionary fields:nil skip:0 limit:0 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         callback(documents, mongoQuery);
     }];
     [query.mutableParameters setObject:@"indexlist" forKey:@"command"];

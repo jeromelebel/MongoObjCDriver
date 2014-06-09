@@ -9,7 +9,7 @@
 #import "MOD_internal.h"
 
 @interface MODDatabase ()
-@property (nonatomic, readwrite, retain) MODClient *client;
+@property (nonatomic, readwrite, strong) MODClient *client;
 @property (nonatomic, readwrite, copy) NSString *name;
 
 @end
@@ -36,6 +36,7 @@
         mongoc_database_destroy(self.mongocDatabase);
         self.mongocDatabase = nil;
     }
+    [_systemIndexesCollection release];
     [super dealloc];
 }
 
@@ -188,6 +189,14 @@
 - (mongoc_client_t *)mongocClient
 {
     return self.client.mongocClient;
+}
+
+- (MODCollection *)systemIndexesCollection
+{
+    if (!_systemIndexesCollection) {
+        _systemIndexesCollection = [[self collectionForName:@"system.indexes"] retain];
+    }
+    return _systemIndexesCollection;
 }
 
 @end
