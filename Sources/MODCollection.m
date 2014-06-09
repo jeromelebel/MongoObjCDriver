@@ -13,6 +13,8 @@
 @property (nonatomic, readwrite, retain) NSString *name;
 @property (nonatomic, readwrite, retain) NSString *absoluteName;
 
+- (bool)_commandSimpleWithCommand:(MODSortedMutableDictionary *)command reply:(MODSortedMutableDictionary **)reply error:(NSError **)error;
+
 @end
 
 @implementation MODCollection
@@ -141,7 +143,7 @@
             bson_t bsonQuery = BSON_INITIALIZER;
             
             if (criteria && criteria.count > 0) {
-                [MODClient appendObject:criteria toBson:&bsonQuery];
+                [self.client.class appendObject:criteria toBson:&bsonQuery];
             }
             
             if (error) {
@@ -251,10 +253,10 @@
             bson_t bsonUpdate = BSON_INITIALIZER;
             
             if (criteria && criteria.count > 0) {
-                [MODClient appendObject:criteria toBson:&bsonCriteria];
+                [self.client.class appendObject:criteria toBson:&bsonCriteria];
             }
             if (update && update.count > 0) {
-                [MODClient appendObject:update toBson:&bsonUpdate];
+                [self.client.class appendObject:update toBson:&bsonUpdate];
             }
             if (error == nil) {
                 bson_error_t bsonError = BSON_NO_ERROR;
@@ -292,7 +294,7 @@
             bson_t bsonDocument = BSON_INITIALIZER;
             bson_error_t bsonError = BSON_NO_ERROR;
             
-            [MODClient appendObject:document toBson:&bsonDocument];
+            [self.client.class appendObject:document toBson:&bsonDocument];
             if (!mongoc_collection_save(self.mongocCollection, &bsonDocument, NULL, &bsonError)) {
                 error = [self.client.class errorFromBsonError:bsonError];
                 mongoQuery.error = error;
@@ -442,54 +444,99 @@
     return query;
 }
 
-- (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction reduceFunction:(NSString *)reduceFunction query:(id)mapReduceQuery sort:(id)sort limit:(int64_t)limit output:(id)output keepTemp:(BOOL)keepTemp finalizeFunction:(NSString *)finalizeFunction scope:(id)scope jsmode:(BOOL)jsmode verbose:(BOOL)verbose callback:(void (^)(MODQuery *mongoQuery))callback
+- (MODQuery *)aggregateWithFlags:(int)flags pipeline:(MODSortedMutableDictionary *)pipeline options:(MODSortedMutableDictionary *)options callback:(void (^)(MODQuery *mongoQuery, MODCursor *cursor))callback
 {
     MODQuery *query = nil;
     
-//    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
-//        NSError *error = nil;
-//        
-//        if (!mongoQuery.canceled) {
-//            bson_t bsonQuery = BSON_INITIALIZER;
-//            bson_t bsonSort = BSON_INITIALIZER;
-//            bson_t bsonOutput = BSON_INITIALIZER;
-//            bson_t bsonScope = BSON_INITIALIZER;
-//            bson_t bsonResult = BSON_INITIALIZER;
-//            NSError *error = nil;
-//            
-//            if (mapReduceQuery && [mapReduceQuery length] > 0) {
-//                [MODRagelJsonParser bsonFromJson:&bsonQuery json:mapReduceQuery error:&error];
-//            }
-//            if (!error) {
-//                if (sort) {
-//                    [MODRagelJsonParser bsonFromJson:&bsonSort json:sort error:&error];
-//                }
-//            }
-//            if (!error) {
-//                if (output) {
-//                    [MODRagelJsonParser bsonFromJson:&bsonOutput json:output error:&error];
-//                }
-//            }
-//            if (!error) {
-//                if (scope) {
-//                    [MODRagelJsonParser bsonFromJson:&bsonScope json:scope error:&error];
-//                }
-//            }
-//            if (!error) {
-//                mongoc_collection_re
-//                mongo_map_reduce(self.mongocClient, self.absoluteName.UTF8String, mapFunction.UTF8String, reduceFunction.UTF8String, &bsonQuery, &bsonSort, limit, &bsonOutput, keepTemp?1:0, finalizeFunction.UTF8String, &bsonScope, jsmode?1:0, verbose?1:0, &bsonResult);
-//                NSLog(@"%@", [self.client.class objectFromBson:&bsonResult]);
-//            } else {
-//                mongoQuery.error = error;
-//            }
-//            bson_destroy(&bsonResult);
-//        }
-//        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
-//            callback(mongoQuery);
-//        }];
-//    }];
-//    [query.mutableParameters setObject:@"reindex" forKey:@"command"];
-    return query;
+    NSAssert(NO, @"not yet implemented. Need to convert mongoc cursor into a MODCursor");
+    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
+        MODCursor *cursor = nil;
+        bson_error_t bsonError = BSON_NO_ERROR;
+
+        if (!mongoQuery.canceled) {
+            bson_t bsonPipeline = BSON_INITIALIZER;
+            bson_t bsonOptions = BSON_INITIALIZER;
+            mongoc_cursor_t *mongocCursor = nil;
+            
+            [self.client.class appendObject:pipeline toBson:&bsonPipeline];
+            [self.client.class appendObject:options toBson:&bsonOptions];
+            mongocCursor = mongoc_collection_aggregate(self.mongocCollection, flags, &bsonPipeline, &bsonOptions, NULL);
+        }
+        [self mongoQueryDidFinish:mongoQuery withBsonError:bsonError callbackBlock:^(void) {
+            callback(mongoQuery, cursor);
+        }];
+    }];
+    [query.mutableParameters setObject:@"aggregate" forKey:@"command"];
+    return nil;
+}
+
+- (bool)_commandSimpleWithCommand:(MODSortedMutableDictionary *)command reply:(MODSortedMutableDictionary **)reply error:(NSError **)error
+{
+    bson_t bsonCommand = BSON_INITIALIZER;
+    bson_t bsonReply = BSON_INITIALIZER;
+    bson_error_t bsonError = BSON_NO_ERROR;
+    bool result;
+    
+    [self.client.class appendObject:command toBson:&bsonCommand];
+    result = mongoc_collection_command_simple(self.mongocCollection, &bsonCommand, NULL, &bsonReply, &bsonError);
+    if (reply) *reply = [self.client.class objectFromBson:&bsonReply];
+    if (error) *error = [self.client.class errorFromBsonError:bsonError];
+    return result;
+}
+
+- (MODQuery *)commandSimpleWithCommand:(MODSortedMutableDictionary *)command callback:(void (^)(MODQuery *query, MODSortedMutableDictionary *reply))callback
+{
+    MODQuery *mongoQuery = nil;
+    
+    mongoQuery = [self.client addQueryInQueue:^(MODQuery *currentMongoQuery) {
+        MODSortedMutableDictionary *reply = nil;
+        NSError *error = nil;
+        
+        if (!currentMongoQuery.canceled) {
+            [self _commandSimpleWithCommand:command reply:&reply error:&error];
+        }
+        [self mongoQueryDidFinish:currentMongoQuery withError:error callbackBlock:^(void) {
+            callback(currentMongoQuery, reply);
+        }];
+    }];
+    [mongoQuery.mutableParameters setObject:@"commandsimple" forKey:@"command"];
+    return mongoQuery;
+}
+
+- (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction reduceFunction:(NSString *)reduceFunction query:(MODSortedMutableDictionary *)query sort:(MODSortedMutableDictionary *)sort limit:(int64_t)limit output:(MODSortedMutableDictionary *)output keepTemp:(BOOL)keepTemp finalizeFunction:(NSString *)finalizeFunction scope:(MODSortedMutableDictionary *)scope jsmode:(BOOL)jsmode verbose:(BOOL)verbose callback:(void (^)(MODQuery *mongoQuery, MODSortedMutableDictionary *documents))callback
+{
+    MODQuery *mongoQuery = nil;
+    
+    mongoQuery = [self.client addQueryInQueue:^(MODQuery *currentMongoQuery) {
+        NSError *error = nil;
+        MODSortedMutableDictionary *reply = nil;
+        
+        if (!currentMongoQuery.canceled) {
+            MODSortedMutableDictionary *command;
+            
+            command = [[MODSortedMutableDictionary alloc] init];
+            [command setObject:self.name forKey:@"mapreduce"];
+            [command setObject:mapFunction forKey:@"map"];
+            [command setObject:reduceFunction forKey:@"reduce"];
+            if (query && query.count > 0) [command setObject:query forKey:@"query"];
+            if (sort && sort.count > 0) [command setObject:sort forKey:@"sort"];
+            if (limit > 0) [command setObject:[NSNumber numberWithLongLong:limit] forKey:@"limit"];
+            if (output && output.count > 0) [command setObject:output forKey:@"out"];
+            if (finalizeFunction && finalizeFunction.length > 0) [command setObject:finalizeFunction forKey:@"finalize"];
+            if (scope && scope.count > 0) [command setObject:scope forKey:@"scope"];
+
+            [command setObject:[NSNumber numberWithBool:keepTemp] forKey:@"keeptemp"];
+            [command setObject:[NSNumber numberWithBool:jsmode] forKey:@"jsmode"];
+            [command setObject:[NSNumber numberWithBool:verbose] forKey:@"verbose"];
+
+            [self _commandSimpleWithCommand:command reply:&reply error:&error];
+        }
+        [self mongoQueryDidFinish:currentMongoQuery withError:error callbackBlock:^(void) {
+            callback(currentMongoQuery, reply);
+        }];
+    }];
+    [mongoQuery.mutableParameters setObject:@"mapreduce" forKey:@"command"];
+    return mongoQuery;
 }
 
 - (MODQuery *)dropWithCallback:(void (^)(MODQuery *mongoQuery))callback
