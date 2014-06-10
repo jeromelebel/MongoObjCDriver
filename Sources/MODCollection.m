@@ -58,7 +58,7 @@
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         MODSortedMutableDictionary *stats = nil;
-        bson_error_t error;
+        bson_error_t error = BSON_NO_ERROR;
         
         if (!mongoQuery.canceled) {
             bson_t output = BSON_INITIALIZER;
