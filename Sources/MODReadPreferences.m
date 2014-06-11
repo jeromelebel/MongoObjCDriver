@@ -20,23 +20,22 @@
     [super dealloc];
 }
 
-- (NSInteger)readMode
+- (MODReadPreferencesReadMode)readMode
 {
     if (!self.mongocReadPreferences) {
-        return 0;
+        return MODReadPreferencesReadPrimaryMode;
     } else {
-        return mongoc_read_prefs_get_mode(self.mongocReadPreferences);
+        return (MODReadPreferencesReadMode)mongoc_read_prefs_get_mode(self.mongocReadPreferences);
     }
 }
 
-- (void)setReadMode:(NSInteger)readMode
+- (void)setReadMode:(MODReadPreferencesReadMode)readMode
 {
     if (self.mongocReadPreferences) {
         mongoc_read_prefs_set_mode(self.mongocReadPreferences, (mongoc_read_mode_t)readMode);
     } else {
         self.mongocReadPreferences = mongoc_read_prefs_new((mongoc_read_mode_t)readMode);
     }
-    
 }
 
 - (MODSortedMutableDictionary *)tags
