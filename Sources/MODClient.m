@@ -192,12 +192,25 @@
 
 - (MODDatabase *)databaseForName:(NSString *)databaseName
 {
-    return [[[MODDatabase alloc] initWithClient:self name:databaseName] autorelease];
+    MODDatabase *result;
+    
+    result = [[[MODDatabase alloc] initWithClient:self name:databaseName] autorelease];
+    result.readPreferences = self.readPreferences;
+    return result;
 }
 
 - (mongoc_read_prefs_t *)mongocReadPreferences
 {
     return self.readPreferences.mongocReadPreferences;
+}
+
+- (void)setReadPreferences:(MODReadPreferences *)readPreferences
+{
+    [_readPreferences release];
+    _readPreferences = [readPreferences retain];
+    if (self.mongocClient) {
+        mongoc_client_set_read_prefs(self.mongocClient, self.mongocReadPreferences);
+    }
 }
 
 @end

@@ -12,6 +12,15 @@
 
 @synthesize mongocReadPreferences = _mongocReadPreferences;
 
++ (MODReadPreferences *)readPreferencesWithReadMode:(MODReadPreferencesReadMode)readMode
+{
+    MODReadPreferences *readPreferences;
+    
+    readPreferences = [[self alloc] init];
+    readPreferences.readMode = readMode;
+    return readPreferences;
+}
+
 - (void)dealloc
 {
     if (self.mongocReadPreferences) {

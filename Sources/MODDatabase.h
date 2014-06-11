@@ -20,10 +20,12 @@
     NSString                            *_name;
     void                                *_mongocDatabase;
     MODCollection                       *_systemIndexesCollection;
+    MODReadPreferences                  *_readPreferences;
 }
 @property (nonatomic, readonly, strong) MODClient *client;
 @property (nonatomic, readonly, copy) NSString *name;
 @property (nonatomic, readonly, strong) MODCollection *systemIndexesCollection;
+@property (nonatomic, readwrite, retain) MODReadPreferences *readPreferences;
 
 - (MODQuery *)statsWithCallback:(void (^)(MODSortedMutableDictionary *databaseStats, MODQuery *mongoQuery))callback;
 - (MODQuery *)fetchCollectionListWithCallback:(void (^)(NSArray *collectionList, MODQuery *mongoQuery))callback;

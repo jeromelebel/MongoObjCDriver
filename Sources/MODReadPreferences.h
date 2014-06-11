@@ -26,4 +26,6 @@ typedef enum
 @property (nonatomic, readwrite, assign) MODReadPreferencesReadMode readMode;
 @property (nonatomic, readwrite, assign) MODSortedMutableDictionary *tags;
 
++ (MODReadPreferences *)readPreferencesWithReadMode:(MODReadPreferencesReadMode)readMode;
+
 @end

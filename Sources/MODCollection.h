@@ -27,12 +27,14 @@ enum MOD_INDEX_OPTIONS {
     NSString                            *_absoluteName;
     NSString                            *_name;
     void                                *_mongocCollection;
+    MODReadPreferences                  *_readPreferences;
 }
 
 @property (nonatomic, retain, readonly) MODClient *client;
 @property (nonatomic, retain, readonly) MODDatabase *database;
 @property (nonatomic, retain, readonly) NSString *name;
 @property (nonatomic, retain, readonly) NSString *absoluteName;
+@property (nonatomic, readwrite, retain) MODReadPreferences *readPreferences;
 
 - (MODQuery *)commandSimpleWithCommand:(MODSortedMutableDictionary *)command callback:(void (^)(MODQuery *query, MODSortedMutableDictionary *reply))callback;
 - (MODQuery *)statsWithCallback:(void (^)(MODSortedMutableDictionary *stats, MODQuery *mongoQuery))callback;

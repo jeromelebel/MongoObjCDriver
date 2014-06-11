@@ -16,7 +16,7 @@
 
 @implementation MODDatabase
 
-@synthesize client = _client, name = _name, mongocDatabase = _mongocDatabase;
+@synthesize client = _client, name = _name, mongocDatabase = _mongocDatabase, readPreferences = _readPreferences;
 
 - (id)initWithClient:(MODClient *)client name:(NSString *)name
 {
@@ -24,7 +24,6 @@
         self.client = client;
         self.name = name;
         self.mongocDatabase = mongoc_client_get_database(client.mongocClient, self.name.UTF8String);
-        
     }
     return self;
 }
@@ -120,7 +119,11 @@
 
 - (MODCollection *)collectionForName:(NSString *)name
 {
-    return [[[MODCollection alloc] initWithName:name database:self] autorelease];
+    MODCollection *result;
+    
+    result = [[[MODCollection alloc] initWithName:name database:self] autorelease];
+    result.readPreferences = self.readPreferences;
+    return result;
 }
 
 - (MODQuery *)createCollectionWithName:(NSString *)collectionName callback:(void (^)(MODQuery *mongoQuery))callback
@@ -201,7 +204,17 @@
 
 - (mongoc_read_prefs_t *)mongocReadPreferences
 {
-    return self.client.mongocReadPreferences;
+    return self.readPreferences.mongocReadPreferences;
+}
+
+- (void)setReadPreferences:(MODReadPreferences *)readPreferences
+{
+    [_readPreferences release];
+    _readPreferences = [readPreferences retain];
+    if (self.mongocDatabase) {
+        mongoc_database_set_read_prefs(self.mongocDatabase, self.mongocReadPreferences);
+    }
+    
 }
 
 @end

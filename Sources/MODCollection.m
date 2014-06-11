@@ -19,7 +19,7 @@
 
 @implementation MODCollection
 
-@synthesize database = _database, name = _name, absoluteName = _absoluteName, mongocCollection = _mongocCollection;
+@synthesize database = _database, name = _name, absoluteName = _absoluteName, mongocCollection = _mongocCollection, readPreferences = _readPreferences;
 
 - (id)initWithName:(NSString *)name database:(MODDatabase *)database
 {
@@ -576,7 +576,17 @@
 
 - (mongoc_read_prefs_t *)mongocReadPreferences
 {
-    return self.database.mongocReadPreferences;
+    return self.readPreferences.mongocReadPreferences;
+}
+
+- (void)setReadPreferences:(MODReadPreferences *)readPreferences
+{
+    [_readPreferences release];
+    _readPreferences = [readPreferences retain];
+    if (self.mongocCollection) {
+        mongoc_collection_set_read_prefs(self.mongocCollection, self.mongocReadPreferences);
+    }
+    
 }
 
 @end
