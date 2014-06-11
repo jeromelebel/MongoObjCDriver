@@ -23,9 +23,10 @@ typedef enum
 {
     void                                *_mongocReadPreferences;
 }
-@property (nonatomic, readonly, assign) MODReadPreferencesReadMode readMode;
-@property (nonatomic, readonly, assign) MODSortedMutableDictionary *tags;
+@property (nonatomic, readwrite, assign) MODReadPreferencesReadMode readMode;
+@property (nonatomic, readwrite, assign) MODSortedMutableDictionary *tags;
 
 + (MODReadPreferences *)readPreferencesWithReadMode:(MODReadPreferencesReadMode)readMode;
++ (MODReadPreferences *)readPreferencesWithReadMode:(MODReadPreferencesReadMode)readMode tags:(MODSortedMutableDictionary *)tags;
 
 @end

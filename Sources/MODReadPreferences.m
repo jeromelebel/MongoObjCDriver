@@ -8,22 +8,22 @@
 
 #import "MOD_internal.h"
 
-@interface MODReadPreferences ()
-@property (nonatomic, readwrite, assign) MODReadPreferencesReadMode readMode;
-@property (nonatomic, readwrite, assign) MODSortedMutableDictionary *tags;
-
-@end
-
 @implementation MODReadPreferences
 
 @synthesize mongocReadPreferences = _mongocReadPreferences;
 
 + (MODReadPreferences *)readPreferencesWithReadMode:(MODReadPreferencesReadMode)readMode
 {
+    return [self readPreferencesWithReadMode:readMode tags:nil];
+}
+
++ (MODReadPreferences *)readPreferencesWithReadMode:(MODReadPreferencesReadMode)readMode tags:(MODSortedMutableDictionary *)tags
+{
     MODReadPreferences *readPreferences;
     
     readPreferences = [[self alloc] init];
     readPreferences.readMode = readMode;
+    readPreferences.tags = tags;
     return readPreferences;
 }
 
@@ -67,14 +67,18 @@
 
 - (void)setTags:(MODSortedMutableDictionary *)tags
 {
-    bson_t bsonTags = BSON_INITIALIZER;
-    
     if (!self.mongocReadPreferences) {
         self.mongocReadPreferences = mongoc_read_prefs_new(MONGOC_READ_PRIMARY);
     }
-    
-    mongoc_read_prefs_set_tags(self.mongocReadPreferences, &bsonTags);
-    bson_destroy(&bsonTags);
+    if (!tags) {
+        mongoc_read_prefs_set_tags(self.mongocReadPreferences, NULL);
+    } else {
+        bson_t bsonTags = BSON_INITIALIZER;
+        
+        [MODClient appendObject:tags toBson:&bsonTags];
+        mongoc_read_prefs_set_tags(self.mongocReadPreferences, &bsonTags);
+        bson_destroy(&bsonTags);
+    }
 }
 
 @end
