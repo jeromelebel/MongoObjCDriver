@@ -8,6 +8,12 @@
 
 #import "MOD_internal.h"
 
+@interface MODReadPreferences ()
+@property (nonatomic, readwrite, assign) MODReadPreferencesReadMode readMode;
+@property (nonatomic, readwrite, assign) MODSortedMutableDictionary *tags;
+
+@end
+
 @implementation MODReadPreferences
 
 @synthesize mongocReadPreferences = _mongocReadPreferences;
