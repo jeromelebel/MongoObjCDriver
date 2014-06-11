@@ -19,6 +19,7 @@ enum {
 @interface MODClient ()
 @property (nonatomic, readwrite, assign, getter=isConnected) BOOL connected;
 @property (nonatomic, readwrite, assign) mongoc_client_t *mongocClient;
+@property (nonatomic, readonly, assign) mongoc_read_prefs_t *mongocReadPreferences;
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock;
@@ -38,6 +39,7 @@ enum {
 @interface MODDatabase ()
 @property (nonatomic, readonly, assign) mongoc_client_t *mongocClient;
 @property (nonatomic, readwrite, assign) mongoc_database_t *mongocDatabase;
+@property (nonatomic, readonly, assign) mongoc_read_prefs_t *mongocReadPreferences;
 
 - (id)initWithClient:(MODClient *)client name:(NSString *)databaseName;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
@@ -48,6 +50,7 @@ enum {
 @interface MODCollection ()
 @property (nonatomic, readonly, assign) mongoc_client_t *mongocClient;
 @property (nonatomic, readwrite, assign) mongoc_collection_t *mongocCollection;
+@property (nonatomic, readonly, assign) mongoc_read_prefs_t *mongocReadPreferences;
 
 - (id)initWithName:(NSString *)name database:(MODDatabase *)database;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
@@ -72,6 +75,11 @@ enum {
 - (void)starts;
 - (void)ends;
 - (void)removeBlockOperation;
+
+@end
+
+@interface MODReadPreferences ()
+@property (nonatomic, readwrite, assign) mongoc_read_prefs_t *mongocReadPreferences;
 
 @end
 

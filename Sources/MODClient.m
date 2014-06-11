@@ -17,7 +17,7 @@
 
 @implementation MODClient
 
-@synthesize connected = _connected, mongocClient = _mongocClient, operationQueue = _operationQueue;
+@synthesize connected = _connected, mongocClient = _mongocClient, operationQueue = _operationQueue, readPreferences = _readPreferences;
 
 + (MODClient *)clientWihtURLString:(NSString *)urlString
 {
@@ -77,6 +77,7 @@
         mongoc_client_destroy(self.mongocClient);
         self.mongocClient = NULL;
     }
+    self.readPreferences = nil;
     self.operationQueue = nil;
     [super dealloc];
 }
@@ -141,7 +142,7 @@
         MODSortedMutableDictionary *outputObjects = nil;
         
         if (!mongoQuery.canceled) {
-            mongoc_client_get_server_status(self.mongocClient, NULL, &output, &error);
+            mongoc_client_get_server_status(self.mongocClient, self.mongocReadPreferences, &output, &error);
             outputObjects = [self.class objectFromBson:&output];
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
@@ -192,6 +193,11 @@
 - (MODDatabase *)databaseForName:(NSString *)databaseName
 {
     return [[[MODDatabase alloc] initWithClient:self name:databaseName] autorelease];
+}
+
+- (mongoc_read_prefs_t *)mongocReadPreferences
+{
+    return self.readPreferences.mongocReadPreferences;
 }
 
 @end

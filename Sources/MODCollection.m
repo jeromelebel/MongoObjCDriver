@@ -152,7 +152,7 @@
                 NSNumber *response;
                 bson_error_t bsonError;
                 
-                count = mongoc_collection_count(self.mongocCollection, 0, &bsonQuery, 0, 0, NULL, &bsonError);
+                count = mongoc_collection_count(self.mongocCollection, 0, &bsonQuery, 0, 0, self.mongocReadPreferences, &bsonError);
                 if (count == -1) {
                     error = [self.client.class errorFromBsonError:bsonError];
                 } else {
@@ -460,7 +460,7 @@
             
             [self.client.class appendObject:pipeline toBson:&bsonPipeline];
             [self.client.class appendObject:options toBson:&bsonOptions];
-            mongocCursor = mongoc_collection_aggregate(self.mongocCollection, flags, &bsonPipeline, &bsonOptions, NULL);
+            mongocCursor = mongoc_collection_aggregate(self.mongocCollection, flags, &bsonPipeline, &bsonOptions, self.mongocReadPreferences);
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:bsonError callbackBlock:^(void) {
             callback(mongoQuery, cursor);
@@ -478,7 +478,7 @@
     bool result;
     
     [self.client.class appendObject:command toBson:&bsonCommand];
-    result = mongoc_collection_command_simple(self.mongocCollection, &bsonCommand, NULL, &bsonReply, &bsonError);
+    result = mongoc_collection_command_simple(self.mongocCollection, &bsonCommand, self.mongocReadPreferences, &bsonReply, &bsonError);
     if (reply) *reply = [self.client.class objectFromBson:&bsonReply];
     if (error) *error = [self.client.class errorFromBsonError:bsonError];
     return result;
@@ -572,6 +572,11 @@
 - (NSString *)databaseName
 {
     return self.database.name;
+}
+
+- (mongoc_read_prefs_t *)mongocReadPreferences
+{
+    return self.database.mongocReadPreferences;
 }
 
 @end

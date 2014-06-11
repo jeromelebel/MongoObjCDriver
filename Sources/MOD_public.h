@@ -11,6 +11,8 @@
 #import "MODCollection.h"
 #import "MODCursor.h"
 #import "MODQuery.h"
+#import "MODReadPreferences.h"
+
 #import "MODTimestamp.h"
 #import "MODObjectId.h"
 #import "MODRegex.h"

@@ -64,6 +64,8 @@
 		02A85F5D14104373004F3FE9 /* MOD_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5B14104373004F3FE9 /* MOD_internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02AB057614296F9000B7CD19 /* MODObjectId.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB057414296F9000B7CD19 /* MODObjectId.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
+		02AB33AC194870D6008C06B9 /* MODReadPreferences.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB33AA194870D6008C06B9 /* MODReadPreferences.h */; };
+		02AB33AD194870D6008C06B9 /* MODReadPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB33AB194870D6008C06B9 /* MODReadPreferences.m */; };
 		02B17F35184FF2E500362A27 /* MODBsonComparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B17F33184FF2E500362A27 /* MODBsonComparator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02B17F36184FF2E500362A27 /* MODBsonComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B17F34184FF2E500362A27 /* MODBsonComparator.m */; };
 		02B24273147D1BD6008A15A3 /* MODSortedMutableDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B24271147D1BD6008A15A3 /* MODSortedMutableDictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1368,6 +1370,8 @@
 		02A85F5B14104373004F3FE9 /* MOD_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOD_internal.h; sourceTree = "<group>"; };
 		02AB057414296F9000B7CD19 /* MODObjectId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODObjectId.h; sourceTree = "<group>"; };
 		02AB057514296F9000B7CD19 /* MODObjectId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODObjectId.m; sourceTree = "<group>"; };
+		02AB33AA194870D6008C06B9 /* MODReadPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODReadPreferences.h; sourceTree = "<group>"; };
+		02AB33AB194870D6008C06B9 /* MODReadPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODReadPreferences.m; sourceTree = "<group>"; };
 		02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "mongo-objc-driver.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02ABA1C314103B37000417F4 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		02ABA1C614103B37000417F4 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -2852,6 +2856,8 @@
 				02BDC3E6141D6073000EF755 /* MODCursor.m */,
 				02A85F5714104184004F3FE9 /* MODQuery.h */,
 				02A85F5814104184004F3FE9 /* MODQuery.m */,
+				02AB33AA194870D6008C06B9 /* MODReadPreferences.h */,
+				02AB33AB194870D6008C06B9 /* MODReadPreferences.m */,
 				02AB057414296F9000B7CD19 /* MODObjectId.h */,
 				02AB057514296F9000B7CD19 /* MODObjectId.m */,
 				028CE603142E10BE0099B1F7 /* MODTimestamp.h */,
@@ -2975,6 +2981,7 @@
 				02D3D3271926661200925BE7 /* mongoc-matcher-private.h in Headers */,
 				02D3D3281926661200925BE7 /* mongoc-matcher.h in Headers */,
 				02D3D3291926661200925BE7 /* mongoc-opcode.h in Headers */,
+				02AB33AC194870D6008C06B9 /* MODReadPreferences.h in Headers */,
 				02D3D32A1926661200925BE7 /* mongoc-queue-private.h in Headers */,
 				02D3D32B1926661200925BE7 /* mongoc-read-prefs-private.h in Headers */,
 				02D3D32C1926661200925BE7 /* mongoc-read-prefs.h in Headers */,
@@ -3172,6 +3179,7 @@
 				02CF0EA21911326B008C822A /* mongoc-stream-mac-tls.c in Sources */,
 				02CF0E7D19111321008C822A /* mongoc-matcher.c in Sources */,
 				02CF0E8419111321008C822A /* mongoc-stream-buffered.c in Sources */,
+				02AB33AD194870D6008C06B9 /* MODReadPreferences.m in Sources */,
 				02CF0E7C19111321008C822A /* mongoc-matcher-op.c in Sources */,
 				0299B61517F39FAA00FB40A2 /* MODRagelJsonParser.m in Sources */,
 				02CF0E2F191112CB008C822A /* bson-writer.c in Sources */,

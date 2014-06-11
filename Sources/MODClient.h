@@ -17,6 +17,7 @@
 @class MODDatabase;
 @class MODClient;
 @class MODSortedMutableDictionary;
+@class MODReadPreferences;
 
 typedef struct mongo_replset            *mongo_replset_ptr;
 
@@ -24,11 +25,13 @@ typedef struct mongo_replset            *mongo_replset_ptr;
 {
     mongo_replset_ptr                   _replicaSet;
     void                                *_mongocClient;
+    MODReadPreferences                  *_readPreferences;
     
     BOOL                                _connected;
     NSOperationQueue                    *_operationQueue;
 }
 @property (nonatomic, readonly, assign, getter = isConnected) BOOL connected;
+@property (nonatomic, readwrite, retain) MODReadPreferences *readPreferences;
 
 + (MODClient *)clientWihtURLString:(NSString *)urlString;
 + (uint16_t)defaultPort;
