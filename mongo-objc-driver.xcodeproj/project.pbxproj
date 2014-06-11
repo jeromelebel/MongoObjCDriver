@@ -64,7 +64,7 @@
 		02A85F5D14104373004F3FE9 /* MOD_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5B14104373004F3FE9 /* MOD_internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02AB057614296F9000B7CD19 /* MODObjectId.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB057414296F9000B7CD19 /* MODObjectId.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
-		02AB33AC194870D6008C06B9 /* MODReadPreferences.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB33AA194870D6008C06B9 /* MODReadPreferences.h */; };
+		02AB33AC194870D6008C06B9 /* MODReadPreferences.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB33AA194870D6008C06B9 /* MODReadPreferences.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02AB33AD194870D6008C06B9 /* MODReadPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB33AB194870D6008C06B9 /* MODReadPreferences.m */; };
 		02B17F35184FF2E500362A27 /* MODBsonComparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B17F33184FF2E500362A27 /* MODBsonComparator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02B17F36184FF2E500362A27 /* MODBsonComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B17F34184FF2E500362A27 /* MODBsonComparator.m */; };
@@ -2941,6 +2941,7 @@
 				027A1DA51767E91F0048AD60 /* MODMinKey.h in Headers */,
 				027A1DA81767E91F0048AD60 /* MODUndefined.h in Headers */,
 				02CCE7A0192A278800A9DB1B /* MODRagelJsonParser.h in Headers */,
+				02AB33AC194870D6008C06B9 /* MODReadPreferences.h in Headers */,
 				02A85F5D14104373004F3FE9 /* MOD_internal.h in Headers */,
 				02D3D3031926661000925BE7 /* mongoc-array-private.h in Headers */,
 				02D3D3041926661000925BE7 /* mongoc-buffer-private.h in Headers */,
@@ -2981,7 +2982,6 @@
 				02D3D3271926661200925BE7 /* mongoc-matcher-private.h in Headers */,
 				02D3D3281926661200925BE7 /* mongoc-matcher.h in Headers */,
 				02D3D3291926661200925BE7 /* mongoc-opcode.h in Headers */,
-				02AB33AC194870D6008C06B9 /* MODReadPreferences.h in Headers */,
 				02D3D32A1926661200925BE7 /* mongoc-queue-private.h in Headers */,
 				02D3D32B1926661200925BE7 /* mongoc-read-prefs-private.h in Headers */,
 				02D3D32C1926661200925BE7 /* mongoc-read-prefs.h in Headers */,
