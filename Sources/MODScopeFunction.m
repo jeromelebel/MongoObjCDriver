@@ -34,13 +34,13 @@
     
     scopeString = [MODClient convertObjectToJson:self.scope pretty:pretty strictJson:strictJSON];
     if (!strictJSON && pretty) {
-        return [NSString stringWithFormat:@"ScopeFunction(\"%@\", %@)", [MODClient escapeSlashesForString:self.function], scopeString];
+        return [NSString stringWithFormat:@"ScopeFunction(\"%@\", %@)", [MODClient escapeQuotesForString:self.function], scopeString];
     } else if (!strictJSON && !pretty) {
-        return [NSString stringWithFormat:@"ScopeFunction(\"%@\",%@)", [MODClient escapeSlashesForString:self.function], scopeString];
+        return [NSString stringWithFormat:@"ScopeFunction(\"%@\",%@)", [MODClient escapeQuotesForString:self.function], scopeString];
     } else if (pretty) {
-        return [NSString stringWithFormat:@"{ \"$scope\" : %@, \"$function\" : \"%@\" }", scopeString, [MODClient escapeSlashesForString:self.function]];
+        return [NSString stringWithFormat:@"{ \"$scope\" : %@, \"$function\" : \"%@\" }", scopeString, [MODClient escapeQuotesForString:self.function]];
     } else {
-        return [NSString stringWithFormat:@"{\"$scope\":%@,\"$function\":\"%@\"}", scopeString, [MODClient escapeSlashesForString:self.function]];
+        return [NSString stringWithFormat:@"{\"$scope\":%@,\"$function\":\"%@\"}", scopeString, [MODClient escapeQuotesForString:self.function]];
     }
 }
 

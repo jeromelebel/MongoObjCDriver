@@ -29,11 +29,11 @@
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
 {
     if (!strictJSON) {
-        return [NSString stringWithFormat:@"Function(\"%@\")", [MODClient escapeSlashesForString:self.function]];
+        return [NSString stringWithFormat:@"Function(\"%@\")", [MODClient escapeQuotesForString:self.function]];
     } else if (pretty) {
-        return [NSString stringWithFormat:@"{ \"$function\" : \"%@\" }", [MODClient escapeSlashesForString:self.function]];
+        return [NSString stringWithFormat:@"{ \"$function\" : \"%@\" }", [MODClient escapeQuotesForString:self.function]];
     } else {
-        return [NSString stringWithFormat:@"{\"$function\":\"%@\"}", [MODClient escapeSlashesForString:self.function]];
+        return [NSString stringWithFormat:@"{\"$function\":\"%@\"}", [MODClient escapeQuotesForString:self.function]];
     }
 }
 
