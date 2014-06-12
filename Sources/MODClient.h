@@ -42,7 +42,7 @@ typedef struct mongo_replset            *mongo_replset_ptr;
 
 - (id)copy;
 
-- (MODQuery *)serverStatusWithCallback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback;
+- (MODQuery *)serverStatusWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback;
 - (MODQuery *)databaseNamesWithCallback:(void (^)(NSArray *list, MODQuery *mongoQuery))callback;
 
 - (MODDatabase *)databaseForName:(NSString *)databaseName;

@@ -13,7 +13,7 @@
 @property (nonatomic, readwrite, retain) NSString *name;
 @property (nonatomic, readwrite, retain) NSString *absoluteName;
 
-- (bool)_commandSimpleWithCommand:(MODSortedMutableDictionary *)command reply:(MODSortedMutableDictionary **)reply error:(NSError **)error;
+- (bool)_commandSimpleWithCommand:(MODSortedMutableDictionary *)command readPreferences:(MODReadPreferences *)readPreferences reply:(MODSortedMutableDictionary **)reply error:(NSError **)error;
 
 @end
 
@@ -131,7 +131,7 @@
     return [[[MODCursor alloc] initWithMongoCollection:self query:query fields:fields skip:skip limit:limit sort:sort] autorelease];
 }
 
-- (MODQuery *)countWithCriteria:(MODSortedMutableDictionary *)criteria callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback
+- (MODQuery *)countWithCriteria:(MODSortedMutableDictionary *)criteria readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -152,7 +152,7 @@
                 NSNumber *response;
                 bson_error_t bsonError;
                 
-                count = mongoc_collection_count(self.mongocCollection, 0, &bsonQuery, 0, 0, self.mongocReadPreferences, &bsonError);
+                count = mongoc_collection_count(self.mongocCollection, 0, &bsonQuery, 0, 0, readPreferences?readPreferences.mongocReadPreferences:NULL, &bsonError);
                 if (count == -1) {
                     error = [self.client.class errorFromBsonError:bsonError];
                 } else {
@@ -444,7 +444,7 @@
     return query;
 }
 
-- (MODQuery *)aggregateWithFlags:(int)flags pipeline:(MODSortedMutableDictionary *)pipeline options:(MODSortedMutableDictionary *)options callback:(void (^)(MODQuery *mongoQuery, MODCursor *cursor))callback
+- (MODQuery *)aggregateWithFlags:(int)flags pipeline:(MODSortedMutableDictionary *)pipeline options:(MODSortedMutableDictionary *)options readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODQuery *mongoQuery, MODCursor *cursor))callback
 {
     MODQuery *query = nil;
     
@@ -460,7 +460,7 @@
             
             [self.client.class appendObject:pipeline toBson:&bsonPipeline];
             [self.client.class appendObject:options toBson:&bsonOptions];
-            mongocCursor = mongoc_collection_aggregate(self.mongocCollection, flags, &bsonPipeline, &bsonOptions, self.mongocReadPreferences);
+            mongocCursor = mongoc_collection_aggregate(self.mongocCollection, flags, &bsonPipeline, &bsonOptions, readPreferences?readPreferences.mongocReadPreferences:NULL);
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:bsonError callbackBlock:^(void) {
             callback(mongoQuery, cursor);
@@ -470,7 +470,7 @@
     return nil;
 }
 
-- (bool)_commandSimpleWithCommand:(MODSortedMutableDictionary *)command reply:(MODSortedMutableDictionary **)reply error:(NSError **)error
+- (bool)_commandSimpleWithCommand:(MODSortedMutableDictionary *)command readPreferences:(MODReadPreferences *)readPreferences reply:(MODSortedMutableDictionary **)reply error:(NSError **)error
 {
     bson_t bsonCommand = BSON_INITIALIZER;
     bson_t bsonReply = BSON_INITIALIZER;
@@ -478,13 +478,13 @@
     bool result;
     
     [self.client.class appendObject:command toBson:&bsonCommand];
-    result = mongoc_collection_command_simple(self.mongocCollection, &bsonCommand, self.mongocReadPreferences, &bsonReply, &bsonError);
+    result = mongoc_collection_command_simple(self.mongocCollection, &bsonCommand, readPreferences?readPreferences.mongocReadPreferences:NULL, &bsonReply, &bsonError);
     if (reply) *reply = [self.client.class objectFromBson:&bsonReply];
     if (error) *error = [self.client.class errorFromBsonError:bsonError];
     return result;
 }
 
-- (MODQuery *)commandSimpleWithCommand:(MODSortedMutableDictionary *)command callback:(void (^)(MODQuery *query, MODSortedMutableDictionary *reply))callback
+- (MODQuery *)commandSimpleWithCommand:(MODSortedMutableDictionary *)command readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODQuery *query, MODSortedMutableDictionary *reply))callback
 {
     MODQuery *mongoQuery = nil;
     
@@ -493,7 +493,7 @@
         NSError *error = nil;
         
         if (!currentMongoQuery.canceled) {
-            [self _commandSimpleWithCommand:command reply:&reply error:&error];
+            [self _commandSimpleWithCommand:command readPreferences:readPreferences reply:&reply error:&error];
         }
         [self mongoQueryDidFinish:currentMongoQuery withError:error callbackBlock:^(void) {
             callback(currentMongoQuery, reply);
@@ -503,7 +503,7 @@
     return mongoQuery;
 }
 
-- (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction reduceFunction:(NSString *)reduceFunction query:(MODSortedMutableDictionary *)query sort:(MODSortedMutableDictionary *)sort limit:(int64_t)limit output:(MODSortedMutableDictionary *)output keepTemp:(BOOL)keepTemp finalizeFunction:(NSString *)finalizeFunction scope:(MODSortedMutableDictionary *)scope jsmode:(BOOL)jsmode verbose:(BOOL)verbose callback:(void (^)(MODQuery *mongoQuery, MODSortedMutableDictionary *documents))callback
+- (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction reduceFunction:(NSString *)reduceFunction query:(MODSortedMutableDictionary *)query sort:(MODSortedMutableDictionary *)sort limit:(int64_t)limit output:(MODSortedMutableDictionary *)output keepTemp:(BOOL)keepTemp finalizeFunction:(NSString *)finalizeFunction scope:(MODSortedMutableDictionary *)scope jsmode:(BOOL)jsmode verbose:(BOOL)verbose readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODQuery *mongoQuery, MODSortedMutableDictionary *documents))callback
 {
     MODQuery *mongoQuery = nil;
     
@@ -529,7 +529,7 @@
             [command setObject:[NSNumber numberWithBool:jsmode] forKey:@"jsmode"];
             [command setObject:[NSNumber numberWithBool:verbose] forKey:@"verbose"];
 
-            [self _commandSimpleWithCommand:command reply:&reply error:&error];
+            [self _commandSimpleWithCommand:command readPreferences:readPreferences reply:&reply error:&error];
         }
         [self mongoQueryDidFinish:currentMongoQuery withError:error callbackBlock:^(void) {
             callback(currentMongoQuery, reply);

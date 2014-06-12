@@ -132,7 +132,7 @@
     [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
 }
 
-- (MODQuery *)serverStatusWithCallback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback
+- (MODQuery *)serverStatusWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback
 {
     MODQuery *query;
     
@@ -142,7 +142,7 @@
         MODSortedMutableDictionary *outputObjects = nil;
         
         if (!mongoQuery.canceled) {
-            mongoc_client_get_server_status(self.mongocClient, self.mongocReadPreferences, &output, &error);
+            mongoc_client_get_server_status(self.mongocClient, readPreferences?readPreferences.mongocReadPreferences:NULL, &output, &error);
             outputObjects = [self.class objectFromBson:&output];
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {

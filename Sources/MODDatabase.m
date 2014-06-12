@@ -51,7 +51,7 @@
     [self.client mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
 }
 
-- (MODQuery *)statsWithCallback:(void (^)(MODSortedMutableDictionary *databaseStats, MODQuery *mongoQuery))callback;
+- (MODQuery *)statsWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedMutableDictionary *databaseStats, MODQuery *mongoQuery))callback;
 {
     MODQuery *query;
     
@@ -65,7 +65,7 @@
             
             bson_init (&cmd);
             BSON_APPEND_INT32(&cmd, "dbstats", 1);
-            if (mongoc_database_command_simple(self.mongocDatabase, &cmd, self.mongocReadPreferences, &output, &error)) {
+            if (mongoc_database_command_simple(self.mongocDatabase, &cmd, readPreferences?readPreferences.mongocReadPreferences:NULL, &output, &error)) {
                 stats = [[self.client class] objectFromBson:&output];
                 [mongoQuery.mutableParameters setObject:stats forKey:@"databasestats"];
             }
