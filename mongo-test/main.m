@@ -299,7 +299,7 @@ static void runDatabaseTests(MODClient *server)
     MODCursor *cursor;
 
     mongoDatabase = [server databaseForName:DATABASE_NAME_TEST];
-    [mongoDatabase statsWithCallback:^(MODSortedMutableDictionary *stats, MODQuery *mongoQuery) {
+    [mongoDatabase statsWithReadPreferences:nil callback:^(MODSortedMutableDictionary *stats, MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
     [server databaseNamesWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
@@ -316,11 +316,11 @@ static void runDatabaseTests(MODClient *server)
     [mongoCollection findWithCriteria:obj(@"{}") fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:obj(@"{ \"_id\": 1 }") callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
-    [mongoCollection countWithCriteria:obj(@"{ \"_id\": \"xxx\" }") callback:^(int64_t count, MODQuery *mongoQuery) {
+    [mongoCollection countWithCriteria:obj(@"{ \"_id\": \"xxx\" }") readPreferences:nil callback:^(int64_t count, MODQuery *mongoQuery) {
         assert(count == 0);
         logMongoQuery(mongoQuery);
     }];
-    [mongoCollection countWithCriteria:nil callback:^(int64_t count, MODQuery *mongoQuery) {
+    [mongoCollection countWithCriteria:nil readPreferences:nil callback:^(int64_t count, MODQuery *mongoQuery) {
         assert(count == 0);
         logMongoQuery(mongoQuery);
     }];
@@ -330,11 +330,11 @@ static void runDatabaseTests(MODClient *server)
     [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\": \"toto1\" }", @"{ \"_id\": { \"$oid\": \"123456789012345678901234\" } }", nil] callback:^(MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
-    [mongoCollection countWithCriteria:nil callback:^(int64_t count, MODQuery *mongoQuery) {
+    [mongoCollection countWithCriteria:nil readPreferences:nil callback:^(int64_t count, MODQuery *mongoQuery) {
         assert(count == 3);
         logMongoQuery(mongoQuery);
     }];
-    [mongoCollection countWithCriteria:obj(@"{ \"_id\": \"toto\" }") callback:^(int64_t count, MODQuery *mongoQuery) {
+    [mongoCollection countWithCriteria:obj(@"{ \"_id\": \"toto\" }") readPreferences:nil callback:^(int64_t count, MODQuery *mongoQuery) {
         assert(count == 1);
         logMongoQuery(mongoQuery);
     }];
@@ -528,7 +528,7 @@ int main (int argc, const char * argv[])
             NSLog(@"Can't parse uri %s", uri);
             assert(false);
         }
-        [server serverStatusWithCallback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {
+        [server serverStatusWithReadPreferences:nil callback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {
             logMongoQuery(mongoQuery);
         }];
         [server databaseNamesWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
