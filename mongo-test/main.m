@@ -308,7 +308,7 @@ static void runDatabaseTests(MODClient *server)
     [mongoDatabase createCollectionWithName:COLLECTION_NAME_TEST callback:^(MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
-    [mongoDatabase fetchCollectionListWithCallback:^(NSArray *collectionList, MODQuery *mongoQuery) {
+    [mongoDatabase collectionNamesWithCallback:^(NSArray *collectionList, MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
     
@@ -374,7 +374,7 @@ static void runDatabaseTests(MODClient *server)
     [mongoCollection dropWithCallback:^(MODQuery *mongoQuery) {
         logMongoQuery(mongoQuery);
     }];
-    [mongoDatabase fetchCollectionListWithCallback:^(NSArray *collectionList, MODQuery *mongoQuery) {
+    [mongoDatabase collectionNamesWithCallback:^(NSArray *collectionList, MODQuery *mongoQuery) {
         assert([collectionList indexOfObject:COLLECTION_NAME_TEST] == NSNotFound);
     }];
     
