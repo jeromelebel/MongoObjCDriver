@@ -66,6 +66,10 @@
 		02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
 		02AB33AC194870D6008C06B9 /* MODReadPreferences.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB33AA194870D6008C06B9 /* MODReadPreferences.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02AB33AD194870D6008C06B9 /* MODReadPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB33AB194870D6008C06B9 /* MODReadPreferences.m */; };
+		02B13FA71949C41000EFF763 /* MODFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B13FA31949C41000EFF763 /* MODFunction.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		02B13FA81949C41000EFF763 /* MODFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B13FA41949C41000EFF763 /* MODFunction.m */; };
+		02B13FA91949C41000EFF763 /* MODScopeFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B13FA51949C41000EFF763 /* MODScopeFunction.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		02B13FAA1949C41000EFF763 /* MODScopeFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B13FA61949C41000EFF763 /* MODScopeFunction.m */; };
 		02B17F35184FF2E500362A27 /* MODBsonComparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B17F33184FF2E500362A27 /* MODBsonComparator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02B17F36184FF2E500362A27 /* MODBsonComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B17F34184FF2E500362A27 /* MODBsonComparator.m */; };
 		02B24273147D1BD6008A15A3 /* MODSortedMutableDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B24271147D1BD6008A15A3 /* MODSortedMutableDictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1379,6 +1383,10 @@
 		02ABA1C814103B37000417F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02ABA1CB14103B37000417F4 /* mongo-objc-driver-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "mongo-objc-driver-Info.plist"; sourceTree = "<group>"; };
 		02ABA1CD14103B37000417F4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		02B13FA31949C41000EFF763 /* MODFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODFunction.h; sourceTree = "<group>"; };
+		02B13FA41949C41000EFF763 /* MODFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODFunction.m; sourceTree = "<group>"; };
+		02B13FA51949C41000EFF763 /* MODScopeFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODScopeFunction.h; sourceTree = "<group>"; };
+		02B13FA61949C41000EFF763 /* MODScopeFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODScopeFunction.m; sourceTree = "<group>"; };
 		02B17F33184FF2E500362A27 /* MODBsonComparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODBsonComparator.h; sourceTree = "<group>"; };
 		02B17F34184FF2E500362A27 /* MODBsonComparator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODBsonComparator.m; sourceTree = "<group>"; };
 		02B24271147D1BD6008A15A3 /* MODSortedMutableDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODSortedMutableDictionary.h; sourceTree = "<group>"; };
@@ -2864,6 +2872,10 @@
 				028CE604142E10BE0099B1F7 /* MODTimestamp.m */,
 				023ECFFA14851BEE00185781 /* MODSymbol.h */,
 				023ECFFB14851BEE00185781 /* MODSymbol.m */,
+				02B13FA31949C41000EFF763 /* MODFunction.h */,
+				02B13FA41949C41000EFF763 /* MODFunction.m */,
+				02B13FA51949C41000EFF763 /* MODScopeFunction.h */,
+				02B13FA61949C41000EFF763 /* MODScopeFunction.m */,
 				02CF87E7142F8AA3000C4C7F /* MODRegex.h */,
 				02CF87E8142F8AA3000C4C7F /* MODRegex.m */,
 				02411AB71432D02600A5FFCA /* MODBinary.h */,
@@ -2935,6 +2947,7 @@
 				025C56211433E7E40064B010 /* MODDBRef.h in Headers */,
 				02B24273147D1BD6008A15A3 /* MODSortedMutableDictionary.h in Headers */,
 				023ECFFC14851BEE00185781 /* MODSymbol.h in Headers */,
+				02B13FA71949C41000EFF763 /* MODFunction.h in Headers */,
 				02DB18AB172C8C5A00B26EAE /* NSData+Base64.h in Headers */,
 				02DB18AF172C8C9700B26EAE /* NSString+Base64.h in Headers */,
 				027A1DA21767E91F0048AD60 /* MODMaxKey.h in Headers */,
@@ -2948,6 +2961,7 @@
 				02D3D3051926661100925BE7 /* mongoc-bulk-operation-private.h in Headers */,
 				02D3D3061926661100925BE7 /* mongoc-bulk-operation.h in Headers */,
 				02D3D3071926661100925BE7 /* mongoc-client-pool.h in Headers */,
+				02B13FA91949C41000EFF763 /* MODScopeFunction.h in Headers */,
 				02D3D3081926661100925BE7 /* mongoc-client-private.h in Headers */,
 				02D3D3091926661100925BE7 /* mongoc-client.h in Headers */,
 				02D3D30A1926661100925BE7 /* mongoc-cluster-private.h in Headers */,
@@ -3183,6 +3197,7 @@
 				02CF0E7C19111321008C822A /* mongoc-matcher-op.c in Sources */,
 				0299B61517F39FAA00FB40A2 /* MODRagelJsonParser.m in Sources */,
 				02CF0E2F191112CB008C822A /* bson-writer.c in Sources */,
+				02B13FAA1949C41000EFF763 /* MODScopeFunction.m in Sources */,
 				02CF0E6B19111321008C822A /* mongoc-client-pool.c in Sources */,
 				02CF0E8A19111321008C822A /* mongoc-uri.c in Sources */,
 				02CF0E8219111321008C822A /* mongoc-socket.c in Sources */,
@@ -3206,6 +3221,7 @@
 				02CF0E7819111321008C822A /* mongoc-index.c in Sources */,
 				02B24274147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */,
 				02CF0E9F19112271008C822A /* yajl_version.c in Sources */,
+				02B13FA81949C41000EFF763 /* MODFunction.m in Sources */,
 				023ECFFD14851BEE00185781 /* MODSymbol.m in Sources */,
 				02CF0E7219111321008C822A /* mongoc-cursor.c in Sources */,
 				02CF0E2C191112CB008C822A /* bson-string.c in Sources */,

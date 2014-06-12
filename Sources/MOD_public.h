@@ -25,3 +25,5 @@
 #import "MODUndefined.h"
 #import "MODBsonComparator.h"
 #import "MODRagelJsonParser.h"
+#import "MODFunction.h"
+#import "MODScopeFunction.h"
