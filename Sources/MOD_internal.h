@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MOD_public.h"
+#import "NSString+Base64.h"
 #import "mongoc.h"
 
 #define BSON_NO_ERROR { 0, 0, 0 }

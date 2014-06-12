@@ -277,8 +277,13 @@
             NSAssert(NO, @"BSON_TYPE_DBREF");
             break;
         case BSON_TYPE_CODE:
-            NSLog(@"*********************** %d %d", bson_iter_type(iterator), __LINE__);
-            NSAssert(NO, @"BSON_TYPE_CODE");
+            {
+                NSString *value;
+                
+                value = [[NSString alloc] initWithUTF8String:bson_iter_code(iterator, NULL)];
+                result = [[[MODFunction alloc] initWithFunction:value] autorelease];
+                [value release];
+            }
             break;
         case BSON_TYPE_SYMBOL:
             {
@@ -290,8 +295,20 @@
             }
             break;
         case BSON_TYPE_CODEWSCOPE:
-            NSLog(@"*********************** %d %d", bson_iter_type(iterator), __LINE__);
-            NSAssert(NO, @"BSON_CODEWSCOPE");
+            {
+                NSString *function;
+                const uint8_t *scopeData = NULL;
+                uint32_t scopeDataLength;
+                MODSortedMutableDictionary *scope = nil;
+                bson_t scopeBson;
+                
+                function = [[NSString alloc] initWithUTF8String:bson_iter_codewscope(iterator, NULL, &scopeDataLength, &scopeData)];
+                NSAssert(bson_init_static(&scopeBson, scopeData, scopeDataLength), @"problem to decode bson %@", [NSData dataWithBytes:scopeData length:scopeDataLength]);
+                scope = [self objectFromBson:&scopeBson];
+                result = [[[MODScopeFunction alloc] initWithFunction:function scope:scope] autorelease];
+                [function release];
+                bson_destroy(&scopeBson);
+            }
             break;
         case BSON_TYPE_INT32:
             result = [NSNumber numberWithInt:bson_iter_int32(iterator)];
@@ -403,6 +420,14 @@
         bson_append_minkey(bson, keyString, strlen(keyString));
     } else if ([value isKindOfClass:[MODMaxKey class]]) {
         bson_append_maxkey(bson, keyString, strlen(keyString));
+    } else if ([value isKindOfClass:[MODFunction class]]) {
+        bson_append_code(bson, keyString, SIZE_T_MAX, [value function].UTF8String);
+    } else if ([value isKindOfClass:[MODScopeFunction class]]) {
+        bson_t bsonScope = BSON_INITIALIZER;
+        
+        [self appendObject:[value scope] toBson:&bsonScope];
+        bson_append_code_with_scope(bson, keyString, SIZE_T_MAX, [value function].UTF8String, &bsonScope);
+        bson_destroy(&bsonScope);
     } else {
         NSLog(@"*********************** class %@ key %@ %d", NSStringFromClass([value class]), key, __LINE__);
         NSAssert(NO, @"class %@ key %@ line %d", NSStringFromClass([value class]), key, __LINE__);
@@ -558,6 +583,10 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     } else if ([value isKindOfClass:[MODMaxKey class]]) {
         [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else if ([value isKindOfClass:[MODMinKey class]]) {
+        [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
+    } else if ([value isKindOfClass:[MODFunction class]]) {
+        [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
+    } else if ([value isKindOfClass:[MODScopeFunction class]]) {
         [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else {
         NSLog(@"unknown type: %@", [value class]);

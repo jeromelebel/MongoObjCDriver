@@ -6,16 +6,7 @@
 //  Copyright (c) 2011 Fotonauts. All rights reserved.
 //
 
-#import "MODSortedMutableDictionary.h"
-#import "MODBinary.h"
-#import "MODRegex.h"
-#import "MODObjectId.h"
-#import "MODTimestamp.h"
-#import "MODSymbol.h"
-#import "MODUndefined.h"
-#import "MODMinKey.h"
-#import "MODMaxKey.h"
-#import "NSString+Base64.h"
+#import "MOD_internal.h"
 
 @implementation MODSortedMutableDictionary
 
@@ -215,6 +206,14 @@
         result = [[MODMinKey alloc] init];
     } else if (self.count == 1 && [[self objectForKey:@"$maxKey"] isKindOfClass:NSNumber.class] && [[self objectForKey:@"$maxKey"] intValue] == 1) {
         result = [[MODMaxKey alloc] init];
+    } else if (self.count == 1 && [[self objectForKey:@"$function"] isKindOfClass:NSString.class]) {
+        result = [[MODFunction alloc] initWithFunction:[self objectForKey:@"$function"]];
+    } else if (self.count == 2 && [[self objectForKey:@"$function"] isKindOfClass:NSString.class] && [[self objectForKey:@"$scope"] isKindOfClass:MODSortedMutableDictionary.class]) {
+        if ([[self objectForKey:@"$scope"] count] == 0) {
+            result = [[MODFunction alloc] initWithFunction:[self objectForKey:@"$function"]];
+        } else {
+            result = [[MODScopeFunction alloc] initWithFunction:[self objectForKey:@"$function"] scope:[self objectForKey:@"$scope"]];
+        }
     }
     return [result autorelease];
 }

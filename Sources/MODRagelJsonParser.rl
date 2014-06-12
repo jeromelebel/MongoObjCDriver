@@ -83,7 +83,7 @@
     VMinKey             = 'MinKey';
     VMaxKey             = 'MaxKey';
     new_keyword         = 'new';
-    begin_value         = [/unftTMBOS'\"\-\[\{NI] | digit;
+    begin_value         = [/unftTMFBOS'\"\-\[\{NI] | digit;
     begin_object        = '{';
     end_object          = '}';
     begin_array         = '[';
@@ -100,8 +100,10 @@
     timestamp_keyword   = 'Timestamp';
     begin_bindata       = 'B';
     bin_data_keyword    = 'BinData';
-    begin_symbol        = 'S';
     symbol_keyword      = 'Symbol';
+    begin_function      = 'F';
+    function_keyword    = 'Function';
+    scopefunction_keyword = 'ScopeFunction';
 }%%
 
 %%{
@@ -192,7 +194,25 @@
     }
     
     action parse_symbol {
-        const char *np = [self _parseSymbolWithPointer:fpc endPointer:pe result:result];
+        const char *np = [self _parseSymbolWithPointer:fpc - strlen("Symbol") + 1 endPointer:pe result:result];
+        if (np == NULL) {
+            fhold; fbreak;
+        } else {
+            fexec np;
+        }
+    }
+    
+    action parse_function {
+        const char *np = [self _parseFunctionWithPointer:fpc endPointer:pe result:result];
+        if (np == NULL) {
+            fhold; fbreak;
+        } else {
+            fexec np;
+        }
+    }
+    
+    action parse_scopefunction {
+        const char *np = [self _parseScopeFunctionWithPointer:fpc - strlen("ScopeFunction") + 1 endPointer:pe result:result];
         if (np == NULL) {
             fhold; fbreak;
         } else {
@@ -227,7 +247,9 @@
         begin_numberlong >parse_numberlong |
         begin_timestamp >parse_timestamp |
         begin_bindata >parse_bin_data |
-        begin_symbol >parse_symbol |
+        scopefunction_keyword @parse_scopefunction |
+        symbol_keyword @parse_symbol |
+        begin_function >parse_function |
         new_keyword @parse_javascript_object
     ) %*exit;
 }%%
@@ -502,6 +524,86 @@
     dataValue = [dataStringValue dataFromBase64];
     if (cs >= JSON_bin_data_first_final && dataValue && [MODBinary isValidDataType:typeValue.unsignedCharValue] ) {
         *result = [[[MODBinary alloc] initWithData:dataValue binaryType:typeValue.unsignedCharValue] autorelease];
+        return p + 1;
+    } else {
+        *result = nil;
+        return NULL;
+    }
+}
+
+%%{
+    machine JSON_function;
+    include JSON_common;
+
+    write data;
+    
+    action parse_code_value {
+        const char *np;
+        np = [self _parseStringWithPointer:fpc endPointer:pe result:&codeStringValue];
+        if (np == NULL) { fhold; fbreak; } else fexec np;
+    }
+
+    action exit { fhold; fbreak; }
+
+    main := (function_keyword ignore* '(' ignore* begin_string >parse_code_value ignore* ')') @exit;
+}%%
+
+- (const char *)_parseFunctionWithPointer:(const char *)p endPointer:(const char *)pe result:(MODFunction **)result
+{
+    NSString *codeStringValue = nil;
+    int cs = 0;
+
+    %% write init;
+    %% write exec;
+
+    if (cs >= JSON_function_first_final && codeStringValue) {
+        *result = [[[MODFunction alloc] initWithFunction:codeStringValue] autorelease];
+        return p + 1;
+    } else {
+        *result = nil;
+        return NULL;
+    }
+}
+
+%%{
+    machine JSON_scopefunction;
+    include JSON_common;
+
+    write data;
+    
+    action parse_code_value {
+        const char *np;
+        np = [self _parseStringWithPointer:fpc endPointer:pe result:&codeStringValue];
+        if (np == NULL) { fhold; fbreak; } else fexec np;
+    }
+    
+    action parse_scope_value {
+        const char *np;
+        
+        np = [self _parseObjectWithPointer:fpc endPointer:pe result:&scopeValue];
+        if (np == NULL) {
+            fhold; fbreak;
+        } else {
+            fexec np;
+        }
+    }
+
+    action exit { fhold; fbreak; }
+
+    main := (scopefunction_keyword ignore* '(' ignore* begin_string >parse_code_value ignore* ',' ignore* begin_object >parse_scope_value ignore* ')') @exit;
+}%%
+
+- (const char *)_parseScopeFunctionWithPointer:(const char *)p endPointer:(const char *)pe result:(MODScopeFunction **)result
+{
+    NSString *codeStringValue = nil;
+    MODSortedMutableDictionary *scopeValue = nil;
+    int cs = 0;
+
+    %% write init;
+    %% write exec;
+
+    if (cs >= JSON_scopefunction_first_final && codeStringValue) {
+        *result = [[[MODScopeFunction alloc] initWithFunction:codeStringValue scope:scopeValue] autorelease];
         return p + 1;
     } else {
         *result = nil;

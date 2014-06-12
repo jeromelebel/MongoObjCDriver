@@ -165,6 +165,9 @@ static void testJson()
     NSError *error;
   
     // more digit for the json, but that's ok
+    testObjects(@"{\"scopefunction\":{\"$function\":\"javascript function\",\"$scope\":{\"x\":1}}}", @"{\"scopefunction\":ScopeFunction(\"javascript function\",{\"x\":1})}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODScopeFunction alloc] initWithFunction:@"javascript function" scope:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"x", nil]] autorelease], @"scopefunction", nil]);
+    testObjects(@"{\"function\":{\"$function\":\"javascript function\"}}", @"{\"function\":Function(\"javascript function\")}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODFunction alloc] initWithFunction:@"javascript function"] autorelease], @"function", nil]);
+    testObjects(@"{\"my symbol\":{\"$symbol\":\"pour fred\"}}", @"{\"my symbol\":Symbol(\"pour fred\")}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODSymbol alloc] initWithValue:@"pour fred"] autorelease], @"my symbol", nil]);
     testObjects(@"{\"date\":new Date(396361048820)}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSDate dateWithTimeIntervalSince1970:396361048.820], @"date", nil]);
     testObjects(@"{int:1}", @"{\"int\":1}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"int", nil]);
     testObjects(@"{$value:1}", @"{\"$value\":1}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithInt:1], @"$value", nil]);
@@ -199,7 +202,6 @@ static void testJson()
     testObjects(@"{\"timestamp\":{\"$timestamp\":[1,2]}}", @"{\"timestamp\":Timestamp(1, 2)}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODTimestamp alloc] initWithTValue:1 iValue:2] autorelease], @"timestamp", nil]);
     testObjects(@"{\"mydate\":{\"$date\":1320066612000}}", @"{\"mydate\":new Date(\"2011-10-31T14:10:12+0100\")}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[NSDate alloc] initWithTimeIntervalSince1970:1320066612] autorelease], @"mydate", nil]);
     testObjects(@"{\"false\":false,\"true\":true}", nil, [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"false", [NSNumber numberWithBool:YES], @"true", nil]);
-    testObjects(@"{\"my symbol\":{\"$symbol\":\"pour fred\"}}", @"{\"my symbol\":Symbol(\"pour fred\")}", [MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[[MODSymbol alloc] initWithValue:@"pour fred"] autorelease], @"my symbol", nil]);
     
     // test if can parse json in chunks, and we should get an error at the end of json
 #if 0
