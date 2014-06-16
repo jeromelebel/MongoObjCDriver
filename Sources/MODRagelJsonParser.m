@@ -891,7 +891,7 @@ static const int JSON_object_en_main = 1;
     NSString *lastName;
     
     if (_maxNesting && _currentNesting > _maxNesting) {
-        [NSException raise:@"NestingError" format:@"nesting of %d is too deep", _currentNesting];
+        [self _makeErrorWithMessage:[NSString stringWithFormat:@"nesting of %d is too deep", _currentNesting] atPosition:p];
     }
     
     *result = [[MODSortedMutableDictionary alloc] init];
@@ -2811,7 +2811,7 @@ static const int JSON_array_en_main = 1;
     int cs = 0;
     
     if (_maxNesting && _currentNesting > _maxNesting) {
-        [NSException raise:@"NestingError" format:@"nesting of %d is too deep", _currentNesting];
+        [self _makeErrorWithMessage:[NSString stringWithFormat:@"nesting of %d is too deep", _currentNesting] atPosition:p];
     }
     *result = [[[NSMutableArray alloc] init] autorelease];
     
@@ -2932,7 +2932,7 @@ _again:
     if(cs >= JSON_array_first_final) {
         return p + 1;
     } else {
-        [NSException raise:@"ParserError"format:@"%u: unexpected token at '%s'", __LINE__, p];
+        [self _makeErrorWithMessage:@"Unexpected character" atPosition:p];
         return NULL;
     }
 }
