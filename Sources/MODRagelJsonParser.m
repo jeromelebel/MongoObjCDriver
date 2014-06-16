@@ -461,6 +461,7 @@ static const int JSON_integer_start = 1;
 static const int JSON_integer_first_final = 3;
 
 
+
 #line 256 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
 
@@ -641,6 +642,7 @@ static const char _JSON_float_trans_actions[] = {
 
 static const int JSON_float_start = 1;
 static const int JSON_float_first_final = 8;
+
 
 
 #line 295 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
@@ -826,6 +828,7 @@ static const int JSON_object_start = 1;
 static const int JSON_object_first_final = 7;
 
 
+
 #line 359 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
 
@@ -835,7 +838,7 @@ static const int JSON_object_first_final = 7;
     NSString *lastName;
     
     if (_maxNesting && _currentNesting > _maxNesting) {
-        [NSException raise:@"NestingError" format:@"nesting of %d is too deep", _currentNesting];
+        [self _makeErrorWithMessage:[NSString stringWithFormat:@"nesting of %d is too deep", _currentNesting] atPosition:p];
     }
     
     *result = [[MODSortedMutableDictionary alloc] init];
@@ -1052,6 +1055,7 @@ static const char _JSON_javascript_object_trans_actions[] = {
 
 static const int JSON_javascript_object_start = 1;
 static const int JSON_javascript_object_first_final = 22;
+
 
 
 #line 434 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
@@ -1273,6 +1277,7 @@ static const int JSON_bin_data_start = 1;
 static const int JSON_bin_data_first_final = 13;
 
 
+
 #line 488 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
 
@@ -1463,6 +1468,7 @@ static const char _JSON_object_id_trans_actions[] = {
 
 static const int JSON_object_id_start = 1;
 static const int JSON_object_id_first_final = 12;
+
 
 
 #line 525 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
@@ -1684,6 +1690,7 @@ static const int JSON_numberlong_start = 1;
 static const int JSON_numberlong_first_final = 14;
 
 
+
 #line 602 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
 
@@ -1873,6 +1880,7 @@ static const int JSON_timestamp_start = 1;
 static const int JSON_timestamp_first_final = 15;
 
 
+
 #line 643 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
 
@@ -2060,6 +2068,7 @@ static const char _JSON_symbol_trans_actions[] = {
 
 static const int JSON_symbol_start = 1;
 static const int JSON_symbol_first_final = 10;
+
 
 
 #line 678 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
@@ -2344,7 +2353,7 @@ static const int JSON_array_first_final = 5;
     int cs = 0;
     
     if (_maxNesting && _currentNesting > _maxNesting) {
-        [NSException raise:@"NestingError" format:@"nesting of %d is too deep", _currentNesting];
+        [self _makeErrorWithMessage:[NSString stringWithFormat:@"nesting of %d is too deep", _currentNesting] atPosition:p];
     }
     *result = [[[NSMutableArray alloc] init] autorelease];
     
@@ -2465,7 +2474,7 @@ _again:
     if(cs >= JSON_array_first_final) {
         return p + 1;
     } else {
-        [NSException raise:@"ParserError"format:@"%u: unexpected token at '%s'", __LINE__, p];
+        [self _makeErrorWithMessage:@"Unexpected character" atPosition:p];
         return NULL;
     }
 }
