@@ -19,10 +19,12 @@ elif [ "${origin_url:0:7}" = "http://" ] ; then
     tmp=`dirname "${origin_url}"`
     github_url=`dirname "${tmp}"`
     github_url="${github_url}/"
-else
+elif [ "${origin_url}" != "" ] ; then
     protocol="ssh"
     github_url=`echo "${origin_url}" | awk -F: '{ print $1 }'`
     github_url="${github_url}:"
+else
+    protocol="file"
 fi
 
 echo $url
