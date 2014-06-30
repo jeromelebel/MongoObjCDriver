@@ -226,13 +226,6 @@
 			remoteGlobalIDString = 02216F151412D39200789BD1;
 			remoteInfo = Submodules;
 		};
-		02C4B0E517F3A93500663C06 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 02ABA1B614103B36000417F4 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0299B61B17F3A8B800FB40A2;
-			remoteInfo = Ragel;
-		};
 		02D3D2FB1926632900925BE7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02ABA1B614103B36000417F4 /* Project object */;
@@ -3036,7 +3029,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				02C4B0E617F3A93500663C06 /* PBXTargetDependency */,
 				02216F1C1412D42B00789BD1 /* PBXTargetDependency */,
 			);
 			name = "mongo-objc-driver";
@@ -3260,11 +3252,6 @@
 			isa = PBXTargetDependency;
 			target = 02216F151412D39200789BD1 /* Submodules */;
 			targetProxy = 02216F1B1412D42B00789BD1 /* PBXContainerItemProxy */;
-		};
-		02C4B0E617F3A93500663C06 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 0299B61B17F3A8B800FB40A2 /* Ragel */;
-			targetProxy = 02C4B0E517F3A93500663C06 /* PBXContainerItemProxy */;
 		};
 		02D3D2FC1926632900925BE7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
