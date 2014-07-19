@@ -3331,7 +3331,7 @@
 					"-DMONGOC_COMPILATION",
 					"-DBSON_COMPILATION",
 				);
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx10.9;
 			};
 			name = Debug;
 		};
@@ -3360,7 +3360,7 @@
 					"-DMONGOC_COMPILATION",
 					"-DBSON_COMPILATION",
 				);
-				SDKROOT = macosx10.8;
+				SDKROOT = macosx10.9;
 			};
 			name = Release;
 		};
@@ -3373,7 +3373,6 @@
 				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.9;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -3387,7 +3386,6 @@
 				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx10.9;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
