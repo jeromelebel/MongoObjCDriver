@@ -167,6 +167,10 @@
             errorMessage = @"MONGOC_ERROR_COLLECTION_INSERT_FAILED";
             break;
         
+        case MONGOC_ERROR_GRIDFS_INVALID_FILENAME:
+            errorMessage = @"MONGOC_ERROR_GRIDFS_INVALID_FILENAME";
+            break;
+        
         case MONGOC_ERROR_QUERY_COMMAND_NOT_FOUND:
             errorMessage = @"MONGOC_ERROR_QUERY_COMMAND_NOT_FOUND";
             break;
