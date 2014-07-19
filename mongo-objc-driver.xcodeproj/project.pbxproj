@@ -3020,7 +3020,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02ABA1D514103B37000417F4 /* Build configuration list for PBXNativeTarget "mongo-objc-driver" */;
 			buildPhases = (
-				0299B61617F39FFA00FB40A2 /* Ragel */,
 				02ABA1BB14103B37000417F4 /* Sources */,
 				02ABA1BC14103B37000417F4 /* Frameworks */,
 				02ABA1BD14103B37000417F4 /* Headers */,
@@ -3093,22 +3092,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0299B61617F39FFA00FB40A2 /* Ragel */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Sources/MODRagelJsonParser.rl",
-			);
-			name = Ragel;
-			outputPaths = (
-				"$(SRCROOT)/Sources/MODRagelJsonParser.m",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/opt/local/bin/ragel \"${SRCROOT}/Sources/MODRagelJsonParser.rl\" -o \"${SRCROOT}/Sources/MODRagelJsonParser.m\"";
-		};
 		0299B61F17F3A8E000FB40A2 /* MODRagelJsonParser */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
