@@ -429,7 +429,9 @@
     } else if ([value isKindOfClass:[MODScopeFunction class]]) {
         bson_t bsonScope = BSON_INITIALIZER;
         
-        [self appendObject:[value scope] toBson:&bsonScope];
+        if ([value scope]) {
+            [self appendObject:[value scope] toBson:&bsonScope];
+        }
         bson_append_code_with_scope(bson, keyString, SIZE_T_MAX, [value function].UTF8String, &bsonScope);
         bson_destroy(&bsonScope);
     } else {
