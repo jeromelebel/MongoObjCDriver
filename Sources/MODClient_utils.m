@@ -363,6 +363,9 @@
 {
     const char *keyString = key.UTF8String;
     
+    NSParameterAssert(value != NULL);
+    NSParameterAssert(key != NULL);
+    NSParameterAssert(bson != NULL);
     if ([value isKindOfClass:NSNull.class]) {
         bson_append_null(bson, keyString, strlen(keyString));
     } else if ([value isKindOfClass:NSString.class]) {
@@ -442,6 +445,8 @@
 
 + (void)appendObject:(MODSortedMutableDictionary *)object toBson:(bson_t *)bson
 {
+    NSParameterAssert(object != NULL);
+    NSParameterAssert(bson != NULL);
     for (NSString *key in object.sortedKeys) {
         id value = [object objectForKey:key];
         
