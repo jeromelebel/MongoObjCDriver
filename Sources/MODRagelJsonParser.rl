@@ -291,7 +291,7 @@
     if (cs >= JSON_integer_first_final) {
         NSString *buffer;
         
-        buffer = [[NSString alloc] initWithBytesNoCopy:(void *)memo length:p - memo encoding:NSUTF8StringEncoding freeWhenDone:NO];
+        buffer = [[NSString alloc] initWithBytes:(void *)memo length:p - memo encoding:NSUTF8StringEncoding];
         if (buffer.longLongValue > INT_MAX || buffer.longLongValue < INT_MIN) {
             *result = [NSNumber numberWithLongLong:buffer.longLongValue];
         } else {
@@ -664,14 +664,14 @@
         NSString *buffer;
         NSString *options;
         
-        buffer = [[NSString alloc] initWithBytesNoCopy:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding freeWhenDone:NO];
+        buffer = [[NSString alloc] initWithBytes:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding];
         cursor++;
         
         bookmark = cursor;
         while (cursor < stringEnd && strchr("imsx", *cursor) != NULL) {
             cursor++;
         }
-        options = [[NSString alloc] initWithBytesNoCopy:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding freeWhenDone:NO];
+        options = [[NSString alloc] initWithBytes:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding];
         
         *result = [[[MODRegex alloc] initWithPattern:buffer options:options] autorelease];
         [buffer release];
@@ -812,7 +812,7 @@
         cursor = NULL;
         *result = NULL;
     } else {
-        buffer = [[NSString alloc] initWithBytesNoCopy:(void *)string length:cursor - string encoding:NSUTF8StringEncoding freeWhenDone:NO];
+        buffer = [[NSString alloc] initWithBytes:(void *)string length:cursor - string encoding:NSUTF8StringEncoding];
         *result = buffer;
         [buffer autorelease];
     }
@@ -837,7 +837,7 @@
             unescapeLength = 1;
             if (cursor > bookmark) {
                 // if the string starts with a \, there is no need to add anything
-                buffer = [[NSString alloc] initWithBytesNoCopy:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding freeWhenDone:NO];
+                buffer = [[NSString alloc] initWithBytes:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding];
                 [mutableResult appendString:buffer];
                 [buffer release];
             }
@@ -871,7 +871,7 @@
                     bookmark = cursor;
                     continue;
             }
-            buffer = [[NSString alloc] initWithBytesNoCopy:(void *)unescape length:unescapeLength encoding:NSUTF8StringEncoding freeWhenDone:NO];
+            buffer = [[NSString alloc] initWithBytes:(void *)unescape length:unescapeLength encoding:NSUTF8StringEncoding];
             [mutableResult appendString:buffer];
             [buffer release];
             bookmark = ++cursor;
@@ -880,7 +880,7 @@
         }
     }
     if (*cursor == quoteString) {
-        buffer = [[NSString alloc] initWithBytesNoCopy:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding freeWhenDone:NO];
+        buffer = [[NSString alloc] initWithBytes:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding];
         [mutableResult appendString:buffer];
         [buffer release];
         *result = [mutableResult autorelease];
