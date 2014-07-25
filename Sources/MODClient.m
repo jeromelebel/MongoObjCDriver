@@ -106,8 +106,7 @@
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error
 {
-    [mongoQuery ends];
-    mongoQuery.error = error;
+    [mongoQuery endsWithError:error];
 }
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock

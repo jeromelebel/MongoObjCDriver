@@ -72,7 +72,7 @@ enum {
 @property (nonatomic, readwrite, strong) NSError *error;
 
 - (void)starts;
-- (void)ends;
+- (void)endsWithError:(NSError *)error;
 - (void)removeBlockOperation;
 
 @end

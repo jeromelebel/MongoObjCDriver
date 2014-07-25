@@ -42,6 +42,7 @@
     self.owner = nil;
     self.name = nil;
     self.parameters = nil;
+    self.error = nil;
     [super dealloc];
 }
 
@@ -58,12 +59,13 @@
     _startDate = [[NSDate alloc] init];
 }
 
-- (void)ends
+- (void)endsWithError:(NSError *)error
 {
-//    NSLog(@"ends %@ from %@", self.name, self.owner.class.className);
+    if (!self.error) self.error = error;
     NSAssert(_startDate != nil, @"needs to be started");
     NSAssert(_endDate == nil, @"already ended");
     _endDate = [[NSDate alloc] init];
+//    NSLog(@"ends %@ from %@ with error %@", self.name, self.owner.class.className, self.error);
     for (id<MODQueryCallbackTarget> target in _callbackTargets) {
         [target mongoQueryDidFinish:self];
     }
