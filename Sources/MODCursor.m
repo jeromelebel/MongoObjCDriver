@@ -110,10 +110,13 @@
     if ([self more]) {
         const bson_t *bson;
         
+        NSLog(@"-[%@ %@] %s %d", self.className, NSStringFromSelector(_cmd), __FILE__, __LINE__);
         if (bsonData) *bsonData = nil;
         if (self.error) {
+            NSLog(@"-[%@ %@] %s %d", self.className, NSStringFromSelector(_cmd), __FILE__, __LINE__);
             *error = self.error;
         } else if (mongoc_cursor_next(self.mongocCursor, &bson)) {
+            NSLog(@"-[%@ %@] %s %d", self.className, NSStringFromSelector(_cmd), __FILE__, __LINE__);
             result = [self.mongoCollection.client.class objectFromBson:bson];
             if (bsonData) {
                 const bson_t *bson;
@@ -124,6 +127,7 @@
         } else {
             bson_error_t error = BSON_NO_ERROR;
             
+            NSLog(@"-[%@ %@] %s %d", self.className, NSStringFromSelector(_cmd), __FILE__, __LINE__);
             mongoc_cursor_error(self.mongocCursor, &error);
             self.internalError = [self.mongoCollection.client.class errorFromBsonError:error];
         }

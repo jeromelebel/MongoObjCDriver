@@ -53,7 +53,7 @@
 
 - (void)starts
 {
-//    NSLog(@"starts %@ from %@", self.name, self.owner.class.className);
+    NSLog(@"starts %@ from %@", self.name, self.owner.class.className);
     NSAssert(_startDate == nil, @"already started");
     NSAssert(_endDate == nil, @"weird");
     _startDate = [[NSDate alloc] init];
@@ -65,7 +65,7 @@
     NSAssert(_startDate != nil, @"needs to be started");
     NSAssert(_endDate == nil, @"already ended");
     _endDate = [[NSDate alloc] init];
-//    NSLog(@"ends %@ from %@ with error %@", self.name, self.owner.class.className, self.error);
+    NSLog(@"ends %@ from %@ with error %@", self.name, self.owner.class.className, self.error);
     for (id<MODQueryCallbackTarget> target in _callbackTargets) {
         [target mongoQueryDidFinish:self];
     }

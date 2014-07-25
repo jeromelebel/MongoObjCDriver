@@ -79,11 +79,13 @@
 {
     MODQuery *query = nil;
     
+    NSLog(@"-[%@ %@] %s %d", self.className, NSStringFromSelector(_cmd), __FILE__, __LINE__);
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
         NSMutableArray *documents = nil;
         NSMutableArray *allBsonData = nil;
         
+        NSLog(@"-[%@ %@] %s %d", self.className, NSStringFromSelector(_cmd), __FILE__, __LINE__);
         if (!mongoQuery.canceled) {
             NSData *bsonData;
             MODCursor *cursor;
@@ -96,9 +98,13 @@
                 [documents addObject:document];
                 [allBsonData addObject:bsonData];
             }
+            NSLog(@"-[%@ %@] %s %d", self.className, NSStringFromSelector(_cmd), __FILE__, __LINE__);
+            NSLog(@"documents %@", documents);
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+            NSLog(@"-[%@ %@] %s %d", self.className, NSStringFromSelector(_cmd), __FILE__, __LINE__);
             if (callback) {
+                NSLog(@"-[%@ %@] %s %d", self.className, NSStringFromSelector(_cmd), __FILE__, __LINE__);
                 callback(documents, allBsonData, mongoQuery);
             }
         }];
