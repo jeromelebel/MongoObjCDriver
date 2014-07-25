@@ -42,13 +42,11 @@
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock
 {
-    [mongoQuery.mutableParameters setObject:self forKey:@"collection"];
     [self.database mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:callbackBlock];
 }
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock
 {
-    [mongoQuery.mutableParameters setObject:self forKey:@"collection"];
     [self.database mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
 }
 
@@ -65,7 +63,6 @@
             
             if (mongoc_collection_stats(self.mongocCollection, NULL, &output, &error)) {
                 stats = [[self.client class] objectFromBson:&output];
-                [mongoQuery.mutableParameters setObject:stats forKey:@"collectionstats"];
             }
             bson_destroy(&output);
         }
@@ -74,8 +71,7 @@
                 callback(stats, mongoQuery);
             }
         }];
-    }];
-    [query.mutableParameters setObject:@"databasestats" forKey:@"command"];
+    } owner:self name:@"collectionstats" parameters:nil];
     return query;
 }
 
@@ -85,10 +81,10 @@
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
+        NSMutableArray *documents = nil;
+        NSMutableArray *allBsonData = nil;
         
         if (!mongoQuery.canceled) {
-            NSMutableArray *documents;
-            NSMutableArray *allBsonData;
             NSData *bsonData;
             MODCursor *cursor;
             MODSortedMutableDictionary *document;
@@ -100,29 +96,15 @@
                 [documents addObject:document];
                 [allBsonData addObject:bsonData];
             }
-            [mongoQuery.mutableParameters setObject:documents forKey:@"documents"];
-            [mongoQuery.mutableParameters setObject:allBsonData forKey:@"dataDocuments"];
-            [documents release];
-            [allBsonData release];
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             if (callback) {
-                callback([mongoQuery.mutableParameters objectForKey:@"documents"], [mongoQuery.mutableParameters objectForKey:@"dataDocuments"], mongoQuery);
+                callback(documents, allBsonData, mongoQuery);
             }
         }];
-    }];
-    if (criteria) {
-        [query.mutableParameters setObject:criteria forKey:@"criteria"];
-    }
-    if (fields) {
-        [query.mutableParameters setObject:fields forKey:@"fields"];
-    }
-    [query.mutableParameters setObject:@"finddocuments" forKey:@"command"];
-    [query.mutableParameters setObject:[NSNumber numberWithUnsignedInteger:skip] forKey:@"skip"];
-    [query.mutableParameters setObject:[NSNumber numberWithUnsignedInteger:limit] forKey:@"limit"];
-    if (sort) {
-        [query.mutableParameters setObject:sort forKey:@"sort"];
-    }
+        [documents release];
+        [allBsonData release];
+    } owner:self name:@"find" parameters:@{ @"criteria": criteria?criteria:[NSNull null], @"fields": fields?fields:[NSNull null], @"skip": [NSNumber numberWithUnsignedInteger:skip], @"limit": [NSNumber numberWithUnsignedInteger:limit], @"sort": sort?sort:[NSNull null] }];
     return query;
 }
 
@@ -157,7 +139,6 @@
                     error = [self.client.class errorFromBsonError:bsonError];
                 } else {
                     response = [[NSNumber alloc] initWithUnsignedLongLong:count];
-                    [mongoQuery.mutableParameters setObject:response forKey:@"count"];
                     [response release];
                 }
             }
@@ -168,11 +149,7 @@
                 callback(count, mongoQuery);
             }
         }];
-    }];
-    [query.mutableParameters setObject:@"countdocuments" forKey:@"command"];
-    if (criteria) {
-        [query.mutableParameters setObject:criteria forKey:@"criteria"];
-    }
+    } owner:self name:@"count" parameters:@{ @"criteria": criteria?criteria:[NSNull null] }];
     return query;
 }
 
@@ -235,9 +212,7 @@
                 callback(mongoQuery);
             }
         }];
-    }];
-    [query.mutableParameters setObject:@"insertdocuments" forKey:@"command"];
-    [query.mutableParameters setObject:documents forKey:@"documents"];
+    } owner:self name:@"insert" parameters:@{ @"documents": documents }];
     return query;
 }
 
@@ -274,12 +249,7 @@
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             callback(mongoQuery);
         }];
-    }];
-    [query.mutableParameters setObject:@"updatedocuments" forKey:@"command"];
-    if (criteria) [query.mutableParameters setObject:criteria forKey:@"criteria"];
-    if (update) [query.mutableParameters setObject:update forKey:@"update"];
-    [query.mutableParameters setObject:[NSNumber numberWithBool:upsert] forKey:@"upsert"];
-    [query.mutableParameters setObject:[NSNumber numberWithBool:multiUpdate] forKey:@"multiUpdate"];
+    } owner:self name:@"update" parameters:@{ @"criteria": criteria?criteria:[NSNull null], @"update": update?update:[NSNull null], @"upsert":[NSNumber numberWithBool:upsert], @"multiupdate": [NSNumber numberWithBool:multiUpdate] }];
     return query;
 }
 
@@ -304,9 +274,7 @@
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             callback(mongoQuery);
         }];
-    }];
-    [query.mutableParameters setObject:@"savedocuments" forKey:@"command"];
-    [query.mutableParameters setObject:document forKey:@"document"];
+    } owner:self name:@"savedocument" parameters:@{ @"document": document }];
     return query;
 }
 
@@ -344,11 +312,7 @@
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             callback(mongoQuery);
         }];
-    }];
-    [query.mutableParameters setObject:@"removedocuments" forKey:@"command"];
-    if (criteria) {
-        [query.mutableParameters setObject:criteria forKey:@"criteria"];
-    }
+    } owner:self name:@"remove" parameters:@{ @"criteria": criteria?criteria:[NSNull null] }];
     return query;
 }
 
@@ -361,7 +325,6 @@
     query = [self.database.systemIndexesCollection findWithCriteria:dictionary fields:nil skip:0 limit:0 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         callback(documents, mongoQuery);
     }];
-    [query.mutableParameters setObject:@"indexlist" forKey:@"command"];
     [dictionary release];
     return query;
 }
@@ -369,23 +332,7 @@
 - (MODQuery *)createIndex:(id)indexDocument name:(NSString *)name options:(enum MOD_INDEX_OPTIONS)options callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
-    NSMutableString *defaultName = nil;
     
-    if (!name) {
-        NSDictionary *objects;
-        
-        if ([indexDocument isKindOfClass:[NSString class]]) {
-            objects = [MODRagelJsonParser objectsFromJson:indexDocument withError:NULL];
-        } else {
-            objects = indexDocument;
-        }
-        defaultName = [[NSMutableString alloc] init];
-        for (NSString *key in [objects allKeys]) {
-            [defaultName appendString:key];
-            [defaultName appendString:@"_"];
-        }
-        name = defaultName;
-    }
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
         
@@ -414,16 +361,11 @@
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             callback(mongoQuery);
         }];
-    }];
-    [query.mutableParameters setObject:@"createindex" forKey:@"command"];
-    [query.mutableParameters setObject:indexDocument forKey:@"index"];
-    [query.mutableParameters setObject:[NSNumber numberWithInt:options] forKey:@"options"];
-    [query.mutableParameters setObject:name forKey:@"name"];
-    [defaultName release];
+    } owner:self name:@"createindex" parameters:@{ @"index": indexDocument, @"name": name?name:[NSNull null], @"options": [NSNumber numberWithInt:options] }];
     return query;
 }
 
-- (MODQuery *)dropIndexName:(NSString *)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback
+- (MODQuery *)dropIndexName:(NSString *)name callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -433,15 +375,13 @@
         if (!mongoQuery.canceled) {
             bson_error_t bsonError = BSON_NO_ERROR;
             
-            mongoc_collection_drop_index(self.mongocCollection, indexDocument.UTF8String, &bsonError);
+            mongoc_collection_drop_index(self.mongocCollection, name.UTF8String, &bsonError);
             error = [self.client.class errorFromBsonError:bsonError];
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             callback(mongoQuery);
         }];
-    }];
-    [query.mutableParameters setObject:@"dropindex" forKey:@"command"];
-    [query.mutableParameters setObject:indexDocument forKey:@"index"];
+    } owner:self name:@"dropindex" parameters:@{ @"index": name }];
     return query;
 }
 
@@ -466,8 +406,7 @@
         [self mongoQueryDidFinish:mongoQuery withBsonError:bsonError callbackBlock:^(void) {
             callback(mongoQuery, cursor);
         }];
-    }];
-    [query.mutableParameters setObject:@"aggregate" forKey:@"command"];
+    } owner:self name:@"aggregate" parameters:nil];
     return nil;
 }
 
@@ -499,8 +438,7 @@
         [self mongoQueryDidFinish:currentMongoQuery withError:error callbackBlock:^(void) {
             callback(currentMongoQuery, reply);
         }];
-    }];
-    [mongoQuery.mutableParameters setObject:@"commandsimple" forKey:@"command"];
+    } owner:self name:@"simplecommand" parameters:@{ @"command": command }];
     return mongoQuery;
 }
 
@@ -535,8 +473,7 @@
         [self mongoQueryDidFinish:currentMongoQuery withError:error callbackBlock:^(void) {
             callback(currentMongoQuery, reply);
         }];
-    }];
-    [mongoQuery.mutableParameters setObject:@"mapreduce" forKey:@"command"];
+    } owner:self name:@"mapreduce" parameters:nil];
     return mongoQuery;
 }
 
@@ -555,8 +492,7 @@
                 callback(mongoQuery);
             }
         }];
-    }];
-    [query.mutableParameters setObject:@"dropcollection" forKey:@"command"];
+    } owner:self name:@"drop" parameters:nil];
     return query;
 }
 

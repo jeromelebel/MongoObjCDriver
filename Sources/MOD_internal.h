@@ -24,7 +24,7 @@ enum {
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock;
-- (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block;
+- (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block owner:(id<NSObject>)owner name:(NSString *)name parameters:(NSDictionary *)parameters;
 
 @end
 
@@ -68,10 +68,8 @@ enum {
 @end
 
 @interface MODQuery ()
-@property (nonatomic, readwrite, retain) NSDictionary *parameters;
-@property (nonatomic, readwrite, retain) NSMutableDictionary *mutableParameters;
 @property (nonatomic, readwrite, assign) NSBlockOperation *blockOperation;
-@property (nonatomic, readwrite, retain) NSError *error;
+@property (nonatomic, readwrite, strong) NSError *error;
 
 - (void)starts;
 - (void)ends;

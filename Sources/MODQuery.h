@@ -16,25 +16,31 @@
 
 @interface MODQuery : NSObject
 {
+    id<NSObject>        _owner;
+    NSString            *_name;
+    NSDictionary        *_parameters;
     NSBlockOperation    *_blockOperation;
     NSError             *_error;
     NSMutableDictionary *_userInfo;
-    NSMutableDictionary *_parameters;
     NSDate              *_startDate;
     NSDate              *_endDate;
     NSMutableArray      *_callbackTargets;
     BOOL                _canceled;
 }
 
+- (instancetype)initWithOwner:(id<NSObject>)owner name:(NSString *)name parameters:(NSDictionary *)parameters;
 - (void)waitUntilFinished;
 - (void)addCallbackWithTarget:(id<MODQueryCallbackTarget>)target;
 - (void)cancel;
 
-@property (nonatomic, readonly, retain) NSError *error;
-@property (nonatomic, readonly, retain) NSDictionary *parameters;
-@property (nonatomic, readwrite, retain) NSMutableDictionary *userInfo;
-@property (nonatomic, readonly, retain) NSDate *startDate;
-@property (nonatomic, readonly, retain) NSDate *endDate;
+@property (nonatomic, readonly, strong) id<NSObject> owner;
+@property (nonatomic, readonly, strong) NSString *name;
+@property (nonatomic, readonly, strong) NSDictionary *parameters;
+
+@property (nonatomic, readonly, strong) NSError *error;
+@property (nonatomic, readwrite, strong) NSMutableDictionary *userInfo;
+@property (nonatomic, readonly, strong) NSDate *startDate;
+@property (nonatomic, readonly, strong) NSDate *endDate;
 @property (nonatomic, readonly, assign) NSTimeInterval duration;
 @property (nonatomic, readonly, assign) BOOL canceled;
 

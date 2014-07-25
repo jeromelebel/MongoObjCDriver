@@ -8,15 +8,25 @@
 
 #import "MOD_internal.h"
 
+@interface MODQuery ()
+@property (nonatomic, readwrite, strong) id<NSObject> owner;
+@property (nonatomic, readwrite, strong) NSString *name;
+@property (nonatomic, readwrite, strong) NSDictionary *parameters;
+@end
+
 @implementation MODQuery
 
-@synthesize parameters = _parameters, userInfo = _userInfo, startDate = _startDate, endDate = _endDate, error = _error, canceled = _canceled;
+@synthesize owner = _owner, name = _name, parameters = _parameters, userInfo = _userInfo, startDate = _startDate, endDate = _endDate, error = _error, canceled = _canceled;
 
-- (id)init
+- (instancetype)initWithOwner:(id<NSObject>)owner name:(NSString *)name parameters:(NSDictionary *)parameters;
 {
+    NSParameterAssert(owner);
+    NSParameterAssert(name);
     if (self = [super init]) {
+        self.owner = owner;
+        self.name = name;
+        self.parameters = parameters;
         _userInfo = [[NSMutableDictionary alloc] init];
-        _parameters = [[NSMutableDictionary alloc] init];
         _callbackTargets = [[NSMutableArray alloc] init];
     }
     return self;
@@ -27,9 +37,11 @@
     [self removeBlockOperation];
     [_startDate release];
     [_endDate release];
-    [_parameters release];
     [_userInfo release];
     [_callbackTargets release];
+    self.owner = nil;
+    self.name = nil;
+    self.parameters = nil;
     [super dealloc];
 }
 
@@ -38,19 +50,9 @@
     _canceled = YES;
 }
 
-- (NSMutableDictionary *)mutableParameters
-{
-    return _parameters;
-}
-
-- (void)setMutableParameters:(NSMutableDictionary *)parameters
-{
-    [_parameters release];
-    _parameters = [parameters retain];
-}
-
 - (void)starts
 {
+//    NSLog(@"starts %@ from %@", self.name, self.owner.class.className);
     NSAssert(_startDate == nil, @"already started");
     NSAssert(_endDate == nil, @"weird");
     _startDate = [[NSDate alloc] init];
@@ -58,6 +60,7 @@
 
 - (void)ends
 {
+//    NSLog(@"ends %@ from %@", self.name, self.owner.class.className);
     NSAssert(_startDate != nil, @"needs to be started");
     NSAssert(_endDate == nil, @"already ended");
     _endDate = [[NSDate alloc] init];

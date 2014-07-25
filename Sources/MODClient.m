@@ -87,12 +87,12 @@
     return [[MODClient alloc] initWithMongoURI:mongoc_client_get_uri(self.mongocClient)];
 }
 
-- (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block
+- (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block owner:(id<NSObject>)owner name:(NSString *)name parameters:(NSDictionary *)parameters
 {
     MODQuery *mongoQuery;
     NSBlockOperation *blockOperation;
     
-    mongoQuery = [[MODQuery alloc] init];
+    mongoQuery = [[MODQuery alloc] initWithOwner:owner name:name parameters:parameters];
     blockOperation = [[NSBlockOperation alloc] init];
     [blockOperation addExecutionBlock:^{
         [mongoQuery starts];
@@ -106,16 +106,12 @@
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error
 {
-    [mongoQuery.mutableParameters setObject:self forKey:@"mongoserver"];
     [mongoQuery ends];
     mongoQuery.error = error;
 }
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock
 {
-    if (![mongoQuery.parameters objectForKey:@"command"]) {
-        NSLog(@"done with %@", [mongoQuery.parameters objectForKey:@"command"]);
-    }
     [self mongoQueryDidFinish:mongoQuery withError:error];
     if (callbackBlock) {
         dispatch_async(dispatch_get_main_queue(), callbackBlock);
@@ -149,8 +145,7 @@
             callback(outputObjects, mongoQuery);
         }];
         bson_destroy(&output);
-    }];
-    [query.mutableParameters setObject:@"fetchserverstatus" forKey:@"command"];
+    } owner:self name:@"serverstatus" parameters:nil];
     return query;
 }
 
@@ -185,8 +180,7 @@
         }];
         bson_destroy(&output);
         [list release];
-    }];
-    [query.mutableParameters setObject:@"fetchdatabaselist" forKey:@"command"];
+    } owner:self name:@"databasenames" parameters:nil];
     return query;
 }
 

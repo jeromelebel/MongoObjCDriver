@@ -41,13 +41,11 @@
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock
 {
-    [mongoQuery.mutableParameters setObject:self forKey:@"mongodatabase"];
     [self.client mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:callbackBlock];
 }
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock
 {
-    [mongoQuery.mutableParameters setObject:self forKey:@"mongodatabase"];
     [self.client mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
 }
 
@@ -67,7 +65,6 @@
             BSON_APPEND_INT32(&cmd, "dbstats", 1);
             if (mongoc_database_command_simple(self.mongocDatabase, &cmd, readPreferences?readPreferences.mongocReadPreferences:NULL, &output, &error)) {
                 stats = [[self.client class] objectFromBson:&output];
-                [mongoQuery.mutableParameters setObject:stats forKey:@"databasestats"];
             }
             bson_destroy(&cmd);
             bson_destroy(&output);
@@ -77,8 +74,7 @@
                 callback(stats, mongoQuery);
             }
         }];
-    }];
-    [query.mutableParameters setObject:@"fetchdatabasestats" forKey:@"command"];
+    } owner:self name:@"databasestats" parameters:nil];
     return query;
 }
 
@@ -112,8 +108,7 @@
             }
         }];
         [collections release];
-    }];
-    [query.mutableParameters setObject:@"fetchcollectionlist" forKey:@"command"];
+    } owner:self name:@"collectionnames" parameters:nil];
     return query;
 }
 
@@ -141,9 +136,7 @@
                 callback(mongoQuery);
             }
         }];
-    }];
-    [query.mutableParameters setObject:@"createcollection" forKey:@"command"];
-    [query.mutableParameters setObject:collectionName forKey:@"collectionname"];
+    } owner:self name:@"createcollection" parameters:@{ @"collectionname": collectionName }];
     return query;
 }
 
@@ -184,8 +177,7 @@
                 callback(mongoQuery);
             }
         }];
-    }];
-    [query.mutableParameters setObject:@"dropdatabase" forKey:@"command"];
+    } owner:self name:@"dropdatabase" parameters:@{ @"name": self.name }];
     return query;
 }
 

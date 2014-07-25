@@ -61,7 +61,6 @@
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock
 {
-    [mongoQuery.mutableParameters setObject:self forKey:@"cursor"];
     [self.mongoCollection mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
 }
 
@@ -162,7 +161,6 @@
         if (!mongoQuery.canceled) {
             MODSortedMutableDictionary *document;
             
-            [mongoQuery.mutableParameters setObject:self forKey:@"cursor"];
             while (!cursorStopped) {
                 documentCount++;
                 document = [self nextDocumentWithBsonData:nil error:&error];
@@ -184,8 +182,7 @@
                 endCallback(documentCount, cursorStopped, mongoQuery);
             }
         }];
-    }];
-    [query.mutableParameters setObject:@"eachdocument" forKey:@"command"];
+    } owner:self name:@"eachdocument" parameters:nil];
     return query;
 }
 
