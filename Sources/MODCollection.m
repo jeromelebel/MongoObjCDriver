@@ -399,6 +399,7 @@
             indexOptions.unique = (options & MOD_INDEX_OPTIONS_UNIQUE) == MOD_INDEX_OPTIONS_UNIQUE;
             indexOptions.sparse = (options & MOD_INDEX_OPTIONS_SPARSE) == MOD_INDEX_OPTIONS_SPARSE;
             indexOptions.drop_dups = (options & MOD_INDEX_OPTIONS_DROP_DUPS) == MOD_INDEX_OPTIONS_DROP_DUPS;
+            indexOptions.name = name.UTF8String;
             if ([indexDocument isKindOfClass:[NSString class]]) {
                 [MODRagelJsonParser bsonFromJson:&index json:indexDocument error:&error];
             } else {
