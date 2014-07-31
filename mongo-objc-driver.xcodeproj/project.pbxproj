@@ -3120,7 +3120,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "./scripts/update_submodule.sh fotonauts mongo-c-driver master Libraries/mongo-c-driver\ncd Libraries/mongo-c-driver\n../../scripts/update_submodule.sh fotonauts libbson master src/libbson\n";
+			shellScript = "./scripts/update_submodule.sh jeromelebel mongo-c-driver master Libraries/mongo-c-driver\ncd Libraries/mongo-c-driver\n../../scripts/update_submodule.sh jeromelebel libbson master src/libbson\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
