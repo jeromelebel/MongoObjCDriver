@@ -3,7 +3,6 @@
 //  mongo-objc-driver
 //
 //  Created by Jérôme Lebel on 11/09/2011.
-//  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
 #import "MOD_internal.h"
