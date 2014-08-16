@@ -2,7 +2,7 @@
 //  MODMaxKey.h
 //  mongo-objc-driver
 //
-//  Created by Jérôme Lebel on 11/06/13.
+//  Created by Jérôme Lebel on 11/06/2013.
 //
 //
 

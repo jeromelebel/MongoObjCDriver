@@ -2,7 +2,7 @@
 //  main.m
 //  mongo-test
 //
-//  Created by Jérôme Lebel on 02/09/11.
+//  Created by Jérôme Lebel on 02/09/2011.
 //  Copyright (c) 2011 Fotonauts. All rights reserved.
 //
 

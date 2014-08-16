@@ -2,7 +2,7 @@
 //  MODRagelJsonParser.m
 //  mongo-objc-driver
 //
-//  Created by Jérôme Lebel on 01/09/13.
+//  Created by Jérôme Lebel on 01/09/2013.
 //
 //
 

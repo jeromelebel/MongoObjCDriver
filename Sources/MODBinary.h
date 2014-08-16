@@ -2,7 +2,7 @@
 //  MODBinary.h
 //  mongo-objc-driver
 //
-//  Created by Jérôme Lebel on 28/09/11.
+//  Created by Jérôme Lebel on 28/09/2011.
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
