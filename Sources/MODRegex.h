@@ -12,10 +12,10 @@
     NSString *_pattern;
     NSString *_options;
 }
+@property (nonatomic, strong, readonly) NSString *pattern;
+@property (nonatomic, strong, readonly) NSString *options;
 
 - (id)initWithPattern:(NSString *)pattern options:(NSString *)options;
-- (NSString *)pattern;
-- (NSString *)options;
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;
 
 @end

@@ -10,9 +10,13 @@
 
 @interface MODSortedMutableDictionary : NSObject
 {
-    NSMutableDictionary *_content;
-    NSMutableArray *_sortedKeys;
+    NSMutableDictionary                 *_content;
+    NSMutableArray                      *_sortedKeys;
 }
+
+@property (nonatomic, strong, readonly) NSDictionary *content;
+@property (nonatomic, strong, readonly) NSArray *sortedKeys;
+@property (nonatomic, assign, readonly) NSUInteger count;
 
 + (id)sortedDictionary;
 + (id)sortedDictionaryWithObject:(id)object forKey:(id)key;
@@ -32,9 +36,5 @@
 - (NSEnumerator *)keyEnumerator;
 
 - (id)tengenJsonEncodedObject;
-
-@property (nonatomic, retain, readonly) NSDictionary *content;
-@property (nonatomic, retain, readonly) NSArray *sortedKeys;
-@property (nonatomic, assign, readonly) NSUInteger count;
 
 @end

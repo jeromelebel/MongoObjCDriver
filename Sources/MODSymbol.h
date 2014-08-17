@@ -12,10 +12,9 @@
 {
     NSString *_value;
 }
+@property (nonatomic, strong, readwrite) NSString *value;
 
 - (id)initWithValue:(NSString *)value;
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;
-
-@property (nonatomic, retain, readwrite) NSString *value;
 
 @end
