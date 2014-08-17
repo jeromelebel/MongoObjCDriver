@@ -415,7 +415,7 @@
     } else if ([value isKindOfClass:[NSData class]]) {
         bson_append_binary(bson, keyString, strlen(keyString), BSON_SUBTYPE_BINARY, [value bytes], [value length]);
     } else if ([value isKindOfClass:[MODBinary class]]) {
-        bson_append_binary(bson, keyString, strlen(keyString), [value binaryType], [[value data] bytes], [[value data] length]);
+        bson_append_binary(bson, keyString, strlen(keyString), [value binaryType], [value binaryData].bytes, [value binaryData].length);
     } else if ([value isKindOfClass:[MODUndefined class]]) {
         bson_append_undefined(bson, keyString, strlen(keyString));
     } else if ([value isKindOfClass:[MODSymbol class]]) {

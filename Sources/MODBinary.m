@@ -8,9 +8,15 @@
 #import "MOD_internal.h"
 #import "NSData+Base64.h"
 
+@interface MODBinary ()
+@property(nonatomic, readwrite, assign) char binaryType;
+@property(nonatomic, readwrite, strong) NSData *binaryData;
+
+@end
+
 @implementation MODBinary
 
-@synthesize data = _data, binaryType = _binaryType;
+@synthesize binaryData = _binaryData, binaryType = _binaryType;
 
 + (BOOL)isValidDataType:(unsigned char)dataType
 {
@@ -35,16 +41,22 @@
 
 - (id)initWithData:(NSData *)data binaryType:(unsigned char)binaryType
 {
-    return [self initWithBytes:[data bytes] length:[data length] binaryType:binaryType];
+    return [self initWithBytes:data.bytes length:data.length binaryType:binaryType];
 }
 
 - (id)initWithBytes:(const void *)bytes length:(NSUInteger)length binaryType:(unsigned char)binaryType
 {
     if (self = [self init]) {
-        _data = [[NSData alloc] initWithBytes:bytes length:length];
-        _binaryType = binaryType;
+        self.binaryData = [NSData dataWithBytes:bytes length:length];
+        self.binaryType = binaryType;
     }
     return self;
+}
+
+- (void)dealloc
+{
+    self.binaryData = nil;
+    [super dealloc];
 }
 
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
@@ -52,21 +64,21 @@
     NSString *result;
     
     if (!strictJSON && pretty) {
-        result = [NSString stringWithFormat:@"BinData(%x, \"%@\")", (int)_binaryType, [_data base64String]];
+        result = [NSString stringWithFormat:@"BinData(%x, \"%@\")", (int)self.binaryType, self.binaryData.base64String];
     } else if (!strictJSON) {
-        result = [NSString stringWithFormat:@"BinData(%x,\"%@\")", (int)_binaryType, [_data base64String]];
+        result = [NSString stringWithFormat:@"BinData(%x,\"%@\")", (int)self.binaryType, self.binaryData.base64String];
     } else if (pretty) {
-        result = [NSString stringWithFormat:@"{ \"$binary\" : \"%@\", \"$type\" : \"%d\" }", [_data base64String], (int)_binaryType];
+        result = [NSString stringWithFormat:@"{ \"$binary\" : \"%@\", \"$type\" : \"%d\" }", self.binaryData.base64String, (int)self.binaryType];
     } else {
-        result = [NSString stringWithFormat:@"{\"$binary\":\"%@\",\"$type\":\"%d\"}", [_data base64String], (int)_binaryType];
+        result = [NSString stringWithFormat:@"{\"$binary\":\"%@\",\"$type\":\"%d\"}", self.binaryData.base64String, (int)self.binaryType];
     }
     return result;
 }
 
 - (BOOL)isEqual:(id)object
 {
-    if ([object isKindOfClass:[self class]]) {
-        return [[object data] isEqual:_data] && [object binaryType] == _binaryType;
+    if ([object isKindOfClass:self.class]) {
+        return [[object data] isEqual:self.binaryData] && [object binaryType] == self.binaryType;
     }
     return NO;
 }
