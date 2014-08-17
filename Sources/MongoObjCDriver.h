@@ -1,5 +1,5 @@
 //
-//  MOD_public.h
+//  MongoObjCDriver.h
 //  mongo-objc-driver
 //
 //  Created by Jérôme Lebel on 28/09/2011.

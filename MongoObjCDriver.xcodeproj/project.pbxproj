@@ -34,7 +34,7 @@
 /* Begin PBXBuildFile section */
 		023ECFFC14851BEE00185781 /* MODSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 023ECFFA14851BEE00185781 /* MODSymbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		023ECFFD14851BEE00185781 /* MODSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 023ECFFB14851BEE00185781 /* MODSymbol.m */; };
-		02411AB51432B8FA00A5FFCA /* MOD_public.h in Headers */ = {isa = PBXBuildFile; fileRef = 02411AB41432B8F900A5FFCA /* MOD_public.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		02411AB51432B8FA00A5FFCA /* MongoObjCDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = 02411AB41432B8F900A5FFCA /* MongoObjCDriver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02411AB91432D02700A5FFCA /* MODBinary.h in Headers */ = {isa = PBXBuildFile; fileRef = 02411AB71432D02600A5FFCA /* MODBinary.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02411ABA1432D02700A5FFCA /* MODBinary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02411AB81432D02600A5FFCA /* MODBinary.m */; };
 		024B0C071887DFBF00B8DCE6 /* MODDocumentComparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 024B0C051887DFBF00B8DCE6 /* MODDocumentComparator.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -54,7 +54,7 @@
 		028CE605142E10BE0099B1F7 /* MODTimestamp.h in Headers */ = {isa = PBXBuildFile; fileRef = 028CE603142E10BE0099B1F7 /* MODTimestamp.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		028CE606142E10BE0099B1F7 /* MODTimestamp.m in Sources */ = {isa = PBXBuildFile; fileRef = 028CE604142E10BE0099B1F7 /* MODTimestamp.m */; };
 		0299B61517F39FAA00FB40A2 /* MODRagelJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 0299B61217F39FA200FB40A2 /* MODRagelJsonParser.m */; };
-		029CAA661940C2A300FD44B4 /* mongo-objc-driver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */; };
+		029CAA661940C2A300FD44B4 /* MongoObjCDriver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C014103B37000417F4 /* MongoObjCDriver.framework */; };
 		02A85F5114103EA6004F3FE9 /* MODClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F4F14103EA6004F3FE9 /* MODClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02A85F5214103EA6004F3FE9 /* MODClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5014103EA6004F3FE9 /* MODClient.m */; };
 		02A85F5914104184004F3FE9 /* MODQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5714104184004F3FE9 /* MODQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1336,7 +1336,7 @@
 		0204511D190E834600A80BED /* mongoc-version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mongoc-version.h"; sourceTree = "<group>"; };
 		023ECFFA14851BEE00185781 /* MODSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODSymbol.h; sourceTree = "<group>"; };
 		023ECFFB14851BEE00185781 /* MODSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODSymbol.m; sourceTree = "<group>"; };
-		02411AB41432B8F900A5FFCA /* MOD_public.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOD_public.h; sourceTree = "<group>"; };
+		02411AB41432B8F900A5FFCA /* MongoObjCDriver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MongoObjCDriver.h; sourceTree = "<group>"; };
 		02411AB71432D02600A5FFCA /* MODBinary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODBinary.h; sourceTree = "<group>"; };
 		02411AB81432D02600A5FFCA /* MODBinary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODBinary.m; sourceTree = "<group>"; };
 		024B0C051887DFBF00B8DCE6 /* MODDocumentComparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODDocumentComparator.h; sourceTree = "<group>"; };
@@ -1367,7 +1367,7 @@
 		02AB057514296F9000B7CD19 /* MODObjectId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODObjectId.m; sourceTree = "<group>"; };
 		02AB33AA194870D6008C06B9 /* MODReadPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODReadPreferences.h; sourceTree = "<group>"; };
 		02AB33AB194870D6008C06B9 /* MODReadPreferences.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODReadPreferences.m; sourceTree = "<group>"; };
-		02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = "mongo-objc-driver.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		02ABA1C014103B37000417F4 /* MongoObjCDriver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MongoObjCDriver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		02ABA1C314103B37000417F4 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		02ABA1C614103B37000417F4 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		02ABA1C714103B37000417F4 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -1415,7 +1415,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				029CAA661940C2A300FD44B4 /* mongo-objc-driver.framework in Frameworks */,
+				029CAA661940C2A300FD44B4 /* MongoObjCDriver.framework in Frameworks */,
 				02CF0EAB191926E4008C822A /* libsasl2.dylib in Frameworks */,
 				02CF0EA71919115D008C822A /* Security.framework in Frameworks */,
 				02F121C01410EF5200197811 /* Foundation.framework in Frameworks */,
@@ -2804,7 +2804,7 @@
 		02ABA1C114103B37000417F4 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */,
+				02ABA1C014103B37000417F4 /* MongoObjCDriver.framework */,
 				02F121BD1410EF5200197811 /* mongo-test */,
 			);
 			name = Products;
@@ -2839,7 +2839,7 @@
 				0299B61217F39FA200FB40A2 /* MODRagelJsonParser.m */,
 				0299B61317F39FA200FB40A2 /* MODRagelJsonParser.rl */,
 				02A85F5B14104373004F3FE9 /* MOD_internal.h */,
-				02411AB41432B8F900A5FFCA /* MOD_public.h */,
+				02411AB41432B8F900A5FFCA /* MongoObjCDriver.h */,
 				02A85F4F14103EA6004F3FE9 /* MODClient.h */,
 				02A85F5014103EA6004F3FE9 /* MODClient.m */,
 				02BDC3EB141D83A7000EF755 /* MODClient_utils.m */,
@@ -2933,7 +2933,7 @@
 				02AB057614296F9000B7CD19 /* MODObjectId.h in Headers */,
 				028CE605142E10BE0099B1F7 /* MODTimestamp.h in Headers */,
 				02CF87E9142F8AA3000C4C7F /* MODRegex.h in Headers */,
-				02411AB51432B8FA00A5FFCA /* MOD_public.h in Headers */,
+				02411AB51432B8FA00A5FFCA /* MongoObjCDriver.h in Headers */,
 				02411AB91432D02700A5FFCA /* MODBinary.h in Headers */,
 				025C56211433E7E40064B010 /* MODDBRef.h in Headers */,
 				02B24273147D1BD6008A15A3 /* MODSortedMutableDictionary.h in Headers */,
@@ -3016,9 +3016,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		02ABA1BF14103B37000417F4 /* mongo-objc-driver */ = {
+		02ABA1BF14103B37000417F4 /* MongoObjCDriver */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 02ABA1D514103B37000417F4 /* Build configuration list for PBXNativeTarget "mongo-objc-driver" */;
+			buildConfigurationList = 02ABA1D514103B37000417F4 /* Build configuration list for PBXNativeTarget "MongoObjCDriver" */;
 			buildPhases = (
 				02ABA1BB14103B37000417F4 /* Sources */,
 				02ABA1BC14103B37000417F4 /* Frameworks */,
@@ -3030,9 +3030,9 @@
 			dependencies = (
 				02216F1C1412D42B00789BD1 /* PBXTargetDependency */,
 			);
-			name = "mongo-objc-driver";
+			name = MongoObjCDriver;
 			productName = "mongo-objc-driver";
-			productReference = 02ABA1C014103B37000417F4 /* mongo-objc-driver.framework */;
+			productReference = 02ABA1C014103B37000417F4 /* MongoObjCDriver.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		02F121BC1410EF5200197811 /* mongo-test */ = {
@@ -3061,7 +3061,7 @@
 			attributes = {
 				LastUpgradeCheck = 0430;
 			};
-			buildConfigurationList = 02ABA1B914103B36000417F4 /* Build configuration list for PBXProject "mongo-objc-driver" */;
+			buildConfigurationList = 02ABA1B914103B36000417F4 /* Build configuration list for PBXProject "MongoObjCDriver" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -3073,7 +3073,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				02ABA1BF14103B37000417F4 /* mongo-objc-driver */,
+				02ABA1BF14103B37000417F4 /* MongoObjCDriver */,
 				02F121BC1410EF5200197811 /* mongo-test */,
 				02216F151412D39200789BD1 /* Submodules */,
 				0299B61B17F3A8B800FB40A2 /* Ragel */,
@@ -3238,7 +3238,7 @@
 		};
 		02D3D2FC1926632900925BE7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 02ABA1BF14103B37000417F4 /* mongo-objc-driver */;
+			target = 02ABA1BF14103B37000417F4 /* MongoObjCDriver */;
 			targetProxy = 02D3D2FB1926632900925BE7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -3408,7 +3408,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		02ABA1B914103B36000417F4 /* Build configuration list for PBXProject "mongo-objc-driver" */ = {
+		02ABA1B914103B36000417F4 /* Build configuration list for PBXProject "MongoObjCDriver" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				02ABA1D314103B37000417F4 /* Debug */,
@@ -3417,7 +3417,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		02ABA1D514103B37000417F4 /* Build configuration list for PBXNativeTarget "mongo-objc-driver" */ = {
+		02ABA1D514103B37000417F4 /* Build configuration list for PBXNativeTarget "MongoObjCDriver" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				02ABA1D614103B37000417F4 /* Debug */,
