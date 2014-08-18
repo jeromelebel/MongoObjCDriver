@@ -78,7 +78,7 @@
 - (BOOL)isEqual:(id)object
 {
     if ([object isKindOfClass:self.class]) {
-        return [[object data] isEqual:self.binaryData] && [object binaryType] == self.binaryType;
+        return [[object binaryData] isEqual:self.binaryData] && [object binaryType] == self.binaryType;
     }
     return NO;
 }
