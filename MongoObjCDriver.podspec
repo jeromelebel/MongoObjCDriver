@@ -7,6 +7,6 @@ Pod::Spec.new do |s|
   s.license      = 'MIT'
   s.author       = "Jerome Lebel"
   s.osx.deployment_target = '10.7'
-  s.source       = { :git => "https://github.com/jeromelebel/MongoObjCDriver.git", :tag => "v1.0" }
+  s.source       = { :git => "https://github.com/jeromelebel/MongoObjCDriver.git", :tag => "v1.0.1" }
   s.source_files = [ "Sources/*.{m,h}", "Libraries/mongo-c-driver/src/mongoc/*.{c,h}", "Libraries/mongo-c-driver/src/libbson/src/bson/*.{c,h}" ]
 end
