@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MOD_public.h"
+#import "MongoObjCDriver.h"
 #import "NSString+Base64.h"
 #import "mongoc.h"
 
