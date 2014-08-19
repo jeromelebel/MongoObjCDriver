@@ -16,7 +16,7 @@
 #import "MODObjectId.h"
 #import "MODRegex.h"
 #import "MODBinary.h"
-#import "MODDBRef.h"
+#import "MODDBPointer.h"
 #import "MODSymbol.h"
 #import "MODMinKey.h"
 #import "MODMaxKey.h"

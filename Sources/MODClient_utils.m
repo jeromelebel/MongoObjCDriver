@@ -276,8 +276,20 @@
             }
             break;
         case BSON_TYPE_DBPOINTER:
-            NSLog(@"*********************** %d %d", bson_iter_type(iterator), __LINE__);
-            NSAssert(NO, @"BSON_TYPE_DBREF");
+            {
+                uint32_t collectionLength;
+                const char *collectionCString;
+                const bson_oid_t *oid;
+                NSString *collection;
+                MODObjectId *objectId;
+                
+                bson_iter_dbpointer(iterator, &collectionLength, &collectionCString, &oid);
+                collection = [[NSString alloc] initWithBytes:collectionCString length:collectionLength encoding:NSUTF8StringEncoding];
+                objectId = [[MODObjectId alloc] initWithOid:oid];
+                result = [[[MODDBPointer alloc] initWithCollectionName:collection objectId:objectId] autorelease];
+                [collection release];
+                [objectId release];
+            }
             break;
         case BSON_TYPE_CODE:
             {
@@ -584,7 +596,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else if ([value isKindOfClass:[MODBinary class]]) {
         [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
-    } else if ([value isKindOfClass:[MODDBRef class]]) {
+    } else if ([value isKindOfClass:[MODDBPointer class]]) {
         [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else if ([value isKindOfClass:[MODSymbol class]]) {
         [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
