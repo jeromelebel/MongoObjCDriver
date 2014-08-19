@@ -1372,7 +1372,7 @@
 		02ABA1C614103B37000417F4 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		02ABA1C714103B37000417F4 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		02ABA1C814103B37000417F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
-		02ABA1CB14103B37000417F4 /* mongo-objc-driver-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "mongo-objc-driver-Info.plist"; sourceTree = "<group>"; };
+		02ABA1CB14103B37000417F4 /* MongoObjCDriver-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MongoObjCDriver-Info.plist"; sourceTree = "<group>"; };
 		02ABA1CD14103B37000417F4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		02B13FA31949C41000EFF763 /* MODFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODFunction.h; sourceTree = "<group>"; };
 		02B13FA41949C41000EFF763 /* MODFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODFunction.m; sourceTree = "<group>"; };
@@ -2893,7 +2893,7 @@
 		02ABA1CA14103B37000417F4 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				02ABA1CB14103B37000417F4 /* mongo-objc-driver-Info.plist */,
+				02ABA1CB14103B37000417F4 /* MongoObjCDriver-Info.plist */,
 				02ABA1CC14103B37000417F4 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
@@ -3354,7 +3354,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
+				INFOPLIST_FILE = "Sources/MongoObjCDriver-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
@@ -3367,7 +3367,7 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
-				INFOPLIST_FILE = "Sources/mongo-objc-driver-Info.plist";
+				INFOPLIST_FILE = "Sources/MongoObjCDriver-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = framework;
