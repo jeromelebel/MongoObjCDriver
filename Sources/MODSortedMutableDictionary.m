@@ -188,6 +188,12 @@
     
     if (self.count == 1 && [[self objectForKey:@"$date"] isKindOfClass:NSNumber.class]) {
         result = [[NSDate alloc] initWithTimeIntervalSince1970:[[self objectForKey:@"$date"] doubleValue] / 1000.0];
+    } else if (self.count == 2 && [[self objectForKey:@"$oid"] isKindOfClass:NSString.class] && [[self objectForKey:@"$oid"] length] == 24 && [[self objectForKey:@"$collection"] isKindOfClass:NSString.class]) {
+        MODObjectId *objectId;
+        
+        objectId = [[MODObjectId alloc] initWithCString:[[self objectForKey:@"$oid"] cStringUsingEncoding:NSUTF8StringEncoding]];
+        result = [[MODDBPointer alloc] initWithCollectionName:[self objectForKey:@"$collection"] objectId:objectId];
+        [objectId release];
     } else if (self.count == 1 && [[self objectForKey:@"$oid"] isKindOfClass:NSString.class] && [[self objectForKey:@"$oid"] length] == 24) {
         result = [[MODObjectId alloc] initWithCString:[[self objectForKey:@"$oid"] cStringUsingEncoding:NSUTF8StringEncoding]];
     } else if (self.count == 1 && [[self objectForKey:@"$timestamp"] isKindOfClass:NSArray.class] && [[self objectForKey:@"$timestamp"] count] == 2) {
