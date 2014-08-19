@@ -1,6 +1,6 @@
 //
 //  MODReadPreferences.m
-//  mongo-objc-driver
+//  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 11/06/2014.
 //

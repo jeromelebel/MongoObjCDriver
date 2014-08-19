@@ -1,6 +1,6 @@
 //
 //  MODDocumentComparator.m
-//  mongo-objc-driver
+//  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 16/01/2014.
 //

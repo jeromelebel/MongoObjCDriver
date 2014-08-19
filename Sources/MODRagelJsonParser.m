@@ -2,7 +2,7 @@
 #line 1 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 //
 //  MODRagelJsonParser.m
-//  mongo-objc-driver
+//  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 01/09/2013.
 //

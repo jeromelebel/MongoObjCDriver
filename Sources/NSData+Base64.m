@@ -1,6 +1,6 @@
 //
 //  NSData+Base64.m
-//  mongo-objc-driver
+//  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 28/04/2013.
 //

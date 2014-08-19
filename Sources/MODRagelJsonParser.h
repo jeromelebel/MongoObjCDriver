@@ -1,6 +1,6 @@
 //
 //  MODRagelJsonParser.h
-//  mongo-objc-driver
+//  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 01/09/2013.
 //

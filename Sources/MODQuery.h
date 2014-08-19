@@ -1,6 +1,6 @@
 //
 //  MODQuery.h
-//  mongo-objc-driver
+//  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 02/09/2011.
 //

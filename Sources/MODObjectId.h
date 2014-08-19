@@ -1,6 +1,6 @@
 //
 //  MODObjectId.h
-//  mongo-objc-driver
+//  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 21/09/2011.
 //

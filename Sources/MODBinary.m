@@ -1,6 +1,6 @@
 //
 //  MODBinary.m
-//  mongo-objc-driver
+//  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 28/09/2011.
 //

@@ -1,6 +1,6 @@
 //
 //  MODScopeFunction.h
-//  mongo-objc-driver
+//  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 12/06/2014.
 //

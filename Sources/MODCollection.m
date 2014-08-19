@@ -1,6 +1,6 @@
 //
 //  MODCollection.m
-//  mongo-objc-driver
+//  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 03/09/2011.
 //

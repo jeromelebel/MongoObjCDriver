@@ -1,6 +1,6 @@
 //
 //  MODSymbol.h
-//  mongo-objc-driver
+//  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 29/11/2011.
 //  Copyright (c) 2011 Fotonauts. All rights reserved.

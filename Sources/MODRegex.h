@@ -1,6 +1,6 @@
 //
 //  MODRegex.h
-//  mongo-objc-driver
+//  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 25/09/2011.
 //

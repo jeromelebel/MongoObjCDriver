@@ -1,6 +1,6 @@
 //
 //  MODBsonComparator.m
-//  mongo-objc-driver
+//  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 05/12/2013.
 //
