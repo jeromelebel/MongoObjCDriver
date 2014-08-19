@@ -2771,7 +2771,6 @@
 		02A85F0214103D4D004F3FE9 /* mongo-c-driver */ = {
 			isa = PBXGroup;
 			children = (
-				02045118190E834600A80BED /* generated-headers */,
 				02044CB1190E5E4C00A80BED /* autogen.sh */,
 				02044CB2190E5E4C00A80BED /* build */,
 				02044CD7190E5E4C00A80BED /* CMakeLists.txt */,
@@ -2835,6 +2834,7 @@
 		02ABA1C914103B37000417F4 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				02045118190E834600A80BED /* generated-headers */,
 				0299B61117F39FA200FB40A2 /* MODRagelJsonParser.h */,
 				0299B61217F39FA200FB40A2 /* MODRagelJsonParser.m */,
 				0299B61317F39FA200FB40A2 /* MODRagelJsonParser.rl */,
