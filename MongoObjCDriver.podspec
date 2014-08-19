@@ -9,6 +9,7 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.7'
   s.requires_arc = false
   s.source       = { :git => "https://github.com/jeromelebel/MongoObjCDriver.git", :tag => "v1.0.2" }
-  s.source_files = [ "Sources/*.{m,h}", "Libraries/mongo-c-driver/src/mongoc/*.{c,h}", "Libraries/mongo-c-driver/src/libbson/src/bson/*.{c,h}", "Sources/generated-headers/*.h" ]
+  s.source_files = [ "Sources/*.{m,h}", "Libraries/mongo-c-driver/src/mongoc/*.{c,h}", "Libraries/mongo-c-driver/src/libbson/src/bson/*.{c,h}", "Sources/generated-headers/*.h", "Libraries/mongo-c-driver/src/libbson/src/yajl/*.{c,h}" ]
   s.prepare_command = "git submodule update --init --recursive"
+  s.compiler_flags = "-DBSON_COMPILATION"
 end
