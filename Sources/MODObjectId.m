@@ -105,11 +105,11 @@
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
 {
     if (!strictJSON) {
-        return [NSString stringWithFormat:@"ObjectId(\"%@\")", [self stringValue]];
+        return [NSString stringWithFormat:@"ObjectId(\"%@\")", self.stringValue];
     } else if (pretty) {
-        return [NSString stringWithFormat:@"{ \"$oid\" : \"%@\" }", [self stringValue]];
+        return [NSString stringWithFormat:@"{ \"$oid\" : \"%@\" }", self.stringValue];
     } else {
-        return [NSString stringWithFormat:@"{\"$oid\":\"%@\"}", [self stringValue]];
+        return [NSString stringWithFormat:@"{\"$oid\":\"%@\"}", self.stringValue];
     }
 }
 
