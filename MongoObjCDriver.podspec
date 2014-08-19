@@ -12,4 +12,5 @@ Pod::Spec.new do |s|
   s.source_files = [ "Sources/*.{m,h}", "Libraries/mongo-c-driver/src/mongoc/*.{c,h}", "Libraries/mongo-c-driver/src/libbson/src/bson/*.{c,h}", "Sources/generated-headers/*.h", "Libraries/mongo-c-driver/src/libbson/src/yajl/*.{c,h}" ]
   s.prepare_command = "git submodule update --init --recursive"
   s.compiler_flags = "-DBSON_COMPILATION"
+  s.preserve_paths = "Libraries/mongo-c-driver/src/libbson/src/yajl/yajl_parser.h"
 end
