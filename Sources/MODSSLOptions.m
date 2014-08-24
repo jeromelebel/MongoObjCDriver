@@ -61,14 +61,16 @@
 
 - (void)getMongocSSLOpt:(mongoc_ssl_opt_t *)sslOpt
 {
-    NSParameterAssert(sslOpt->pem_file);
-    NSParameterAssert(sslOpt->pem_pwd);
-    NSParameterAssert(sslOpt->ca_file);
-    NSParameterAssert(sslOpt->ca_dir);
+    NSParameterAssert(sslOpt->pem_file == NULL);
+    NSParameterAssert(sslOpt->pem_pwd == NULL);
+    NSParameterAssert(sslOpt->ca_file == NULL);
+    NSParameterAssert(sslOpt->ca_dir == NULL);
+    NSParameterAssert(sslOpt->crl_file == NULL);
     sslOpt->pem_file = self.pemFileName.UTF8String;
     sslOpt->pem_pwd = self.pemPassword.UTF8String;
     sslOpt->ca_file = self.caFileName.UTF8String;
     sslOpt->ca_dir = self.caDirectory.UTF8String;
+    sslOpt->crl_file = self.crlFileName.UTF8String;
     sslOpt->weak_cert_validation = self.weakCertificate;
 }
 
