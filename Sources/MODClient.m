@@ -217,7 +217,7 @@
 
 - (void)setSslOptions:(MODSSLOptions *)sslOptions
 {
-    mongoc_ssl_opt_t mongocSSLOptions;
+    mongoc_ssl_opt_t mongocSSLOptions = { NULL, NULL, NULL, NULL, NULL, false };
     
     [sslOptions getMongocSSLOpt:&mongocSSLOptions];
     [_sslOptions release];
