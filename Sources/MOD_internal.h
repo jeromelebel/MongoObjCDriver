@@ -99,3 +99,9 @@ enum {
 - (id)initWithBson1:(bson_t *)bson1 bson2:(bson_t *)bson2;
 
 @end
+
+@interface MODSSLOptions (private)
++ (instancetype)sslOptionsWithMongocSSLOpt:(const mongoc_ssl_opt_t *)sslOpt;
+- (void)getMongocSSLOpt:(mongoc_ssl_opt_t *)sslOpt;
+@end
+

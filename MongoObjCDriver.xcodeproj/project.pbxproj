@@ -39,6 +39,8 @@
 		02411ABA1432D02700A5FFCA /* MODBinary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02411AB81432D02600A5FFCA /* MODBinary.m */; };
 		024B0C071887DFBF00B8DCE6 /* MODDocumentComparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 024B0C051887DFBF00B8DCE6 /* MODDocumentComparator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		024B0C081887DFBF00B8DCE6 /* MODDocumentComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 024B0C061887DFBF00B8DCE6 /* MODDocumentComparator.m */; };
+		025410A819AA7FCE00CF437E /* MODSSLOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 025410A619AA7FCE00CF437E /* MODSSLOptions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		025410A919AA7FCE00CF437E /* MODSSLOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 025410A719AA7FCE00CF437E /* MODSSLOptions.m */; };
 		025C56201433E7E40064B010 /* MODDBPointer.m in Sources */ = {isa = PBXBuildFile; fileRef = 025C561E1433E7E40064B010 /* MODDBPointer.m */; };
 		025C56211433E7E40064B010 /* MODDBPointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 025C561F1433E7E40064B010 /* MODDBPointer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02688DDC14119CF50014ED51 /* MODDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 02688DDA14119CF50014ED51 /* MODDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1341,6 +1343,8 @@
 		02411AB81432D02600A5FFCA /* MODBinary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODBinary.m; sourceTree = "<group>"; };
 		024B0C051887DFBF00B8DCE6 /* MODDocumentComparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODDocumentComparator.h; sourceTree = "<group>"; };
 		024B0C061887DFBF00B8DCE6 /* MODDocumentComparator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODDocumentComparator.m; sourceTree = "<group>"; };
+		025410A619AA7FCE00CF437E /* MODSSLOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODSSLOptions.h; sourceTree = "<group>"; };
+		025410A719AA7FCE00CF437E /* MODSSLOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODSSLOptions.m; sourceTree = "<group>"; };
 		025C561E1433E7E40064B010 /* MODDBPointer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODDBPointer.m; sourceTree = "<group>"; };
 		025C561F1433E7E40064B010 /* MODDBPointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODDBPointer.h; sourceTree = "<group>"; };
 		02688DDA14119CF50014ED51 /* MODDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODDatabase.h; sourceTree = "<group>"; };
@@ -2842,6 +2846,8 @@
 				02411AB41432B8F900A5FFCA /* MongoObjCDriver.h */,
 				02A85F4F14103EA6004F3FE9 /* MODClient.h */,
 				02A85F5014103EA6004F3FE9 /* MODClient.m */,
+				025410A619AA7FCE00CF437E /* MODSSLOptions.h */,
+				025410A719AA7FCE00CF437E /* MODSSLOptions.m */,
 				02BDC3EB141D83A7000EF755 /* MODClient_utils.m */,
 				02B17F33184FF2E500362A27 /* MODBsonComparator.h */,
 				02B17F34184FF2E500362A27 /* MODBsonComparator.m */,
@@ -2947,6 +2953,7 @@
 				02CCE7A0192A278800A9DB1B /* MODRagelJsonParser.h in Headers */,
 				02AB33AC194870D6008C06B9 /* MODReadPreferences.h in Headers */,
 				02A85F5D14104373004F3FE9 /* MOD_internal.h in Headers */,
+				025410A819AA7FCE00CF437E /* MODSSLOptions.h in Headers */,
 				02D3D3031926661000925BE7 /* mongoc-array-private.h in Headers */,
 				02D3D3041926661000925BE7 /* mongoc-buffer-private.h in Headers */,
 				02D3D3051926661100925BE7 /* mongoc-bulk-operation-private.h in Headers */,
@@ -3130,6 +3137,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				025410A919AA7FCE00CF437E /* MODSSLOptions.m in Sources */,
 				02CF0E22191112CB008C822A /* bson-clock.c in Sources */,
 				02CF0E8119111321008C822A /* mongoc-sasl.c in Sources */,
 				02A85F5214103EA6004F3FE9 /* MODClient.m in Sources */,

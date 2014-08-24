@@ -17,6 +17,7 @@
 @class MODClient;
 @class MODSortedMutableDictionary;
 @class MODReadPreferences;
+@class MODSSLOptions;
 
 typedef struct mongo_replset            *mongo_replset_ptr;
 
@@ -25,12 +26,15 @@ typedef struct mongo_replset            *mongo_replset_ptr;
     mongo_replset_ptr                   _replicaSet;
     void                                *_mongocClient;
     MODReadPreferences                  *_readPreferences;
+    // we have to keept ssl options so the char * parameters are kept alive
+    MODSSLOptions                       *_sslOptions;
     
     BOOL                                _connected;
     NSOperationQueue                    *_operationQueue;
 }
 @property (nonatomic, readonly, assign, getter = isConnected) BOOL connected;
-@property (nonatomic, readwrite, retain) MODReadPreferences *readPreferences;
+@property (nonatomic, readwrite, strong) MODReadPreferences *readPreferences;
+@property (nonatomic, readwrite, strong) MODSSLOptions *sslOptions;
 
 + (MODClient *)clientWihtURLString:(NSString *)urlString;
 + (uint16_t)defaultPort;

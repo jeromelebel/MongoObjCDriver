@@ -8,6 +8,7 @@
 #import "MOD_internal.h"
 #import "bson.h"
 #import "mongoc.h"
+#import "mongoc-client-private.h"
 
 @interface MODClient ()
 @property (nonatomic, readwrite, retain) NSOperationQueue *operationQueue;
@@ -16,7 +17,10 @@
 
 @implementation MODClient
 
-@synthesize connected = _connected, mongocClient = _mongocClient, operationQueue = _operationQueue, readPreferences = _readPreferences;
+@synthesize connected = _connected;
+@synthesize mongocClient = _mongocClient;
+@synthesize operationQueue = _operationQueue;
+@synthesize readPreferences = _readPreferences;
 
 + (MODClient *)clientWihtURLString:(NSString *)urlString
 {
@@ -76,6 +80,7 @@
         mongoc_client_destroy(self.mongocClient);
         self.mongocClient = NULL;
     }
+    [_sslOptions release];
     self.readPreferences = nil;
     self.operationQueue = nil;
     [super dealloc];
@@ -203,6 +208,21 @@
     if (self.mongocClient) {
         mongoc_client_set_read_prefs(self.mongocClient, self.mongocReadPreferences);
     }
+}
+
+- (MODSSLOptions *)sslOptions
+{
+    return [MODSSLOptions sslOptionsWithMongocSSLOpt:&self.mongocClient->ssl_opts];
+}
+
+- (void)setSslOptions:(MODSSLOptions *)sslOptions
+{
+    mongoc_ssl_opt_t mongocSSLOptions;
+    
+    [sslOptions getMongocSSLOpt:&mongocSSLOptions];
+    [_sslOptions release];
+    _sslOptions = [sslOptions retain];
+    mongoc_client_set_ssl_opts(self.mongocClient, &mongocSSLOptions);
 }
 
 @end

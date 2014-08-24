@@ -6,6 +6,7 @@
 //
 
 #import "MODClient.h"
+#import "MODSSLOptions.h"
 #import "MODDatabase.h"
 #import "MODCollection.h"
 #import "MODCursor.h"
