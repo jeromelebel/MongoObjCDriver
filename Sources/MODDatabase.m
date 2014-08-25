@@ -69,7 +69,7 @@
             bson_destroy(&output);
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
-            if (callback) {
+            if (!mongoQuery.isCanceled && callback) {
                 callback(stats, mongoQuery);
             }
         }];
@@ -102,7 +102,7 @@
             }
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
-            if (callback) {
+            if (!mongoQuery.isCanceled && callback) {
                 callback(collections, mongoQuery);
             }
         }];
@@ -131,7 +131,7 @@
             mongoc_database_create_collection(self.mongocDatabase, collectionName.UTF8String, NULL, &error);
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
-            if (callback) {
+            if (!mongoQuery.isCanceled && callback) {
                 callback(mongoQuery);
             }
         }];
@@ -172,7 +172,7 @@
             mongoc_database_drop(self.mongocDatabase, &error);
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
-            if (callback) {
+            if (!mongoQuery.isCanceled && callback) {
                 callback(mongoQuery);
             }
         }];

@@ -66,7 +66,7 @@
             bson_destroy(&output);
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
-            if (callback) {
+            if (!mongoQuery.isCanceled && callback) {
                 callback(stats, mongoQuery);
             }
         }];
@@ -97,7 +97,7 @@
             }
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
-            if (callback) {
+            if (!mongoQuery.isCanceled && callback) {
                 callback(documents, allBsonData, mongoQuery);
             }
         }];
@@ -144,7 +144,7 @@
             bson_destroy(&bsonQuery);
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
-            if (callback) {
+            if (!mongoQuery.isCanceled && callback) {
                 callback(count, mongoQuery);
             }
         }];
@@ -207,7 +207,7 @@
             mongoQuery.error = error;
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
-            if (callback) {
+            if (!mongoQuery.isCanceled && callback) {
                 callback(mongoQuery);
             }
         }];
@@ -246,7 +246,9 @@
             bson_destroy(&bsonUpdate);
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
-            callback(mongoQuery);
+            if (!mongoQuery.isCanceled && callback) {
+                callback(mongoQuery);
+            }
         }];
     } owner:self name:@"update" parameters:@{ @"criteria": criteria?criteria:[NSNull null], @"update": update?update:[NSNull null], @"upsert":[NSNumber numberWithBool:upsert], @"multiupdate": [NSNumber numberWithBool:multiUpdate] }];
     return query;
@@ -271,7 +273,9 @@
             bson_destroy(&bsonDocument);
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
-            callback(mongoQuery);
+            if (!mongoQuery.isCanceled && callback) {
+                callback(mongoQuery);
+            }
         }];
     } owner:self name:@"savedocument" parameters:@{ @"document": document }];
     return query;
@@ -309,7 +313,9 @@
             bson_destroy(&bsonCriteria);
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
-            callback(mongoQuery);
+            if (!mongoQuery.isCanceled && callback) {
+                callback(mongoQuery);
+            }
         }];
     } owner:self name:@"remove" parameters:@{ @"criteria": criteria?criteria:[NSNull null] }];
     return query;
@@ -358,7 +364,9 @@
             bson_destroy(&index);
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
-            callback(mongoQuery);
+            if (!mongoQuery.isCanceled && callback) {
+                callback(mongoQuery);
+            }
         }];
     } owner:self name:@"createindex" parameters:@{ @"index": indexDocument, @"name": name?name:[NSNull null], @"options": [NSNumber numberWithInt:options] }];
     return query;
@@ -378,7 +386,9 @@
             error = [self.client.class errorFromBsonError:bsonError];
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
-            callback(mongoQuery);
+            if (!mongoQuery.isCanceled && callback) {
+                callback(mongoQuery);
+            }
         }];
     } owner:self name:@"dropindex" parameters:@{ @"index": name }];
     return query;
@@ -403,7 +413,9 @@
             mongocCursor = mongoc_collection_aggregate(self.mongocCollection, flags, &bsonPipeline, &bsonOptions, readPreferences?readPreferences.mongocReadPreferences:NULL);
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:bsonError callbackBlock:^(void) {
-            callback(mongoQuery, cursor);
+            if (!mongoQuery.isCanceled && callback) {
+                callback(mongoQuery, cursor);
+            }
         }];
     } owner:self name:@"aggregate" parameters:nil];
     return nil;
@@ -435,7 +447,9 @@
             [self _commandSimpleWithCommand:command readPreferences:readPreferences reply:&reply error:&error];
         }
         [self mongoQueryDidFinish:currentMongoQuery withError:error callbackBlock:^(void) {
-            callback(currentMongoQuery, reply);
+            if (!currentMongoQuery.isCanceled && callback) {
+                callback(currentMongoQuery, reply);
+            }
         }];
     } owner:self name:@"simplecommand" parameters:@{ @"command": command }];
     return mongoQuery;
@@ -470,7 +484,9 @@
             [self _commandSimpleWithCommand:command readPreferences:readPreferences reply:&reply error:&error];
         }
         [self mongoQueryDidFinish:currentMongoQuery withError:error callbackBlock:^(void) {
-            callback(currentMongoQuery, reply);
+            if (!currentMongoQuery.isCanceled && callback) {
+                callback(currentMongoQuery, reply);
+            }
         }];
     } owner:self name:@"mapreduce" parameters:nil];
     return mongoQuery;
@@ -487,7 +503,7 @@
             mongoc_collection_drop(self.mongocCollection, &error);
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
-            if (callback) {
+            if (!mongoQuery.isCanceled && callback) {
                 callback(mongoQuery);
             }
         }];

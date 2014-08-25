@@ -177,7 +177,7 @@
             };
         }
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
-            if (endCallback) {
+            if (!mongoQuery.isCanceled && endCallback) {
                 endCallback(documentCount, cursorStopped, mongoQuery);
             }
         }];
