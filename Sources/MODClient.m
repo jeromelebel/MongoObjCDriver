@@ -167,7 +167,7 @@
             outputObjects = [self.class objectFromBson:&output];
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
-            if (!mongoQuery.isCanceled) {
+            if (!mongoQuery.isCanceled && callback) {
                 callback(outputObjects, mongoQuery);
             }
         }];
@@ -203,7 +203,7 @@
 
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
-            if (!mongoQuery.isCanceled) {
+            if (!mongoQuery.isCanceled && callback) {
                 callback(list, mongoQuery);
             }
         }];
