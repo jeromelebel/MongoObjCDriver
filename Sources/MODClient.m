@@ -145,7 +145,9 @@
             outputObjects = [self.class objectFromBson:&output];
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
-            callback(outputObjects, mongoQuery);
+            if (!mongoQuery.canceled) {
+                callback(outputObjects, mongoQuery);
+            }
         }];
         bson_destroy(&output);
     } owner:self name:@"serverstatus" parameters:nil];
@@ -179,7 +181,9 @@
 
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
-            callback(list, mongoQuery);
+            if (!mongoQuery.canceled) {
+                callback(list, mongoQuery);
+            }
         }];
         bson_destroy(&output);
         [list release];
