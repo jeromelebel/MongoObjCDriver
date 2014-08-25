@@ -10,6 +10,20 @@
 #import "mongoc.h"
 #import "mongoc-client-private.h"
 
+@interface MODBlockOperation : NSBlockOperation
+{
+    MODQuery *_mongoQuery;
+}
+@property (nonatomic, readwrite, strong) MODQuery *mongoQuery;
+
+@end
+
+@implementation MODBlockOperation
+
+@synthesize mongoQuery = _mongoQuery;
+
+@end
+
 @interface MODClient ()
 @property (nonatomic, readwrite, retain) NSOperationQueue *operationQueue;
 
@@ -94,10 +108,11 @@
 - (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block owner:(id<NSObject>)owner name:(NSString *)name parameters:(NSDictionary *)parameters
 {
     MODQuery *mongoQuery;
-    NSBlockOperation *blockOperation;
+    MODBlockOperation *blockOperation;
     
     mongoQuery = [[MODQuery alloc] initWithOwner:owner name:name parameters:parameters];
-    blockOperation = [[NSBlockOperation alloc] init];
+    blockOperation = [[MODBlockOperation alloc] init];
+    blockOperation.mongoQuery = mongoQuery;
     [blockOperation addExecutionBlock:^{
         [mongoQuery starts];
         block(mongoQuery);
@@ -106,6 +121,13 @@
     [self.operationQueue addOperation:blockOperation];
     [blockOperation release];
     return [mongoQuery autorelease];
+}
+
+- (void)cancelAllOperations
+{
+    for (MODBlockOperation *blockOperation in self.operationQueue.operations) {
+        [blockOperation.mongoQuery cancel];
+    }
 }
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error
