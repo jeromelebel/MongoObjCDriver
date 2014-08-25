@@ -41,7 +41,7 @@ enum {
 @property (nonatomic, readwrite, assign) mongoc_database_t *mongocDatabase;
 @property (nonatomic, readonly, assign) mongoc_read_prefs_t *mongocReadPreferences;
 
-- (id)initWithClient:(MODClient *)client name:(NSString *)databaseName;
+- (instancetype)initWithClient:(MODClient *)client name:(NSString *)databaseName;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock;
 
@@ -52,14 +52,14 @@ enum {
 @property (nonatomic, readwrite, assign) mongoc_collection_t *mongocCollection;
 @property (nonatomic, readonly, assign) mongoc_read_prefs_t *mongocReadPreferences;
 
-- (id)initWithName:(NSString *)name database:(MODDatabase *)database;
+- (instancetype)initWithName:(NSString *)name database:(MODDatabase *)database;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock;
 
 @end
 
 @interface MODCursor ()
-- (id)initWithMongoCollection:(MODCollection *)mongoCollection query:(MODSortedMutableDictionary *)query fields:(NSArray *)fields skip:(uint32_t)skip limit:(uint32_t)limit sort:(MODSortedMutableDictionary *)sort;
+- (instancetype)initWithMongoCollection:(MODCollection *)mongoCollection query:(MODSortedMutableDictionary *)query fields:(NSArray *)fields skip:(uint32_t)skip limit:(uint32_t)limit sort:(MODSortedMutableDictionary *)sort;
 - (MODSortedMutableDictionary *)nextDocumentWithBsonData:(NSData **)bsonData error:(NSError **)error;
 - (BOOL)more;
 - (NSError *)error;
@@ -82,7 +82,7 @@ enum {
 @end
 
 @interface MODObjectId ()
-- (id)initWithOid:(const bson_oid_t *)oid;
+- (instancetype)initWithOid:(const bson_oid_t *)oid;
 - (const bson_oid_t *)bsonObjectId;
 
 @end
@@ -96,7 +96,7 @@ enum {
 @end
 
 @interface MODBsonComparator (private)
-- (id)initWithBson1:(bson_t *)bson1 bson2:(bson_t *)bson2;
+- (instancetype)initWithBson1:(bson_t *)bson1 bson2:(bson_t *)bson2;
 
 @end
 

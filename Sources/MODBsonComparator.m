@@ -27,7 +27,7 @@ typedef struct __BsonComparatorStack {
 
 @implementation MODBsonComparator (Private)
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {
@@ -36,7 +36,7 @@ typedef struct __BsonComparatorStack {
     return self;
 }
 
-- (id)initWithBson1:(bson_t *)bson1 bson2:(bson_t *)bson2
+- (instancetype)initWithBson1:(bson_t *)bson1 bson2:(bson_t *)bson2
 {
     self = [self init];
     if (self) {
@@ -52,7 +52,7 @@ typedef struct __BsonComparatorStack {
 
 @synthesize bson1 = _bson1, bson2 = _bson2, differences = _differences, bson1ToDestroy = _bson1ToDestroy, bson2ToDestroy = _bson2ToDestroy;
 
-- (id)initWithBsonData1:(NSData *)bsonData1 bsonData2:(NSData *)bsonData2
+- (instancetype)initWithBsonData1:(NSData *)bsonData1 bsonData2:(NSData *)bsonData2
 {
     self = [self init];
     if (self) {

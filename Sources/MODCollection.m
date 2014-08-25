@@ -20,7 +20,7 @@
 
 @synthesize database = _database, name = _name, absoluteName = _absoluteName, mongocCollection = _mongocCollection, readPreferences = _readPreferences;
 
-- (id)initWithName:(NSString *)name database:(MODDatabase *)database
+- (instancetype)initWithName:(NSString *)name database:(MODDatabase *)database
 {
     if (self = [self init]) {
         self.database = database;

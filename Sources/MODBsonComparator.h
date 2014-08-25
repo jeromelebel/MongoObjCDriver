@@ -19,7 +19,7 @@
 
 @property (nonatomic, readonly, strong) NSArray *differences;
 
-- (id)initWithBsonData1:(NSData *)bson1 bsonData2:(NSData *)bson2;
+- (instancetype)initWithBsonData1:(NSData *)bson1 bsonData2:(NSData *)bson2;
 - (BOOL)compare;
 
 @end

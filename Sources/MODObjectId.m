@@ -35,13 +35,13 @@
     return [self isCStringValid:string.UTF8String];
 }
 
-- (id)initWithOid:(const bson_oid_t *)oid
+- (instancetype)initWithOid:(const bson_oid_t *)oid
 {
     NSAssert(sizeof(bson_oid_t) == sizeof(_bytes), @"problem with types");
     return [self initWithBytes:(const unsigned char *)oid];
 }
 
-- (id)initWithBytes:(const unsigned char[12])bytes
+- (instancetype)initWithBytes:(const unsigned char[12])bytes
 {
     if (self = [self init]) {
         memcpy((char *)_bytes, bytes, sizeof(_bytes));
@@ -49,7 +49,7 @@
     return self;
 }
 
-- (id)initWithCString:(const char *)cString
+- (instancetype)initWithCString:(const char *)cString
 {
     NSAssert([self.class isCStringValid:cString], @"wrong size for the cString expecting %d. received %d", (int)sizeof(_bytes), (int)strlen(cString));
     if (self = [self init]) {
@@ -66,7 +66,7 @@
     return self;
 }
 
-- (id)initWithString:(NSString *)string
+- (instancetype)initWithString:(NSString *)string
 {
     if (self = [self initWithCString:string.UTF8String]) {
         
@@ -74,7 +74,7 @@
     return self;
 }
 
-- (id)copyWithZone:(NSZone *)zone
+- (instancetype)copyWithZone:(NSZone *)zone
 {
     return [self retain];
 }

@@ -17,7 +17,7 @@
 
 @synthesize client = _client, name = _name, mongocDatabase = _mongocDatabase, readPreferences = _readPreferences;
 
-- (id)initWithClient:(MODClient *)client name:(NSString *)name
+- (instancetype)initWithClient:(MODClient *)client name:(NSString *)name
 {
     if (self = [self init]) {
         self.client = client;

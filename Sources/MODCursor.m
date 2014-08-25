@@ -27,7 +27,7 @@
 
 @synthesize mongoCollection = _mongoCollection, query = _query, fields = _fields, skip = _skip, limit = _limit, sort = _sort, mongocCursor = _mongocCursor, tailable = _tailable, batchSize = _batchSize, internalError = _internalError;
 
-- (id)initWithMongoCollection:(MODCollection *)mongoCollection
+- (instancetype)initWithMongoCollection:(MODCollection *)mongoCollection
 {
     if (self = [self init]) {
         self.mongoCollection = mongoCollection;
@@ -35,7 +35,7 @@
     return self;
 }
 
-- (id)initWithMongoCollection:(MODCollection *)mongoCollection query:(MODSortedMutableDictionary *)query fields:(NSArray *)fields skip:(uint32_t)skip limit:(uint32_t)limit sort:(MODSortedMutableDictionary *)sort
+- (instancetype)initWithMongoCollection:(MODCollection *)mongoCollection query:(MODSortedMutableDictionary *)query fields:(NSArray *)fields skip:(uint32_t)skip limit:(uint32_t)limit sort:(MODSortedMutableDictionary *)sort
 {
     if (self = [self initWithMongoCollection:mongoCollection]) {
         self.query = query;
