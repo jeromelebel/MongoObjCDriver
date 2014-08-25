@@ -157,7 +157,7 @@
         BOOL cursorStopped = NO;
         NSError *error = nil;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             MODSortedMutableDictionary *document;
             
             while (!cursorStopped) {

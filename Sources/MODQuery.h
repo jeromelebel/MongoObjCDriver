@@ -41,6 +41,6 @@
 @property (nonatomic, readonly, strong) NSDate *startDate;
 @property (nonatomic, readonly, strong) NSDate *endDate;
 @property (nonatomic, readonly, assign) NSTimeInterval duration;
-@property (nonatomic, readonly, assign) BOOL canceled;
+@property (nonatomic, readonly, assign, getter=isCanceled) BOOL canceled;
 
 @end

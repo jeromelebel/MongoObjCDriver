@@ -162,12 +162,12 @@
         bson_error_t error = BSON_NO_ERROR;
         MODSortedMutableDictionary *outputObjects = nil;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             mongoc_client_get_server_status(self.mongocClient, readPreferences?readPreferences.mongocReadPreferences:NULL, &output, &error);
             outputObjects = [self.class objectFromBson:&output];
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
-            if (!mongoQuery.canceled) {
+            if (!mongoQuery.isCanceled) {
                 callback(outputObjects, mongoQuery);
             }
         }];
@@ -185,7 +185,7 @@
         NSMutableArray *list = nil;
         bson_error_t error = BSON_NO_ERROR;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             char **cStringName;
             
             cStringName = mongoc_client_get_database_names(self.mongocClient, &error);
@@ -203,7 +203,7 @@
 
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
-            if (!mongoQuery.canceled) {
+            if (!mongoQuery.isCanceled) {
                 callback(list, mongoQuery);
             }
         }];

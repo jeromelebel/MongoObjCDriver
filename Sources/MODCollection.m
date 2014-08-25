@@ -57,7 +57,7 @@
         MODSortedMutableDictionary *stats = nil;
         bson_error_t error = BSON_NO_ERROR;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             bson_t output = BSON_INITIALIZER;
             
             if (mongoc_collection_stats(self.mongocCollection, NULL, &output, &error)) {
@@ -83,7 +83,7 @@
         NSMutableArray *documents = nil;
         NSMutableArray *allBsonData = nil;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             NSData *bsonData;
             MODCursor *cursor;
             MODSortedMutableDictionary *document;
@@ -120,7 +120,7 @@
         int64_t count = 0;
         NSError *error = nil;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             bson_t bsonQuery = BSON_INITIALIZER;
             
             if (criteria && criteria.count > 0) {
@@ -159,7 +159,7 @@
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             NSInteger ii = 0;
             mongoc_bulk_operation_t *bulk;
             
@@ -222,7 +222,7 @@
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             bson_t bsonCriteria = BSON_INITIALIZER;
             bson_t bsonUpdate = BSON_INITIALIZER;
             
@@ -259,7 +259,7 @@
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             bson_t bsonDocument = BSON_INITIALIZER;
             bson_error_t bsonError = BSON_NO_ERROR;
             
@@ -284,7 +284,7 @@
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             bson_t bsonCriteria = BSON_INITIALIZER;
             
             if (criteria && [criteria isKindOfClass:[NSString class]]) {
@@ -335,7 +335,7 @@
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             bson_t index = BSON_INITIALIZER;
             bson_error_t bsonError = BSON_NO_ERROR;
             mongoc_index_opt_t indexOptions;
@@ -371,7 +371,7 @@
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
 
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             bson_error_t bsonError = BSON_NO_ERROR;
             
             mongoc_collection_drop_index(self.mongocCollection, name.UTF8String, &bsonError);
@@ -393,7 +393,7 @@
         MODCursor *cursor = nil;
         bson_error_t bsonError = BSON_NO_ERROR;
 
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             bson_t bsonPipeline = BSON_INITIALIZER;
             bson_t bsonOptions = BSON_INITIALIZER;
             mongoc_cursor_t *mongocCursor = nil;
@@ -431,7 +431,7 @@
         MODSortedMutableDictionary *reply = nil;
         NSError *error = nil;
         
-        if (!currentMongoQuery.canceled) {
+        if (!currentMongoQuery.isCanceled) {
             [self _commandSimpleWithCommand:command readPreferences:readPreferences reply:&reply error:&error];
         }
         [self mongoQueryDidFinish:currentMongoQuery withError:error callbackBlock:^(void) {
@@ -449,7 +449,7 @@
         NSError *error = nil;
         MODSortedMutableDictionary *reply = nil;
         
-        if (!currentMongoQuery.canceled) {
+        if (!currentMongoQuery.isCanceled) {
             MODSortedMutableDictionary *command;
             
             command = [[MODSortedMutableDictionary alloc] init];
@@ -483,7 +483,7 @@
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         bson_error_t error = BSON_NO_ERROR;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             mongoc_collection_drop(self.mongocCollection, &error);
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {

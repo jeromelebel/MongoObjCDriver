@@ -56,7 +56,7 @@
         MODSortedMutableDictionary *stats = nil;
         bson_error_t error = BSON_NO_ERROR;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             bson_t cmd = BSON_INITIALIZER;
             bson_t output;
             
@@ -85,7 +85,7 @@
         NSMutableArray *collections = nil;
         bson_error_t error = BSON_NO_ERROR;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             char **cStringCollections;
             
             cStringCollections = mongoc_database_get_collection_names(self.mongocDatabase, &error);
@@ -127,7 +127,7 @@
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery){
         bson_error_t error = BSON_NO_ERROR;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             mongoc_database_create_collection(self.mongocDatabase, collectionName.UTF8String, NULL, &error);
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
@@ -146,7 +146,7 @@
 //    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery){
 //        if (!self.client.isMaster) {
 //            mongoQuery.error = [MODClient errorWithErrorDomain:MODMongoErrorDomain code:MONGO_CONN_NOT_MASTER descriptionDetails:@"Collection add forbidden on a slave"];
-//        } else if (!mongoQuery.canceled && [self.client authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
+//        } else if (!mongoQuery.isCanceled && [self.client authenticateSynchronouslyWithDatabaseName:_databaseName userName:_userName password:_password mongoQuery:mongoQuery]) {
 //            mongo_cmd_create_capped_collection(self.client.mongo, [_databaseName UTF8String], [collectionName UTF8String], capSize);
 //        }
 //        [self mongoQueryDidFinish:mongoQuery withCallbackBlock:^(void) {
@@ -168,7 +168,7 @@
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         bson_error_t error = BSON_NO_ERROR;
         
-        if (!mongoQuery.canceled) {
+        if (!mongoQuery.isCanceled) {
             mongoc_database_drop(self.mongocDatabase, &error);
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
