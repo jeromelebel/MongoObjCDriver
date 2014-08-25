@@ -6,8 +6,56 @@
 //
 
 #import "MOD_internal.h"
+#import "mongoc-log.h"
+
+static void (^logCallback)(MODLogLevel logLever, const char *logName, const char *message) = nil;
+
+static void defaultLogCallback (mongoc_log_level_t  log_level,
+                                const char         *log_domain,
+                                const char         *message,
+                                void               *user_data)
+{
+    MODLogLevel logLevel;
+    
+    switch (log_level) {
+        case MONGOC_LOG_LEVEL_ERROR:
+            logLevel = MODLogLevelError;
+            break;
+        case MONGOC_LOG_LEVEL_CRITICAL:
+            logLevel = MODLogLevelCritical;
+            break;
+        case MONGOC_LOG_LEVEL_WARNING:
+            logLevel = MODLogLevelWarning;
+            break;
+        case MONGOC_LOG_LEVEL_MESSAGE:
+            logLevel = MODLogLevelMessage;
+            break;
+        case MONGOC_LOG_LEVEL_INFO:
+            logLevel = MODLogLevelInfo;
+            break;
+        case MONGOC_LOG_LEVEL_DEBUG:
+            logLevel = MODLogLevelInfo;
+            break;
+        case MONGOC_LOG_LEVEL_TRACE:
+            logLevel = MODLogLevelTrace;
+            break;
+    }
+    if (logCallback) {
+        logCallback(logLevel, log_domain, message);
+    }
+}
 
 @implementation MODClient(utils_internal)
+
++ (void)initialize
+{
+    if (self == MODClient.class) {
+        mongoc_log_set_handler(defaultLogCallback, NULL);
+        logCallback = [^(MODLogLevel logLever, const char *logName, const char *message) {
+            NSLog(@"%s %s", logName, message);
+        } retain];
+    }
+}
 
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails
 {
@@ -798,6 +846,12 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     } else {
         return @[ [NSMutableDictionary dictionaryWithObjectsAndKeys:@"*", @"key", object1, @"value1", object2, @"value2", nil]];
     }
+}
+
++ (void)setLogCallback:(void (^)(MODLogLevel logLever, const char *logName, const char *message))callback
+{
+    [logCallback release];
+    logCallback = [callback retain];
 }
 
 @end

@@ -21,6 +21,17 @@
 
 typedef struct mongo_replset            *mongo_replset_ptr;
 
+typedef enum
+{
+    MODLogLevelError,
+    MODLogLevelCritical,
+    MODLogLevelWarning,
+    MODLogLevelMessage,
+    MODLogLevelInfo,
+    MODLogLevelDebug,
+    MODLogLevelTrace,
+} MODLogLevel;
+
 @interface MODClient : NSObject
 {
     mongo_replset_ptr                   _replicaSet;
@@ -59,4 +70,7 @@ typedef struct mongo_replset            *mongo_replset_ptr;
 + (BOOL)isEqualWithJson:(NSString *)json toBsonData:(NSData *)document info:(NSDictionary **)info;
 + (BOOL)isEqualWithJson:(NSString *)json toDocument:(id)document info:(NSDictionary **)info;
 + (NSArray *)findAllDifferencesInObject1:(id)object1 object2:(id)object2;
+
++ (void)setLogCallback:(void (^)(MODLogLevel logLever, const char *logName, const char *message))callback;
+
 @end
