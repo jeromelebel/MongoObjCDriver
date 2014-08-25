@@ -40,7 +40,7 @@
 {
     if ((self = [super init]) != nil) {
         self.operationQueue = [[[NSOperationQueue alloc] init] autorelease];
-        [_operationQueue setMaxConcurrentOperationCount:1];
+        [self.operationQueue setMaxConcurrentOperationCount:1];
     }
     return self;
 }
@@ -103,7 +103,7 @@
         block(mongoQuery);
     }];
     mongoQuery.blockOperation = blockOperation;
-    [_operationQueue addOperation:blockOperation];
+    [self.operationQueue addOperation:blockOperation];
     [blockOperation release];
     return [mongoQuery autorelease];
 }
