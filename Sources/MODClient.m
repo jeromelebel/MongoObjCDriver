@@ -136,7 +136,7 @@
     MODQuery *query;
     
     query = [self addQueryInQueue:^(MODQuery *mongoQuery){
-        bson_t output;
+        bson_t output = BSON_INITIALIZER;
         bson_error_t error = BSON_NO_ERROR;
         MODSortedMutableDictionary *outputObjects = nil;
         
