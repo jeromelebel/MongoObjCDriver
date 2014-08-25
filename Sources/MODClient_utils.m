@@ -51,9 +51,6 @@ static void defaultLogCallback (mongoc_log_level_t  log_level,
 {
     if (self == MODClient.class) {
         mongoc_log_set_handler(defaultLogCallback, NULL);
-        logCallback = [^(MODLogLevel logLever, const char *logName, const char *message) {
-            NSLog(@"%s %s", logName, message);
-        } retain];
     }
 }
 
