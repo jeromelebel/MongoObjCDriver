@@ -3,7 +3,6 @@
 //  mongo-test
 //
 //  Created by Jérôme Lebel on 02/09/2011.
-//  Copyright (c) 2011 Fotonauts. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -221,7 +220,7 @@ static void testJson()
 #endif
     
     // test to make sure each items in an array has the correct index
-    // https://github.com/fotonauts/MongoHub-Mac/issues/28
+    // https://github.com/jeromelebel/MongoHub-Mac/issues/28
     {
         bson_t bsonObject = BSON_INITIALIZER;
         
@@ -231,7 +230,7 @@ static void testJson()
     }
     
     // test to make sure each items in an array has the correct index
-    // https://github.com/fotonauts/MongoHub-Mac/issues/39
+    // https://github.com/jeromelebel/MongoHub-Mac/issues/39
     {
         id objects;
         bson_t bsonObject = BSON_INITIALIZER;
