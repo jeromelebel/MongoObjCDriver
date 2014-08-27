@@ -27,7 +27,7 @@ void logMongoQuery(MODQuery *mongoQuery)
         NSLog(@"********* ERROR ************");
         NSLog(@"Need to set the command name in the query parameters of mongo query");
     }
-    NSLog(@"%@", mongoQuery.parameters);
+    NSLog(@"%@ %@", mongoQuery.name, mongoQuery.parameters);
     assert(mongoQuery.name != nil);
     assert(mongoQuery.error == nil);
 }
