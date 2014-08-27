@@ -63,7 +63,7 @@
 		02A85F5214103EA6004F3FE9 /* MODClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5014103EA6004F3FE9 /* MODClient.m */; };
 		02A85F5914104184004F3FE9 /* MODQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5714104184004F3FE9 /* MODQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02A85F5A14104184004F3FE9 /* MODQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5814104184004F3FE9 /* MODQuery.m */; };
-		02A85F5D14104373004F3FE9 /* MOD_internal.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5B14104373004F3FE9 /* MOD_internal.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02A85F5D14104373004F3FE9 /* MongoObjCDriver-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5B14104373004F3FE9 /* MongoObjCDriver-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02AB057614296F9000B7CD19 /* MODObjectId.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB057414296F9000B7CD19 /* MODObjectId.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
 		02AB33AC194870D6008C06B9 /* MODReadPreferences.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB33AA194870D6008C06B9 /* MODReadPreferences.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1370,7 +1370,7 @@
 		02A85F5014103EA6004F3FE9 /* MODClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODClient.m; sourceTree = "<group>"; };
 		02A85F5714104184004F3FE9 /* MODQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODQuery.h; sourceTree = "<group>"; };
 		02A85F5814104184004F3FE9 /* MODQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODQuery.m; sourceTree = "<group>"; };
-		02A85F5B14104373004F3FE9 /* MOD_internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOD_internal.h; sourceTree = "<group>"; };
+		02A85F5B14104373004F3FE9 /* MongoObjCDriver-private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MongoObjCDriver-private.h"; sourceTree = "<group>"; };
 		02AB057414296F9000B7CD19 /* MODObjectId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODObjectId.h; sourceTree = "<group>"; };
 		02AB057514296F9000B7CD19 /* MODObjectId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODObjectId.m; sourceTree = "<group>"; };
 		02AB33AA194870D6008C06B9 /* MODReadPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODReadPreferences.h; sourceTree = "<group>"; };
@@ -2847,11 +2847,11 @@
 			isa = PBXGroup;
 			children = (
 				02045118190E834600A80BED /* generated-headers */,
+				02411AB41432B8F900A5FFCA /* MongoObjCDriver.h */,
+				02A85F5B14104373004F3FE9 /* MongoObjCDriver-private.h */,
 				0299B61117F39FA200FB40A2 /* MODRagelJsonParser.h */,
 				0299B61217F39FA200FB40A2 /* MODRagelJsonParser.m */,
 				0299B61317F39FA200FB40A2 /* MODRagelJsonParser.rl */,
-				02A85F5B14104373004F3FE9 /* MOD_internal.h */,
-				02411AB41432B8F900A5FFCA /* MongoObjCDriver.h */,
 				02A85F4F14103EA6004F3FE9 /* MODClient.h */,
 				02A85F5014103EA6004F3FE9 /* MODClient.m */,
 				02BDC3EB141D83A7000EF755 /* MODClient_utils.m */,
@@ -2962,7 +2962,7 @@
 				027A1DA81767E91F0048AD60 /* MODUndefined.h in Headers */,
 				02CCE7A0192A278800A9DB1B /* MODRagelJsonParser.h in Headers */,
 				02AB33AC194870D6008C06B9 /* MODReadPreferences.h in Headers */,
-				02A85F5D14104373004F3FE9 /* MOD_internal.h in Headers */,
+				02A85F5D14104373004F3FE9 /* MongoObjCDriver-private.h in Headers */,
 				025410A819AA7FCE00CF437E /* MODSSLOptions.h in Headers */,
 				02D3D3031926661000925BE7 /* mongoc-array-private.h in Headers */,
 				02D3D3041926661000925BE7 /* mongoc-buffer-private.h in Headers */,
