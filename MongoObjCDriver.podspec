@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 
   s.name         = "MongoObjCDriver"
   s.version      = "1.0.6"
-  s.summary      = "MongoObjCDriver is a framework to connect to a mongodb database with async API"
+  s.summary      = "MongoObjCDriver is a framework to connect to a mongodb database with async API. This framework is used by https://github.com/jeromelebel/MongoHub-Mac"
   s.homepage     = "https://github.com/jeromelebel/MongoObjCDriver"
   s.license      = { :type => "-", :file => "README" }
   s.author       = "Jerome Lebel"
