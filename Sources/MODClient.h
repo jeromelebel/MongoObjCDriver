@@ -71,6 +71,7 @@ typedef enum
 + (BOOL)isEqualWithJson:(NSString *)json toDocument:(id)document info:(NSDictionary **)info;
 + (NSArray *)findAllDifferencesInObject1:(id)object1 object2:(id)object2;
 
-+ (void)setLogCallback:(void (^)(MODLogLevel logLever, const char *logName, const char *message))callback;
++ (void)setLogCallback:(void (^)(MODLogLevel level, const char *domain, const char *message))callback;
++ (NSString *)logLevelStringForLogLevel:(MODLogLevel)level;
 
 @end

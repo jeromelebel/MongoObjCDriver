@@ -8,12 +8,12 @@
 #import "MOD_internal.h"
 #import "mongoc-log.h"
 
-static void (^logCallback)(MODLogLevel logLever, const char *logName, const char *message) = nil;
+static void (^logCallback)(MODLogLevel level, const char *domain, const char *message) = nil;
 
-static void defaultLogCallback (mongoc_log_level_t  log_level,
-                                const char         *log_domain,
-                                const char         *message,
-                                void               *user_data)
+static void defaultLogCallback(mongoc_log_level_t  log_level,
+                               const char         *log_domain,
+                               const char         *message,
+                               void               *user_data)
 {
     MODLogLevel logLevel;
     
@@ -845,10 +845,40 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     }
 }
 
-+ (void)setLogCallback:(void (^)(MODLogLevel logLever, const char *logName, const char *message))callback
++ (void)setLogCallback:(void (^)(MODLogLevel level, const char *domain, const char *message))callback
 {
     [logCallback release];
     logCallback = [callback retain];
+}
+
++ (NSString *)logLevelStringForLogLevel:(MODLogLevel)level
+{
+    NSString *result = @"unknown";
+    
+    switch(level) {
+        case MODLogLevelError:
+            result = @"error";
+            break;
+        case MODLogLevelCritical:
+            result = @"critical";
+            break;
+        case MODLogLevelWarning:
+            result = @"warning";
+            break;
+        case MODLogLevelMessage:
+            result = @"message";
+            break;
+        case MODLogLevelInfo:
+            result = @"info";
+            break;
+        case MODLogLevelDebug:
+            result = @"debug";
+            break;
+        case MODLogLevelTrace:
+            result = @"trace";
+            break;
+    }
+    return result;
 }
 
 @end
