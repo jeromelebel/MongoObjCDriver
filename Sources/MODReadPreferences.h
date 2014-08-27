@@ -19,14 +19,22 @@ typedef enum
     MODReadPreferencesReadNearestMode               = (1 << 3) | MODReadPreferencesReadSecondaryMode
 } MODReadPreferencesReadMode;
 
+/*
+    read preferences is non mutable since MODClient instance doesn't keep it around
+    this avoid errors like :
+    client.readPreferences.readMode = MODReadPreferencesReadSecondaryMode;
+*/
+
 @interface MODReadPreferences : NSObject
 {
     void                                *_mongocReadPreferences;
 }
-@property (nonatomic, readwrite, assign) MODReadPreferencesReadMode readMode;
-@property (nonatomic, readwrite, assign) MODSortedMutableDictionary *tags;
+@property (nonatomic, assign, readonly) MODReadPreferencesReadMode readMode;
+@property (nonatomic, assign, readonly) MODSortedMutableDictionary *tags;
 
 + (MODReadPreferences *)readPreferencesWithReadMode:(MODReadPreferencesReadMode)readMode;
 + (MODReadPreferences *)readPreferencesWithReadMode:(MODReadPreferencesReadMode)readMode tags:(MODSortedMutableDictionary *)tags;
+
+- (instancetype)initWithReadMode:(MODReadPreferencesReadMode)readMode tags:(MODSortedMutableDictionary *)tags;
 
 @end

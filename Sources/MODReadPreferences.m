@@ -8,6 +8,12 @@
 
 #import "MOD_internal.h"
 
+@interface MODReadPreferences ()
+@property (nonatomic, assign, readwrite) MODReadPreferencesReadMode readMode;
+@property (nonatomic, assign, readwrite) MODSortedMutableDictionary *tags;
+
+@end
+
 @implementation MODReadPreferences
 
 @synthesize mongocReadPreferences = _mongocReadPreferences;
@@ -47,6 +53,16 @@
     if (self) {
         mongoc_read_prefs_destroy(self.mongocReadPreferences);
         self.mongocReadPreferences = mongoc_read_prefs_copy(readPreferences);
+    }
+    return self;
+}
+
+- (instancetype)initWithReadMode:(MODReadPreferencesReadMode)readMode tags:(MODSortedMutableDictionary *)tags
+{
+    self = [self init];
+    if (self) {
+        self.readMode = readMode;
+        self.tags = tags;
     }
     return self;
 }
