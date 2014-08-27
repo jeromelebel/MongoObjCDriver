@@ -15,7 +15,6 @@
 @property (nonatomic, assign, readwrite) int32_t w;
 @property (nonatomic, assign, readwrite) int32_t wtimeout;
 @property (nonatomic, strong, readwrite) NSString *wtag;
-@property (nonatomic, strong, readwrite) id compiled;
 
 @end
 
@@ -37,7 +36,7 @@
     return self;
 }
 
-- (instancetype)initWithFileSync:(BOOL)fileSync journal:(BOOL)journal w:(int32_t)w wtimeout:(int32_t)wtimeout wtag:(NSString *)wtag compiled:(id)compiled
+- (instancetype)initWithFileSync:(BOOL)fileSync journal:(BOOL)journal w:(int32_t)w wtimeout:(int32_t)wtimeout wtag:(NSString *)wtag
 {
     if (self = [self init]) {
         self.fileSync = fileSync;
@@ -45,7 +44,6 @@
         self.w = w;
         self.wtimeout = wtimeout;
         self.wtag = wtag;
-        self.compiled = compiled;
     }
     return self;
 }
@@ -115,16 +113,6 @@
 - (void)setWtag:(NSString *)wtag
 {
     mongoc_write_concern_set_wtag(self.mongocWriteConcern, wtag.UTF8String);
-}
-
-- (id)compiled
-{
-    return nil;
-}
-
-- (void)setCompiled:(id)compiled
-{
-    
 }
 
 @end

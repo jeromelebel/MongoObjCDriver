@@ -23,8 +23,7 @@
 @property (nonatomic, assign, readonly) int32_t w;
 @property (nonatomic, assign, readonly) int32_t wtimeout;
 @property (nonatomic, strong, readonly) NSString *wtag;
-@property (nonatomic, strong, readonly) id compiled;
 
-- (instancetype)initWithFileSync:(BOOL)fileSync journal:(BOOL)journal w:(int32_t)w wtimeout:(int32_t)wtimeout wtag:(NSString *)wtag compiled:(id)compiled;
+- (instancetype)initWithFileSync:(BOOL)fileSync journal:(BOOL)journal w:(int32_t)w wtimeout:(int32_t)wtimeout wtag:(NSString *)wtag;
 
 @end
