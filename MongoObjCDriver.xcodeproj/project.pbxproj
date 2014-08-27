@@ -1398,6 +1398,8 @@
 		02DB18AA172C8C5A00B26EAE /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		02DB18AD172C8C9700B26EAE /* NSString+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Base64.h"; sourceTree = "<group>"; };
 		02DB18AE172C8C9700B26EAE /* NSString+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Base64.m"; sourceTree = "<group>"; };
+		02E3ECF619AD74E400F7F06E /* MongoObjCDriver.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = MongoObjCDriver.podspec; sourceTree = "<group>"; };
+		02E3ECF719AD74EF00F7F06E /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		02F121BD1410EF5200197811 /* mongo-test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mongo-test"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02F121BF1410EF5200197811 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02F121C21410EF5200197811 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -2796,6 +2798,8 @@
 		02ABA1B414103B36000417F4 = {
 			isa = PBXGroup;
 			children = (
+				02E3ECF619AD74E400F7F06E /* MongoObjCDriver.podspec */,
+				02E3ECF719AD74EF00F7F06E /* README */,
 				02ABA1C914103B37000417F4 /* Sources */,
 				02F121C11410EF5200197811 /* mongo-test */,
 				02A85F0114103D4D004F3FE9 /* Libraries */,
