@@ -1,12 +1,12 @@
 //
-//  NSString+Base64.m
+//  NSString+MOBase64.m
 //  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 28/04/2013.
 //
 //
 
-#import "NSString+Base64.h"
+#import "NSString+MODBase64.h"
 
 #define CONVERT_CHAR_TO_BYTE(mychar) ((mychar >= 'A' && mychar <= 'Z')?(mychar - 'A'):(mychar >= 'a' && mychar <= 'z')?(mychar - 'a' + 26):(mychar >= '0' && mychar <= '9')?(mychar - '0' + 52):(mychar == '+')?62:(mychar == '/')?63:-1)
 

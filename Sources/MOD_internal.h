@@ -7,7 +7,8 @@
 
 #import <Foundation/Foundation.h>
 #import "MongoObjCDriver.h"
-#import "NSString+Base64.h"
+#import "NSString+MODBase64.h"
+#import "NSData+MODBase64.h"
 #import "mongoc.h"
 
 #define BSON_NO_ERROR { 0, 0, 0 }

@@ -1,12 +1,12 @@
 //
-//  NSData+Base64.m
+//  NSData+MODBase64.m
 //  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 28/04/2013.
 //
 //
 
-#import "NSData+Base64.h"
+#import "NSData+MODBase64.h"
 
 static char base64chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 

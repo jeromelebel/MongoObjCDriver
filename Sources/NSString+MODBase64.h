@@ -1,5 +1,5 @@
 //
-//  NSData+Base64.h
+//  NSString+MOBase64.h
 //  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 28/04/2013.
@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSData (MODBase64)
-- (NSString *)mod_base64String;
+@interface NSString (MODBase64)
+
+- (NSData *)mod_dataFromBase64;
+
 @end

@@ -6,7 +6,6 @@
 //
 
 #import "MOD_internal.h"
-#import "NSData+Base64.h"
 
 @interface MODBinary ()
 @property(nonatomic, readwrite, assign) char binaryType;

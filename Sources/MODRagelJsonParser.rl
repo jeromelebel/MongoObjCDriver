@@ -17,7 +17,6 @@
 #import "MODBinary.h"
 #import "MODTimestamp.h"
 #import "MODSymbol.h"
-#import "NSString+Base64.h"
 
 #pragma clang diagnostic ignored "-Wunused-variable"
 

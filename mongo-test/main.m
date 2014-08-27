@@ -7,8 +7,6 @@
 
 #import <Foundation/Foundation.h>
 #import "MOD_internal.h"
-#import "NSData+Base64.h"
-#import "NSString+Base64.h"
 #import "MODBsonComparator.h"
 #import "MODDocumentComparator.h"
 
@@ -255,11 +253,11 @@ static void testNSDataInBase64(NSData *dataToConvert, const char *base64)
         NSLog(@"received %@", dataToConvert.mod_base64String);
         assert(false);
     }
-    if (![base64String.mod_base64String isEqualToData:dataToConvert]) {
+    if (![base64String.mod_dataFromBase64 isEqualToData:dataToConvert]) {
         NSLog(@"***** Problem to decode base 64");
         NSLog(@"trying to decode %s", base64);
         NSLog(@"expecting %@", dataToConvert);
-        NSLog(@"received %@", base64String.mod_base64String);
+        NSLog(@"received %@", base64String.mod_dataFromBase64);
         assert(false);
     }
 }
