@@ -21,55 +21,62 @@
 {
     MODReadPreferences *readPreferences;
     
-    readPreferences = [[self alloc] init];
+    readPreferences = [[[self alloc] init] autorelease];
     readPreferences.readMode = readMode;
     readPreferences.tags = tags;
     return readPreferences;
 }
 
++ (instancetype)readPreferencesWithMongocReadPreferences:(const mongoc_read_prefs_t *)readPreferences
+{
+    return [[[self alloc] initWithMongocReadPreferences:readPreferences] autorelease];
+}
+
+- (instancetype)init
+{
+    self = [self init];
+    if (self) {
+        self.mongocReadPreferences = mongoc_read_prefs_new(MONGOC_READ_PRIMARY);
+    }
+    return self;
+}
+
+- (instancetype)initWithMongocReadPreferences:(const mongoc_read_prefs_t *)readPreferences
+{
+    self = [self init];
+    if (self) {
+        mongoc_read_prefs_destroy(self.mongocReadPreferences);
+        self.mongocReadPreferences = mongoc_read_prefs_copy(readPreferences);
+    }
+    return self;
+}
+
 - (void)dealloc
 {
-    if (self.mongocReadPreferences) {
-        mongoc_read_prefs_destroy(self.mongocReadPreferences);
-    }
+    mongoc_read_prefs_destroy(self.mongocReadPreferences);
     [super dealloc];
 }
 
 - (MODReadPreferencesReadMode)readMode
 {
-    if (!self.mongocReadPreferences) {
-        return MODReadPreferencesReadPrimaryMode;
-    } else {
-        return (MODReadPreferencesReadMode)mongoc_read_prefs_get_mode(self.mongocReadPreferences);
-    }
+    return (MODReadPreferencesReadMode)mongoc_read_prefs_get_mode(self.mongocReadPreferences);
 }
 
 - (void)setReadMode:(MODReadPreferencesReadMode)readMode
 {
-    if (self.mongocReadPreferences) {
-        mongoc_read_prefs_set_mode(self.mongocReadPreferences, (mongoc_read_mode_t)readMode);
-    } else {
-        self.mongocReadPreferences = mongoc_read_prefs_new((mongoc_read_mode_t)readMode);
-    }
+    mongoc_read_prefs_set_mode(self.mongocReadPreferences, (mongoc_read_mode_t)readMode);
 }
 
 - (MODSortedMutableDictionary *)tags
 {
-    if (!self.mongocReadPreferences) {
-        return nil;
-    } else {
-        const bson_t *tags;
-        
-        tags = mongoc_read_prefs_get_tags(self.mongocReadPreferences);
-        return [self.class objectFromBson:tags];
-    }
+    const bson_t *tags;
+    
+    tags = mongoc_read_prefs_get_tags(self.mongocReadPreferences);
+    return [self.class objectFromBson:tags];
 }
 
 - (void)setTags:(MODSortedMutableDictionary *)tags
 {
-    if (!self.mongocReadPreferences) {
-        self.mongocReadPreferences = mongoc_read_prefs_new(MONGOC_READ_PRIMARY);
-    }
     if (!tags) {
         mongoc_read_prefs_set_tags(self.mongocReadPreferences, NULL);
     } else {

@@ -80,6 +80,8 @@ enum {
 @interface MODReadPreferences ()
 @property (nonatomic, readwrite, assign) mongoc_read_prefs_t *mongocReadPreferences;
 
++ (instancetype)readPreferencesWithMongocReadPreferences:(const mongoc_read_prefs_t *)readPreferences;
+
 @end
 
 @interface MODObjectId ()
