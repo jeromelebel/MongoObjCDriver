@@ -34,7 +34,6 @@
 @synthesize connected = _connected;
 @synthesize mongocClient = _mongocClient;
 @synthesize operationQueue = _operationQueue;
-@synthesize readPreferences = _readPreferences;
 
 + (MODClient *)clientWihtURLString:(NSString *)urlString
 {
@@ -90,10 +89,8 @@
 
 - (void)dealloc
 {
-    if (self.mongocClient) {
-        mongoc_client_destroy(self.mongocClient);
-        self.mongocClient = NULL;
-    }
+    mongoc_client_destroy(self.mongocClient);
+    self.mongocClient = NULL;
     [_sslOptions release];
     self.readPreferences = nil;
     self.operationQueue = nil;
@@ -227,13 +224,14 @@
     return self.readPreferences.mongocReadPreferences;
 }
 
+- (MODReadPreferences *)readPreferences
+{
+    return [MODReadPreferences readPreferencesWithMongocReadPreferences:mongoc_client_get_read_prefs(self.mongocClient)];
+}
+
 - (void)setReadPreferences:(MODReadPreferences *)readPreferences
 {
-    [_readPreferences release];
-    _readPreferences = [readPreferences retain];
-    if (self.mongocClient) {
-        mongoc_client_set_read_prefs(self.mongocClient, self.mongocReadPreferences);
-    }
+    mongoc_client_set_read_prefs(self.mongocClient, self.mongocReadPreferences);
 }
 
 - (MODSSLOptions *)sslOptions
@@ -249,6 +247,16 @@
     [_sslOptions release];
     _sslOptions = [sslOptions retain];
     mongoc_client_set_ssl_opts(self.mongocClient, &mongocSSLOptions);
+}
+
+- (MODWriteConcern *)writeConcern
+{
+    return nil;
+}
+
+- (void)setWriteConcern:(MODWriteConcern *)writeConcern
+{
+    
 }
 
 @end

@@ -18,6 +18,7 @@
 @class MODSortedMutableDictionary;
 @class MODReadPreferences;
 @class MODSSLOptions;
+@class MODWriteConcern;
 
 typedef struct mongo_replset            *mongo_replset_ptr;
 
@@ -36,16 +37,16 @@ typedef enum
 {
     mongo_replset_ptr                   _replicaSet;
     void                                *_mongocClient;
-    MODReadPreferences                  *_readPreferences;
     // we have to keept ssl options so the char * parameters are kept alive
     MODSSLOptions                       *_sslOptions;
     
     BOOL                                _connected;
     NSOperationQueue                    *_operationQueue;
 }
-@property (nonatomic, readonly, assign, getter = isConnected) BOOL connected;
-@property (nonatomic, readwrite, strong) MODReadPreferences *readPreferences;
-@property (nonatomic, readwrite, strong) MODSSLOptions *sslOptions;
+@property (nonatomic, assign, readonly, getter = isConnected) BOOL connected;
+@property (nonatomic, strong, readwrite) MODReadPreferences *readPreferences;
+@property (nonatomic, strong, readwrite) MODSSLOptions *sslOptions;
+@property (nonatomic, strong, readwrite) MODWriteConcern *writeConcern;
 
 + (MODClient *)clientWihtURLString:(NSString *)urlString;
 + (uint16_t)defaultPort;
