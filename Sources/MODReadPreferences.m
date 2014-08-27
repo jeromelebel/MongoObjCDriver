@@ -40,7 +40,7 @@
 
 - (instancetype)init
 {
-    self = [self init];
+    self = [super init];
     if (self) {
         self.mongocReadPreferences = mongoc_read_prefs_new(MONGOC_READ_PRIMARY);
     }
