@@ -106,8 +106,12 @@
 
 - (NSString *)wtag
 {
-    
-    return [NSString stringWithUTF8String:mongoc_write_concern_get_wtag(self.mongocWriteConcern)];
+    const char *wtagUTF8String = mongoc_write_concern_get_wtag(self.mongocWriteConcern);
+    if (wtagUTF8String) {
+        return [NSString stringWithUTF8String:wtagUTF8String];
+    } else {
+        return nil;
+    }
 }
 
 - (void)setWtag:(NSString *)wtag
