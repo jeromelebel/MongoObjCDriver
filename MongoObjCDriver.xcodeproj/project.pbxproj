@@ -47,8 +47,10 @@
 		02688DDD14119CF50014ED51 /* MODDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DDB14119CF50014ED51 /* MODDatabase.m */; };
 		02688DE21411C5010014ED51 /* MODCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 02688DE01411C5010014ED51 /* MODCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02688DE31411C5010014ED51 /* MODCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DE11411C5010014ED51 /* MODCollection.m */; };
-		026B2F4E19ADC1C300009719 /* MODWriteConcern.h in Headers */ = {isa = PBXBuildFile; fileRef = 026B2F4C19ADC1C300009719 /* MODWriteConcern.h */; };
+		026B2F4E19ADC1C300009719 /* MODWriteConcern.h in Headers */ = {isa = PBXBuildFile; fileRef = 026B2F4C19ADC1C300009719 /* MODWriteConcern.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		026B2F4F19ADC1C300009719 /* MODWriteConcern.m in Sources */ = {isa = PBXBuildFile; fileRef = 026B2F4D19ADC1C300009719 /* MODWriteConcern.m */; };
+		026B2F5319AE13B200009719 /* MODWriteConcern-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 026B2F5119AE02DC00009719 /* MODWriteConcern-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		026B2F5419AE13BE00009719 /* MODReadPreferences-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 026B2F5219AE05AE00009719 /* MODReadPreferences-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		027A1DA21767E91F0048AD60 /* MODMaxKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 027A1D9C1767E91F0048AD60 /* MODMaxKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		027A1DA31767E91F0048AD60 /* MODMaxKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 027A1D9D1767E91F0048AD60 /* MODMaxKey.m */; };
 		027A1DA51767E91F0048AD60 /* MODMinKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 027A1D9E1767E91F0048AD60 /* MODMinKey.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1355,6 +1357,8 @@
 		02688DE11411C5010014ED51 /* MODCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODCollection.m; sourceTree = "<group>"; };
 		026B2F4C19ADC1C300009719 /* MODWriteConcern.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODWriteConcern.h; sourceTree = "<group>"; };
 		026B2F4D19ADC1C300009719 /* MODWriteConcern.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODWriteConcern.m; sourceTree = "<group>"; };
+		026B2F5119AE02DC00009719 /* MODWriteConcern-private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MODWriteConcern-private.h"; sourceTree = "<group>"; };
+		026B2F5219AE05AE00009719 /* MODReadPreferences-private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MODReadPreferences-private.h"; sourceTree = "<group>"; };
 		027A1D9C1767E91F0048AD60 /* MODMaxKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODMaxKey.h; sourceTree = "<group>"; };
 		027A1D9D1767E91F0048AD60 /* MODMaxKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODMaxKey.m; sourceTree = "<group>"; };
 		027A1D9E1767E91F0048AD60 /* MODMinKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODMinKey.h; sourceTree = "<group>"; };
@@ -2870,8 +2874,10 @@
 				02A85F5714104184004F3FE9 /* MODQuery.h */,
 				02A85F5814104184004F3FE9 /* MODQuery.m */,
 				02AB33AA194870D6008C06B9 /* MODReadPreferences.h */,
+				026B2F5219AE05AE00009719 /* MODReadPreferences-private.h */,
 				02AB33AB194870D6008C06B9 /* MODReadPreferences.m */,
 				026B2F4C19ADC1C300009719 /* MODWriteConcern.h */,
+				026B2F5119AE02DC00009719 /* MODWriteConcern-private.h */,
 				026B2F4D19ADC1C300009719 /* MODWriteConcern.m */,
 				02AB057414296F9000B7CD19 /* MODObjectId.h */,
 				02AB057514296F9000B7CD19 /* MODObjectId.m */,
@@ -2975,6 +2981,7 @@
 				02D3D30A1926661100925BE7 /* mongoc-cluster-private.h in Headers */,
 				02D3D30B1926661100925BE7 /* mongoc-collection-private.h in Headers */,
 				02D3D30C1926661100925BE7 /* mongoc-collection.h in Headers */,
+				026B2F5419AE13BE00009719 /* MODReadPreferences-private.h in Headers */,
 				02D3D30D1926661100925BE7 /* mongoc-counters-private.h in Headers */,
 				02D3D30E1926661100925BE7 /* mongoc-cursor-array-private.h in Headers */,
 				02D3D30F1926661100925BE7 /* mongoc-cursor-cursorid-private.h in Headers */,
@@ -3005,6 +3012,7 @@
 				02D3D3281926661200925BE7 /* mongoc-matcher.h in Headers */,
 				02D3D3291926661200925BE7 /* mongoc-opcode.h in Headers */,
 				02D3D32A1926661200925BE7 /* mongoc-queue-private.h in Headers */,
+				026B2F5319AE13B200009719 /* MODWriteConcern-private.h in Headers */,
 				02D3D32B1926661200925BE7 /* mongoc-read-prefs-private.h in Headers */,
 				02D3D32C1926661200925BE7 /* mongoc-read-prefs.h in Headers */,
 				02D3D32D1926661200925BE7 /* mongoc-rpc-private.h in Headers */,

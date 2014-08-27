@@ -20,7 +20,7 @@ typedef enum
 } MODReadPreferencesReadMode;
 
 /*
-    read preferences is non mutable since MODClient instance doesn't keep it around
+    MODReadPreferences is non mutable since MODClient instance doesn't keep it around
     this avoid errors like :
     client.readPreferences.readMode = MODReadPreferencesReadSecondaryMode;
 */

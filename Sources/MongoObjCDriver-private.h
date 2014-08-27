@@ -10,6 +10,8 @@
 #import "NSString+MODBase64.h"
 #import "NSData+MODBase64.h"
 #import "mongoc.h"
+#import "MODReadPreferences-private.h"
+#import "MODWriteConcern-private.h"
 
 #define BSON_NO_ERROR { 0, 0, 0 }
 
@@ -74,13 +76,6 @@ enum {
 - (void)starts;
 - (void)endsWithError:(NSError *)error;
 - (void)removeBlockOperation;
-
-@end
-
-@interface MODReadPreferences ()
-@property (nonatomic, readwrite, assign) mongoc_read_prefs_t *mongocReadPreferences;
-
-+ (instancetype)readPreferencesWithMongocReadPreferences:(const mongoc_read_prefs_t *)readPreferences;
 
 @end
 

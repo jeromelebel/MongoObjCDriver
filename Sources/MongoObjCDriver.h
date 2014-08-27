@@ -12,6 +12,7 @@
 #import "MODCursor.h"
 #import "MODQuery.h"
 #import "MODReadPreferences.h"
+#import "MODWriteConcern.h"
 
 #import "MODTimestamp.h"
 #import "MODObjectId.h"

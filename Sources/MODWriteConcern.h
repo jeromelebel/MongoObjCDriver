@@ -8,24 +8,23 @@
 
 #import <Foundation/Foundation.h>
 
+/*
+ MODWriteConcern is non mutable since MODClient instance doesn't keep it around
+ this avoid errors like :
+ client.writeConcern.journal = YES;
+ */
+
 @interface MODWriteConcern : NSObject
 {
-    BOOL                            _fsync;
-    BOOL                            _journal;
-    int32_t                         _w;
-    int32_t                         _wtimeout;
-    NSString                        *_wtag;
-    BOOL                            _frozen;
-    id                              _compiled;
+    void                                *_mongocWriteConcern;
 }
-@property (nonatomic, assign, readonly) BOOL fsync;
+@property (nonatomic, assign, readonly) BOOL fileSync;
 @property (nonatomic, assign, readonly) BOOL journal;
 @property (nonatomic, assign, readonly) int32_t w;
 @property (nonatomic, assign, readonly) int32_t wtimeout;
 @property (nonatomic, strong, readonly) NSString *wtag;
-@property (nonatomic, assign, readonly) BOOL frozen;
 @property (nonatomic, strong, readonly) id compiled;
 
-- (instancetype)initWithFsync:(BOOL)fsync journal:(BOOL)journal w:(int32_t)w wtimeout:(int32_t)wtimeout wtag:(NSString *)wtag frozen:(BOOL)frozen compiled:(id)compiled;
+- (instancetype)initWithFileSync:(BOOL)fileSync journal:(BOOL)journal w:(int32_t)w wtimeout:(int32_t)wtimeout wtag:(NSString *)wtag compiled:(id)compiled;
 
 @end
