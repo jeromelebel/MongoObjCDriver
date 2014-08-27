@@ -5,7 +5,7 @@
 //  Created by Jérôme Lebel on 25/09/2011.
 //
 
-#import "MOD_internal.h"
+#import "MongoObjCDriver-private.h"
 
 @implementation MODRegex
 

@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 Fotonauts. All rights reserved.
 //
 
-#import "MOD_internal.h"
+#import "MongoObjCDriver-private.h"
 
 @implementation MODSymbol
 

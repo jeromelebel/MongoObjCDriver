@@ -13,7 +13,7 @@
 #import "MODUndefined.h"
 #import "MODObjectId.h"
 #import "MODRegex.h"
-#import "MOD_internal.h"
+#import "MongoObjCDriver-private.h"
 #import "MODBinary.h"
 #import "MODTimestamp.h"
 #import "MODSymbol.h"

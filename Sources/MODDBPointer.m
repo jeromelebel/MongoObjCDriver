@@ -5,7 +5,7 @@
 //  Created by Jérôme Lebel on 29/09/2011.
 //
 
-#import "MOD_internal.h"
+#import "MongoObjCDriver-private.h"
 
 @interface MODDBPointer ()
 @property (nonatomic, readwrite, strong) NSString *collectionName;

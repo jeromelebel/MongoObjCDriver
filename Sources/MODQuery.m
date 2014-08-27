@@ -5,7 +5,7 @@
 //  Created by Jérôme Lebel on 02/09/2011.
 //
 
-#import "MOD_internal.h"
+#import "MongoObjCDriver-private.h"
 
 @interface MODQuery ()
 @property (nonatomic, readwrite, strong) id<NSObject> owner;

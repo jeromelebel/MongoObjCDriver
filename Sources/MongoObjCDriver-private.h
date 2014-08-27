@@ -1,5 +1,5 @@
 //
-//  MOD_internal.h
+//  MongoObjCDriver-private.h
 //  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 02/09/2011.

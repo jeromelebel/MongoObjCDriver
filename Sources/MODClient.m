@@ -5,7 +5,7 @@
 //  Created by Jérôme Lebel on 02/09/2011.
 //
 
-#import "MOD_internal.h"
+#import "MongoObjCDriver-private.h"
 #import "bson.h"
 #import "mongoc.h"
 #import "mongoc-client-private.h"

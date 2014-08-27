@@ -6,7 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MOD_internal.h"
+#import "MongoObjCDriver-private.h"
 #import "MODBsonComparator.h"
 #import "MODDocumentComparator.h"
 

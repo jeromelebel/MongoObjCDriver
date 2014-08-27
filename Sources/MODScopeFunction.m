@@ -6,7 +6,7 @@
 //
 //
 
-#import "MOD_internal.h"
+#import "MongoObjCDriver-private.h"
 
 @implementation MODScopeFunction
 

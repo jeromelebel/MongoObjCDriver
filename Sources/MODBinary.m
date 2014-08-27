@@ -5,7 +5,7 @@
 //  Created by Jérôme Lebel on 28/09/2011.
 //
 
-#import "MOD_internal.h"
+#import "MongoObjCDriver-private.h"
 
 @interface MODBinary ()
 @property(nonatomic, readwrite, assign) char binaryType;
