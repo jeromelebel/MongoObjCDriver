@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSString (Base64)
+@interface NSString (MODBase64)
 
-- (NSData *)dataFromBase64;
+- (NSData *)mod_dataFromBase64;
 
 @end

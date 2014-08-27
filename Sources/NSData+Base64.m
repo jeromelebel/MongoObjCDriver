@@ -12,9 +12,9 @@ static char base64chars[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxy
 
 #define CHAR_AT_INDEX(buffer, index) ((buffer >> (index * 6)) & 63)
 
-@implementation NSData (Base64)
+@implementation NSData (MODBase64)
 
-- (NSString *)base64String
+- (NSString *)mod_base64String
 {
     NSUInteger ii, dataLength = self.length;
     NSMutableString *result = [NSMutableString stringWithCapacity:(dataLength / 3 * 4) + (((dataLength % 3) > 0)?4:0)];

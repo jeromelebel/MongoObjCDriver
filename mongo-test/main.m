@@ -248,18 +248,18 @@ static void testNSDataInBase64(NSData *dataToConvert, const char *base64)
     NSString *base64String;
     
     base64String = [NSString stringWithUTF8String:base64];
-    if (![[dataToConvert base64String] isEqualToString:base64String]) {
+    if (![dataToConvert.mod_base64String isEqualToString:base64String]) {
         NSLog(@"***** Problem to encode base 64");
         NSLog(@"trying to encode %@", dataToConvert);
         NSLog(@"expecting %s", base64);
-        NSLog(@"received %@", [dataToConvert base64String]);
+        NSLog(@"received %@", dataToConvert.mod_base64String);
         assert(false);
     }
-    if (![[base64String dataFromBase64] isEqualToData:dataToConvert]) {
+    if (![base64String.mod_base64String isEqualToData:dataToConvert]) {
         NSLog(@"***** Problem to decode base 64");
         NSLog(@"trying to decode %s", base64);
         NSLog(@"expecting %@", dataToConvert);
-        NSLog(@"received %@", [base64String dataFromBase64]);
+        NSLog(@"received %@", base64String.mod_base64String);
         assert(false);
     }
 }

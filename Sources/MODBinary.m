@@ -64,13 +64,13 @@
     NSString *result;
     
     if (!strictJSON && pretty) {
-        result = [NSString stringWithFormat:@"BinData(%x, \"%@\")", (int)self.binaryType, self.binaryData.base64String];
+        result = [NSString stringWithFormat:@"BinData(%x, \"%@\")", (int)self.binaryType, self.binaryData.mod_base64String];
     } else if (!strictJSON) {
-        result = [NSString stringWithFormat:@"BinData(%x,\"%@\")", (int)self.binaryType, self.binaryData.base64String];
+        result = [NSString stringWithFormat:@"BinData(%x,\"%@\")", (int)self.binaryType, self.binaryData.mod_base64String];
     } else if (pretty) {
-        result = [NSString stringWithFormat:@"{ \"$binary\" : \"%@\", \"$type\" : \"%d\" }", self.binaryData.base64String, (int)self.binaryType];
+        result = [NSString stringWithFormat:@"{ \"$binary\" : \"%@\", \"$type\" : \"%d\" }", self.binaryData.mod_base64String, (int)self.binaryType];
     } else {
-        result = [NSString stringWithFormat:@"{\"$binary\":\"%@\",\"$type\":\"%d\"}", self.binaryData.base64String, (int)self.binaryType];
+        result = [NSString stringWithFormat:@"{\"$binary\":\"%@\",\"$type\":\"%d\"}", self.binaryData.mod_base64String, (int)self.binaryType];
     }
     return result;
 }

@@ -12,7 +12,7 @@
 
 @implementation NSString (Base64)
 
-- (NSData *)dataFromBase64
+- (NSData *)mod_dataFromBase64
 {
     NSUInteger ii, stringLength = self.length;
     NSMutableData *result = [NSMutableData dataWithCapacity:stringLength / 4 * 3];

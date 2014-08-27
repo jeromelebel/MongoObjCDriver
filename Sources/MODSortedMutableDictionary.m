@@ -199,7 +199,7 @@
     } else if (self.count == 1 && [[self objectForKey:@"$timestamp"] isKindOfClass:NSArray.class] && [[self objectForKey:@"$timestamp"] count] == 2) {
         result = [[MODTimestamp alloc] initWithTValue:[[[self objectForKey:@"$timestamp"] objectAtIndex:0] intValue] iValue:[[[self objectForKey:@"$timestamp"] objectAtIndex:1] intValue]];
     } else if (self.count == 2 && [[self objectForKey:@"$binary"] isKindOfClass:NSString.class] && [[self objectForKey:@"$type"] isKindOfClass:NSString.class]) {
-        result = [[MODBinary alloc] initWithData:[[self objectForKey:@"$binary"] dataFromBase64] binaryType:[[self objectForKey:@"$type"] intValue]];
+        result = [[MODBinary alloc] initWithData:[[self objectForKey:@"$binary"] mod_dataFromBase64] binaryType:[[self objectForKey:@"$type"] intValue]];
     } else if (self.count == 2 && [[self objectForKey:@"$regex"] isKindOfClass:NSString.class] && [[self objectForKey:@"$options"] isKindOfClass:NSString.class]) {
         result = [[MODRegex alloc] initWithPattern:[self objectForKey:@"$regex"] options:[self objectForKey:@"$options"]];
     } else if (self.count == 1 && [[self objectForKey:@"$regex"] isKindOfClass:NSString.class]) {

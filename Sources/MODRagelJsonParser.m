@@ -1462,7 +1462,7 @@ _again:
 
 #line 523 "/Users/jerome/Sources/MongoHub-Mac/Libraries/mongo-objc-driver/Sources/MODRagelJsonParser.rl"
 
-    dataValue = [dataStringValue dataFromBase64];
+    dataValue = dataStringValue.mod_dataFromBase64;
     if (cs >= JSON_bin_data_first_final && dataValue && [MODBinary isValidDataType:typeValue.unsignedCharValue] ) {
         *result = [[[MODBinary alloc] initWithData:dataValue binaryType:typeValue.unsignedCharValue] autorelease];
         return p + 1;
