@@ -23,12 +23,12 @@ void logMongoQuery(MODQuery *mongoQuery)
         NSLog(@"********* ERROR ************");
         NSLog(@"%@", mongoQuery.error);
     }
-    if ([mongoQuery.parameters objectForKey:@"command"] == nil) {
+    if (mongoQuery.name == nil) {
         NSLog(@"********* ERROR ************");
         NSLog(@"Need to set the command name in the query parameters of mongo query");
     }
     NSLog(@"%@", mongoQuery.parameters);
-    assert([mongoQuery.parameters objectForKey:@"command"] != nil);
+    assert(mongoQuery.name != nil);
     assert(mongoQuery.error == nil);
 }
 
