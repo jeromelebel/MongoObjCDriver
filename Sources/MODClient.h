@@ -48,14 +48,14 @@ typedef enum
 @property (nonatomic, strong, readwrite) MODSSLOptions *sslOptions;
 @property (nonatomic, strong, readwrite) MODWriteConcern *writeConcern;
 
-+ (MODClient *)clientWihtURLString:(NSString *)urlString;
++ (instancetype)clientWihtURLString:(NSString *)urlString;
 + (uint16_t)defaultPort;
 
 // can return nil if the URI is invalid
-- (id)initWithURIString:(NSString *)urlString;
-- (id)initWithURICString:(const char *)urlCString;
+- (instancetype)initWithURIString:(NSString *)urlString;
+- (instancetype)initWithURICString:(const char *)urlCString;
 
-- (id)copy;
+- (instancetype)copy;
 
 - (MODQuery *)serverStatusWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback;
 - (MODQuery *)databaseNamesWithCallback:(void (^)(NSArray *list, MODQuery *mongoQuery))callback;

@@ -35,7 +35,7 @@
 @synthesize mongocClient = _mongocClient;
 @synthesize operationQueue = _operationQueue;
 
-+ (MODClient *)clientWihtURLString:(NSString *)urlString
++ (instancetype)clientWihtURLString:(NSString *)urlString
 {
     MODClient *result;
     
@@ -49,7 +49,7 @@
     return MONGOC_DEFAULT_PORT;
 }
 
-- (id)init
+- (instancetype)init
 {
     if ((self = [super init]) != nil) {
         self.operationQueue = [[[NSOperationQueue alloc] init] autorelease];
@@ -58,12 +58,12 @@
     return self;
 }
 
-- (id)initWithURIString:(NSString *)urlString
+- (instancetype)initWithURIString:(NSString *)urlString
 {
     return [self initWithURICString:urlString.UTF8String];
 }
 
-- (id)initWithURICString:(const char *)urlCString
+- (instancetype)initWithURICString:(const char *)urlCString
 {
     if ((self = [self init]) != nil) {
         self.mongocClient = mongoc_client_new(urlCString);
@@ -75,7 +75,7 @@
     return self;
 }
 
-- (id)initWithMongoURI:(const mongoc_uri_t *)uri
+- (instancetype)initWithMongoURI:(const mongoc_uri_t *)uri
 {
     if ((self = [self init]) != nil) {
         _mongocClient = mongoc_client_new_from_uri(uri);
@@ -89,17 +89,23 @@
 
 - (void)dealloc
 {
-    mongoc_client_destroy(self.mongocClient);
-    self.mongocClient = NULL;
-    [_sslOptions release];
+    self.sslOptions = nil;
+    self.writeConcern = nil;
     self.readPreferences = nil;
     self.operationQueue = nil;
+    mongoc_client_destroy(self.mongocClient);
     [super dealloc];
 }
 
-- (id)copy
+- (instancetype)copy
 {
-    return [[MODClient alloc] initWithMongoURI:mongoc_client_get_uri(self.mongocClient)];
+    MODClient *result;
+    
+    result = [[self.class alloc] initWithMongoURI:mongoc_client_get_uri(self.mongocClient)];
+    result.sslOptions = self.sslOptions;
+    result.readPreferences = self.readPreferences;
+    result.writeConcern = self.writeConcern;
+    return result;
 }
 
 - (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block owner:(id<NSObject>)owner name:(NSString *)name parameters:(NSDictionary *)parameters
@@ -251,12 +257,12 @@
 
 - (MODWriteConcern *)writeConcern
 {
-    return nil;
+    return [MODWriteConcern writeConcernWithMongocWriteConcern:mongoc_client_get_write_concern(self.mongocClient)];
 }
 
 - (void)setWriteConcern:(MODWriteConcern *)writeConcern
 {
-    
+    mongoc_client_set_write_concern(self.mongocClient, writeConcern.mongocWriteConcern);
 }
 
 @end
