@@ -848,7 +848,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
 + (void)setLogCallback:(void (^)(MODLogLevel level, const char *domain, const char *message))callback
 {
     [logCallback release];
-    logCallback = [callback retain];
+    logCallback = [callback copy];
 }
 
 + (NSString *)logLevelStringForLogLevel:(MODLogLevel)level
