@@ -48,6 +48,8 @@
 - (void)cancel
 {
     _canceled = YES;
+    [self.blockOperation cancel];
+    [self removeBlockOperation];
 }
 
 - (void)starts
