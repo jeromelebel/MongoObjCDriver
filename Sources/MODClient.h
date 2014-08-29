@@ -42,6 +42,7 @@ typedef enum
     
     BOOL                                _connected;
     NSOperationQueue                    *_operationQueue;
+    NSMutableArray                      *_mongoQueries;
 }
 @property (nonatomic, assign, readonly, getter = isConnected) BOOL connected;
 @property (nonatomic, strong, readwrite) MODReadPreferences *readPreferences;

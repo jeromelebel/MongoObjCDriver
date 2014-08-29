@@ -31,7 +31,8 @@
 @end
 
 @interface MODClient ()
-@property (nonatomic, readwrite, retain) NSOperationQueue *operationQueue;
+@property (nonatomic, strong, readwrite) NSOperationQueue *operationQueue;
+@property (nonatomic, strong, readwrite) NSMutableArray *mongoQueries;
 
 @end
 
@@ -40,6 +41,7 @@
 @synthesize connected = _connected;
 @synthesize mongocClient = _mongocClient;
 @synthesize operationQueue = _operationQueue;
+@synthesize mongoQueries = _mongoQueries;
 
 + (instancetype)clientWihtURLString:(NSString *)urlString
 {
@@ -59,6 +61,7 @@
 {
     if ((self = [super init]) != nil) {
         self.operationQueue = [[[NSOperationQueue alloc] init] autorelease];
+        self.mongoQueries = [NSMutableArray array];
         [self.operationQueue setMaxConcurrentOperationCount:1];
     }
     return self;
@@ -99,6 +102,7 @@
     self.writeConcern = nil;
     self.readPreferences = nil;
     self.operationQueue = nil;
+    self.mongoQueries = nil;
     mongoc_client_destroy(self.mongocClient);
     [super dealloc];
 }
@@ -128,28 +132,25 @@
     }];
     mongoQuery.blockOperation = blockOperation;
     [self.operationQueue addOperation:blockOperation];
+    [self.mongoQueries addObject:mongoQuery];
     [blockOperation release];
     return [mongoQuery autorelease];
 }
 
 - (void)cancelAllOperations
 {
-    for (MODBlockOperation *blockOperation in self.operationQueue.operations) {
-        [blockOperation.mongoQuery cancel];
+    for (MODQuery *mongoQuery in self.mongoQueries) {
+        [mongoQuery cancel];
     }
-}
-
-- (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error
-{
-    [mongoQuery endsWithError:error];
 }
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock
 {
-    [self mongoQueryDidFinish:mongoQuery withError:error];
-    if (callbackBlock) {
-        dispatch_async(dispatch_get_main_queue(), callbackBlock);
-    }
+    [mongoQuery endsWithError:error];
+    dispatch_async(dispatch_get_main_queue(), ^() {
+        if (callbackBlock) callbackBlock();
+        [self.mongoQueries removeObject:mongoQuery];
+    });
 }
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)bsonError callbackBlock:(void (^)(void))callbackBlock
