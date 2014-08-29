@@ -22,6 +22,12 @@
 
 @synthesize mongoQuery = _mongoQuery;
 
+- (void)dealloc
+{
+    self.mongoQuery = nil;
+    [super dealloc];
+}
+
 @end
 
 @interface MODClient ()
