@@ -34,6 +34,7 @@
 @property (nonatomic, strong, readwrite) NSOperationQueue *operationQueue;
 @property (nonatomic, strong, readwrite) NSMutableArray *mongoQueries;
 
+
 @end
 
 @implementation MODClient
@@ -42,6 +43,7 @@
 @synthesize mongocClient = _mongocClient;
 @synthesize operationQueue = _operationQueue;
 @synthesize mongoQueries = _mongoQueries;
+@synthesize sshMapping = _sshMapping;
 
 + (instancetype)clientWihtURLString:(NSString *)urlString
 {
@@ -80,6 +82,7 @@
             [self release];
             self = nil;
         }
+        [self setupMongocClient];
     }
     return self;
 }
@@ -92,6 +95,7 @@
             [self release];
             self = nil;
         }
+        [self setupMongocClient];
     }
     return self;
 }
@@ -103,6 +107,7 @@
     self.readPreferences = nil;
     self.operationQueue = nil;
     self.mongoQueries = nil;
+    self.sshMapping = nil;
     mongoc_client_destroy(self.mongocClient);
     [super dealloc];
 }
@@ -116,6 +121,38 @@
     result.readPreferences = self.readPreferences;
     result.writeConcern = self.writeConcern;
     return result;
+}
+
+static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_host_list_t *host, void *user_data, bson_error_t *error)
+{
+    return [(MODClient *)user_data getStreamWithURI:uri host:host error:error];
+}
+
+- (mongoc_stream_t *)getStreamWithURI:(const mongoc_uri_t *)uri host:(const mongoc_host_list_t *)host error:(bson_error_t *)error
+{
+    NSString *hostPortString = [NSString stringWithUTF8String:host->host_and_port];
+    NSNumber *sshBindedPort = self.sshMapping[hostPortString];
+    
+    if (!sshBindedPort) {
+        return ((mongoc_stream_initiator_t)_defaultStreamInitiator)(uri, host, _defaultStreamInitiatorData, error);
+    } else {
+        mongoc_host_list_t mappedHost;
+        NSArray *components = [hostPortString componentsSeparatedByString:@":"];
+        
+        NSAssert(components.count == 2, @"Should have ip and port in %@", hostPortString);
+        memcpy(&mappedHost, host, sizeof(mappedHost));
+        sprintf(mappedHost.host_and_port, "127.0.0.1:%d", (int)sshBindedPort.integerValue);
+        sprintf(mappedHost.host, "127.0.0.1");
+        mappedHost.port = sshBindedPort.integerValue;
+        return ((mongoc_stream_initiator_t)_defaultStreamInitiator)(uri, &mappedHost, _defaultStreamInitiatorData, error);
+    }
+}
+
+- (void)setupMongocClient
+{
+    _defaultStreamInitiator = self.mongocClient->initiator;
+    _defaultStreamInitiatorData = self.mongocClient->initiator_data;
+    mongoc_client_set_stream_initiator(self.mongocClient, stream_initiator, self);
 }
 
 - (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block owner:(id<NSObject>)owner name:(NSString *)name parameters:(NSDictionary *)parameters

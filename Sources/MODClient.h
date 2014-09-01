@@ -39,6 +39,9 @@ typedef enum
     void                                *_mongocClient;
     // we have to keept ssl options so the char * parameters are kept alive
     MODSSLOptions                       *_sslOptions;
+    NSDictionary                        *_sshMapping;
+    void                                *_defaultStreamInitiator;
+    void                                *_defaultStreamInitiatorData;
     
     BOOL                                _connected;
     NSOperationQueue                    *_operationQueue;
@@ -48,6 +51,7 @@ typedef enum
 @property (nonatomic, strong, readwrite) MODReadPreferences *readPreferences;
 @property (nonatomic, strong, readwrite) MODSSLOptions *sslOptions;
 @property (nonatomic, strong, readwrite) MODWriteConcern *writeConcern;
+@property (nonatomic, strong, readwrite) NSDictionary *sshMapping;
 
 + (instancetype)clientWihtURLString:(NSString *)urlString;
 + (uint16_t)defaultPort;
