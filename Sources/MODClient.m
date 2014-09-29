@@ -59,6 +59,11 @@
     return MONGOC_DEFAULT_PORT;
 }
 
++ (uint32_t)defaultConnectionTimeout
+{
+    return MONGOC_DEFAULT_CONNECTTIMEOUTMS;
+}
+
 - (instancetype)init
 {
     if ((self = [super init]) != nil) {
