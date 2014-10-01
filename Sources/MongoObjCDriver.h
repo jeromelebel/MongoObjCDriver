@@ -28,3 +28,5 @@
 #import "MODRagelJsonParser.h"
 #import "MODFunction.h"
 #import "MODScopeFunction.h"
+
+#import "MODDocumentComparator.h"
