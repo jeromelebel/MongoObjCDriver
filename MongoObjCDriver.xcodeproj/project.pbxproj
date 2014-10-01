@@ -233,6 +233,13 @@
 			remoteGlobalIDString = 02216F151412D39200789BD1;
 			remoteInfo = Submodules;
 		};
+		02E6402319DC30BF00FEFEFC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02ABA1B614103B36000417F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 02ABA1BF14103B37000417F4;
+			remoteInfo = MongoObjCDriver;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -3060,6 +3067,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				02E6402419DC30BF00FEFEFC /* PBXTargetDependency */,
 			);
 			name = "MongoObjCDriver Tests";
 			productName = "MongoObjCDriver Tests";
@@ -3268,6 +3276,11 @@
 			isa = PBXTargetDependency;
 			target = 02216F151412D39200789BD1 /* Submodules */;
 			targetProxy = 02216F1B1412D42B00789BD1 /* PBXContainerItemProxy */;
+		};
+		02E6402419DC30BF00FEFEFC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 02ABA1BF14103B37000417F4 /* MongoObjCDriver */;
+			targetProxy = 02E6402319DC30BF00FEFEFC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
