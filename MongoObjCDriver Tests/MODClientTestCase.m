@@ -174,4 +174,22 @@
     CFRunLoopRun();
 }
 
+- (void)testLotOfCollections
+{
+    MODDatabase *mongoDatabase;
+    NSUInteger ii;
+    
+    mongoDatabase = [self.server databaseForName:DATABASE_NAME_TEST];
+    for (ii = 0; ii < 5000; ii++) {
+        [mongoDatabase createCollectionWithName:[NSString stringWithFormat:@"test+%lu", (unsigned long)ii] callback:^(MODQuery *mongoQuery) {
+            [self logMongoQuery:mongoQuery];
+        }];
+    }
+    [mongoDatabase collectionNamesWithCallback:^(NSArray *collectionList, MODQuery *mongoQuery) {
+        XCTAssertEqual(collectionList.count, 5001, @"should have 5001 collections");
+        CFRunLoopStop(CFRunLoopGetCurrent());
+    }];
+    CFRunLoopRun();
+}
+
 @end
