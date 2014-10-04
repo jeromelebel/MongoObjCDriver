@@ -200,4 +200,30 @@
     CFRunLoopRun();
 }
 
+- (void)testBigDocuments
+{
+    MODCollection *collection;
+    MODSortedMutableDictionary *document;
+    NSMutableArray *documents = [NSMutableArray array];
+    NSString *value = @"fdsafsdafds afsdafdsafsdafdsafsdaf dsafsdafdsafsdafdsafsdafdsafs dafdsafsdafdsafsdafd safsdafdsafsdaf dsafsdafdsafsdafd safsdafdsafsdafd safsdafdsafsdafdsa fsdafdsafsdafdsa fsdafdsafsdafdsa fsdafdsafsdafdsafsd afdsafsdafdsafsdafdsafsdaf";
+    NSUInteger ii;
+    
+    collection = [[self.server databaseForName:DATABASE_NAME_TEST] collectionForName:@"BigDocuments"];
+    document = [[MODSortedMutableDictionary alloc] init];
+    for (ii = 0; ii < 50; ii++) {
+        [document setObject:value forKey:[NSString stringWithFormat:@"big key fads f das fd sa fs f    as fdsa  dsa f dsa f %lu", ii]];
+    }
+    for (ii = 0; ii < 15; ii++) {
+        [documents addObject:document];
+    }
+    [collection removeWithCriteria:nil callback:nil];
+    [collection insertWithDocuments:documents callback:^(MODQuery *mongoQuery) {
+        [self logMongoQuery:mongoQuery];
+    }];
+    [collection findWithCriteria:nil fields:nil skip:0 limit:100 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+        CFRunLoopStop(CFRunLoopGetCurrent());
+    }];
+    CFRunLoopRun();
+}
+
 @end
