@@ -14,7 +14,7 @@
 #define COLLECTION_NAME_TEST @"collection_test"
 
 @interface MODClientTestCase : XCTestCase
-@property (nonatomic, readwrite, retain) MODClient *server;
+@property (nonatomic, readwrite, retain) MODClient *client;
 @end
 
 @implementation MODClientTestCase
@@ -46,7 +46,7 @@
 
 - (void)removeTestDatabase
 {
-    [[self.server databaseForName:DATABASE_NAME_TEST] dropWithCallback:^(MODQuery *mongoQuery) {
+    [[self.client databaseForName:DATABASE_NAME_TEST] dropWithCallback:^(MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
 }
@@ -58,16 +58,16 @@
     // Put setup code here. This method is called before the invocation of each test method in the class.
 
     uri = NSProcessInfo.processInfo.environment[@"mongouri"];
-    self.server = [[MODClient alloc] initWithURIString:uri];
-    self.server.sslOptions = [[MODSSLOptions alloc] initWithPemFileName:nil pemPassword:nil caFileName:nil caDirectory:nil crlFileName:nil weakCertificate:YES];
-    if (self.server == nil) {
+    self.client = [[MODClient alloc] initWithURIString:uri];
+    self.client.sslOptions = [[MODSSLOptions alloc] initWithPemFileName:nil pemPassword:nil caFileName:nil caDirectory:nil crlFileName:nil weakCertificate:YES];
+    if (self.client == nil) {
         NSLog(@"Can't parse uri %@", uri);
         assert(false);
     }
-    [self.server serverStatusWithReadPreferences:nil callback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {
+    [self.client serverStatusWithReadPreferences:nil callback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
-    [self.server databaseNamesWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
+    [self.client databaseNamesWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
         if ([list indexOfObject:DATABASE_NAME_TEST] != NSNotFound) {
             [self removeTestDatabase];
@@ -86,11 +86,11 @@
     MODCollection *mongoCollection;
     MODCursor *cursor;
     
-    mongoDatabase = [self.server databaseForName:DATABASE_NAME_TEST];
+    mongoDatabase = [self.client databaseForName:DATABASE_NAME_TEST];
     [mongoDatabase statsWithReadPreferences:nil callback:^(MODSortedMutableDictionary *stats, MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
-    [self.server databaseNamesWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
+    [self.client databaseNamesWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
         XCTAssertNotEqual([list indexOfObject:DATABASE_NAME_TEST], NSNotFound, @"can not find %@", DATABASE_NAME_TEST);
     }];
     [mongoDatabase createCollectionWithName:COLLECTION_NAME_TEST callback:^(MODQuery *mongoQuery) {
@@ -168,7 +168,7 @@
         [self logMongoQuery:mongoQuery];
     }];
     
-    [self.server databaseNamesWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
+    [self.client databaseNamesWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
         XCTAssertEqual([list indexOfObject:DATABASE_NAME_TEST], NSNotFound, @"should have no more %@ database", DATABASE_NAME_TEST);
         CFRunLoopStop(CFRunLoopGetCurrent());
     }];
@@ -182,7 +182,7 @@
     static NSUInteger collectionCount = -1;
     const NSUInteger collectionCountToAdd = 5000;
     
-    mongoDatabase = [self.server databaseForName:DATABASE_NAME_TEST];
+    mongoDatabase = [self.client databaseForName:DATABASE_NAME_TEST];
     [mongoDatabase createCollectionWithName:@"first" callback:^(MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
@@ -210,7 +210,7 @@
     NSUInteger ii;
     const NSUInteger documentCountToInsert = 15;
     
-    collection = [[self.server databaseForName:DATABASE_NAME_TEST] collectionForName:@"BigDocuments"];
+    collection = [[self.client databaseForName:DATABASE_NAME_TEST] collectionForName:@"BigDocuments"];
     document = [[MODSortedMutableDictionary alloc] init];
     for (ii = 0; ii < 50; ii++) {
         [document setObject:value forKey:[NSString stringWithFormat:@"big key fads f das fd sa fs f    as fdsa  dsa f dsa f %lu", ii]];
