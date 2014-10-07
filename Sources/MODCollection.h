@@ -36,6 +36,7 @@ enum MOD_INDEX_OPTIONS {
 @property (nonatomic, readwrite, retain) MODReadPreferences *readPreferences;
 
 - (MODQuery *)commandSimpleWithCommand:(MODSortedMutableDictionary *)command readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODQuery *query, MODSortedMutableDictionary *reply))callback;
+- (MODQuery *)renameWithNewDatabaseName:(NSString *)newDatabaseName newCollectionName:(NSString *)newCollectionName callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)statsWithCallback:(void (^)(MODSortedMutableDictionary *stats, MODQuery *mongoQuery))callback;
 - (MODCursor *)cursorWithCriteria:(MODSortedMutableDictionary *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(MODSortedMutableDictionary *)sort;
 - (MODQuery *)findWithCriteria:(MODSortedMutableDictionary *)criteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(MODSortedMutableDictionary *)sort callback:(void (^)(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery))callback;

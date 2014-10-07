@@ -25,7 +25,7 @@
     if (self = [self init]) {
         self.database = database;
         self.name = [name retain];
-        self.absoluteName = [[[NSString alloc] initWithFormat:@"%@.%@", self.database.name, self.name] autorelease];
+        self.absoluteName = [NSString stringWithFormat:@"%@.%@", self.database.name, self.name];
         self.mongocCollection = mongoc_database_get_collection(self.database.mongocDatabase, name.UTF8String);
     }
     return self;
@@ -47,6 +47,32 @@
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock
 {
     [self.database mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
+}
+
+- (MODQuery *)renameWithNewDatabaseName:(NSString *)newDatabaseName newCollectionName:(NSString *)newCollectionName callback:(void (^)(MODQuery *mongoQuery))callback
+{
+    MODQuery *query = nil;
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    
+    NSParameterAssert(newCollectionName);
+    if (newDatabaseName) parameters[@"newdatabasename"] = newDatabaseName;
+    parameters[@"newcollectionname"] = newCollectionName;
+    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
+        bson_error_t error = BSON_NO_ERROR;
+        
+        if (!mongoQuery.isCanceled) {
+            if (mongoc_collection_rename(self.mongocCollection, newDatabaseName.UTF8String, newCollectionName.UTF8String, false, &error)) {
+                self.name = newCollectionName;
+                self.absoluteName = [NSString stringWithFormat:@"%@.%@", self.database.name, self.name];
+            }
+        }
+        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^{
+            if (!mongoQuery.isCanceled && callback) {
+                callback(mongoQuery);
+            }
+        }];
+    } owner:self name:@"rename" parameters:parameters];
+    return query;
 }
 
 - (MODQuery *)statsWithCallback:(void (^)(MODSortedMutableDictionary *stats, MODQuery *mongoQuery))callback
