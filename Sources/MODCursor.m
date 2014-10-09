@@ -50,6 +50,10 @@
 
 - (void)dealloc
 {
+    if (self.mongocCursor) {
+        mongoc_cursor_destroy(self.mongocCursor);
+        self.mongocCursor = nil;
+    }
     self.internalError = nil;
     self.query = nil;
     self.fields = nil;
