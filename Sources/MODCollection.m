@@ -37,6 +37,10 @@
 - (void)dealloc
 {
     [NSNotificationCenter.defaultCenter removeObserver:self name:nil object:nil];
+    if (self.mongocCollection) {
+        mongoc_collection_destroy(self.mongocCollection);
+        self.mongocCollection = nil;
+    }
     self.absoluteName = nil;
     self.readPreferences = nil;
     [_database release];
