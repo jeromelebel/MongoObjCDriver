@@ -111,7 +111,6 @@
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^{
             if (renameCalled) {
                 if (!mongoQuery.error) {
-                    NSLog(@"renaming....");
                     self.name = newCollectionName;
                     if (newDatabase) {
                         self.database = newDatabase;
