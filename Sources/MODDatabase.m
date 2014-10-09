@@ -135,7 +135,7 @@
                 callback(mongoQuery);
             }
         }];
-    } owner:self name:@"createcollection" parameters:@{ @"collectionname": collectionName }];
+    } owner:self name:@"createcollection" parameters:@{ @"name": collectionName }];
     return query;
 }
 
@@ -167,13 +167,20 @@
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         bson_error_t error = BSON_NO_ERROR;
+        BOOL droppedCalled = NO;
         
         if (!mongoQuery.isCanceled) {
             mongoc_database_drop(self.mongocDatabase, &error);
+            droppedCalled = YES;
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
-            if (!mongoQuery.isCanceled && callback) {
-                callback(mongoQuery);
+            if (droppedCalled) {
+                if (callback) {
+                    callback(mongoQuery);
+                }
+                if (!mongoQuery.error) {
+                    [NSNotificationCenter.defaultCenter postNotificationName:MODDatabase_Dropped_Notification object:self];
+                }
             }
         }];
     } owner:self name:@"dropdatabase" parameters:@{ @"name": self.name }];
@@ -206,6 +213,11 @@
         mongoc_database_set_read_prefs(self.mongocDatabase, self.mongocReadPreferences);
     }
     
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@: name %@, %p>", self.className, self.name, self];
 }
 
 @end

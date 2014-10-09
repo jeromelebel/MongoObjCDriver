@@ -18,14 +18,13 @@
 
 @implementation MODCollection
 
-@synthesize database = _database, name = _name, absoluteName = _absoluteName, mongocCollection = _mongocCollection, readPreferences = _readPreferences;
+@synthesize absoluteName = _absoluteName, mongocCollection = _mongocCollection, readPreferences = _readPreferences;
 
 - (instancetype)initWithName:(NSString *)name database:(MODDatabase *)database
 {
     if (self = [self init]) {
         self.database = database;
-        self.name = [name retain];
-        self.absoluteName = [NSString stringWithFormat:@"%@.%@", self.database.name, self.name];
+        self.name = name;
         self.mongocCollection = mongoc_database_get_collection(self.database.mongocDatabase, name.UTF8String);
     }
     return self;
@@ -33,10 +32,47 @@
 
 - (void)dealloc
 {
-    self.database = nil;
-    self.name = nil;
     self.absoluteName = nil;
+    [_database release];
+    [_name release];
     [super dealloc];
+}
+
+- (void)updateAbsoluteName
+{
+    self.absoluteName = [NSString stringWithFormat:@"%@.%@", self.database.name, self.name];
+}
+
+- (void)setDatabase:(MODDatabase *)database
+{
+    if (database != _database) {
+        [self willChangeValueForKey:@"database"];
+        [_database release];
+        _database = [database retain];
+        [self updateAbsoluteName];
+        [self didChangeValueForKey:@"database"];
+    }
+}
+
+- (MODDatabase *)database
+{
+    return _database;
+}
+
+- (void)setName:(NSString *)name
+{
+    if (name != _name) {
+        [self willChangeValueForKey:@"name"];
+        [_name release];
+        _name = [name retain];
+        [self updateAbsoluteName];
+        [self didChangeValueForKey:@"name"];
+    }
+}
+
+- (NSString *)name
+{
+    return _name;
 }
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock
@@ -49,26 +85,42 @@
     [self.database mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
 }
 
-- (MODQuery *)renameWithNewDatabaseName:(NSString *)newDatabaseName newCollectionName:(NSString *)newCollectionName callback:(void (^)(MODQuery *mongoQuery))callback
+- (MODQuery *)renameWithNewDatabase:(MODDatabase *)newDatabase newCollectionName:(NSString *)newCollectionName dropTargetBeforeRenaming:(BOOL)dropTargetBeforeRenaming callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     
     NSParameterAssert(newCollectionName);
-    if (newDatabaseName) parameters[@"newdatabasename"] = newDatabaseName;
+    if (newDatabase == self.database) {
+        newDatabase = nil;
+    }
+    if (newDatabase) {
+        parameters[@"newdatabase"] = newDatabase.name;
+        NSParameterAssert(newDatabase.client == self.client);
+    }
     parameters[@"newcollectionname"] = newCollectionName;
+    parameters[@"droptargetbeforerenaming"] = @(dropTargetBeforeRenaming);
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         bson_error_t error = BSON_NO_ERROR;
+        BOOL renameCalled = NO;
         
         if (!mongoQuery.isCanceled) {
-            if (mongoc_collection_rename(self.mongocCollection, newDatabaseName.UTF8String, newCollectionName.UTF8String, false, &error)) {
-                self.name = newCollectionName;
-                self.absoluteName = [NSString stringWithFormat:@"%@.%@", self.database.name, self.name];
-            }
+            mongoc_collection_rename(self.mongocCollection, newDatabase.name.UTF8String, newCollectionName.UTF8String, dropTargetBeforeRenaming, &error);
+            renameCalled = YES;
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^{
-            if (!mongoQuery.isCanceled && callback) {
-                callback(mongoQuery);
+            if (renameCalled) {
+                if (!mongoQuery.error) {
+                    NSLog(@"renaming....");
+                    self.name = newCollectionName;
+                    if (newDatabase) {
+                        self.database = newDatabase;
+                    }
+                    self.absoluteName = [NSString stringWithFormat:@"%@.%@", self.database.name, self.name];
+                }
+                if (callback) {
+                    callback(mongoQuery);
+                }
             }
         }];
     } owner:self name:@"rename" parameters:parameters];
@@ -524,16 +576,23 @@
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         bson_error_t error = BSON_NO_ERROR;
+        BOOL droppedCalled = NO;
         
         if (!mongoQuery.isCanceled) {
             mongoc_collection_drop(self.mongocCollection, &error);
+            droppedCalled = YES;
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
-            if (!mongoQuery.isCanceled && callback) {
-                callback(mongoQuery);
+            if (droppedCalled) {
+                if (callback) {
+                    callback(mongoQuery);
+                }
+                if (!mongoQuery.error) {
+                    [NSNotificationCenter.defaultCenter postNotificationName:MODCollection_Dropped_Notification object:self];
+                }
             }
         }];
-    } owner:self name:@"drop" parameters:nil];
+    } owner:self name:@"dropcollection" parameters:@{ @"name": self.absoluteName }];
     return query;
 }
 
@@ -565,6 +624,11 @@
         mongoc_collection_set_read_prefs(self.mongocCollection, self.mongocReadPreferences);
     }
     
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@: name %@, %p>", self.className, self.absoluteName, self];
 }
 
 @end

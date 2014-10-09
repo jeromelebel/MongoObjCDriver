@@ -34,7 +34,6 @@
 @property (nonatomic, strong, readwrite) NSOperationQueue *operationQueue;
 @property (nonatomic, strong, readwrite) NSMutableArray *mongoQueries;
 
-
 @end
 
 @implementation MODClient
@@ -165,6 +164,7 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
     MODQuery *mongoQuery;
     MODBlockOperation *blockOperation;
     
+    NSParameterAssert(name);
     mongoQuery = [[MODQuery alloc] initWithOwner:owner name:name parameters:parameters];
     blockOperation = [[MODBlockOperation alloc] init];
     blockOperation.mongoQuery = mongoQuery;

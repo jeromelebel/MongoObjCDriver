@@ -13,6 +13,8 @@
 @class MODQuery;
 @class MODSortedMutableDictionary;
 
+#define MODDatabase_Dropped_Notification        @"MODDatabase_Dropped_Notification"
+
 @interface MODDatabase : NSObject
 {
     MODClient                           *_client;

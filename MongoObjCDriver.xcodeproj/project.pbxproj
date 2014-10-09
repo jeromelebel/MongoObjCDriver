@@ -1363,6 +1363,8 @@
 		02A85F5714104184004F3FE9 /* MODQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODQuery.h; sourceTree = "<group>"; };
 		02A85F5814104184004F3FE9 /* MODQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODQuery.m; sourceTree = "<group>"; };
 		02A85F5B14104373004F3FE9 /* MongoObjCDriver-private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MongoObjCDriver-private.h"; sourceTree = "<group>"; };
+		02A9B23B19E5947D002A73E4 /* MODClient-private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MODClient-private.h"; sourceTree = "<group>"; };
+		02A9B23C19E596E5002A73E4 /* MODDatabase-private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MODDatabase-private.h"; sourceTree = "<group>"; };
 		02AB057414296F9000B7CD19 /* MODObjectId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODObjectId.h; sourceTree = "<group>"; };
 		02AB057514296F9000B7CD19 /* MODObjectId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODObjectId.m; sourceTree = "<group>"; };
 		02AB33AA194870D6008C06B9 /* MODReadPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODReadPreferences.h; sourceTree = "<group>"; };
@@ -2847,6 +2849,7 @@
 				0299B61217F39FA200FB40A2 /* MODRagelJsonParser.m */,
 				0299B61317F39FA200FB40A2 /* MODRagelJsonParser.rl */,
 				02A85F4F14103EA6004F3FE9 /* MODClient.h */,
+				02A9B23B19E5947D002A73E4 /* MODClient-private.h */,
 				02A85F5014103EA6004F3FE9 /* MODClient.m */,
 				02BDC3EB141D83A7000EF755 /* MODClient_utils.m */,
 				025410A619AA7FCE00CF437E /* MODSSLOptions.h */,
@@ -2862,6 +2865,7 @@
 				024B0C051887DFBF00B8DCE6 /* MODDocumentComparator.h */,
 				024B0C061887DFBF00B8DCE6 /* MODDocumentComparator.m */,
 				02688DDA14119CF50014ED51 /* MODDatabase.h */,
+				02A9B23C19E596E5002A73E4 /* MODDatabase-private.h */,
 				02688DDB14119CF50014ED51 /* MODDatabase.m */,
 				02688DE01411C5010014ED51 /* MODCollection.h */,
 				02688DE11411C5010014ED51 /* MODCollection.m */,
