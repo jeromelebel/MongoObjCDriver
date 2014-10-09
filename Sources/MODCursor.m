@@ -9,15 +9,15 @@
 
 @interface MODCursor ()
 
-@property (nonatomic, readwrite, retain) MODCollection *mongoCollection;
-@property (nonatomic, readwrite, retain) MODSortedMutableDictionary *query;
-@property (nonatomic, readwrite, retain) NSArray *fields;
-@property (nonatomic, readwrite, assign) uint32_t skip;
-@property (nonatomic, readwrite, assign) uint32_t limit;
-@property (nonatomic, readwrite, assign) uint32_t batchSize;
-@property (nonatomic, readwrite, retain) MODSortedMutableDictionary * sort;
-@property (nonatomic, readwrite, assign) mongoc_cursor_t *mongocCursor;
-@property (nonatomic, readwrite, strong) NSError *internalError;
+@property (nonatomic, strong, readwrite) MODCollection *mongoCollection;
+@property (nonatomic, strong, readwrite) MODSortedMutableDictionary *query;
+@property (nonatomic, strong, readwrite) NSArray *fields;
+@property (nonatomic, assign, readwrite) uint32_t skip;
+@property (nonatomic, assign, readwrite) uint32_t limit;
+@property (nonatomic, assign, readwrite) uint32_t batchSize;
+@property (nonatomic, strong, readwrite) MODSortedMutableDictionary * sort;
+@property (nonatomic, assign, readwrite) mongoc_cursor_t *mongocCursor;
+@property (nonatomic, strong, readwrite) NSError *internalError;
 
 - (void)_createMongocCursor;
 

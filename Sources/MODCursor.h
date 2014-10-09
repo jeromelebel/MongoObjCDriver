@@ -29,12 +29,12 @@
 
 - (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, MODSortedMutableDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback;
 
-@property(nonatomic, readonly, retain) MODCollection *mongoCollection;
-@property(nonatomic, readonly, retain) MODSortedMutableDictionary *query;
-@property(nonatomic, readonly, retain) NSArray *fields;
-@property(nonatomic, readonly, assign) uint32_t skip;
-@property(nonatomic, readonly, assign) uint32_t limit;
-@property(nonatomic, readonly, retain) MODSortedMutableDictionary * sort;
-@property(nonatomic, readwrite, assign) BOOL tailable;
+@property(nonatomic, strong, readonly) MODCollection *mongoCollection;
+@property(nonatomic, strong, readonly) MODSortedMutableDictionary *query;
+@property(nonatomic, strong, readonly) NSArray *fields;
+@property(nonatomic, assign, readonly) uint32_t skip;
+@property(nonatomic, assign, readonly) uint32_t limit;
+@property(nonatomic, strong, readonly) MODSortedMutableDictionary * sort;
+@property(nonatomic, assign, readwrite) BOOL tailable;
 
 @end
