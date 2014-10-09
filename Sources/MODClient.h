@@ -56,7 +56,8 @@ typedef enum
 
 + (instancetype)clientWihtURLString:(NSString *)urlString;
 + (uint16_t)defaultPort;
-+ (uint32_t)defaultConnectionTimeout;
++ (uint32_t)defaultConnectTimeout;
++ (uint32_t)defaultSocketTimeout;
 
 // can return nil if the URI is invalid
 - (instancetype)initWithURIString:(NSString *)urlString;

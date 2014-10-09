@@ -58,9 +58,14 @@
     return MONGOC_DEFAULT_PORT;
 }
 
-+ (uint32_t)defaultConnectionTimeout
++ (uint32_t)defaultConnectTimeout
 {
     return MONGOC_DEFAULT_CONNECTTIMEOUTMS;
+}
+
++ (uint32_t)defaultSocketTimeout
+{
+    return MONGOC_DEFAULT_SOCKETTIMEOUTMS;
 }
 
 - (instancetype)init
