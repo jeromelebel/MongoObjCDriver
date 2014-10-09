@@ -14,7 +14,7 @@
 }
 @property (nonatomic, strong, readwrite) NSString *value;
 
-- (id)initWithValue:(NSString *)value;
+- (instancetype)initWithValue:(NSString *)value;
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;
 
 @end

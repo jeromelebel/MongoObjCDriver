@@ -25,10 +25,10 @@
 + (id)sortedDictionaryWithDictionary:(NSDictionary *)dict;
 + (id)sortedDictionaryWithObjects:(NSArray *)objects forKeys:(NSArray *)keys;
 
-- (id)initWithObjects:(const id [])objects forKeys:(const id [])keys count:(NSUInteger)cnt;
-- (id)initWithObjectsAndKeys:(id)firstObject, ... NS_REQUIRES_NIL_TERMINATION;
-- (id)initWithDictionary:(NSDictionary *)otherDictionary;
-- (id)initWithObjects:(NSArray *)objects forKeys:(NSArray *)keys;
+- (instancetype)initWithObjects:(const id [])objects forKeys:(const id [])keys count:(NSUInteger)cnt;
+- (instancetype)initWithObjectsAndKeys:(id)firstObject, ... NS_REQUIRES_NIL_TERMINATION;
+- (instancetype)initWithDictionary:(NSDictionary *)otherDictionary;
+- (instancetype)initWithObjects:(NSArray *)objects forKeys:(NSArray *)keys;
 
 - (void)removeObjectForKey:(id)aKey;
 - (id)objectForKey:(id)aKey;

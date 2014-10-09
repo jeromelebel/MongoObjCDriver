@@ -18,7 +18,7 @@
 @synthesize collectionName = _collectionName;
 @synthesize objectId = _objectId;
 
-- (id)initWithCollectionName:(NSString *)collectionName objectId:(MODObjectId *)objectId
+- (instancetype)initWithCollectionName:(NSString *)collectionName objectId:(MODObjectId *)objectId
 {
     if (self = [self init]) {
         self.collectionName = collectionName;

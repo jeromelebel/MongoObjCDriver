@@ -13,7 +13,7 @@
     NSString *_function;
 }
 
-- (id)initWithFunction:(NSString *)function;
+- (instancetype)initWithFunction:(NSString *)function;
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;
 
 @property (nonatomic, strong, readwrite) NSString *function;

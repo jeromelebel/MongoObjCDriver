@@ -11,7 +11,7 @@
 
 @synthesize tValue = _tValue, iValue = _iValue;
 
-- (id)initWithTValue:(uint32_t)tValue iValue:(uint32_t)iValue
+- (instancetype)initWithTValue:(uint32_t)tValue iValue:(uint32_t)iValue
 {
     if (self = [self init]) {
         _iValue = iValue;

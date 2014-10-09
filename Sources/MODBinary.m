@@ -38,12 +38,12 @@
     return result;
 }
 
-- (id)initWithData:(NSData *)data binaryType:(unsigned char)binaryType
+- (instancetype)initWithData:(NSData *)data binaryType:(unsigned char)binaryType
 {
     return [self initWithBytes:data.bytes length:data.length binaryType:binaryType];
 }
 
-- (id)initWithBytes:(const void *)bytes length:(NSUInteger)length binaryType:(unsigned char)binaryType
+- (instancetype)initWithBytes:(const void *)bytes length:(NSUInteger)length binaryType:(unsigned char)binaryType
 {
     if (self = [self init]) {
         self.binaryData = [NSData dataWithBytes:bytes length:length];

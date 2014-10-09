@@ -12,7 +12,7 @@
 
 @synthesize value = _value;
 
-- (id)initWithValue:(NSString *)value
+- (instancetype)initWithValue:(NSString *)value
 {
     if (self = [self init]) {
         _value = [value retain];

@@ -12,7 +12,7 @@
 
 @synthesize function = _function, scope = _scope;
 
-- (id)initWithFunction:(NSString *)function scope:(MODSortedMutableDictionary *)scope
+- (instancetype)initWithFunction:(NSString *)function scope:(MODSortedMutableDictionary *)scope
 {
     if (self = [self init]) {
         self.function = function;

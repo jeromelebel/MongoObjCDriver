@@ -17,8 +17,8 @@
 
 + (BOOL)isValidDataType:(unsigned char)dataType;
 
-- (id)initWithData:(NSData *)data binaryType:(unsigned char)binaryType;
-- (id)initWithBytes:(const void *)bytes length:(NSUInteger)length binaryType:(unsigned char)binaryType;
+- (instancetype)initWithData:(NSData *)data binaryType:(unsigned char)binaryType;
+- (instancetype)initWithBytes:(const void *)bytes length:(NSUInteger)length binaryType:(unsigned char)binaryType;
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;
 
 @end

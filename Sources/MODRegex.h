@@ -15,7 +15,7 @@
 @property (nonatomic, strong, readonly) NSString *pattern;
 @property (nonatomic, strong, readonly) NSString *options;
 
-- (id)initWithPattern:(NSString *)pattern options:(NSString *)options;
+- (instancetype)initWithPattern:(NSString *)pattern options:(NSString *)options;
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;
 
 @end

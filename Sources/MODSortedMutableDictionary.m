@@ -57,7 +57,7 @@
     return [[[self alloc] initWithObjects:objects forKeys:keys] autorelease];
 }
 
-- (id)initWithObjects:(const id [])objects forKeys:(const id [])keys count:(NSUInteger)cnt
+- (instancetype)initWithObjects:(const id [])objects forKeys:(const id [])keys count:(NSUInteger)cnt
 {
     if (self = [self init]) {
         NSUInteger ii;
@@ -69,7 +69,7 @@
     return self;
 }
 
-- (id)initWithObjectsAndKeys:(id)firstObject, ...
+- (instancetype)initWithObjectsAndKeys:(id)firstObject, ...
 {
     if (self = [self init]) {
         va_list(ap);
@@ -89,7 +89,7 @@
     return self;
 }
 
-- (id)initWithDictionary:(NSDictionary *)otherDictionary
+- (instancetype)initWithDictionary:(NSDictionary *)otherDictionary
 {
     if (self = [self init]) {
         [_content addEntriesFromDictionary:otherDictionary];
@@ -98,7 +98,7 @@
     return self;
 }
 
-- (id)initWithObjects:(NSArray *)objects forKeys:(NSArray *)keys
+- (instancetype)initWithObjects:(NSArray *)objects forKeys:(NSArray *)keys
 {
     if (self = [self init]) {
         NSUInteger ii, count;
@@ -111,7 +111,7 @@
     return self;
 }
 
-- (id)init
+- (instancetype)init
 {
     if (self = [super init]) {
         _content = [[NSMutableDictionary alloc] init];

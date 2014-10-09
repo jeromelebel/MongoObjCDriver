@@ -17,7 +17,7 @@
 @property (nonatomic, readonly, strong) NSString *collectionName;
 @property (nonatomic, readonly, strong) MODObjectId *objectId;
 
-- (id)initWithCollectionName:(NSString *)collectionName objectId:(MODObjectId *)objectId;;
+- (instancetype)initWithCollectionName:(NSString *)collectionName objectId:(MODObjectId *)objectId;;
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;
 
 @end

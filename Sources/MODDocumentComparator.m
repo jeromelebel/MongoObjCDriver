@@ -22,7 +22,7 @@
 @synthesize document2 = _document2;
 @synthesize differences = _differences;
 
-- (id)initWithDocument1:(MODSortedMutableDictionary *)document1 document2:(MODSortedMutableDictionary *)document2
+- (instancetype)initWithDocument1:(MODSortedMutableDictionary *)document1 document2:(MODSortedMutableDictionary *)document2
 {
     self = [self init];
     if (self) {

@@ -9,7 +9,7 @@
 
 @implementation MODRegex
 
-- (id)initWithPattern:(NSString *)pattern options:(NSString *)options
+- (instancetype)initWithPattern:(NSString *)pattern options:(NSString *)options
 {
     if (self = [self init]) {
         _pattern = [pattern retain];

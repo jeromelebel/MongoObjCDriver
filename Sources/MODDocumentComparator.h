@@ -21,7 +21,7 @@
 @property (nonatomic, readonly, strong) MODSortedMutableDictionary *document2;
 @property (nonatomic, readonly, strong) NSArray *differences;
 
-- (id)initWithDocument1:(MODSortedMutableDictionary *)document1 document2:(MODSortedMutableDictionary *)document2;
+- (instancetype)initWithDocument1:(MODSortedMutableDictionary *)document1 document2:(MODSortedMutableDictionary *)document2;
 - (BOOL)compare;
 
 @end

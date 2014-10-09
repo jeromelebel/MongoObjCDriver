@@ -12,7 +12,7 @@
 
 @synthesize function = _function;
 
-- (id)initWithFunction:(NSString *)function
+- (instancetype)initWithFunction:(NSString *)function
 {
     if (self = [self init]) {
         self.function = function;
