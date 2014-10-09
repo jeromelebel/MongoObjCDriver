@@ -29,13 +29,15 @@ enum MOD_INDEX_OPTIONS {
     NSString                            *_name;
     void                                *_mongocCollection;
     MODReadPreferences                  *_readPreferences;
+    BOOL                                _dropped;
 }
 
-@property (nonatomic, retain, readonly) MODClient *client;
-@property (nonatomic, retain, readonly) MODDatabase *database;
-@property (nonatomic, retain, readonly) NSString *name;
-@property (nonatomic, retain, readonly) NSString *absoluteName;
-@property (nonatomic, readwrite, retain) MODReadPreferences *readPreferences;
+@property (nonatomic, strong, readonly) MODClient *client;
+@property (nonatomic, strong, readonly) MODDatabase *database;
+@property (nonatomic, strong, readonly) NSString *name;
+@property (nonatomic, strong, readonly) NSString *absoluteName;
+@property (nonatomic, strong, readwrite) MODReadPreferences *readPreferences;
+@property (nonatomic, assign, readonly) BOOL dropped;
 
 - (MODQuery *)commandSimpleWithCommand:(MODSortedMutableDictionary *)command readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODQuery *query, MODSortedMutableDictionary *reply))callback;
 - (MODQuery *)renameWithNewDatabase:(MODDatabase *)newDatabase newCollectionName:(NSString *)newCollectionName dropTargetBeforeRenaming:(BOOL)dropTargetBeforeRenaming callback:(void (^)(MODQuery *mongoQuery))callback;

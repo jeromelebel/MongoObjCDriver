@@ -8,14 +8,19 @@
 #import "MongoObjCDriver-private.h"
 
 @interface MODDatabase ()
-@property (nonatomic, readwrite, strong) MODClient *client;
-@property (nonatomic, readwrite, copy) NSString *name;
+@property (nonatomic, strong, readwrite) MODClient *client;
+@property (nonatomic, copy, readwrite) NSString *name;
+@property (nonatomic, assign, readwrite) BOOL dropped;
 
 @end
 
 @implementation MODDatabase
 
-@synthesize client = _client, name = _name, mongocDatabase = _mongocDatabase, readPreferences = _readPreferences;
+@synthesize client = _client;
+@synthesize name = _name;
+@synthesize mongocDatabase = _mongocDatabase;
+@synthesize readPreferences = _readPreferences;
+@synthesize dropped = _dropped;
 
 - (instancetype)initWithClient:(MODClient *)client name:(NSString *)name
 {
@@ -179,6 +184,7 @@
                     callback(mongoQuery);
                 }
                 if (!mongoQuery.error) {
+                    self.dropped = YES;
                     [NSNotificationCenter.defaultCenter postNotificationName:MODDatabase_Dropped_Notification object:self];
                 }
             }

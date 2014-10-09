@@ -8,9 +8,10 @@
 #import "MongoObjCDriver-private.h"
 
 @interface MODCollection ()
-@property (nonatomic, readwrite, retain) MODDatabase *database;
-@property (nonatomic, readwrite, retain) NSString *name;
-@property (nonatomic, readwrite, retain) NSString *absoluteName;
+@property (nonatomic, strong, readwrite) MODDatabase *database;
+@property (nonatomic, strong, readwrite) NSString *name;
+@property (nonatomic, strong, readwrite) NSString *absoluteName;
+@property (nonatomic, assign, readwrite) BOOL dropped;
 
 - (bool)_commandSimpleWithCommand:(MODSortedMutableDictionary *)command readPreferences:(MODReadPreferences *)readPreferences reply:(MODSortedMutableDictionary **)reply error:(NSError **)error;
 
@@ -18,7 +19,10 @@
 
 @implementation MODCollection
 
-@synthesize absoluteName = _absoluteName, mongocCollection = _mongocCollection, readPreferences = _readPreferences;
+@synthesize absoluteName = _absoluteName;
+@synthesize mongocCollection = _mongocCollection;
+@synthesize readPreferences = _readPreferences;
+@synthesize dropped = _dropped;
 
 - (instancetype)initWithName:(NSString *)name database:(MODDatabase *)database
 {
@@ -32,7 +36,9 @@
 
 - (void)dealloc
 {
+    [NSNotificationCenter.defaultCenter removeObserver:self name:nil object:nil];
     self.absoluteName = nil;
+    self.readPreferences = nil;
     [_database release];
     [_name release];
     [super dealloc];
@@ -57,6 +63,20 @@
 - (MODDatabase *)database
 {
     return _database;
+}
+
+- (void)setDropped:(BOOL)dropped
+{
+    if (_dropped != dropped) {
+        [self willChangeValueForKey:@"dropped"];
+        _dropped = dropped;
+        [self didChangeValueForKey:@"dropped"];
+    }
+}
+
+- (BOOL)dropped
+{
+    return _dropped || self.database.dropped;
 }
 
 - (void)setName:(NSString *)name
@@ -130,6 +150,9 @@
 {
     MODQuery *query = nil;
     
+    if ([self.database.name isEqualToString:@"dropped"]) {
+        NSLog(@"test");
+    }
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         MODSortedMutableDictionary *stats = nil;
         bson_error_t error = BSON_NO_ERROR;
@@ -587,6 +610,7 @@
                     callback(mongoQuery);
                 }
                 if (!mongoQuery.error) {
+                    self.dropped = YES;
                     [NSNotificationCenter.defaultCenter postNotificationName:MODCollection_Dropped_Notification object:self];
                 }
             }

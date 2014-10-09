@@ -22,11 +22,13 @@
     void                                *_mongocDatabase;
     MODCollection                       *_systemIndexesCollection;
     MODReadPreferences                  *_readPreferences;
+    BOOL                                _dropped;
 }
-@property (nonatomic, readonly, strong) MODClient *client;
-@property (nonatomic, readonly, copy) NSString *name;
-@property (nonatomic, readonly, strong) MODCollection *systemIndexesCollection;
-@property (nonatomic, readwrite, retain) MODReadPreferences *readPreferences;
+@property (nonatomic, strong, readonly) MODClient *client;
+@property (nonatomic, copy, readonly) NSString *name;
+@property (nonatomic, strong, readonly) MODCollection *systemIndexesCollection;
+@property (nonatomic, strong, readwrite) MODReadPreferences *readPreferences;
+@property (nonatomic, assign, readonly) BOOL dropped;
 
 - (MODQuery *)statsWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedMutableDictionary *databaseStats, MODQuery *mongoQuery))callback;
 - (MODQuery *)collectionNamesWithCallback:(void (^)(NSArray *collectionList, MODQuery *mongoQuery))callback;
