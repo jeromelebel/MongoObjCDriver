@@ -35,6 +35,8 @@
 - (void)dealloc
 {
     self.client = nil;
+    self.name = nil;
+    self.readPreferences = nil;
     if (self.mongocDatabase) {
         mongoc_database_destroy(self.mongocDatabase);
         self.mongocDatabase = nil;
