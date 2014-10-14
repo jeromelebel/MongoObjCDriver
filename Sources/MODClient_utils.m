@@ -250,7 +250,7 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
             result = [NSString stringWithUTF8String:bson_iter_utf8(iterator, NULL)];
             break;
         case BSON_TYPE_DOCUMENT:
-            result = [[[MODSortedMutableDictionary alloc] init] autorelease];
+            result = [MODSortedMutableDictionary sortedDictionary];
             bson_iter_recurse(iterator, &subIterator);
             while (bson_iter_next(&subIterator)) {
                 id value;
