@@ -249,9 +249,16 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
             if (cStringName) {
                 char **cursor = cStringName;
                 
-                list = [[NSMutableArray alloc] init];
+                list = [NSMutableArray array];
                 while (*cursor != NULL) {
-                    [list addObject:[NSString stringWithUTF8String:*cursor]];
+                    NSString *name;
+                    
+                    name = [NSString stringWithUTF8String:*cursor];
+                    if (name) {
+                        // If there bson is corrupted, the name will not UTF8 compliant
+                        // we should skip it
+                        [list addObject:name];
+                    }
                     bson_free(*cursor);
                     cursor++;
                 }
@@ -265,7 +272,6 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
             }
         }];
         bson_destroy(&output);
-        [list release];
     } owner:self name:@"databasenames" parameters:nil];
     return query;
 }
