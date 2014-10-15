@@ -27,16 +27,21 @@
 
 @implementation MODRagelJsonParser (private)
 
-+ (void)bsonFromJson:(bson_t *)bsonResult json:(NSString *)json error:(NSError **)error
++ (BOOL)bsonFromJson:(bson_t *)bsonResult json:(NSString *)json error:(NSError **)outputError
 {
-    id object = [self objectsFromJson:json withError:error];
+    NSError *error = nil;
+    id object = [self objectsFromJson:json withError:&error];
     
-    if (object && !*error && [object isKindOfClass:NSArray.class]) {
+    if (object && !error && [object isKindOfClass:NSArray.class]) {
         object = [MODSortedMutableDictionary sortedDictionaryWithObject:object forKey:@"array"];
     }
-    if (object && !*error && [object isKindOfClass:MODSortedMutableDictionary.class]) {
+    if (object && !error && [object isKindOfClass:MODSortedMutableDictionary.class]) {
         [MODClient appendObject:object toBson:bsonResult];
     }
+    if (outputError) {
+        *outputError = error;
+    }
+    return !error;
 }
 
 @end

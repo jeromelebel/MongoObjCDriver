@@ -49,7 +49,7 @@
 {
     MODSSLOptions *result;
     
-    result = [[MODSSLOptions alloc] init];
+    result = [[[MODSSLOptions alloc] init] autorelease];
     result.pemFileName = [NSString stringWithUTF8String:sslOpt->pem_file];
     result.pemPassword = [NSString stringWithUTF8String:sslOpt->pem_pwd];
     result.caFileName = [NSString stringWithUTF8String:sslOpt->ca_file];

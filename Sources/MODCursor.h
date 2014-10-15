@@ -12,7 +12,7 @@
 
 @interface MODCursor : NSObject
 {
-    MODCollection                       *_mongoCollection;
+    MODCollection                       *_collection;
     MODSortedMutableDictionary          *_query;
     NSArray                             *_fields;
     uint32_t                            _skip;
@@ -29,7 +29,7 @@
 
 - (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, MODSortedMutableDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback;
 
-@property(nonatomic, strong, readonly) MODCollection *mongoCollection;
+@property(nonatomic, strong, readonly) MODCollection *collection;
 @property(nonatomic, strong, readonly) MODSortedMutableDictionary *query;
 @property(nonatomic, strong, readonly) NSArray *fields;
 @property(nonatomic, assign, readonly) uint32_t skip;

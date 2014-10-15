@@ -1384,6 +1384,7 @@
 		02B17F34184FF2E500362A27 /* MODBsonComparator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODBsonComparator.m; sourceTree = "<group>"; };
 		02B24271147D1BD6008A15A3 /* MODSortedMutableDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODSortedMutableDictionary.h; sourceTree = "<group>"; };
 		02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODSortedMutableDictionary.m; sourceTree = "<group>"; };
+		02B5B56219EEDEE900CD4098 /* MODCursor-private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MODCursor-private.h"; sourceTree = "<group>"; };
 		02BDC3E5141D6073000EF755 /* MODCursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODCursor.h; sourceTree = "<group>"; };
 		02BDC3E6141D6073000EF755 /* MODCursor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODCursor.m; sourceTree = "<group>"; };
 		02BDC3EB141D83A7000EF755 /* MODClient_utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODClient_utils.m; sourceTree = "<group>"; };
@@ -2870,6 +2871,7 @@
 				02688DE01411C5010014ED51 /* MODCollection.h */,
 				02688DE11411C5010014ED51 /* MODCollection.m */,
 				02BDC3E5141D6073000EF755 /* MODCursor.h */,
+				02B5B56219EEDEE900CD4098 /* MODCursor-private.h */,
 				02BDC3E6141D6073000EF755 /* MODCursor.m */,
 				02A85F5714104184004F3FE9 /* MODQuery.h */,
 				02A85F5814104184004F3FE9 /* MODQuery.m */,

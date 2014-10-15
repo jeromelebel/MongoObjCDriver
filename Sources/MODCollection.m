@@ -213,7 +213,7 @@
 
 - (MODCursor *)cursorWithCriteria:(MODSortedMutableDictionary *)query fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(MODSortedMutableDictionary *)sort
 {
-    return [[[MODCursor alloc] initWithMongoCollection:self query:query fields:fields skip:skip limit:limit sort:sort] autorelease];
+    return [[[MODCursor alloc] initWithCollection:self query:query fields:fields skip:skip limit:limit sort:sort] autorelease];
 }
 
 - (MODQuery *)countWithCriteria:(MODSortedMutableDictionary *)criteria readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback
@@ -520,6 +520,7 @@
             [self.client.class appendObject:pipeline toBson:&bsonPipeline];
             [self.client.class appendObject:options toBson:&bsonOptions];
             mongocCursor = mongoc_collection_aggregate(self.mongocCollection, flags, &bsonPipeline, &bsonOptions, readPreferences?readPreferences.mongocReadPreferences:NULL);
+            cursor = [[[MODCursor alloc] initWithCollection:self mongocCursor:mongocCursor] autorelease];
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:bsonError callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
@@ -527,7 +528,7 @@
             }
         }];
     } owner:self name:@"aggregate" parameters:nil];
-    return nil;
+    return query;
 }
 
 - (bool)_commandSimpleWithCommand:(MODSortedMutableDictionary *)command readPreferences:(MODReadPreferences *)readPreferences reply:(MODSortedMutableDictionary **)reply error:(NSError **)error
@@ -575,7 +576,7 @@
         if (!currentMongoQuery.isCanceled) {
             MODSortedMutableDictionary *command;
             
-            command = [[MODSortedMutableDictionary alloc] init];
+            command = [MODSortedMutableDictionary sortedDictionary];
             [command setObject:self.name forKey:@"mapreduce"];
             [command setObject:mapFunction forKey:@"map"];
             [command setObject:reduceFunction forKey:@"reduce"];

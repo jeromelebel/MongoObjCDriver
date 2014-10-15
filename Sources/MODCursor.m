@@ -9,7 +9,7 @@
 
 @interface MODCursor ()
 
-@property (nonatomic, strong, readwrite) MODCollection *mongoCollection;
+@property (nonatomic, strong, readwrite) MODCollection *collection;
 @property (nonatomic, strong, readwrite) MODSortedMutableDictionary *query;
 @property (nonatomic, strong, readwrite) NSArray *fields;
 @property (nonatomic, assign, readwrite) uint32_t skip;
@@ -25,19 +25,27 @@
 
 @implementation MODCursor
 
-@synthesize mongoCollection = _mongoCollection, query = _query, fields = _fields, skip = _skip, limit = _limit, sort = _sort, mongocCursor = _mongocCursor, tailable = _tailable, batchSize = _batchSize, internalError = _internalError;
+@synthesize collection = _collection, query = _query, fields = _fields, skip = _skip, limit = _limit, sort = _sort, mongocCursor = _mongocCursor, tailable = _tailable, batchSize = _batchSize, internalError = _internalError;
 
-- (instancetype)initWithMongoCollection:(MODCollection *)mongoCollection
+- (instancetype)initWithCollection:(MODCollection *)collection
 {
     if (self = [self init]) {
-        self.mongoCollection = mongoCollection;
+        self.collection = collection;
     }
     return self;
 }
 
-- (instancetype)initWithMongoCollection:(MODCollection *)mongoCollection query:(MODSortedMutableDictionary *)query fields:(NSArray *)fields skip:(uint32_t)skip limit:(uint32_t)limit sort:(MODSortedMutableDictionary *)sort
+- (instancetype)initWithCollection:(MODCollection *)collection mongocCursor:(mongoc_cursor_t *)mongocCursor
 {
-    if (self = [self initWithMongoCollection:mongoCollection]) {
+    if (self = [self initWithCollection:collection]) {
+        self.mongocCursor = mongocCursor;
+    }
+    return self;
+}
+
+- (instancetype)initWithCollection:(MODCollection *)collection query:(MODSortedMutableDictionary *)query fields:(NSArray *)fields skip:(uint32_t)skip limit:(uint32_t)limit sort:(MODSortedMutableDictionary *)sort
+{
+    if (self = [self initWithCollection:collection]) {
         self.query = query;
         self.fields = fields;
         self.skip = skip;
@@ -58,13 +66,13 @@
     self.query = nil;
     self.fields = nil;
     self.sort = nil;
-    self.mongoCollection = nil;
+    self.collection = nil;
     [super dealloc];
 }
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock
 {
-    [self.mongoCollection mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
+    [self.collection mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
 }
 
 - (void)_createMongocCursor
@@ -99,7 +107,7 @@
             bson_append_bool(&bsonFields, field.UTF8String, -1, 1);
         }
     }
-    self.mongocCursor = mongoc_collection_find(self.mongoCollection.mongocCollection, MONGOC_QUERY_NONE, self.skip, self.limit, self.batchSize, &bsonQuery, &bsonFields, NULL);
+    self.mongocCursor = mongoc_collection_find(self.collection.mongocCollection, MONGOC_QUERY_NONE, self.skip, self.limit, self.batchSize, &bsonQuery, &bsonFields, NULL);
     bson_destroy(&bsonQuery);
     bson_destroy(&bsonFields);
 }
@@ -117,7 +125,7 @@
         if (self.error) {
             *error = self.error;
         } else if (mongoc_cursor_next(self.mongocCursor, &bson)) {
-            result = [self.mongoCollection.client.class objectFromBson:bson];
+            result = [self.collection.client.class objectFromBson:bson];
             if (bsonData) {
                 const bson_t *bson;
                 
@@ -128,7 +136,7 @@
             bson_error_t error = BSON_NO_ERROR;
             
             mongoc_cursor_error(self.mongocCursor, &error);
-            self.internalError = [self.mongoCollection.client.class errorFromBsonError:error];
+            self.internalError = [self.collection.client.class errorFromBsonError:error];
         }
     }
     return result;
@@ -147,7 +155,7 @@
         bson_error_t error = BSON_NO_ERROR;
         
         mongoc_cursor_error(self.mongocCursor, &error);
-        return [self.mongoCollection.client.class errorFromBsonError:error];
+        return [self.collection.client.class errorFromBsonError:error];
     }
 }
 
@@ -156,7 +164,7 @@
 {
     MODQuery *query = nil;
     
-    query = [self.mongoCollection.client addQueryInQueue:^(MODQuery *mongoQuery) {
+    query = [self.collection.client addQueryInQueue:^(MODQuery *mongoQuery) {
         uint64_t documentCount = 0;
         BOOL cursorStopped = NO;
         NSError *error = nil;

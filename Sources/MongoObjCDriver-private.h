@@ -14,6 +14,7 @@
 #import "MODWriteConcern-private.h"
 #import "MODClient-private.h"
 #import "MODDatabase-private.h"
+#import "MODCursor-private.h"
 
 #define BSON_NO_ERROR { 0, 0, 0 }
 
@@ -29,14 +30,6 @@ enum {
 - (instancetype)initWithName:(NSString *)name database:(MODDatabase *)database;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock;
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock;
-
-@end
-
-@interface MODCursor ()
-- (instancetype)initWithMongoCollection:(MODCollection *)mongoCollection query:(MODSortedMutableDictionary *)query fields:(NSArray *)fields skip:(uint32_t)skip limit:(uint32_t)limit sort:(MODSortedMutableDictionary *)sort;
-- (MODSortedMutableDictionary *)nextDocumentWithBsonData:(NSData **)bsonData error:(NSError **)error;
-- (BOOL)more;
-- (NSError *)error;
 
 @end
 
@@ -60,7 +53,7 @@ enum {
 @end
 
 @interface MODRagelJsonParser (private)
-+ (void)bsonFromJson:(bson_t *)bsonResult json:(NSString *)json error:(NSError **)error;
++ (BOOL)bsonFromJson:(bson_t *)bsonResult json:(NSString *)json error:(NSError **)error;
 
 @end
 
