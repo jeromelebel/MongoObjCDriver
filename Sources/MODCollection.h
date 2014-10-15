@@ -12,6 +12,7 @@
 @class MODQuery;
 @class MODCursor;
 @class MODSortedMutableDictionary;
+@class MODWriteConcern;
 
 enum MOD_INDEX_OPTIONS {
     MOD_INDEX_OPTIONS_UNIQUE = ( 1<<0 ),
@@ -46,7 +47,11 @@ enum MOD_INDEX_OPTIONS {
 - (MODQuery *)findWithCriteria:(MODSortedMutableDictionary *)criteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(MODSortedMutableDictionary *)sort callback:(void (^)(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery))callback;
 - (MODQuery *)countWithCriteria:(MODSortedMutableDictionary *)criteria readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback;
 - (MODQuery *)insertWithDocuments:(NSArray *)documents callback:(void (^)(MODQuery *mongoQuery))callback;
-- (MODQuery *)updateWithCriteria:(MODSortedMutableDictionary *)criteria update:(MODSortedMutableDictionary *)update upsert:(BOOL)upsert multiUpdate:(BOOL)multiUpdate callback:(void (^)(MODQuery *mongoQuery))callback;
+- (MODQuery *)updateWithCriteria:(MODSortedMutableDictionary *)criteria
+                          update:(MODSortedMutableDictionary *)update
+                          upsert:(BOOL)upsert
+                     multiUpdate:(BOOL)multiUpdate
+                    writeConcern:(MODWriteConcern *)writeConcern callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)saveWithDocument:(MODSortedMutableDictionary *)document callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)removeWithCriteria:(id)jsonCriteria callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)dropWithCallback:(void (^)(MODQuery *mongoQuery))callback;

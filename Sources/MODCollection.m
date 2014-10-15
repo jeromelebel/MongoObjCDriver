@@ -319,7 +319,12 @@
     return query;
 }
 
-- (MODQuery *)updateWithCriteria:(MODSortedMutableDictionary *)criteria update:(MODSortedMutableDictionary *)update upsert:(BOOL)upsert multiUpdate:(BOOL)multiUpdate callback:(void (^)(MODQuery *mongoQuery))callback
+- (MODQuery *)updateWithCriteria:(MODSortedMutableDictionary *)criteria
+                          update:(MODSortedMutableDictionary *)update
+                          upsert:(BOOL)upsert
+                     multiUpdate:(BOOL)multiUpdate
+                    writeConcern:(MODWriteConcern *)writeConcern
+                        callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -339,7 +344,7 @@
             if (error == nil) {
                 bson_error_t bsonError = BSON_NO_ERROR;
                 
-                if (!mongoc_collection_update(self.mongocCollection, (upsert?MONGOC_UPDATE_UPSERT:0) | (multiUpdate?MONGOC_UPDATE_MULTI_UPDATE:0), &bsonCriteria, &bsonUpdate, NULL, &bsonError)) {
+                if (!mongoc_collection_update(self.mongocCollection, (upsert?MONGOC_UPDATE_UPSERT:0) | (multiUpdate?MONGOC_UPDATE_MULTI_UPDATE:0), &bsonCriteria, &bsonUpdate, writeConcern.mongocWriteConcern, &bsonError)) {
                     error = [self.client.class errorFromBsonError:bsonError];
                     mongoQuery.error = error;
                 }
