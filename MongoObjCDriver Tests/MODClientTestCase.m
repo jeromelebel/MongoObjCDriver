@@ -146,7 +146,7 @@
     } endCallback:^(uint64_t count, BOOL stopped, MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
-    [mongoCollection updateWithCriteria:[self obj:@"{\"_id\": \"toto\"}"] update:[self obj:@"{\"$inc\": {\"x\": 1}}"] upsert:NO multiUpdate:NO callback:^(MODQuery *mongoQuery) {
+    [mongoCollection updateWithCriteria:[self obj:@"{\"_id\": \"toto\"}"] update:[self obj:@"{\"$inc\": {\"x\": 1}}"] upsert:NO multiUpdate:NO writeConcern:nil callback:^(MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
     [mongoCollection saveWithDocument:[self obj:@"{\"_id\": \"toto\", \"y\": null}"] callback:^(MODQuery *mongoQuery) {
