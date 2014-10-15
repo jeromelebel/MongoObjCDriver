@@ -254,14 +254,20 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
             bson_iter_recurse(iterator, &subIterator);
             while (bson_iter_next(&subIterator)) {
                 id value;
+                NSString *key;
                 
+                key = [NSString stringWithUTF8String:bson_iter_key(&subIterator)];
+                if (!key) {
+                    // some bson can be corrupted
+                    // if the key is not with UTF8, then that's the end
+                    break;
+                }
                 value = [self objectFromBsonIterator:&subIterator];
                 if (value) {
-                    NSString *key;
-                    
-                    key = [[NSString alloc] initWithUTF8String:bson_iter_key(&subIterator)];
+                    if (key == nil) {
+                        bson_iter_key(&subIterator);
+                    }
                     [result setObject:value forKey:key];
-                    [key release];
                 }
             }
             break;
@@ -405,12 +411,16 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
         NSString *key;
         id value;
         
-        key = [[NSString alloc] initWithUTF8String:bson_iter_key(&iterator)];
+        key = [NSString stringWithUTF8String:bson_iter_key(&iterator)];
+        if (!key) {
+            // if we can't have a NSString, this is probably a corrupted bson
+            // just pretend it finished
+            break;
+        }
         value = [self objectFromBsonIterator:&iterator];
         if (value) {
             [result setObject:value forKey:key];
         }
-        [key release];
     }
     return [result autorelease];
 }
