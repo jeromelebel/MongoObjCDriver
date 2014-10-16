@@ -178,7 +178,12 @@
     return query;
 }
 
-- (MODQuery *)findWithCriteria:(MODSortedMutableDictionary *)criteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(MODSortedMutableDictionary *)sort callback:(void (^)(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery))callback
+- (MODQuery *)findWithCriteria:(MODSortedMutableDictionary *)criteria
+                        fields:(NSArray *)fields
+                          skip:(int32_t)skip
+                         limit:(int32_t)limit
+                          sort:(MODSortedMutableDictionary *)sort
+                      callback:(void (^)(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     

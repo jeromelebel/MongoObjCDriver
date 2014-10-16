@@ -25,7 +25,16 @@
 
 @implementation MODCursor
 
-@synthesize collection = _collection, query = _query, fields = _fields, skip = _skip, limit = _limit, sort = _sort, mongocCursor = _mongocCursor, tailable = _tailable, batchSize = _batchSize, internalError = _internalError;
+@synthesize collection = _collection;
+@synthesize query = _query;
+@synthesize fields = _fields;
+@synthesize skip = _skip;
+@synthesize limit = _limit;
+@synthesize sort = _sort;
+@synthesize mongocCursor = _mongocCursor;
+@synthesize tailable = _tailable;
+@synthesize batchSize = _batchSize;
+@synthesize internalError = _internalError;
 
 - (instancetype)initWithCollection:(MODCollection *)collection
 {
@@ -43,7 +52,12 @@
     return self;
 }
 
-- (instancetype)initWithCollection:(MODCollection *)collection query:(MODSortedMutableDictionary *)query fields:(NSArray *)fields skip:(uint32_t)skip limit:(uint32_t)limit sort:(MODSortedMutableDictionary *)sort
+- (instancetype)initWithCollection:(MODCollection *)collection
+                             query:(MODSortedMutableDictionary *)query
+                            fields:(NSArray *)fields
+                              skip:(uint32_t)skip
+                             limit:(uint32_t)limit
+                              sort:(MODSortedMutableDictionary *)sort
 {
     if (self = [self initWithCollection:collection]) {
         self.query = query;

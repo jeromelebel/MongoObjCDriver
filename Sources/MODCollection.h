@@ -44,7 +44,11 @@ enum MOD_INDEX_OPTIONS {
 - (MODQuery *)renameWithNewDatabase:(MODDatabase *)newDatabase newCollectionName:(NSString *)newCollectionName dropTargetBeforeRenaming:(BOOL)dropTargetBeforeRenaming callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)statsWithCallback:(void (^)(MODSortedMutableDictionary *stats, MODQuery *mongoQuery))callback;
 - (MODCursor *)cursorWithCriteria:(MODSortedMutableDictionary *)jsonCriteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(MODSortedMutableDictionary *)sort;
-- (MODQuery *)findWithCriteria:(MODSortedMutableDictionary *)criteria fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(MODSortedMutableDictionary *)sort callback:(void (^)(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery))callback;
+- (MODQuery *)findWithCriteria:(MODSortedMutableDictionary *)criteria
+                        fields:(NSArray *)fields skip:(int32_t)skip
+                         limit:(int32_t)limit
+                          sort:(MODSortedMutableDictionary *)sort
+                      callback:(void (^)(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery))callback;
 - (MODQuery *)countWithCriteria:(MODSortedMutableDictionary *)criteria readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback;
 - (MODQuery *)insertWithDocuments:(NSArray *)documents callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)updateWithCriteria:(MODSortedMutableDictionary *)criteria
