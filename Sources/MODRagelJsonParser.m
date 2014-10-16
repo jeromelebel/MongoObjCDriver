@@ -2686,7 +2686,7 @@ _again:
     char quoteString;
     NSString *buffer;
     
-    mutableResult = [[NSMutableString alloc] init];
+    mutableResult = [NSMutableString string];
     quoteString = string[0];
     cursor = string + 1;
     bookmark = cursor;
@@ -2742,7 +2742,7 @@ _again:
         buffer = [[NSString alloc] initWithBytes:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding];
         [mutableResult appendString:buffer];
         [buffer release];
-        *result = [mutableResult autorelease];
+        *result = mutableResult;
         cursor++;
     } else {
         cursor = NULL;
