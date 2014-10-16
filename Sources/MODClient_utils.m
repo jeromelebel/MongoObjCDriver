@@ -205,6 +205,7 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
             
         case MONGOC_ERROR_NAMESPACE_INVALID_FILTER_TYPE:
             errorMessage = @"MONGOC_ERROR_NAMESPACE_INVALID_FILTER_TYPE";
+            break;
         
         case MONGOC_ERROR_COMMAND_INVALID_ARG:
             errorMessage = @"MONGOC_ERROR_COMMAND_INVALID_ARG";
