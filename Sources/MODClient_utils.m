@@ -202,6 +202,9 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
         case MONGOC_ERROR_NAMESPACE_INVALID:
             errorMessage = @"MONGOC_ERROR_NAMESPACE_INVALID";
             break;
+            
+        case MONGOC_ERROR_NAMESPACE_INVALID_FILTER_TYPE:
+            errorMessage = @"MONGOC_ERROR_NAMESPACE_INVALID_FILTER_TYPE";
         
         case MONGOC_ERROR_COMMAND_INVALID_ARG:
             errorMessage = @"MONGOC_ERROR_COMMAND_INVALID_ARG";
@@ -209,6 +212,10 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
         
         case MONGOC_ERROR_COLLECTION_INSERT_FAILED:
             errorMessage = @"MONGOC_ERROR_COLLECTION_INSERT_FAILED";
+            break;
+        
+        case MONGOC_ERROR_COLLECTION_DOES_NOT_EXIST:
+            errorMessage = @"MONGOC_ERROR_COLLECTION_DOES_NOT_EXIST";
             break;
         
         case MONGOC_ERROR_GRIDFS_INVALID_FILENAME:
@@ -222,9 +229,6 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
         case MONGOC_ERROR_QUERY_NOT_TAILABLE:
             errorMessage = @"MONGOC_ERROR_QUERY_NOT_TAILABLE";
             break;
-//        case MONGOC_ERROR_PROTOCOL_ERROR:
-//            errorMessage = @"MONGOC_ERROR_PROTOCOL_ERROR";
-//            break;
     }
     if (strlen(error.message) > 0) {
         errorMessage = [NSString stringWithCString:error.message encoding:NSUTF8StringEncoding];
