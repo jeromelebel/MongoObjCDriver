@@ -223,6 +223,8 @@
 		02E6401D19DC07DB00FEFEFC /* MODDocumentCompatorTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E6401C19DC07DB00FEFEFC /* MODDocumentCompatorTestCase.m */; };
 		02E6401F19DC0AA900FEFEFC /* MODBsonComparatorTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E6401E19DC0AA900FEFEFC /* MODBsonComparatorTestCase.m */; };
 		02E6402119DC146300FEFEFC /* MODClientTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E6402019DC146300FEFEFC /* MODClientTestCase.m */; };
+		02F4EA7D19F1ABF500BE9695 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F4EA7C19F1ABF500BE9695 /* main.m */; };
+		02F4EA8219F1ADB400BE9695 /* MongoObjCDriver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C014103B37000417F4 /* MongoObjCDriver.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -240,7 +242,26 @@
 			remoteGlobalIDString = 02ABA1BF14103B37000417F4;
 			remoteInfo = MongoObjCDriver;
 		};
+		02F4EA8319F1ADBB00BE9695 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02ABA1B614103B36000417F4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 02ABA1BF14103B37000417F4;
+			remoteInfo = MongoObjCDriver;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		02F4EA7819F1ABF400BE9695 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		02044CB1190E5E4C00A80BED /* autogen.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = autogen.sh; sourceTree = "<group>"; };
@@ -1408,6 +1429,8 @@
 		02E6401E19DC0AA900FEFEFC /* MODBsonComparatorTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODBsonComparatorTestCase.m; sourceTree = "<group>"; };
 		02E6402019DC146300FEFEFC /* MODClientTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODClientTestCase.m; sourceTree = "<group>"; };
 		02F121BF1410EF5200197811 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		02F4EA7A19F1ABF400BE9695 /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
+		02F4EA7C19F1ABF500BE9695 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1426,6 +1449,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				02E6401719DB6CD500FEFEFC /* MongoObjCDriver.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		02F4EA7719F1ABF400BE9695 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02F4EA8219F1ADB400BE9695 /* MongoObjCDriver.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2804,6 +2835,7 @@
 				02ABA1C914103B37000417F4 /* Sources */,
 				02A85F0114103D4D004F3FE9 /* Libraries */,
 				02E6400D19DB68F900FEFEFC /* MongoObjCDriver Tests */,
+				02F4EA7B19F1ABF500BE9695 /* test */,
 				02ABA1C214103B37000417F4 /* Frameworks */,
 				02ABA1C114103B37000417F4 /* Products */,
 			);
@@ -2814,6 +2846,7 @@
 			children = (
 				02ABA1C014103B37000417F4 /* MongoObjCDriver.framework */,
 				02E6400C19DB68F900FEFEFC /* MongoObjCDriver Tests.xctest */,
+				02F4EA7A19F1ABF400BE9695 /* test */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2937,6 +2970,14 @@
 				02E6400F19DB68F900FEFEFC /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		02F4EA7B19F1ABF500BE9695 /* test */ = {
+			isa = PBXGroup;
+			children = (
+				02F4EA7C19F1ABF500BE9695 /* main.m */,
+			);
+			path = test;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -3080,6 +3121,24 @@
 			productReference = 02E6400C19DB68F900FEFEFC /* MongoObjCDriver Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		02F4EA7919F1ABF400BE9695 /* test */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 02F4EA8019F1ABF500BE9695 /* Build configuration list for PBXNativeTarget "test" */;
+			buildPhases = (
+				02F4EA7619F1ABF400BE9695 /* Sources */,
+				02F4EA7719F1ABF400BE9695 /* Frameworks */,
+				02F4EA7819F1ABF400BE9695 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				02F4EA8419F1ADBB00BE9695 /* PBXTargetDependency */,
+			);
+			name = test;
+			productName = test;
+			productReference = 02F4EA7A19F1ABF400BE9695 /* test */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -3090,6 +3149,9 @@
 				LastUpgradeCheck = 0430;
 				TargetAttributes = {
 					02E6400B19DB68F900FEFEFC = {
+						CreatedOnToolsVersion = 6.0.1;
+					};
+					02F4EA7919F1ABF400BE9695 = {
 						CreatedOnToolsVersion = 6.0.1;
 					};
 				};
@@ -3110,6 +3172,7 @@
 				02216F151412D39200789BD1 /* Submodules */,
 				0299B61B17F3A8B800FB40A2 /* Ragel */,
 				02E6400B19DB68F900FEFEFC /* MongoObjCDriver Tests */,
+				02F4EA7919F1ABF400BE9695 /* test */,
 			);
 		};
 /* End PBXProject section */
@@ -3275,6 +3338,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		02F4EA7619F1ABF400BE9695 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				02F4EA7D19F1ABF500BE9695 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -3287,6 +3358,11 @@
 			isa = PBXTargetDependency;
 			target = 02ABA1BF14103B37000417F4 /* MongoObjCDriver */;
 			targetProxy = 02E6402319DC30BF00FEFEFC /* PBXContainerItemProxy */;
+		};
+		02F4EA8419F1ADBB00BE9695 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 02ABA1BF14103B37000417F4 /* MongoObjCDriver */;
+			targetProxy = 02F4EA8319F1ADBB00BE9695 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -3496,6 +3572,71 @@
 			};
 			name = Release;
 		};
+		02F4EA7E19F1ABF500BE9695 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		02F4EA7F19F1ABF500BE9695 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3543,6 +3684,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		02F4EA8019F1ABF500BE9695 /* Build configuration list for PBXNativeTarget "test" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				02F4EA7E19F1ABF500BE9695 /* Debug */,
+				02F4EA7F19F1ABF500BE9695 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
