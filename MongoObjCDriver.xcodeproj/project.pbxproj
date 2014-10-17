@@ -225,6 +225,8 @@
 		02E6402119DC146300FEFEFC /* MODClientTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E6402019DC146300FEFEFC /* MODClientTestCase.m */; };
 		02F4EA7D19F1ABF500BE9695 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F4EA7C19F1ABF500BE9695 /* main.m */; };
 		02F4EA8219F1ADB400BE9695 /* MongoObjCDriver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C014103B37000417F4 /* MongoObjCDriver.framework */; };
+		02F4EA8719F1C39B00BE9695 /* MODBulkOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F4EA8519F1C39B00BE9695 /* MODBulkOperation.h */; };
+		02F4EA8819F1C39B00BE9695 /* MODBulkOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F4EA8619F1C39B00BE9695 /* MODBulkOperation.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1431,6 +1433,8 @@
 		02F121BF1410EF5200197811 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02F4EA7A19F1ABF400BE9695 /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
 		02F4EA7C19F1ABF500BE9695 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		02F4EA8519F1C39B00BE9695 /* MODBulkOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODBulkOperation.h; sourceTree = "<group>"; };
+		02F4EA8619F1C39B00BE9695 /* MODBulkOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODBulkOperation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2903,6 +2907,8 @@
 				02688DDB14119CF50014ED51 /* MODDatabase.m */,
 				02688DE01411C5010014ED51 /* MODCollection.h */,
 				02688DE11411C5010014ED51 /* MODCollection.m */,
+				02F4EA8519F1C39B00BE9695 /* MODBulkOperation.h */,
+				02F4EA8619F1C39B00BE9695 /* MODBulkOperation.m */,
 				02BDC3E5141D6073000EF755 /* MODCursor.h */,
 				02B5B56219EEDEE900CD4098 /* MODCursor-private.h */,
 				02BDC3E6141D6073000EF755 /* MODCursor.m */,
@@ -3010,6 +3016,7 @@
 				027A1DA81767E91F0048AD60 /* MODUndefined.h in Headers */,
 				02CCE7A0192A278800A9DB1B /* MODRagelJsonParser.h in Headers */,
 				02AB33AC194870D6008C06B9 /* MODReadPreferences.h in Headers */,
+				02F4EA8719F1C39B00BE9695 /* MODBulkOperation.h in Headers */,
 				02A85F5D14104373004F3FE9 /* MongoObjCDriver-private.h in Headers */,
 				025410A819AA7FCE00CF437E /* MODSSLOptions.h in Headers */,
 				02D3D3031926661000925BE7 /* mongoc-array-private.h in Headers */,
@@ -3250,6 +3257,7 @@
 				02CF0E6B19111321008C822A /* mongoc-client-pool.c in Sources */,
 				02CF0E8A19111321008C822A /* mongoc-uri.c in Sources */,
 				02CF0E8219111321008C822A /* mongoc-socket.c in Sources */,
+				02F4EA8819F1C39B00BE9695 /* MODBulkOperation.m in Sources */,
 				02CF0E28191112CB008C822A /* bson-md5.c in Sources */,
 				02CF0E20191112CB008C822A /* bcon.c in Sources */,
 				02688DE31411C5010014ED51 /* MODCollection.m in Sources */,

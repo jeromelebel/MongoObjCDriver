@@ -13,6 +13,7 @@
 #import "MODQuery.h"
 #import "MODReadPreferences.h"
 #import "MODWriteConcern.h"
+#import "MODBulkOperation.h"
 
 #import "MODTimestamp.h"
 #import "MODObjectId.h"
