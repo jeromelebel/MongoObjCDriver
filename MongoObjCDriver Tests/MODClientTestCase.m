@@ -118,10 +118,10 @@
         XCTAssertEqual(count, 0, @"should have no document");
         [self logMongoQuery:mongoQuery];
     }];
-    [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\": \"toto\" }", nil] callback:^(MODQuery *mongoQuery) {
+    [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\": \"toto\" }", nil] writeConcern:nil callback:^(MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
-    [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\": \"toto1\" }", @"{ \"_id\": { \"$oid\": \"123456789012345678901234\" } }", nil] callback:^(MODQuery *mongoQuery) {
+    [mongoCollection insertWithDocuments:[NSArray arrayWithObjects:@"{ \"_id\": \"toto1\" }", @"{ \"_id\": { \"$oid\": \"123456789012345678901234\" } }", nil] writeConcern:nil callback:^(MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
     [mongoCollection countWithCriteria:nil readPreferences:nil callback:^(int64_t count, MODQuery *mongoQuery) {
@@ -238,7 +238,7 @@
         [documents addObject:document];
     }
     [collection removeWithCriteria:nil callback:nil];
-    [collection insertWithDocuments:documents callback:^(MODQuery *mongoQuery) {
+    [collection insertWithDocuments:documents writeConcern:nil callback:^(MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
     [collection findWithCriteria:nil fields:nil skip:0 limit:100 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {

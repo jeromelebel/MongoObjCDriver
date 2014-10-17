@@ -261,7 +261,9 @@
     return query;
 }
 
-- (MODQuery *)insertWithDocuments:(NSArray *)documents callback:(void (^)(MODQuery *mongoQuery))callback
+- (MODQuery *)insertWithDocuments:(NSArray *)documents
+                     writeConcern:(MODWriteConcern *)writeConcern
+                         callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -303,7 +305,7 @@
                         break;
                     }
                     mongoc_bulk_operation_destroy(bulk);
-                    bulk = mongoc_collection_create_bulk_operation(self.mongocCollection, false, NULL);
+                    bulk = mongoc_collection_create_bulk_operation(self.mongocCollection, false, writeConcern.mongocWriteConcern);
                 }
             }
             if (!error) {

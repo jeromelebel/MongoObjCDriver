@@ -50,7 +50,9 @@ enum MOD_INDEX_OPTIONS {
                           sort:(MODSortedMutableDictionary *)sort
                       callback:(void (^)(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery))callback;
 - (MODQuery *)countWithCriteria:(MODSortedMutableDictionary *)criteria readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback;
-- (MODQuery *)insertWithDocuments:(NSArray *)documents callback:(void (^)(MODQuery *mongoQuery))callback;
+- (MODQuery *)insertWithDocuments:(NSArray *)documents
+                     writeConcern:(MODWriteConcern *)writeConcern
+                         callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)updateWithCriteria:(MODSortedMutableDictionary *)criteria
                           update:(MODSortedMutableDictionary *)update
                           upsert:(BOOL)upsert
