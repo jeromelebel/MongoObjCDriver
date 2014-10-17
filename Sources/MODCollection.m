@@ -508,7 +508,11 @@
     return query;
 }
 
-- (MODQuery *)aggregateWithFlags:(int)flags pipeline:(MODSortedMutableDictionary *)pipeline options:(MODSortedMutableDictionary *)options readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODQuery *mongoQuery, MODCursor *cursor))callback
+- (MODQuery *)aggregateWithFlags:(int)flags
+                        pipeline:(MODSortedMutableDictionary *)pipeline
+                         options:(MODSortedMutableDictionary *)options
+                 readPreferences:(MODReadPreferences *)readPreferences
+                        callback:(void (^)(MODQuery *mongoQuery, MODCursor *cursor))callback
 {
     MODQuery *query = nil;
     
@@ -570,7 +574,19 @@
     return mongoQuery;
 }
 
-- (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction reduceFunction:(NSString *)reduceFunction query:(MODSortedMutableDictionary *)query sort:(MODSortedMutableDictionary *)sort limit:(int64_t)limit output:(MODSortedMutableDictionary *)output keepTemp:(BOOL)keepTemp finalizeFunction:(NSString *)finalizeFunction scope:(MODSortedMutableDictionary *)scope jsmode:(BOOL)jsmode verbose:(BOOL)verbose readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODQuery *mongoQuery, MODSortedMutableDictionary *documents))callback
+- (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction
+                        reduceFunction:(NSString *)reduceFunction
+                                 query:(MODSortedMutableDictionary *)query
+                                  sort:(MODSortedMutableDictionary *)sort
+                                 limit:(int64_t)limit
+                                output:(MODSortedMutableDictionary *)output
+                              keepTemp:(BOOL)keepTemp
+                      finalizeFunction:(NSString *)finalizeFunction
+                                 scope:(MODSortedMutableDictionary *)scope
+                                jsmode:(BOOL)jsmode
+                               verbose:(BOOL)verbose
+                       readPreferences:(MODReadPreferences *)readPreferences
+                              callback:(void (^)(MODQuery *mongoQuery, MODSortedMutableDictionary *documents))callback
 {
     MODQuery *mongoQuery = nil;
     

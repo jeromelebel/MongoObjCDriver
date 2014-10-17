@@ -64,7 +64,23 @@ enum MOD_INDEX_OPTIONS {
 - (MODQuery *)createIndex:(id)indexDocument name:(NSString *)name options:(enum MOD_INDEX_OPTIONS)options callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)dropIndexName:(NSString *)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback;
 
-- (MODQuery *)aggregateWithFlags:(int)flags pipeline:(MODSortedMutableDictionary *)pipeline options:(MODSortedMutableDictionary *)options readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODQuery *mongoQuery, MODCursor *cursor))callback;
-- (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction reduceFunction:(NSString *)reduceFunction query:(MODSortedMutableDictionary *)query sort:(MODSortedMutableDictionary *)sort limit:(int64_t)limit output:(MODSortedMutableDictionary *)output keepTemp:(BOOL)keepTemp finalizeFunction:(NSString *)finalizeFunction scope:(MODSortedMutableDictionary *)scope jsmode:(BOOL)jsmode verbose:(BOOL)verbose readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODQuery *mongoQuery, MODSortedMutableDictionary *documents))callback;
+- (MODQuery *)aggregateWithFlags:(int)flags
+                        pipeline:(MODSortedMutableDictionary *)pipeline
+                         options:(MODSortedMutableDictionary *)options
+                 readPreferences:(MODReadPreferences *)readPreferences
+                        callback:(void (^)(MODQuery *mongoQuery, MODCursor *cursor))callback;
+- (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction
+                        reduceFunction:(NSString *)reduceFunction
+                                 query:(MODSortedMutableDictionary *)query
+                                  sort:(MODSortedMutableDictionary *)sort
+                                 limit:(int64_t)limit
+                                output:(MODSortedMutableDictionary *)output
+                              keepTemp:(BOOL)keepTemp
+                      finalizeFunction:(NSString *)finalizeFunction
+                                 scope:(MODSortedMutableDictionary *)scope
+                                jsmode:(BOOL)jsmode
+                               verbose:(BOOL)verbose
+                       readPreferences:(MODReadPreferences *)readPreferences
+                              callback:(void (^)(MODQuery *mongoQuery, MODSortedMutableDictionary *documents))callback;
 
 @end
