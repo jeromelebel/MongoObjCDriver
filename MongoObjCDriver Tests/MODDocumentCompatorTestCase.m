@@ -90,4 +90,10 @@
 {
     [self testCompareDifferentDocumentWithJson1:@"{}" json2:@"{\"test\":2}" differences:@[ @"*" ]];
 }
+
+- (void)testCompareDifferentBson5
+{
+    [self testCompareDifferentDocumentWithJson1:@"{\"test\":3}" json2:@"{\"test\":2}" differences:@[ @"test" ]];
+}
+
 @end
