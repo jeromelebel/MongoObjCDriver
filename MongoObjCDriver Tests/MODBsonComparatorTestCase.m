@@ -96,7 +96,7 @@
 
 - (void)testCompareDifferentBson5
 {
-    [self testCompareDifferentBsonWithJson1:@"{\"test\":3}" json2:@"{\"test\":2}" differences:@[ @"test" ]];
+    [self testCompareDifferentBsonWithJson1:@"{\"test\":3}" json2:@"{\"test\":\"2\"}" differences:@[ @"test" ]];
 }
 
 @end
