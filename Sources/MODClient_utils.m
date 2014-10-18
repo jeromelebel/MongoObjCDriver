@@ -499,14 +499,14 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
     } else if ([value isKindOfClass:[MODMaxKey class]]) {
         bson_append_maxkey(bson, keyString, strlen(keyString));
     } else if ([value isKindOfClass:[MODFunction class]]) {
-        bson_append_code(bson, keyString, SIZE_T_MAX, [value function].UTF8String);
+        bson_append_code(bson, keyString, strlen(keyString), [value function].UTF8String);
     } else if ([value isKindOfClass:[MODScopeFunction class]]) {
         bson_t bsonScope = BSON_INITIALIZER;
         
         if ([value scope]) {
             [self appendObject:[value scope] toBson:&bsonScope];
         }
-        bson_append_code_with_scope(bson, keyString, SIZE_T_MAX, [value function].UTF8String, &bsonScope);
+        bson_append_code_with_scope(bson, keyString, strlen(keyString), [value function].UTF8String, &bsonScope);
         bson_destroy(&bsonScope);
     } else if ([value isKindOfClass:[MODDBPointer class]]) {
         bson_append_dbpointer(bson, keyString, strlen(keyString), [value collectionName].UTF8String, [value objectId].bsonObjectId);
