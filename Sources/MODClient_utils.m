@@ -508,6 +508,8 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
         }
         bson_append_code_with_scope(bson, keyString, SIZE_T_MAX, [value function].UTF8String, &bsonScope);
         bson_destroy(&bsonScope);
+    } else if ([value isKindOfClass:[MODDBPointer class]]) {
+        bson_append_dbpointer(bson, keyString, strlen(keyString), [value collectionName].UTF8String, [value objectId].bsonObjectId);
     } else {
         NSLog(@"*********************** class %@ key %@ %d", NSStringFromClass([value class]), key, __LINE__);
         NSAssert(NO, @"class %@ key %@ line %d", NSStringFromClass([value class]), key, __LINE__);

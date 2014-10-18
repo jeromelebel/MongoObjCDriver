@@ -194,7 +194,7 @@
                && (self.count == 2 || (self.count == 3 && [[self objectForKey:@"$db"] isKindOfClass:NSString.class]))) {
         MODObjectId *objectId;
         
-        objectId = [[MODObjectId alloc] initWithCString:[[self objectForKey:@"$oid"] cStringUsingEncoding:NSUTF8StringEncoding]];
+        objectId = [[MODObjectId alloc] initWithCString:[[self objectForKey:@"$id"] cStringUsingEncoding:NSUTF8StringEncoding]];
         result = [[MODDBPointer alloc] initWithCollectionName:[self objectForKey:@"$ref"] objectId:objectId databaseName:[self objectForKey:@"$db"]];
         [objectId release];
     } else if (self.count == 1 && [[self objectForKey:@"$oid"] isKindOfClass:NSString.class] && [[self objectForKey:@"$oid"] length] == 24) {
