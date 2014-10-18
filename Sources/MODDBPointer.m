@@ -43,9 +43,9 @@
     
     if (!strictJSON) {
         if (self.databaseName) {
-            result = [NSString stringWithFormat:@"DBPointer(\"%@\", \"%@\", \"%@\")", [MODClient escapeQuotesForString:self.collectionName], self.objectId.stringValue, [MODClient escapeQuotesForString:self.databaseName]];
+            result = [NSString stringWithFormat:@"DBRef(\"%@\", \"%@\", \"%@\")", [MODClient escapeQuotesForString:self.collectionName], self.objectId.stringValue, [MODClient escapeQuotesForString:self.databaseName]];
         } else {
-            result = [NSString stringWithFormat:@"DBPointer(\"%@\", \"%@\")", [MODClient escapeQuotesForString:self.collectionName], self.objectId.stringValue];
+            result = [NSString stringWithFormat:@"DBRef(\"%@\", \"%@\")", [MODClient escapeQuotesForString:self.collectionName], self.objectId.stringValue];
         }
     } else if (pretty) {
         if (self.databaseName) {
