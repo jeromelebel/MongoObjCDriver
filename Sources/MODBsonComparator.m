@@ -121,6 +121,7 @@ typedef struct __BsonComparatorStack {
 {
     BOOL stillContinue = YES;
     BOOL result = YES;
+    NSMutableArray *currentDifferences = [NSMutableArray array];
     
     while (stillContinue) {
         if (bson_iter_next(&stack->iterator1)) {
@@ -136,41 +137,58 @@ typedef struct __BsonComparatorStack {
         if (stack->type1 == BSON_TYPE_EOD && stack->type2 == BSON_TYPE_EOD) {
             stillContinue = NO;
         } else if (stack->type1 != stack->type2) {
-            if (prefix) {
-                [(NSMutableArray *)self.differences addObject:prefix];
-            } else {
-                [(NSMutableArray *)self.differences addObject:@"*"];
-            }
-            stillContinue = NO;
+            NSString *key1 = nil;
+            NSString *key2 = nil;
+            
             result = NO;
+            if (stack->type1 != BSON_TYPE_EOD) {
+                key1 = [NSString stringWithUTF8String:bson_iter_key(&stack->iterator1)];
+            }
+            if (stack->type2 != BSON_TYPE_EOD) {
+                key2 = [NSString stringWithUTF8String:bson_iter_key(&stack->iterator2)];
+            }
+            if (key1 && key2 && [key1 isEqualToString:key2]) {
+                if (prefix) {
+                    [currentDifferences addObject:[NSString stringWithFormat:@"%@.%@", prefix, key1]];
+                } else {
+                    [currentDifferences addObject:key1];
+                }
+            } else {
+                [currentDifferences removeAllObjects];
+                if (prefix) {
+                    [currentDifferences addObject:prefix];
+                } else {
+                    [currentDifferences addObject:@"*"];
+                }
+                stillContinue = NO;
+            }
         } else {
             NSString *key1;
             NSString *key2;
             
-            key1 = [[NSString alloc] initWithUTF8String:bson_iter_key(&stack->iterator1)];
-            key2 = [[NSString alloc] initWithUTF8String:bson_iter_key(&stack->iterator2)];
+            key1 = [NSString stringWithUTF8String:bson_iter_key(&stack->iterator1)];
+            key2 = [NSString stringWithUTF8String:bson_iter_key(&stack->iterator2)];
             if (![key1 isEqualToString:key2]) {
-                [(NSMutableArray *)self.differences addObject:@"*"];
+                [currentDifferences removeAllObjects];
+                [currentDifferences addObject:@"*"];
                 stillContinue = NO;
                 result = NO;
             } else {
                 NSString *newPrefix;
                 
                 if (prefix) {
-                    newPrefix = [[NSString alloc] initWithFormat:@"%@.%@", prefix, key1];
+                    newPrefix = [NSString stringWithFormat:@"%@.%@", prefix, key1];
                 } else {
-                    newPrefix = [key1 retain];
+                    newPrefix = key1;
                 }
                 result = [self compareValueWithStack:stack prefix:newPrefix];
-                [newPrefix release];
                 if (!result) {
                     stillContinue = NO;
                 }
             }
-            [key1 release];
-            [key2 release];
         }
     }
+    [(NSMutableArray *)self.differences addObjectsFromArray:currentDifferences];
     return result;
 }
 
@@ -179,6 +197,7 @@ typedef struct __BsonComparatorStack {
     BOOL stillContinue = YES;
     BOOL result = YES;
     NSUInteger ii = 0;
+    NSMutableArray *currentDifferences = [NSMutableArray array];
     
     while (stillContinue) {
         bson_iter_next(&stack->iterator1);
@@ -188,29 +207,38 @@ typedef struct __BsonComparatorStack {
         if (stack->type1 == BSON_TYPE_EOD && stack->type2 == BSON_TYPE_EOD) {
             stillContinue = NO;
         } else if (stack->type1 != stack->type2) {
-            if (prefix) {
-                [(NSMutableArray *)self.differences addObject:prefix];
+            if (stack->type1 == BSON_TYPE_EOD || stack->type2 == BSON_TYPE_EOD) {
+                [currentDifferences removeAllObjects];
+                if (prefix) {
+                    [currentDifferences addObject:prefix];
+                } else {
+                    [currentDifferences addObject:@"*"];
+                }
+                stillContinue = NO;
+                result = NO;
             } else {
-                [(NSMutableArray *)self.differences addObject:@"*"];
+                if (prefix) {
+                    [currentDifferences addObject:[NSString stringWithFormat:@"%@.%d", prefix, (int)ii]];
+                } else {
+                    [currentDifferences addObject:[NSString stringWithFormat:@"%d", (int)ii]];
+                }
             }
-            stillContinue = NO;
-            result = NO;
         } else {
             NSString *newPrefix;
             
             if (prefix) {
-                newPrefix = [[NSString alloc] initWithFormat:@"%@.%d", prefix, (int)ii];
+                newPrefix = [NSString stringWithFormat:@"%@.%d", prefix, (int)ii];
             } else {
-                newPrefix = [[NSString alloc] initWithFormat:@"%d", (int)ii];
+                newPrefix = [NSString stringWithFormat:@"%d", (int)ii];
             }
             result = [self compareValueWithStack:stack prefix:newPrefix];
-            [newPrefix release];
             if (!result) {
                 stillContinue = NO;
             }
         }
         ii++;
     }
+    [(NSMutableArray *)self.differences addObjectsFromArray:currentDifferences];
     return result;
 }
 
