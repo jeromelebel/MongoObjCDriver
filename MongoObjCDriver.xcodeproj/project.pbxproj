@@ -225,7 +225,7 @@
 		02E6402119DC146300FEFEFC /* MODClientTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E6402019DC146300FEFEFC /* MODClientTestCase.m */; };
 		02F4EA7D19F1ABF500BE9695 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F4EA7C19F1ABF500BE9695 /* main.m */; };
 		02F4EA8219F1ADB400BE9695 /* MongoObjCDriver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C014103B37000417F4 /* MongoObjCDriver.framework */; };
-		02F4EA8719F1C39B00BE9695 /* MODBulkOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F4EA8519F1C39B00BE9695 /* MODBulkOperation.h */; };
+		02F4EA8719F1C39B00BE9695 /* MODBulkOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F4EA8519F1C39B00BE9695 /* MODBulkOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02F4EA8819F1C39B00BE9695 /* MODBulkOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F4EA8619F1C39B00BE9695 /* MODBulkOperation.m */; };
 /* End PBXBuildFile section */
 
@@ -3016,9 +3016,9 @@
 				027A1DA81767E91F0048AD60 /* MODUndefined.h in Headers */,
 				02CCE7A0192A278800A9DB1B /* MODRagelJsonParser.h in Headers */,
 				02AB33AC194870D6008C06B9 /* MODReadPreferences.h in Headers */,
-				02F4EA8719F1C39B00BE9695 /* MODBulkOperation.h in Headers */,
 				02A85F5D14104373004F3FE9 /* MongoObjCDriver-private.h in Headers */,
 				025410A819AA7FCE00CF437E /* MODSSLOptions.h in Headers */,
+				02F4EA8719F1C39B00BE9695 /* MODBulkOperation.h in Headers */,
 				02D3D3031926661000925BE7 /* mongoc-array-private.h in Headers */,
 				02D3D3041926661000925BE7 /* mongoc-buffer-private.h in Headers */,
 				02D3D3051926661100925BE7 /* mongoc-bulk-operation-private.h in Headers */,
@@ -3700,6 +3700,7 @@
 				02F4EA7F19F1ABF500BE9695 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
