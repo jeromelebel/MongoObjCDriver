@@ -91,12 +91,11 @@
                 NSString *newPrefix;
                 
                 if (prefix) {
-                    newPrefix = [[NSString alloc] initWithFormat:@"%@.%@", prefix, key1];
+                    newPrefix = [NSString stringWithFormat:@"%@.%@", prefix, key1];
                 } else {
-                    newPrefix = [key1 retain];
+                    newPrefix = key1;
                 }
                 result = [self compareValue1:[object1 objectForKey:key1] withValue2:[object2 objectForKey:key2] prefix:newPrefix];
-                [newPrefix release];
                 if (!result) {
                     stillContinue = NO;
                 }
@@ -134,12 +133,11 @@
             NSString *newPrefix;
             
             if (prefix) {
-                newPrefix = [[NSString alloc] initWithFormat:@"%@.%d", prefix, (int)ii];
+                newPrefix = [NSString stringWithFormat:@"%@.%d", prefix, (int)ii];
             } else {
-                newPrefix = [[NSString alloc] initWithFormat:@"%d", (int)ii];
+                newPrefix = [NSString stringWithFormat:@"%d", (int)ii];
             }
             result = [self compareValue1:object1 withValue2:object2 prefix:newPrefix];
-            [newPrefix release];
             if (!result) {
                 stillContinue = NO;
             }
