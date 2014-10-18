@@ -342,7 +342,7 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
                 bson_iter_dbpointer(iterator, &collectionLength, &collectionCString, &oid);
                 collection = [[NSString alloc] initWithBytes:collectionCString length:collectionLength encoding:NSUTF8StringEncoding];
                 objectId = [[MODObjectId alloc] initWithOid:oid];
-                result = [[[MODDBPointer alloc] initWithCollectionName:collection objectId:objectId] autorelease];
+                result = [[[MODDBPointer alloc] initWithCollectionName:collection objectId:objectId databaseName:nil] autorelease];
                 [collection release];
                 [objectId release];
             }

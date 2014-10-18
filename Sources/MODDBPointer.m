@@ -10,6 +10,7 @@
 @interface MODDBPointer ()
 @property (nonatomic, readwrite, strong) NSString *collectionName;
 @property (nonatomic, readwrite, strong) MODObjectId *objectId;
+@property (nonatomic, readwrite, strong) NSString *databaseName;
 
 @end
 
@@ -17,12 +18,14 @@
 
 @synthesize collectionName = _collectionName;
 @synthesize objectId = _objectId;
+@synthesize databaseName = _databaseName;
 
-- (instancetype)initWithCollectionName:(NSString *)collectionName objectId:(MODObjectId *)objectId
+- (instancetype)initWithCollectionName:(NSString *)collectionName objectId:(MODObjectId *)objectId databaseName:(NSString *)databaseName
 {
     if (self = [self init]) {
         self.collectionName = collectionName;
         self.objectId = objectId;
+        self.databaseName = databaseName;
     }
     return self;
 }
@@ -39,11 +42,23 @@
     NSString *result;
     
     if (!strictJSON) {
-        result = [NSString stringWithFormat:@"DBPointer(\"%@\", \"%@\")", self.collectionName, self.objectId.stringValue];
+        if (self.databaseName) {
+            result = [NSString stringWithFormat:@"DBPointer(\"%@\", \"%@\", \"%@\")", [MODClient escapeQuotesForString:self.collectionName], self.objectId.stringValue, [MODClient escapeQuotesForString:self.databaseName]];
+        } else {
+            result = [NSString stringWithFormat:@"DBPointer(\"%@\", \"%@\")", [MODClient escapeQuotesForString:self.collectionName], self.objectId.stringValue];
+        }
     } else if (pretty) {
-        result = [NSString stringWithFormat:@"{ \"$collection\" : \"%@\", \"$oid\" : \"%@\" }", self.collectionName, self.objectId.stringValue];
+        if (self.databaseName) {
+            result = [NSString stringWithFormat:@"{ \"$ref\" : \"%@\", \"$id\" : \"%@\", \"$db\" : \"%@\" }", [MODClient escapeQuotesForString:self.collectionName], self.objectId.stringValue, [MODClient escapeQuotesForString:self.databaseName]];
+        } else {
+            result = [NSString stringWithFormat:@"{ \"$ref\" : \"%@\", \"$id\" : \"%@\" }", [MODClient escapeQuotesForString:self.collectionName], self.objectId.stringValue];
+        }
     } else {
-        result = [NSString stringWithFormat:@"{\"$collection\":\"%@\",\"$oid\":\"%@\"}", self.collectionName, self.objectId.stringValue];
+        if (self.databaseName) {
+            result = [NSString stringWithFormat:@"{\"$ref\":\"%@\",\"$id\":\"%@\",\"$db\":\"%@\"}", [MODClient escapeQuotesForString:self.collectionName], self.objectId.stringValue, [MODClient escapeQuotesForString:self.databaseName]];
+        } else {
+            result = [NSString stringWithFormat:@"{\"$ref\":\"%@\",\"$id\":\"%@\"}", [MODClient escapeQuotesForString:self.collectionName], self.objectId.stringValue];
+        }
     }
     return result;
 }
