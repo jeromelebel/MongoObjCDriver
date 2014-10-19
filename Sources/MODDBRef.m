@@ -1,5 +1,5 @@
 //
-//  MODDBPointer.m
+//  MODDBRef.m
 //  MongoHub
 //
 //  Created by Jérôme Lebel on 29/09/2011.
@@ -7,14 +7,14 @@
 
 #import "MongoObjCDriver-private.h"
 
-@interface MODDBPointer ()
+@interface MODDBRef ()
 @property (nonatomic, readwrite, strong) NSString *collectionName;
 @property (nonatomic, readwrite, strong) MODObjectId *objectId;
 @property (nonatomic, readwrite, strong) NSString *databaseName;
 
 @end
 
-@implementation MODDBPointer
+@implementation MODDBRef
 
 @synthesize collectionName = _collectionName;
 @synthesize objectId = _objectId;

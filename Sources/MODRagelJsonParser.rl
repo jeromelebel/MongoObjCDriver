@@ -618,7 +618,7 @@
     main := (dbref_keyword ignore* '(' ignore* begin_string >parse_collection_name ignore* ',' ignore* begin_string >parse_document_id ignore* ( ',' ignore* begin_string >parse_database_name ignore* )? ')') @exit;
 }%%
 
-- (const char *)_parseDBRefWithPointer:(const char *)p endPointer:(const char *)pe result:(MODDBPointer **)result
+- (const char *)_parseDBRefWithPointer:(const char *)p endPointer:(const char *)pe result:(MODDBRef **)result
 {
     NSString *collectionName = nil;
     MODObjectId *documentId = nil;
@@ -629,7 +629,7 @@
     %% write exec;
 
     if (cs >= JSON_dbref_first_final && collectionName && documentId) {
-        *result = [[[MODDBPointer alloc] initWithCollectionName:collectionName objectId:documentId databaseName:databaseName] autorelease];
+        *result = [[[MODDBRef alloc] initWithCollectionName:collectionName objectId:documentId databaseName:databaseName] autorelease];
         return p + 1;
     } else {
         *result = nil;

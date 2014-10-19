@@ -342,7 +342,7 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
                 bson_iter_dbpointer(iterator, &collectionLength, &collectionCString, &oid);
                 collection = [[NSString alloc] initWithBytes:collectionCString length:collectionLength encoding:NSUTF8StringEncoding];
                 objectId = [[MODObjectId alloc] initWithOid:oid];
-                result = [[[MODDBPointer alloc] initWithCollectionName:collection objectId:objectId databaseName:nil] autorelease];
+                result = [[[MODDBRef alloc] initWithCollectionName:collection objectId:objectId databaseName:nil] autorelease];
                 [collection release];
                 [objectId release];
             }
@@ -508,7 +508,7 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
         }
         bson_append_code_with_scope(bson, keyString, strlen(keyString), [value function].UTF8String, &bsonScope);
         bson_destroy(&bsonScope);
-    } else if ([value isKindOfClass:[MODDBPointer class]]) {
+    } else if ([value isKindOfClass:[MODDBRef class]]) {
         bson_append_dbpointer(bson, keyString, strlen(keyString), [value collectionName].UTF8String, [value objectId].bsonObjectId);
     } else {
         NSLog(@"*********************** class %@ key %@ %d", NSStringFromClass([value class]), key, __LINE__);
@@ -658,7 +658,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else if ([value isKindOfClass:[MODBinary class]]) {
         [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
-    } else if ([value isKindOfClass:[MODDBPointer class]]) {
+    } else if ([value isKindOfClass:[MODDBRef class]]) {
         [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else if ([value isKindOfClass:[MODSymbol class]]) {
         [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];

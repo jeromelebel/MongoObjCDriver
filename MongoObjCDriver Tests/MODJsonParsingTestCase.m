@@ -367,7 +367,7 @@
     
     [self jsonTesterWithJsonToParse:@"{\"dbref\":DBRef(\"prout\",\"4e9807f88157f608b4000002\")}"
                        jsonExpected:nil
-                        shouldEqual:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[MODDBPointer alloc] initWithCollectionName:@"prout" objectId:objectId databaseName:nil], @"dbref", nil]];
+                        shouldEqual:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[MODDBRef alloc] initWithCollectionName:@"prout" objectId:objectId databaseName:nil], @"dbref", nil]];
 }
 
 @end

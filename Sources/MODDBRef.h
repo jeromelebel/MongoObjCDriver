@@ -1,5 +1,5 @@
 //
-//  MODDBPointer.h
+//  MODDBRef.h
 //  MongoHub
 //
 //  Created by Jérôme Lebel on 29/09/2011.
@@ -9,7 +9,7 @@
 
 @class MODObjectId;
 
-@interface MODDBPointer : NSObject
+@interface MODDBRef : NSObject
 {
     NSString                    *_collectionName;
     MODObjectId                 *_objectId;
