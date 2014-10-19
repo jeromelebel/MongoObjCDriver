@@ -41,11 +41,17 @@
 {
     NSString *result;
     
-    if (!strictJSON) {
+    if (!strictJSON && pretty) {
         if (self.databaseName) {
             result = [NSString stringWithFormat:@"DBRef(\"%@\", \"%@\", \"%@\")", [MODClient escapeQuotesForString:self.collectionName], self.objectId.stringValue, [MODClient escapeQuotesForString:self.databaseName]];
         } else {
             result = [NSString stringWithFormat:@"DBRef(\"%@\", \"%@\")", [MODClient escapeQuotesForString:self.collectionName], self.objectId.stringValue];
+        }
+    } else if (!strictJSON && !pretty) {
+        if (self.databaseName) {
+            result = [NSString stringWithFormat:@"DBRef(\"%@\",\"%@\",\"%@\")", [MODClient escapeQuotesForString:self.collectionName], self.objectId.stringValue, [MODClient escapeQuotesForString:self.databaseName]];
+        } else {
+            result = [NSString stringWithFormat:@"DBRef(\"%@\",\"%@\")", [MODClient escapeQuotesForString:self.collectionName], self.objectId.stringValue];
         }
     } else if (pretty) {
         if (self.databaseName) {
@@ -66,9 +72,14 @@
 - (BOOL)isEqual:(id)object
 {
     if ([object isKindOfClass:[self class]]) {
-        return [[object collectionName] isEqual:self.collectionName] && [[object objectId] isEqual:self.objectId];
+        return [[object collectionName] isEqual:self.collectionName] && [[object objectId] isEqual:self.objectId] && (self.databaseName == [object databaseName] || (self.databaseName != nil && [object databaseName] != nil && [self.databaseName isEqualToString:[object databaseName]]));
     }
     return NO;
+}
+
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"<%@: %p, %@, %@, %@>", self.class, self, self.collectionName, self.objectId.stringValue, self.databaseName];
 }
 
 @end

@@ -87,7 +87,7 @@
     VMinKey             = 'MinKey';
     VMaxKey             = 'MaxKey';
     new_keyword         = 'new';
-    begin_value         = [/unftTMFBOS'\"\-\[\{NI] | digit;
+    begin_value         = [/unftTMFBOSD'\"\-\[\{NI] | digit;
     begin_object        = '{';
     end_object          = '}';
     begin_array         = '[';
@@ -108,6 +108,8 @@
     begin_function      = 'F';
     function_keyword    = 'Function';
     scopefunction_keyword = 'ScopeFunction';
+    begin_dbref         = 'D';
+    dbref_keyword       = 'DBRef';
 }%%
 
 %%{
@@ -215,6 +217,15 @@
         }
     }
     
+    action parse_dbref {
+        const char *np = [self _parseDBRefWithPointer:fpc endPointer:pe result:result];
+        if (np == NULL) {
+            fhold; fbreak;
+        } else {
+            fexec np;
+        }
+    }
+    
     action parse_scopefunction {
         const char *np = [self _parseScopeFunctionWithPointer:fpc - strlen("ScopeFunction") + 1 endPointer:pe result:result];
         if (np == NULL) {
@@ -254,6 +265,7 @@
         scopefunction_keyword @parse_scopefunction |
         symbol_keyword @parse_symbol |
         begin_function >parse_function |
+        begin_dbref >parse_dbref |
         new_keyword @parse_javascript_object
     ) %*exit;
 }%%
@@ -562,6 +574,62 @@
 
     if (cs >= JSON_function_first_final && codeStringValue) {
         *result = [[[MODFunction alloc] initWithFunction:codeStringValue] autorelease];
+        return p + 1;
+    } else {
+        *result = nil;
+        return NULL;
+    }
+}
+
+%%{
+    machine JSON_dbref;
+    include JSON_common;
+
+    write data;
+    
+    action parse_collection_name {
+        const char *np;
+        np = [self _parseStringWithPointer:fpc endPointer:pe result:&collectionName];
+        if (np == NULL) { fhold; fbreak; } else fexec np;
+    }
+    
+    action parse_document_id {
+        const char *np;
+        NSString *string = nil;
+        
+        np = [self _parseStringWithPointer:fpc endPointer:pe result:&string];
+        if (np == NULL) {
+            fhold;
+            fbreak;
+        } else {
+            documentId = [[[MODObjectId alloc] initWithString:string] autorelease];
+            fexec np;
+        }
+    }
+    
+    action parse_database_name {
+        const char *np;
+        np = [self _parseStringWithPointer:fpc endPointer:pe result:&databaseName];
+        if (np == NULL) { fhold; fbreak; } else fexec np;
+    }
+
+    action exit { fhold; fbreak; }
+
+    main := (dbref_keyword ignore* '(' ignore* begin_string >parse_collection_name ignore* ',' ignore* begin_string >parse_document_id ignore* ( ',' ignore* begin_string >parse_database_name ignore* )? ')') @exit;
+}%%
+
+- (const char *)_parseDBRefWithPointer:(const char *)p endPointer:(const char *)pe result:(MODDBPointer **)result
+{
+    NSString *collectionName = nil;
+    MODObjectId *documentId = nil;
+    NSString *databaseName = nil;
+    int cs = 0;
+
+    %% write init;
+    %% write exec;
+
+    if (cs >= JSON_dbref_first_final && collectionName && documentId) {
+        *result = [[[MODDBPointer alloc] initWithCollectionName:collectionName objectId:documentId databaseName:databaseName] autorelease];
         return p + 1;
     } else {
         *result = nil;
