@@ -153,6 +153,7 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
         sprintf(mappedHost.host_and_port, "127.0.0.1:%d", (int)sshBindedPort.integerValue);
         sprintf(mappedHost.host, "127.0.0.1");
         mappedHost.port = sshBindedPort.integerValue;
+        [self.class logWithLevel:MODLogLevelDebug domain:"mapping" message:[NSString stringWithFormat:@"%s -> %s", host->host_and_port, mappedHost.host_and_port].UTF8String];
         return ((mongoc_stream_initiator_t)_defaultStreamInitiator)(uri, &mappedHost, _defaultStreamInitiatorData, error);
     }
 }

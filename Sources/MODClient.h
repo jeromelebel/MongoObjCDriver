@@ -82,5 +82,6 @@ typedef enum
 
 + (void)setLogCallback:(void (^)(MODLogLevel level, const char *domain, const char *message))callback;
 + (NSString *)logLevelStringForLogLevel:(MODLogLevel)level;
++ (void)logWithLevel:(MODLogLevel)logLevel domain:(const char *)domain message:(const char *)message;
 
 @end

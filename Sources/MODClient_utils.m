@@ -898,4 +898,9 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     return result;
 }
 
++ (void)logWithLevel:(MODLogLevel)logLevel domain:(const char *)domain message:(const char *)message
+{
+    logCallback(logLevel, domain, message);
+}
+
 @end
