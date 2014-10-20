@@ -154,9 +154,6 @@
 {
     MODQuery *query = nil;
     
-    if ([self.database.name isEqualToString:@"dropped"]) {
-        NSLog(@"test");
-    }
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         MODSortedMutableDictionary *stats = nil;
         bson_error_t error = BSON_NO_ERROR;
