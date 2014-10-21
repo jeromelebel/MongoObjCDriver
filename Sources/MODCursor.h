@@ -14,7 +14,7 @@
 {
     MODCollection                       *_collection;
     MODSortedMutableDictionary          *_query;
-    NSArray                             *_fields;
+    MODSortedMutableDictionary          *_fields;
     uint32_t                            _skip;
     uint32_t                            _limit;
     uint32_t                            _batchSize;
@@ -31,7 +31,7 @@
 
 @property(nonatomic, strong, readonly) MODCollection *collection;
 @property(nonatomic, strong, readonly) MODSortedMutableDictionary *query;
-@property(nonatomic, strong, readonly) NSArray *fields;
+@property(nonatomic, strong, readonly) MODSortedMutableDictionary *fields;
 @property(nonatomic, assign, readonly) uint32_t skip;
 @property(nonatomic, assign, readonly) uint32_t limit;
 @property(nonatomic, strong, readonly) MODSortedMutableDictionary * sort;

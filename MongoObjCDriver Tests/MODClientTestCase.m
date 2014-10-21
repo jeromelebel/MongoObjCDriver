@@ -107,7 +107,12 @@
     }];
     
     mongoCollection = [mongoDatabase collectionForName:COLLECTION_NAME_TEST];
-    [mongoCollection findWithCriteria:[self obj:@"{}"] fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:5 sort:[self obj:@"{ \"_id\": 1 }"] callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+    [mongoCollection findWithCriteria:[self obj:@"{}"]
+                               fields:[self obj:@" { _id: 1, album_id: 1 }"]
+                                 skip:1
+                                limit:5
+                                 sort:[self obj:@"{ \"_id\": 1 }"]
+                             callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
     [mongoCollection countWithCriteria:[self obj:@"{ \"_id\": \"xxx\" }"] readPreferences:nil callback:^(int64_t count, MODQuery *mongoQuery) {
@@ -132,11 +137,21 @@
         XCTAssertEqual(count, 1, @"should have 1 document");
         [self logMongoQuery:mongoQuery];
     }];
-    [mongoCollection findWithCriteria:nil fields:[NSArray arrayWithObjects:@"_id", @"album_id", nil] skip:1 limit:100 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+    [mongoCollection findWithCriteria:nil
+                               fields:[self obj:@" { _id: 1, album_id: 1 }"]
+                                 skip:1
+                                limit:100
+                                 sort:nil
+                             callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         XCTAssertEqual(documents.count, 2, @"should have 2 documents");
         [self logMongoQuery:mongoQuery];
     }];
-    [mongoCollection findWithCriteria:nil fields:nil skip:0 limit:0 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+    [mongoCollection findWithCriteria:nil
+                               fields:nil
+                                 skip:0
+                                limit:0
+                                 sort:nil
+                             callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         XCTAssertEqual(documents.count, 3, @"should have 3 documents");
         [self logMongoQuery:mongoQuery];
     }];
@@ -152,13 +167,23 @@
     [mongoCollection saveWithDocument:[self obj:@"{\"_id\": \"toto\", \"y\": null}"] callback:^(MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
-    [mongoCollection findWithCriteria:[self obj:@"{\"_id\": \"toto\"}"] fields:nil skip:1 limit:5 sort:[self obj:@"{ \"_id\": 1 }"] callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+    [mongoCollection findWithCriteria:[self obj:@"{\"_id\": \"toto\"}"]
+                               fields:nil
+                                 skip:1
+                                limit:5
+                                 sort:[self obj:@"{ \"_id\": 1 }"]
+                             callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
     [mongoCollection removeWithCriteria:[self obj:@"{\"_id\": \"toto\"}"] callback:^(MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
-    [mongoCollection findWithCriteria:[self obj:@"{\"_id\": \"toto\"}"] fields:nil skip:1 limit:5 sort:[self obj:@"{ \"_id\": 1 }"] callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+    [mongoCollection findWithCriteria:[self obj:@"{\"_id\": \"toto\"}"]
+                               fields:nil
+                                 skip:1
+                                limit:5
+                                 sort:[self obj:@"{ \"_id\": 1 }"]
+                             callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         XCTAssertEqual(documents.count, 0, @"should have no document");
         [self logMongoQuery:mongoQuery];
     }];
@@ -241,7 +266,12 @@
     [collection insertWithDocuments:documents writeConcern:nil callback:^(MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
-    [collection findWithCriteria:nil fields:nil skip:0 limit:100 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+    [collection findWithCriteria:nil
+                          fields:nil
+                            skip:0
+                           limit:100
+                            sort:nil
+                        callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         XCTAssertEqual(documentCountToInsert, documents.count, @"problem to get big documents");
         CFRunLoopStop(CFRunLoopGetCurrent());
     }];

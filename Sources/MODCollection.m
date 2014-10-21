@@ -176,7 +176,7 @@
 }
 
 - (MODQuery *)findWithCriteria:(MODSortedMutableDictionary *)criteria
-                        fields:(NSArray *)fields
+                        fields:(MODSortedMutableDictionary *)fields
                           skip:(int32_t)skip
                          limit:(int32_t)limit
                           sort:(MODSortedMutableDictionary *)sort
@@ -213,9 +213,18 @@
     return query;
 }
 
-- (MODCursor *)cursorWithCriteria:(MODSortedMutableDictionary *)query fields:(NSArray *)fields skip:(int32_t)skip limit:(int32_t)limit sort:(MODSortedMutableDictionary *)sort
+- (MODCursor *)cursorWithCriteria:(MODSortedMutableDictionary *)query
+                           fields:(MODSortedMutableDictionary *)fields
+                             skip:(int32_t)skip
+                            limit:(int32_t)limit
+                             sort:(MODSortedMutableDictionary *)sort
 {
-    return [[[MODCursor alloc] initWithCollection:self query:query fields:fields skip:skip limit:limit sort:sort] autorelease];
+    return [[[MODCursor alloc] initWithCollection:self
+                                            query:query
+                                           fields:fields
+                                             skip:skip
+                                            limit:limit
+                                             sort:sort] autorelease];
 }
 
 - (MODQuery *)countWithCriteria:(MODSortedMutableDictionary *)criteria readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback
@@ -440,7 +449,12 @@
     MODSortedMutableDictionary *dictionary;
     
     dictionary = [[MODSortedMutableDictionary alloc] initWithObjectsAndKeys:self.absoluteName, @"ns", nil];
-    query = [self.database.systemIndexesCollection findWithCriteria:dictionary fields:nil skip:0 limit:0 sort:nil callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
+    query = [self.database.systemIndexesCollection findWithCriteria:dictionary
+                                                             fields:nil
+                                                               skip:0
+                                                              limit:0
+                                                               sort:nil
+                                                           callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         callback(documents, mongoQuery);
     }];
     [dictionary release];

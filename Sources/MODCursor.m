@@ -11,7 +11,7 @@
 
 @property (nonatomic, strong, readwrite) MODCollection *collection;
 @property (nonatomic, strong, readwrite) MODSortedMutableDictionary *query;
-@property (nonatomic, strong, readwrite) NSArray *fields;
+@property (nonatomic, strong, readwrite) MODSortedMutableDictionary *fields;
 @property (nonatomic, assign, readwrite) uint32_t skip;
 @property (nonatomic, assign, readwrite) uint32_t limit;
 @property (nonatomic, assign, readwrite) uint32_t batchSize;
@@ -54,7 +54,7 @@
 
 - (instancetype)initWithCollection:(MODCollection *)collection
                              query:(MODSortedMutableDictionary *)query
-                            fields:(NSArray *)fields
+                            fields:(MODSortedMutableDictionary *)fields
                               skip:(uint32_t)skip
                              limit:(uint32_t)limit
                               sort:(MODSortedMutableDictionary *)sort
@@ -117,9 +117,7 @@
         }
     }
     if (self.internalError == nil && self.fields.count > 0) {
-        for (NSString *field in self.fields) {
-            bson_append_bool(&bsonFields, field.UTF8String, -1, 1);
-        }
+        [MODClient appendObject:self.fields toBson:&bsonFields];
     }
     self.mongocCursor = mongoc_collection_find(self.collection.mongocCollection, MONGOC_QUERY_NONE, self.skip, self.limit, self.batchSize, &bsonQuery, &bsonFields, NULL);
     bson_destroy(&bsonQuery);
