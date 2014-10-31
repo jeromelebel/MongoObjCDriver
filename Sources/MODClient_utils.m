@@ -223,6 +223,14 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
             errorMessage = @"MONGOC_ERROR_GRIDFS_INVALID_FILENAME";
             break;
         
+        case MONGOC_ERROR_SCRAM_NOT_DONE:
+            errorMessage = @"MONGOC_ERROR_SCRAM_NOT_DONE";
+            break;
+        
+        case MONGOC_ERROR_SCRAM_PROTOCOL_ERROR:
+            errorMessage = @"MONGOC_ERROR_SCRAM_PROTOCOL_ERROR";
+            break;
+        
         case MONGOC_ERROR_QUERY_COMMAND_NOT_FOUND:
             errorMessage = @"MONGOC_ERROR_QUERY_COMMAND_NOT_FOUND";
             break;
@@ -292,7 +300,7 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
             {
                 NSData *data;
                 bson_subtype_t subType;
-                uint32_t length;
+                size_t length;
                 const uint8_t *binary;
                 
                 bson_iter_binary(iterator, &subType, &length, &binary);
