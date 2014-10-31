@@ -212,6 +212,16 @@
 		02D3D33E1926661400925BE7 /* mongoc-write-concern-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F3B190E5E4E00A80BED /* mongoc-write-concern-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02D3D33F1926661400925BE7 /* mongoc-write-concern.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F3D190E5E4E00A80BED /* mongoc-write-concern.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02D3D3401926661400925BE7 /* mongoc.h in Headers */ = {isa = PBXBuildFile; fileRef = 02044F3E190E5E4E00A80BED /* mongoc.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02D9BFE11A042F9C00787949 /* mongoc-b64-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02D9BFDB1A042F9C00787949 /* mongoc-b64-private.h */; };
+		02D9BFE21A042F9C00787949 /* mongoc-rand-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02D9BFDC1A042F9C00787949 /* mongoc-rand-private.h */; };
+		02D9BFE31A042F9C00787949 /* mongoc-rand.c in Sources */ = {isa = PBXBuildFile; fileRef = 02D9BFDD1A042F9C00787949 /* mongoc-rand.c */; };
+		02D9BFE41A042F9C00787949 /* mongoc-rand.h in Headers */ = {isa = PBXBuildFile; fileRef = 02D9BFDE1A042F9C00787949 /* mongoc-rand.h */; };
+		02D9BFE51A042F9C00787949 /* mongoc-scram-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02D9BFDF1A042F9C00787949 /* mongoc-scram-private.h */; };
+		02D9BFE61A042F9C00787949 /* mongoc-scram.c in Sources */ = {isa = PBXBuildFile; fileRef = 02D9BFE01A042F9C00787949 /* mongoc-scram.c */; };
+		02D9BFEB1A04383800787949 /* bson-iso8601-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02D9BFE71A04383800787949 /* bson-iso8601-private.h */; };
+		02D9BFEC1A04383800787949 /* bson-iso8601.c in Sources */ = {isa = PBXBuildFile; fileRef = 02D9BFE81A04383800787949 /* bson-iso8601.c */; };
+		02D9BFED1A04383800787949 /* bson-timegm-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02D9BFE91A04383800787949 /* bson-timegm-private.h */; };
+		02D9BFEF1A04387200787949 /* bson-timegm.c in Sources */ = {isa = PBXBuildFile; fileRef = 02D9BFEA1A04383800787949 /* bson-timegm.c */; };
 		02DB18AB172C8C5A00B26EAE /* NSData+MODBase64.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DB18A9172C8C5A00B26EAE /* NSData+MODBase64.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02DB18AC172C8C5A00B26EAE /* NSData+MODBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DB18AA172C8C5A00B26EAE /* NSData+MODBase64.m */; };
 		02DB18AF172C8C9700B26EAE /* NSString+MODBase64.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DB18AD172C8C9700B26EAE /* NSString+MODBase64.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1416,6 +1426,16 @@
 		02CF0EA919192608008C822A /* libsasl2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsasl2.dylib; path = usr/lib/libsasl2.dylib; sourceTree = SDKROOT; };
 		02CF87E7142F8AA3000C4C7F /* MODRegex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODRegex.h; sourceTree = "<group>"; };
 		02CF87E8142F8AA3000C4C7F /* MODRegex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODRegex.m; sourceTree = "<group>"; };
+		02D9BFDB1A042F9C00787949 /* mongoc-b64-private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mongoc-b64-private.h"; sourceTree = "<group>"; };
+		02D9BFDC1A042F9C00787949 /* mongoc-rand-private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mongoc-rand-private.h"; sourceTree = "<group>"; };
+		02D9BFDD1A042F9C00787949 /* mongoc-rand.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mongoc-rand.c"; sourceTree = "<group>"; };
+		02D9BFDE1A042F9C00787949 /* mongoc-rand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mongoc-rand.h"; sourceTree = "<group>"; };
+		02D9BFDF1A042F9C00787949 /* mongoc-scram-private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mongoc-scram-private.h"; sourceTree = "<group>"; };
+		02D9BFE01A042F9C00787949 /* mongoc-scram.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mongoc-scram.c"; sourceTree = "<group>"; };
+		02D9BFE71A04383800787949 /* bson-iso8601-private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "bson-iso8601-private.h"; sourceTree = "<group>"; };
+		02D9BFE81A04383800787949 /* bson-iso8601.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "bson-iso8601.c"; sourceTree = "<group>"; };
+		02D9BFE91A04383800787949 /* bson-timegm-private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "bson-timegm-private.h"; sourceTree = "<group>"; };
+		02D9BFEA1A04383800787949 /* bson-timegm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "bson-timegm.c"; sourceTree = "<group>"; };
 		02DB18A9172C8C5A00B26EAE /* NSData+MODBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+MODBase64.h"; sourceTree = "<group>"; };
 		02DB18AA172C8C5A00B26EAE /* NSData+MODBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+MODBase64.m"; sourceTree = "<group>"; };
 		02DB18AD172C8C9700B26EAE /* NSString+MODBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MODBase64.h"; sourceTree = "<group>"; };
@@ -2120,6 +2140,12 @@
 				02044EE3190E5E4E00A80BED /* mongoc-client.h */,
 				02044EE4190E5E4E00A80BED /* mongoc-cluster-private.h */,
 				02044EE5190E5E4E00A80BED /* mongoc-cluster.c */,
+				02D9BFDB1A042F9C00787949 /* mongoc-b64-private.h */,
+				02D9BFDC1A042F9C00787949 /* mongoc-rand-private.h */,
+				02D9BFDD1A042F9C00787949 /* mongoc-rand.c */,
+				02D9BFDE1A042F9C00787949 /* mongoc-rand.h */,
+				02D9BFDF1A042F9C00787949 /* mongoc-scram-private.h */,
+				02D9BFE01A042F9C00787949 /* mongoc-scram.c */,
 				02044EE6190E5E4E00A80BED /* mongoc-collection-private.h */,
 				02044EE7190E5E4E00A80BED /* mongoc-collection.c */,
 				02044EE8190E5E4E00A80BED /* mongoc-collection.h */,
@@ -2597,6 +2623,10 @@
 		0204505B190E5EB000A80BED /* bson */ = {
 			isa = PBXGroup;
 			children = (
+				02D9BFE71A04383800787949 /* bson-iso8601-private.h */,
+				02D9BFE81A04383800787949 /* bson-iso8601.c */,
+				02D9BFE91A04383800787949 /* bson-timegm-private.h */,
+				02D9BFEA1A04383800787949 /* bson-timegm.c */,
 				0204505C190E5EB000A80BED /* .gitignore */,
 				0204505D190E5EB000A80BED /* b64_ntop.h */,
 				0204505E190E5EB000A80BED /* b64_pton.h */,
@@ -3019,6 +3049,7 @@
 				02A85F5D14104373004F3FE9 /* MongoObjCDriver-private.h in Headers */,
 				025410A819AA7FCE00CF437E /* MODSSLOptions.h in Headers */,
 				02F4EA8719F1C39B00BE9695 /* MODBulkOperation.h in Headers */,
+				02D9BFE51A042F9C00787949 /* mongoc-scram-private.h in Headers */,
 				02D3D3031926661000925BE7 /* mongoc-array-private.h in Headers */,
 				02D3D3041926661000925BE7 /* mongoc-buffer-private.h in Headers */,
 				02D3D3051926661100925BE7 /* mongoc-bulk-operation-private.h in Headers */,
@@ -3039,10 +3070,12 @@
 				02D3D3121926661100925BE7 /* mongoc-database-private.h in Headers */,
 				02D3D3131926661100925BE7 /* mongoc-database.h in Headers */,
 				02D3D3141926661100925BE7 /* mongoc-errno-private.h in Headers */,
+				02D9BFED1A04383800787949 /* bson-timegm-private.h in Headers */,
 				02D3D3151926661100925BE7 /* mongoc-error.h in Headers */,
 				02D3D3161926661100925BE7 /* mongoc-flags.h in Headers */,
 				02D3D3171926661100925BE7 /* mongoc-gridfs-file-list-private.h in Headers */,
 				02D3D3181926661100925BE7 /* mongoc-gridfs-file-list.h in Headers */,
+				02D9BFEB1A04383800787949 /* bson-iso8601-private.h in Headers */,
 				02D3D3191926661100925BE7 /* mongoc-gridfs-file-page-private.h in Headers */,
 				02D3D31A1926661100925BE7 /* mongoc-gridfs-file-page.h in Headers */,
 				02D3D31B1926661100925BE7 /* mongoc-gridfs-file-private.h in Headers */,
@@ -3054,6 +3087,7 @@
 				02D3D3211926661100925BE7 /* mongoc-index.h in Headers */,
 				02D3D3221926661100925BE7 /* mongoc-init.h in Headers */,
 				02D3D3231926661200925BE7 /* mongoc-iovec.h in Headers */,
+				02D9BFE41A042F9C00787949 /* mongoc-rand.h in Headers */,
 				02D3D3241926661200925BE7 /* mongoc-list-private.h in Headers */,
 				02D3D3251926661200925BE7 /* mongoc-log.h in Headers */,
 				02D3D3261926661200925BE7 /* mongoc-matcher-op-private.h in Headers */,
@@ -3071,11 +3105,13 @@
 				02D3D3311926661300925BE7 /* mongoc-ssl.h in Headers */,
 				02D3D3321926661300925BE7 /* mongoc-stream-buffered.h in Headers */,
 				02D3D3331926661300925BE7 /* mongoc-stream-file.h in Headers */,
+				02D9BFE21A042F9C00787949 /* mongoc-rand-private.h in Headers */,
 				02D3D3341926661300925BE7 /* mongoc-stream-gridfs.h in Headers */,
 				02D3D3351926661300925BE7 /* mongoc-stream-private.h in Headers */,
 				02D3D3361926661300925BE7 /* mongoc-stream-socket.h in Headers */,
 				02D3D3371926661300925BE7 /* mongoc-stream-tls.h in Headers */,
 				026B2F4E19ADC1C300009719 /* MODWriteConcern.h in Headers */,
+				02D9BFE11A042F9C00787949 /* mongoc-b64-private.h in Headers */,
 				02D3D3381926661300925BE7 /* mongoc-stream.h in Headers */,
 				02D3D3391926661300925BE7 /* mongoc-thread-private.h in Headers */,
 				02D3D33A1926661300925BE7 /* mongoc-trace.h in Headers */,
@@ -3250,6 +3286,7 @@
 				02CF0E7D19111321008C822A /* mongoc-matcher.c in Sources */,
 				02CF0E8419111321008C822A /* mongoc-stream-buffered.c in Sources */,
 				02AB33AD194870D6008C06B9 /* MODReadPreferences.m in Sources */,
+				02D9BFE31A042F9C00787949 /* mongoc-rand.c in Sources */,
 				02CF0E7C19111321008C822A /* mongoc-matcher-op.c in Sources */,
 				0299B61517F39FAA00FB40A2 /* MODRagelJsonParser.m in Sources */,
 				02CF0E2F191112CB008C822A /* bson-writer.c in Sources */,
@@ -3282,6 +3319,7 @@
 				02B13FA81949C41000EFF763 /* MODFunction.m in Sources */,
 				023ECFFD14851BEE00185781 /* MODSymbol.m in Sources */,
 				02CF0E7219111321008C822A /* mongoc-cursor.c in Sources */,
+				02D9BFEC1A04383800787949 /* bson-iso8601.c in Sources */,
 				02CF0E2C191112CB008C822A /* bson-string.c in Sources */,
 				02CF0E30191112CB008C822A /* bson.c in Sources */,
 				02CF0E8919111321008C822A /* mongoc-stream.c in Sources */,
@@ -3297,6 +3335,7 @@
 				02CF0E6919111321008C822A /* mongoc-buffer.c in Sources */,
 				02CF0E7419111321008C822A /* mongoc-gridfs-file-list.c in Sources */,
 				02CF0E2A191112CB008C822A /* bson-oid.c in Sources */,
+				02D9BFEF1A04387200787949 /* bson-timegm.c in Sources */,
 				02CF0E7B19111321008C822A /* mongoc-log.c in Sources */,
 				02CF0E25191112CB008C822A /* bson-iter.c in Sources */,
 				02CF0E6D19111321008C822A /* mongoc-cluster.c in Sources */,
@@ -3329,6 +3368,7 @@
 				02CF0E8519111321008C822A /* mongoc-stream-file.c in Sources */,
 				02CF0E9919112271008C822A /* yajl_buf.c in Sources */,
 				02CF0E9B19112271008C822A /* yajl_gen.c in Sources */,
+				02D9BFE61A042F9C00787949 /* mongoc-scram.c in Sources */,
 				02CF0E7119111321008C822A /* mongoc-cursor-cursorid.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
