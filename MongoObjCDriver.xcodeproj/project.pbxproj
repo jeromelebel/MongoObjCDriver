@@ -1391,6 +1391,7 @@
 		0299B61117F39FA200FB40A2 /* MODRagelJsonParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MODRagelJsonParser.h; sourceTree = "<group>"; };
 		0299B61217F39FA200FB40A2 /* MODRagelJsonParser.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MODRagelJsonParser.m; sourceTree = "<group>"; };
 		0299B61317F39FA200FB40A2 /* MODRagelJsonParser.rl */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.objc; path = MODRagelJsonParser.rl; sourceTree = "<group>"; };
+		02A73FB11A06D58800447C12 /* test-iso8601.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "test-iso8601.c"; sourceTree = "<group>"; };
 		02A85F4F14103EA6004F3FE9 /* MODClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODClient.h; sourceTree = "<group>"; };
 		02A85F5014103EA6004F3FE9 /* MODClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODClient.m; sourceTree = "<group>"; };
 		02A85F5714104184004F3FE9 /* MODQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODQuery.h; sourceTree = "<group>"; };
@@ -2723,6 +2724,7 @@
 				020450F8190E5EB000A80BED /* test-bcon-extract.c */,
 				020450F9190E5EB000A80BED /* test-bson.c */,
 				020450FA190E5EB000A80BED /* test-clock.c */,
+				02A73FB11A06D58800447C12 /* test-iso8601.c */,
 				020450FB190E5EB000A80BED /* test-endian.c */,
 				020450FC190E5EB000A80BED /* test-error.c */,
 				020450FD190E5EB000A80BED /* test-iter.c */,
