@@ -336,14 +336,14 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
                 uint32_t collectionLength;
                 const char *collectionCString;
                 const bson_oid_t *oid;
-                NSString *collection;
+                NSString *absoluteCollection;
                 MODObjectId *objectId;
                 
                 bson_iter_dbpointer(iterator, &collectionLength, &collectionCString, &oid);
-                collection = [[NSString alloc] initWithBytes:collectionCString length:collectionLength encoding:NSUTF8StringEncoding];
+                absoluteCollection = [[NSString alloc] initWithBytes:collectionCString length:collectionLength encoding:NSUTF8StringEncoding];
                 objectId = [[MODObjectId alloc] initWithOid:oid];
-                result = [[[MODDBRef alloc] initWithCollectionName:collection objectId:objectId databaseName:nil] autorelease];
-                [collection release];
+                result = [[[MODDBRef alloc] initWithAbsoluteCollectionName:absoluteCollection objectId:objectId] autorelease];
+                [absoluteCollection release];
                 [objectId release];
             }
             break;
@@ -509,7 +509,7 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
         bson_append_code_with_scope(bson, keyString, strlen(keyString), [value function].UTF8String, &bsonScope);
         bson_destroy(&bsonScope);
     } else if ([value isKindOfClass:[MODDBRef class]]) {
-        bson_append_dbpointer(bson, keyString, strlen(keyString), [value collectionName].UTF8String, [value objectId].bsonObjectId);
+        bson_append_dbpointer(bson, keyString, strlen(keyString), [value absoluteCollectionName].UTF8String, [value objectId].bsonObjectId);
     } else {
         NSLog(@"*********************** class %@ key %@ %d", NSStringFromClass([value class]), key, __LINE__);
         NSAssert(NO, @"class %@ key %@ line %d", NSStringFromClass([value class]), key, __LINE__);
