@@ -361,35 +361,4 @@
                         shouldEqual:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"false", [NSNumber numberWithBool:YES], @"true", nil]];
 }
 
-- (void)testDBRefParsing
-{
-    MODObjectId *objectId = [[MODObjectId alloc] initWithString:@"4e9807f88157f608b4000002"];
-    
-    [self jsonTesterWithJsonToParse:@"{\"dbref\":DBRef(\"prout\",\"4e9807f88157f608b4000002\")}"
-                       jsonExpected:nil
-                        shouldEqual:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[MODDBRef alloc] initWithDatabaseName:nil collectionName:@"prout" objectId:objectId], @"dbref", nil]];
-    [self jsonTesterWithJsonToParse:@"{\"dbref\":DBRef(\"prout.col\",\"4e9807f88157f608b4000002\")}"
-                       jsonExpected:nil
-                        shouldEqual:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[MODDBRef alloc] initWithDatabaseName:@"prout" collectionName:@"col" objectId:objectId], @"dbref", nil]];
-    [self jsonTesterWithJsonToParse:@"{\"dbref\":DBRef(\"prout.col\",\"4e9807f88157f608b4000002\")}"
-                       jsonExpected:nil
-                        shouldEqual:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[MODDBRef alloc] initWithAbsoluteCollectionName:@"prout.col" objectId:objectId], @"dbref", nil]];
-    [self jsonTesterWithJsonToParse:@"{\"dbref\":DBRef(\"col\",\"4e9807f88157f608b4000002\")}"
-                       jsonExpected:nil
-                        shouldEqual:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[MODDBRef alloc] initWithDatabaseName:nil collectionName:@"col" objectId:objectId], @"dbref", nil]];
-    [self jsonTesterWithJsonToParse:@"{\"dbref\":DBRef(\"col\",\"4e9807f88157f608b4000002\")}"
-                       jsonExpected:nil
-                        shouldEqual:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[MODDBRef alloc] initWithAbsoluteCollectionName:@"col" objectId:objectId], @"dbref", nil]];
-    
-    [self jsonTesterWithJsonToParse:@"{\"dbref\":{\"$ref\":\"\",\"$db\":\"prout\",\"$id\":\"4e9807f88157f608b4000002\"}}"
-                       jsonExpected:@"{\"dbref\":DBRef(\"prout.\",\"4e9807f88157f608b4000002\")}"
-                        shouldEqual:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[MODDBRef alloc] initWithDatabaseName:@"prout" collectionName:nil objectId:objectId], @"dbref", nil]];
-    [self jsonTesterWithJsonToParse:@"{\"dbref\":{\"$ref\":\"col\",\"$db\":\"prout\",\"$id\":\"4e9807f88157f608b4000002\"}}"
-                       jsonExpected:@"{\"dbref\":DBRef(\"prout.col\",\"4e9807f88157f608b4000002\")}"
-                        shouldEqual:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[MODDBRef alloc] initWithDatabaseName:@"prout" collectionName:@"col" objectId:objectId], @"dbref", nil]];
-    [self jsonTesterWithJsonToParse:@"{\"dbref\":{\"$ref\":\"col\",\"$id\":\"4e9807f88157f608b4000002\"}}"
-                       jsonExpected:@"{\"dbref\":DBRef(\"col\",\"4e9807f88157f608b4000002\")}"
-                        shouldEqual:[MODSortedMutableDictionary sortedDictionaryWithObjectsAndKeys:[[MODDBRef alloc] initWithAbsoluteCollectionName:@"col" objectId:objectId], @"dbref", nil]];
-}
-
 @end

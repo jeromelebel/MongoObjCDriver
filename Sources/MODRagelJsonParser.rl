@@ -109,7 +109,7 @@
     function_keyword    = 'Function';
     scopefunction_keyword = 'ScopeFunction';
     begin_dbref         = 'D';
-    dbref_keyword       = 'DBRef';
+    dbref_keyword       = 'DBPointer';
 }%%
 
 %%{
@@ -589,7 +589,7 @@
     
     action parse_absolute_collection_name {
         const char *np;
-        np = [self _parseStringWithPointer:fpc endPointer:pe result:&absoluteCollectionName];
+        np = [self _parseStringWithPointer:fpc endPointer:pe result:&collectionName];
         if (np == NULL) { fhold; fbreak; } else fexec np;
     }
     
@@ -602,7 +602,9 @@
             fhold;
             fbreak;
         } else {
-            documentId = [[[MODObjectId alloc] initWithString:string] autorelease];
+            if ([MODObjectId isStringValid:string]) {
+                documentId = [[[MODObjectId alloc] initWithString:string] autorelease];
+            }
             fexec np;
         }
     }
@@ -614,15 +616,15 @@
 
 - (const char *)_parseDBPointerWithPointer:(const char *)p endPointer:(const char *)pe result:(MODDBPointer **)result
 {
-    NSString *absoluteCollectionName = nil;
+    NSString *collectionName = nil;
     MODObjectId *documentId = nil;
     int cs = 0;
 
     %% write init;
     %% write exec;
 
-    if (cs >= JSON_dbref_first_final && absoluteCollectionName && documentId) {
-        *result = [[[MODDBPointer alloc] initWithAbsoluteCollectionName:absoluteCollectionName objectId:documentId] autorelease];
+    if (cs >= JSON_dbref_first_final && collectionName && documentId) {
+        *result = [[[MODDBPointer alloc] initWithCollectionName:collectionName objectId:documentId] autorelease];
         return p + 1;
     } else {
         *result = nil;
