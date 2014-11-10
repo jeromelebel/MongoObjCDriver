@@ -218,7 +218,7 @@
     }
     
     action parse_dbref {
-        const char *np = [self _parseDBRefWithPointer:fpc endPointer:pe result:result];
+        const char *np = [self _parseDBPointerWithPointer:fpc endPointer:pe result:result];
         if (np == NULL) {
             fhold; fbreak;
         } else {
@@ -612,7 +612,7 @@
     main := (dbref_keyword ignore* '(' ignore* begin_string >parse_absolute_collection_name ignore* ',' ignore* begin_string >parse_document_id ignore*')') @exit;
 }%%
 
-- (const char *)_parseDBRefWithPointer:(const char *)p endPointer:(const char *)pe result:(MODDBRef **)result
+- (const char *)_parseDBPointerWithPointer:(const char *)p endPointer:(const char *)pe result:(MODDBPointer **)result
 {
     NSString *absoluteCollectionName = nil;
     MODObjectId *documentId = nil;
@@ -622,7 +622,7 @@
     %% write exec;
 
     if (cs >= JSON_dbref_first_final && absoluteCollectionName && documentId) {
-        *result = [[[MODDBRef alloc] initWithAbsoluteCollectionName:absoluteCollectionName objectId:documentId] autorelease];
+        *result = [[[MODDBPointer alloc] initWithAbsoluteCollectionName:absoluteCollectionName objectId:documentId] autorelease];
         return p + 1;
     } else {
         *result = nil;

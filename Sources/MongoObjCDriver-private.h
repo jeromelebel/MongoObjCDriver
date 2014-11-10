@@ -15,6 +15,7 @@
 #import "MODClient-private.h"
 #import "MODDatabase-private.h"
 #import "MODCursor-private.h"
+#import "MODDBPointer.h"
 
 #define BSON_NO_ERROR { 0, 0, 0 }
 

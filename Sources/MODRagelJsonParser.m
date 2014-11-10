@@ -428,7 +428,7 @@ _match:
 	case 17:
 #line 220 "/Users/jerome/Sources/MongoHub-Mac/Libraries/MongoObjCDriver/Sources/MODRagelJsonParser.rl"
 	{
-        const char *np = [self _parseDBRefWithPointer:p endPointer:pe result:result];
+        const char *np = [self _parseDBPointerWithPointer:p endPointer:pe result:result];
         if (np == NULL) {
             p--; {p++; goto _out; }
         } else {
@@ -1735,7 +1735,7 @@ static const int JSON_dbref_en_main = 1;
 #line 613 "/Users/jerome/Sources/MongoHub-Mac/Libraries/MongoObjCDriver/Sources/MODRagelJsonParser.rl"
 
 
-- (const char *)_parseDBRefWithPointer:(const char *)p endPointer:(const char *)pe result:(MODDBRef **)result
+- (const char *)_parseDBPointerWithPointer:(const char *)p endPointer:(const char *)pe result:(MODDBPointer **)result
 {
     NSString *absoluteCollectionName = nil;
     MODObjectId *documentId = nil;
@@ -1867,7 +1867,7 @@ _again:
 #line 623 "/Users/jerome/Sources/MongoHub-Mac/Libraries/MongoObjCDriver/Sources/MODRagelJsonParser.rl"
 
     if (cs >= JSON_dbref_first_final && absoluteCollectionName && documentId) {
-        *result = [[[MODDBRef alloc] initWithAbsoluteCollectionName:absoluteCollectionName objectId:documentId] autorelease];
+        *result = [[[MODDBPointer alloc] initWithAbsoluteCollectionName:absoluteCollectionName objectId:documentId] autorelease];
         return p + 1;
     } else {
         *result = nil;

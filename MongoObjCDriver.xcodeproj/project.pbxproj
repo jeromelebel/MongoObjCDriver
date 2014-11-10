@@ -41,8 +41,8 @@
 		024B0C081887DFBF00B8DCE6 /* MODDocumentComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 024B0C061887DFBF00B8DCE6 /* MODDocumentComparator.m */; };
 		025410A819AA7FCE00CF437E /* MODSSLOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 025410A619AA7FCE00CF437E /* MODSSLOptions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		025410A919AA7FCE00CF437E /* MODSSLOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 025410A719AA7FCE00CF437E /* MODSSLOptions.m */; };
-		025C56201433E7E40064B010 /* MODDBRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 025C561E1433E7E40064B010 /* MODDBRef.m */; };
-		025C56211433E7E40064B010 /* MODDBRef.h in Headers */ = {isa = PBXBuildFile; fileRef = 025C561F1433E7E40064B010 /* MODDBRef.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		025C56201433E7E40064B010 /* MODDBPointer.m in Sources */ = {isa = PBXBuildFile; fileRef = 025C561E1433E7E40064B010 /* MODDBPointer.m */; };
+		025C56211433E7E40064B010 /* MODDBPointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 025C561F1433E7E40064B010 /* MODDBPointer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02688DDC14119CF50014ED51 /* MODDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 02688DDA14119CF50014ED51 /* MODDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02688DDD14119CF50014ED51 /* MODDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02688DDB14119CF50014ED51 /* MODDatabase.m */; };
 		02688DE21411C5010014ED51 /* MODCollection.h in Headers */ = {isa = PBXBuildFile; fileRef = 02688DE01411C5010014ED51 /* MODCollection.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1370,8 +1370,8 @@
 		024B0C061887DFBF00B8DCE6 /* MODDocumentComparator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODDocumentComparator.m; sourceTree = "<group>"; };
 		025410A619AA7FCE00CF437E /* MODSSLOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODSSLOptions.h; sourceTree = "<group>"; };
 		025410A719AA7FCE00CF437E /* MODSSLOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODSSLOptions.m; sourceTree = "<group>"; };
-		025C561E1433E7E40064B010 /* MODDBRef.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODDBRef.m; sourceTree = "<group>"; };
-		025C561F1433E7E40064B010 /* MODDBRef.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODDBRef.h; sourceTree = "<group>"; };
+		025C561E1433E7E40064B010 /* MODDBPointer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODDBPointer.m; sourceTree = "<group>"; };
+		025C561F1433E7E40064B010 /* MODDBPointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODDBPointer.h; sourceTree = "<group>"; };
 		02688DDA14119CF50014ED51 /* MODDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODDatabase.h; sourceTree = "<group>"; };
 		02688DDB14119CF50014ED51 /* MODDatabase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODDatabase.m; sourceTree = "<group>"; };
 		02688DE01411C5010014ED51 /* MODCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODCollection.h; sourceTree = "<group>"; };
@@ -2960,8 +2960,8 @@
 				02CF87E8142F8AA3000C4C7F /* MODRegex.m */,
 				02411AB71432D02600A5FFCA /* MODBinary.h */,
 				02411AB81432D02600A5FFCA /* MODBinary.m */,
-				025C561F1433E7E40064B010 /* MODDBRef.h */,
-				025C561E1433E7E40064B010 /* MODDBRef.m */,
+				025C561F1433E7E40064B010 /* MODDBPointer.h */,
+				025C561E1433E7E40064B010 /* MODDBPointer.m */,
 				027A1D9C1767E91F0048AD60 /* MODMaxKey.h */,
 				027A1D9D1767E91F0048AD60 /* MODMaxKey.m */,
 				027A1D9E1767E91F0048AD60 /* MODMinKey.h */,
@@ -3037,7 +3037,7 @@
 				02CF87E9142F8AA3000C4C7F /* MODRegex.h in Headers */,
 				02411AB51432B8FA00A5FFCA /* MongoObjCDriver.h in Headers */,
 				02411AB91432D02700A5FFCA /* MODBinary.h in Headers */,
-				025C56211433E7E40064B010 /* MODDBRef.h in Headers */,
+				025C56211433E7E40064B010 /* MODDBPointer.h in Headers */,
 				02B24273147D1BD6008A15A3 /* MODSortedMutableDictionary.h in Headers */,
 				023ECFFC14851BEE00185781 /* MODSymbol.h in Headers */,
 				02B13FA71949C41000EFF763 /* MODFunction.h in Headers */,
@@ -3314,7 +3314,7 @@
 				02411ABA1432D02700A5FFCA /* MODBinary.m in Sources */,
 				02CF0E26191112CB008C822A /* bson-json.c in Sources */,
 				02CF0E8C19111321008C822A /* mongoc-write-command.c in Sources */,
-				025C56201433E7E40064B010 /* MODDBRef.m in Sources */,
+				025C56201433E7E40064B010 /* MODDBPointer.m in Sources */,
 				02CF0E7819111321008C822A /* mongoc-index.c in Sources */,
 				02B24274147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */,
 				02CF0E9F19112271008C822A /* yajl_version.c in Sources */,

@@ -188,15 +188,6 @@
     
     if (self.count == 1 && [[self objectForKey:@"$date"] isKindOfClass:NSNumber.class]) {
         result = [[NSDate alloc] initWithTimeIntervalSince1970:[[self objectForKey:@"$date"] doubleValue] / 1000.0];
-    } else if ([[self objectForKey:@"$id"] isKindOfClass:NSString.class]
-               && [[self objectForKey:@"$id"] length] == 24
-               && [[self objectForKey:@"$ref"] isKindOfClass:NSString.class]
-               && (self.count == 2 || (self.count == 3 && [[self objectForKey:@"$db"] isKindOfClass:NSString.class]))) {
-        MODObjectId *objectId;
-        
-        objectId = [[MODObjectId alloc] initWithCString:[[self objectForKey:@"$id"] cStringUsingEncoding:NSUTF8StringEncoding]];
-        result = [[MODDBRef alloc] initWithDatabaseName:[self objectForKey:@"$db"] collectionName:[self objectForKey:@"$ref"] objectId:objectId];
-        [objectId release];
     } else if (self.count == 1 && [[self objectForKey:@"$oid"] isKindOfClass:NSString.class] && [[self objectForKey:@"$oid"] length] == 24) {
         result = [[MODObjectId alloc] initWithCString:[[self objectForKey:@"$oid"] cStringUsingEncoding:NSUTF8StringEncoding]];
     } else if (self.count == 1 && [[self objectForKey:@"$timestamp"] isKindOfClass:NSArray.class] && [[self objectForKey:@"$timestamp"] count] == 2) {
