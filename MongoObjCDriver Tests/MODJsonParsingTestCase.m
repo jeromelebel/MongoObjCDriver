@@ -82,7 +82,7 @@
     if ([shouldEqual isKindOfClass:[MODSortedMutableDictionary class]]) {
         NSString *jsonFromObjects;
         
-        jsonFromObjects = [MODClient convertObjectToJson:shouldEqual pretty:NO strictJson:NO];
+        jsonFromObjects = [MODClient convertObjectToJson:shouldEqual pretty:NO strictJson:NO jsonKeySortOrder:MODJsonKeySortOrderDocument];
         if (![jsonFromObjects isEqualToString:jsonExpected]) {
             NSLog(@"problem to convert objects to json %@", shouldEqual);
             NSLog(@"expecting: '%@'", jsonToParse);
