@@ -535,7 +535,7 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
 
 @end
 
-static void convertValueToJson(NSMutableString *result, int indent, id value, NSString *key, BOOL pretty, BOOL useStrictJSON);
+static void convertValueToJson(NSMutableString *result, int indent, id value, NSString *key, BOOL pretty, BOOL useStrictJSON, MODJsonKeySortOrder jsonKeySortOrder);
 
 static void addIdent(NSMutableString *result, int indent)
 {
@@ -547,15 +547,17 @@ static void addIdent(NSMutableString *result, int indent)
     }
 }
 
-static void convertDictionaryToJson(NSMutableString *result, int indent, MODSortedMutableDictionary *value, BOOL pretty, BOOL useStrictJSON)
+static void convertDictionaryToJson(NSMutableString *result, int indent, MODSortedMutableDictionary *value, BOOL pretty, BOOL useStrictJSON, MODJsonKeySortOrder jsonKeySortOrder)
 {
     BOOL first = YES;
+    NSArray *keys;
     
     [result appendString:@"{"];
     if (pretty) {
         [result appendString:@"\n"];
     }
-    for (NSString *key in value.sortedKeys) {
+    keys = [MODClient sortKeys:value.sortedKeys withJsonKeySortOrder:jsonKeySortOrder];
+    for (NSString *key in keys) {
         if (first) {
             first = NO;
         } else if (pretty) {
@@ -563,7 +565,7 @@ static void convertDictionaryToJson(NSMutableString *result, int indent, MODSort
         } else {
             [result appendString:@","];
         }
-        convertValueToJson(result, indent + 1, [value objectForKey:key], key, pretty, useStrictJSON);
+        convertValueToJson(result, indent + 1, [value objectForKey:key], key, pretty, useStrictJSON, jsonKeySortOrder);
     }
     if (pretty) {
         [result appendString:@"\n"];
@@ -572,7 +574,7 @@ static void convertDictionaryToJson(NSMutableString *result, int indent, MODSort
     [result appendString:@"}"];
 }
 
-static void convertArrayToJson(NSMutableString *result, int indent, NSArray *value, BOOL pretty, BOOL useStrictJSON)
+static void convertArrayToJson(NSMutableString *result, int indent, NSArray *value, BOOL pretty, BOOL useStrictJSON, MODJsonKeySortOrder jsonKeySortOrder)
 {
     BOOL first = YES;
     
@@ -588,7 +590,7 @@ static void convertArrayToJson(NSMutableString *result, int indent, NSArray *val
         } else {
             [result appendString:@","];
         }
-        convertValueToJson(result, indent + 1, arrayValue, nil, pretty, useStrictJSON);
+        convertValueToJson(result, indent + 1, arrayValue, nil, pretty, useStrictJSON, jsonKeySortOrder);
     }
     if (pretty) {
         [result appendString:@"\n"];
@@ -597,7 +599,7 @@ static void convertArrayToJson(NSMutableString *result, int indent, NSArray *val
     [result appendString:@"]"];
 }
 
-static void convertValueToJson(NSMutableString *result, int indent, id value, NSString *key, BOOL pretty, BOOL useStrictJSON)
+static void convertValueToJson(NSMutableString *result, int indent, id value, NSString *key, BOOL pretty, BOOL useStrictJSON, MODJsonKeySortOrder jsonKeySortOrder)
 {
     if (pretty) {
         addIdent(result, indent);
@@ -632,9 +634,9 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     } else if ([value isKindOfClass:[NSNull class]]) {
         [result appendString:@"null"];
     } else if ([value isKindOfClass:[MODSortedMutableDictionary class]]) {
-        convertDictionaryToJson(result, indent, value, pretty, useStrictJSON);
+        convertDictionaryToJson(result, indent, value, pretty, useStrictJSON, jsonKeySortOrder);
     } else if ([value isKindOfClass:[NSArray class]]) {
-        convertArrayToJson(result, indent, value, pretty, useStrictJSON);
+        convertArrayToJson(result, indent, value, pretty, useStrictJSON, jsonKeySortOrder);
     } else if ([value isKindOfClass:[NSNumber class]]) {
         if (strcmp([value objCType], @encode(BOOL)) == 0) {
             if ([value boolValue]) {
@@ -677,7 +679,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     } else if ([value isKindOfClass:[MODFunction class]]) {
         [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
     } else if ([value isKindOfClass:[MODScopeFunction class]]) {
-        [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON]];
+        [result appendString:[value jsonValueWithPretty:pretty strictJSON:useStrictJSON jsonKeySortOrder:jsonKeySortOrder]];
     } else {
         NSLog(@"unknown type: %@", [value class]);
         assert(false);
@@ -686,12 +688,36 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
 
 @implementation MODClient(utils)
 
-+ (NSString *)convertObjectToJson:(MODSortedMutableDictionary *)object pretty:(BOOL)pretty strictJson:(BOOL)strictJson
++ (NSArray *)sortKeys:(NSArray *)keys withJsonKeySortOrder:(MODJsonKeySortOrder)jsonKeySortOrder
+{
+    NSArray *sortedKeys;
+    
+    switch (jsonKeySortOrder) {
+        case MODJsonKeySortOrderAscending:
+            sortedKeys = [keys sortedArrayWithOptions:NSSortConcurrent usingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+                return [obj1 compare:obj2 options:0];
+            }];
+            break;
+            
+        case MODJsonKeySortOrderDescending:
+            sortedKeys = [keys sortedArrayWithOptions:NSSortConcurrent usingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+                return [obj2 compare:obj1 options:0];
+            }];
+            break;
+            
+        default:
+            sortedKeys = keys;
+            break;
+    }
+    return sortedKeys;
+}
+
++ (NSString *)convertObjectToJson:(MODSortedMutableDictionary *)object pretty:(BOOL)pretty strictJson:(BOOL)strictJson jsonKeySortOrder:(MODJsonKeySortOrder)jsonKeySortOrder
 {
     NSMutableString *result;
     
     result = [NSMutableString string];
-    convertDictionaryToJson(result, 0, object, pretty, strictJson);
+    convertDictionaryToJson(result, 0, object, pretty, strictJson, jsonKeySortOrder);
     return result;
 }
 
@@ -798,9 +824,9 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     NSAssert(error == nil, @"Error while parsing to objects %@, %@", json, error);
     if (![document isEqual:convertedDocument]) {
         NSLog(@"%@", [MODClient findAllDifferencesInObject1:document object2:convertedDocument]);
-        NSLog(@"%@", [MODClient convertObjectToJson:convertedDocument pretty:YES strictJson:NO]);
+        NSLog(@"%@", [MODClient convertObjectToJson:convertedDocument pretty:YES strictJson:NO jsonKeySortOrder:MODJsonKeySortOrderDocument]);
         NSLog(@"%@", json);
-        NSLog(@"%@", [MODClient convertObjectToJson:document pretty:YES strictJson:NO]);
+        NSLog(@"%@", [MODClient convertObjectToJson:document pretty:YES strictJson:NO jsonKeySortOrder:MODJsonKeySortOrderDocument]);
 //        NSAssert([document isEqual:convertedDocument], @"Error to parse values with %@ document id %@", [MODClient findAllDifferencesInObject1:document object2:convertedDocument], [document objectForKey:@"_id"]);
         result = NO;
     }

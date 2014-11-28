@@ -28,11 +28,11 @@
     [super dealloc];
 }
 
-- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON jsonKeySortOrder:(MODJsonKeySortOrder)jsonKeySortOrder
 {
     NSString *scopeString;
     
-    scopeString = [MODClient convertObjectToJson:self.scope pretty:pretty strictJson:strictJSON];
+    scopeString = [MODClient convertObjectToJson:self.scope pretty:pretty strictJson:strictJSON jsonKeySortOrder:jsonKeySortOrder];
     if (!strictJSON && pretty) {
         return [NSString stringWithFormat:@"ScopeFunction(\"%@\", %@)", [MODClient escapeQuotesForString:self.function], scopeString];
     } else if (!strictJSON && !pretty) {

@@ -33,6 +33,13 @@ typedef enum
     MODLogLevelTrace,
 } MODLogLevel;
 
+typedef enum
+{
+    MODJsonKeySortOrderDocument,
+    MODJsonKeySortOrderAscending,
+    MODJsonKeySortOrderDescending,
+} MODJsonKeySortOrder;
+
 @interface MODClient : NSObject
 {
     mongo_replset_ptr                   _replicaSet;
@@ -75,7 +82,9 @@ typedef enum
 @interface MODClient (utils)
 + (NSString *)escapeQuotesForString:(NSString *)string;
 + (NSString *)escapeSlashesForString:(NSString *)string;
-+ (NSString *)convertObjectToJson:(MODSortedMutableDictionary *)object pretty:(BOOL)pretty strictJson:(BOOL)strictJson;
+
++ (NSArray *)sortKeys:(NSArray *)keys withJsonKeySortOrder:(MODJsonKeySortOrder)jsonKeySortOrder;
++ (NSString *)convertObjectToJson:(MODSortedMutableDictionary *)object pretty:(BOOL)pretty strictJson:(BOOL)strictJson jsonKeySortOrder:(MODJsonKeySortOrder)jsonKeySortOrder;
 + (BOOL)isEqualWithJson:(NSString *)json toBsonData:(NSData *)document info:(NSDictionary **)info;
 + (BOOL)isEqualWithJson:(NSString *)json toDocument:(id)document info:(NSDictionary **)info;
 + (NSArray *)findAllDifferencesInObject1:(id)object1 object2:(id)object2;

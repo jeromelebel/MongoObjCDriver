@@ -17,7 +17,7 @@
 }
 
 - (instancetype)initWithFunction:(NSString *)function scope:(MODSortedMutableDictionary *)scope;
-- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;
+- (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON jsonKeySortOrder:(MODJsonKeySortOrder)jsonKeySortOrder;
 
 @property (nonatomic, retain, readwrite) NSString *function;
 @property (nonatomic, retain, readwrite) MODSortedMutableDictionary *scope;
