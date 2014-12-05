@@ -305,6 +305,7 @@
                 if (ii >= 50) {
                     bson_error_t bsonError;
                     
+                    ii = 0;
                     mongoc_bulk_operation_execute(bulk, NULL, &bsonError);
                     error = [self.client.class errorFromBsonError:bsonError];
                     if (error) {
@@ -314,7 +315,7 @@
                     bulk = mongoc_collection_create_bulk_operation(self.mongocCollection, false, writeConcern.mongocWriteConcern);
                 }
             }
-            if (!error) {
+            if (!error && ii > 0) {
                 bson_error_t bsonError = BSON_NO_ERROR;
                 
                 mongoc_bulk_operation_execute(bulk, NULL, &bsonError);
