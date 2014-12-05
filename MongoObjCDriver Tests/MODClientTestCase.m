@@ -311,4 +311,33 @@
     CFRunLoopRun();
 }
 
+- (void)testALotOfDocuments
+{
+    MODCollection *collection;
+    const int batchCount = 100;
+    const int batchSize = 10;
+    
+    collection = [[self.client databaseForName:DATABASE_NAME_TEST1] collectionForName:@"1000documents"];
+    [collection removeWithCriteria:nil callback:^(MODQuery *mongoQuery) {
+        for (int ii = 0; ii < batchCount; ii++) {
+            NSMutableArray *documents;
+            
+            documents = [NSMutableArray array];
+            for (int jj = 0; jj < batchSize; jj++) {
+                MODSortedMutableDictionary *document;
+                
+                document = [[MODSortedMutableDictionary alloc] init];
+                [document setObject:@(jj + batchSize * ii) forKey:@"index"];
+                [documents addObject:document];
+            }
+            [collection insertWithDocuments:documents writeConcern:nil callback:nil];
+        }
+        [collection countWithCriteria:nil readPreferences:nil callback:^(int64_t count, MODQuery *mongoQuery) {
+            XCTAssertEqual(count, batchSize * batchCount);
+            CFRunLoopStop(CFRunLoopGetCurrent());
+        }];
+    }];
+    CFRunLoopRun();
+}
+
 @end
