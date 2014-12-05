@@ -315,7 +315,7 @@
 {
     MODCollection *collection;
     const int batchCount = 100;
-    const int batchSize = 10;
+    const int batchSize = 100;
     
     collection = [[self.client databaseForName:DATABASE_NAME_TEST1] collectionForName:@"1000documents"];
     [collection removeWithCriteria:nil callback:^(MODQuery *mongoQuery) {
@@ -331,6 +331,9 @@
                 [documents addObject:document];
             }
             [collection insertWithDocuments:documents writeConcern:nil callback:nil];
+            [collection insertWithDocuments:documents writeConcern:nil callback:^(MODQuery *mongoQuery) {
+                XCTAssert(mongoQuery.error == nil, @"should have no error %@", mongoQuery.error);
+            }];
         }
         [collection countWithCriteria:nil readPreferences:nil callback:^(int64_t count, MODQuery *mongoQuery) {
             XCTAssertEqual(count, batchSize * batchCount);
