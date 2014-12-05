@@ -413,11 +413,13 @@
         if (!mongoQuery.isCanceled) {
             bson_t bsonCriteria = BSON_INITIALIZER;
             
-            if (criteria && [criteria isKindOfClass:[NSString class]]) {
+            if (criteria == nil) {
+                // nothing to do
+            } else if ([criteria isKindOfClass:[NSString class]]) {
                 if ([criteria length] > 0) {
                     [MODRagelJsonParser bsonFromJson:&bsonCriteria json:criteria error:&error];
                 }
-            } else if (criteria && [criteria isKindOfClass:[MODSortedMutableDictionary class]]) {
+            } else if ([criteria isKindOfClass:[MODSortedMutableDictionary class]]) {
                 [[self.client class] appendObject:criteria toBson:&bsonCriteria];
             } else {
                 error = [self.client.class errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
