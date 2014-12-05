@@ -319,6 +319,7 @@
     
     collection = [[self.client databaseForName:DATABASE_NAME_TEST1] collectionForName:@"1000documents"];
     [collection removeWithCriteria:nil callback:^(MODQuery *mongoQuery) {
+        XCTAssert(mongoQuery.error == nil, @"should have no error %@", mongoQuery.error);
         for (int ii = 0; ii < batchCount; ii++) {
             NSMutableArray *documents;
             
