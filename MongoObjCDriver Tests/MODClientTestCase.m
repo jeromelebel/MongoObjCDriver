@@ -331,7 +331,6 @@
                 [document setObject:@(jj + batchSize * ii) forKey:@"index"];
                 [documents addObject:document];
             }
-            [collection insertWithDocuments:documents writeConcern:nil callback:nil];
             [collection insertWithDocuments:documents writeConcern:nil callback:^(MODQuery *mongoQuery) {
                 XCTAssert(mongoQuery.error == nil, @"should have no error %@", mongoQuery.error);
             }];
