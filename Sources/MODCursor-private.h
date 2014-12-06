@@ -11,12 +11,12 @@
 @interface MODCursor ()
 - (instancetype)initWithCollection:(MODCollection *)collection mongocCursor:(mongoc_cursor_t *)mongocCursor;
 - (instancetype)initWithCollection:(MODCollection *)collection
-                             query:(MODSortedMutableDictionary *)query
-                            fields:(MODSortedMutableDictionary *)fields
+                             query:(MODSortedDictionary *)query
+                            fields:(MODSortedDictionary *)fields
                               skip:(uint32_t)skip
                              limit:(uint32_t)limit
-                              sort:(MODSortedMutableDictionary *)sort;
-- (MODSortedMutableDictionary *)nextDocumentWithBsonData:(NSData **)bsonData error:(NSError **)error;
+                              sort:(MODSortedDictionary *)sort;
+- (MODSortedDictionary *)nextDocumentWithBsonData:(NSData **)bsonData error:(NSError **)error;
 - (BOOL)more;
 - (NSError *)error;
 

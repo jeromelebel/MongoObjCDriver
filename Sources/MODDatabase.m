@@ -55,12 +55,12 @@
     [self.client mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
 }
 
-- (MODQuery *)statsWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedMutableDictionary *databaseStats, MODQuery *mongoQuery))callback;
+- (MODQuery *)statsWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedDictionary *databaseStats, MODQuery *mongoQuery))callback;
 {
     MODQuery *query;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery){
-        MODSortedMutableDictionary *stats = nil;
+        MODSortedDictionary *stats = nil;
         bson_error_t error = BSON_NO_ERROR;
         
         if (!mongoQuery.isCanceled) {

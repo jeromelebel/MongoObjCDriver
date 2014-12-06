@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class MODSortedMutableDictionary;
+@class MODSortedDictionary;
 
 typedef enum
 {
@@ -30,11 +30,11 @@ typedef enum
     void                                *_mongocReadPreferences;
 }
 @property (nonatomic, assign, readonly) MODReadPreferencesReadMode readMode;
-@property (nonatomic, assign, readonly) MODSortedMutableDictionary *tags;
+@property (nonatomic, assign, readonly) MODSortedDictionary *tags;
 
 + (MODReadPreferences *)readPreferencesWithReadMode:(MODReadPreferencesReadMode)readMode;
-+ (MODReadPreferences *)readPreferencesWithReadMode:(MODReadPreferencesReadMode)readMode tags:(MODSortedMutableDictionary *)tags;
++ (MODReadPreferences *)readPreferencesWithReadMode:(MODReadPreferencesReadMode)readMode tags:(MODSortedDictionary *)tags;
 
-- (instancetype)initWithReadMode:(MODReadPreferencesReadMode)readMode tags:(MODSortedMutableDictionary *)tags;
+- (instancetype)initWithReadMode:(MODReadPreferencesReadMode)readMode tags:(MODSortedDictionary *)tags;
 
 @end

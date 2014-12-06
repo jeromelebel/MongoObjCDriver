@@ -15,7 +15,7 @@
 @class MODQuery;
 @class MODDatabase;
 @class MODClient;
-@class MODSortedMutableDictionary;
+@class MODSortedDictionary;
 @class MODReadPreferences;
 @class MODSSLOptions;
 @class MODWriteConcern;
@@ -72,7 +72,7 @@ typedef enum
 
 - (instancetype)copy;
 
-- (MODQuery *)serverStatusWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback;
+- (MODQuery *)serverStatusWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedDictionary *serverStatus, MODQuery *mongoQuery))callback;
 - (MODQuery *)databaseNamesWithCallback:(void (^)(NSArray *list, MODQuery *mongoQuery))callback;
 - (MODDatabase *)databaseForName:(NSString *)databaseName;
 - (void)cancelAllOperations;
@@ -84,7 +84,7 @@ typedef enum
 + (NSString *)escapeSlashesForString:(NSString *)string;
 
 + (NSArray *)sortKeys:(NSArray *)keys withJsonKeySortOrder:(MODJsonKeySortOrder)jsonKeySortOrder;
-+ (NSString *)convertObjectToJson:(MODSortedMutableDictionary *)object pretty:(BOOL)pretty strictJson:(BOOL)strictJson jsonKeySortOrder:(MODJsonKeySortOrder)jsonKeySortOrder;
++ (NSString *)convertObjectToJson:(MODSortedDictionary *)object pretty:(BOOL)pretty strictJson:(BOOL)strictJson jsonKeySortOrder:(MODJsonKeySortOrder)jsonKeySortOrder;
 + (BOOL)isEqualWithJson:(NSString *)json toBsonData:(NSData *)document info:(NSDictionary **)info;
 + (BOOL)isEqualWithJson:(NSString *)json toDocument:(id)document info:(NSDictionary **)info;
 + (NSArray *)findAllDifferencesInObject1:(id)object1 object2:(id)object2;

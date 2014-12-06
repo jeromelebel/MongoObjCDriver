@@ -24,7 +24,7 @@
 + (NSError *)errorWithErrorDomain:(NSString *)errorDomain code:(NSInteger)code descriptionDetails:(NSString *)descriptionDetails;
 + (NSError *)errorFromBsonError:(bson_error_t)error;
 //+ (NSError *)errorFromMongo:(mongoc_client_t *)mongo;
-+ (MODSortedMutableDictionary *)objectFromBson:(const bson_t *)bsonObject;
-+ (void)appendObject:(MODSortedMutableDictionary *)object toBson:(bson_t *)bson;
++ (MODSortedDictionary *)objectFromBson:(const bson_t *)bsonObject;
++ (void)appendObject:(MODSortedDictionary *)object toBson:(bson_t *)bson;
 
 @end

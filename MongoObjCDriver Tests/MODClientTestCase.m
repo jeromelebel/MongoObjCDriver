@@ -38,10 +38,10 @@
     XCTAssertNil(mongoQuery.error, @"error with %@", mongoQuery.name);
 }
 
-- (MODSortedMutableDictionary *)obj:(NSString *)json
+- (MODSortedDictionary *)obj:(NSString *)json
 {
     NSError *error;
-    MODSortedMutableDictionary *result;
+    MODSortedDictionary *result;
     
     result = [MODRagelJsonParser objectsFromJson:json withError:&error];
     XCTAssertNil(error, @"should have no error for %@", json);
@@ -61,7 +61,7 @@
         NSLog(@"Can't parse uri %@", uri);
         assert(false);
     }
-    [self.client serverStatusWithReadPreferences:nil callback:^(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery) {
+    [self.client serverStatusWithReadPreferences:nil callback:^(MODSortedDictionary *serverStatus, MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
     [self.client databaseNamesWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
@@ -93,7 +93,7 @@
     MODCursor *cursor;
     
     mongoDatabase = [self.client databaseForName:DATABASE_NAME_TEST1];
-    [mongoDatabase statsWithReadPreferences:nil callback:^(MODSortedMutableDictionary *stats, MODQuery *mongoQuery) {
+    [mongoDatabase statsWithReadPreferences:nil callback:^(MODSortedDictionary *stats, MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
     }];
     [self.client databaseNamesWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
@@ -156,7 +156,7 @@
         [self logMongoQuery:mongoQuery];
     }];
     cursor = [mongoCollection cursorWithCriteria:nil fields:nil skip:0 limit:0 sort:nil];
-    [cursor forEachDocumentWithCallbackDocumentCallback:^(uint64_t index, MODSortedMutableDictionary *document) {
+    [cursor forEachDocumentWithCallbackDocumentCallback:^(uint64_t index, MODSortedDictionary *document) {
         return YES;
     } endCallback:^(uint64_t count, BOOL stopped, MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];

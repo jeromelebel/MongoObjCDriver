@@ -38,7 +38,7 @@
     [super dealloc];
 }
 
-- (void)insert:(MODSortedMutableDictionary *)document
+- (void)insert:(MODSortedDictionary *)document
 {
     bson_t bson = BSON_INITIALIZER;
     
@@ -57,7 +57,7 @@
     [self.client mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
 }
 
-- (MODQuery *)executeWithCallback:(void (^)(MODQuery *mongoQuery, MODSortedMutableDictionary *result))callback
+- (MODQuery *)executeWithCallback:(void (^)(MODQuery *mongoQuery, MODSortedDictionary *result))callback
 {
     MODQuery *query;
     
@@ -65,7 +65,7 @@
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         bson_t reply = BSON_INITIALIZER;
         bson_error_t bsonError = BSON_NO_ERROR;
-        MODSortedMutableDictionary *result = nil;
+        MODSortedDictionary *result = nil;
         
         if (!mongoQuery.isCanceled) {
             mongoc_bulk_operation_execute(_mongocBulkOperation, &reply, &bsonError);

@@ -9,7 +9,7 @@
 //
 
 #import "MODRagelJsonParser.h"
-#import "MODSortedMutableDictionary.h"
+#import "MODSortedDictionary.h"
 #import "MODMaxKey.h"
 #import "MODMinKey.h"
 #import "MODUndefined.h"
@@ -35,9 +35,9 @@
     id object = [self objectsFromJson:json withError:&error];
     
     if (object && !error && [object isKindOfClass:NSArray.class]) {
-        object = [MODSortedMutableDictionary sortedDictionaryWithObject:object forKey:@"array"];
+        object = [MODSortedDictionary sortedDictionaryWithObject:object forKey:@"array"];
     }
-    if (object && !error && [object isKindOfClass:MODSortedMutableDictionary.class]) {
+    if (object && !error && [object isKindOfClass:MODSortedDictionary.class]) {
         [MODClient appendObject:object toBson:bsonResult];
     }
     if (outputError) {
@@ -902,16 +902,17 @@ static const int JSON_object_en_main = 1;
 #line 399 "/Users/jerome/Sources/MongoHub-Mac/Libraries/MongoObjCDriver/Sources/MODRagelJsonParser.rl"
 
 
-- (const char *)_parseObjectWithPointer:(const char *)p endPointer:(const char *)pe result:(MODSortedMutableDictionary **)result
+- (const char *)_parseObjectWithPointer:(const char *)p endPointer:(const char *)pe result:(MODSortedDictionary **)result
 {
     int cs = 0;
     NSString *lastName;
+    MODSortedMutableDictionary *dictionary;
     
     if (_maxNesting && _currentNesting > _maxNesting) {
         [self _makeErrorWithMessage:[NSString stringWithFormat:@"nesting of %d is too deep", _currentNesting] atPosition:p];
     }
     
-    *result = [[MODSortedMutableDictionary alloc] init];
+    dictionary = [MODSortedMutableDictionary sortedDictionary];
     
     
 #line 918 "/Users/jerome/Sources/MongoHub-Mac/Libraries/MongoObjCDriver/Sources/MODRagelJsonParser.m"
@@ -1003,7 +1004,7 @@ _match:
         if (np == NULL) {
             p--; {p++; goto _out; }
         } else {
-            [*result setObject:value forKey:lastName];
+            [dictionary setObject:value forKey:lastName];
             {p = (( np))-1;}
         }
     }
@@ -1040,18 +1041,16 @@ _again:
 #line 414 "/Users/jerome/Sources/MongoHub-Mac/Libraries/MongoObjCDriver/Sources/MODRagelJsonParser.rl"
     
     if (cs >= JSON_object_first_final) {
-        MODSortedMutableDictionary *tengen;
+        MODSortedDictionary *tengen;
         
-        tengen = [*result tengenJsonEncodedObject];
+        tengen = [dictionary tengenJsonEncodedObject];
         if (tengen) {
-            [*result release];
             *result = tengen;
         } else {
-            [*result autorelease];
+            *result = dictionary;
         }
         return p + 1;
     } else {
-        [*result release];
         *result = nil;
         return NULL;
     }
@@ -1953,7 +1952,7 @@ static const int JSON_scopefunction_en_main = 1;
 - (const char *)_parseScopeFunctionWithPointer:(const char *)p endPointer:(const char *)pe result:(MODScopeFunction **)result
 {
     NSString *codeStringValue = nil;
-    MODSortedMutableDictionary *scopeValue = nil;
+    MODSortedDictionary *scopeValue = nil;
     int cs = 0;
 
     

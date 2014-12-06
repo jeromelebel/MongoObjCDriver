@@ -59,7 +59,7 @@ static void getValuesAndKeys(id firstObject, va_list ap, NSMutableDictionary *va
     va_list(ap);
     NSMutableDictionary *values = [NSMutableDictionary dictionary];
     NSMutableArray *keys = [NSMutableArray array];
-    MODSortedMutableDictionary *result;
+    MODSortedDictionary *result;
     
     va_start(ap, firstObject);
     getValuesAndKeys(firstObject, ap, values, keys);
@@ -154,8 +154,15 @@ static void getValuesAndKeys(id firstObject, va_list ap, NSMutableDictionary *va
 
 - (BOOL)isEqual:(id)object
 {
-    if ([object isKindOfClass:[self class]]) {
-        return [self.content isEqual:[object content]] && [self.sortedKeys isEqual:[object sortedKeys]];
+    if ([object isKindOfClass:[MODSortedDictionary class]]) {
+        // the content and sortedKeys of MODSortedDictionary (non-mutable one) with no data are set to nil
+        if (self.count == 0 && [object count] == 0) {
+            return YES;
+        } else if (self.count != [object count]) {
+            return NO;
+        } else {
+            return [self.content isEqual:[object content]] && [self.sortedKeys isEqual:[object sortedKeys]];
+        }
     }
     return NO;
 }
@@ -176,8 +183,12 @@ static void getValuesAndKeys(id firstObject, va_list ap, NSMutableDictionary *va
     NSString *result;
     
     hack = [[NSMutableDictionary alloc] init];
-    [hack addEntriesFromDictionary:_content];
-    [hack setObject:_sortedKeys forKey:@"__sorted_keys__"];
+    if (self.content) {
+        [hack addEntriesFromDictionary:self.content];
+        [hack setObject:self.sortedKeys forKey:@"__sorted_keys__"];
+    } else {
+        [hack setObject:@[] forKey:@"__sorted_keys__"];
+    }
     result = [[hack description] retain];
     [hack release];
     return [result autorelease];
@@ -209,7 +220,7 @@ static void getValuesAndKeys(id firstObject, va_list ap, NSMutableDictionary *va
         result = [[MODMaxKey alloc] init];
     } else if (self.count == 1 && [[self objectForKey:@"$function"] isKindOfClass:NSString.class]) {
         result = [[MODFunction alloc] initWithFunction:[self objectForKey:@"$function"]];
-    } else if (self.count == 2 && [[self objectForKey:@"$function"] isKindOfClass:NSString.class] && [[self objectForKey:@"$scope"] isKindOfClass:MODSortedMutableDictionary.class]) {
+    } else if (self.count == 2 && [[self objectForKey:@"$function"] isKindOfClass:NSString.class] && [[self objectForKey:@"$scope"] isKindOfClass:MODSortedDictionary.class]) {
         if ([[self objectForKey:@"$scope"] count] == 0) {
             result = [[MODFunction alloc] initWithFunction:[self objectForKey:@"$function"]];
         } else {

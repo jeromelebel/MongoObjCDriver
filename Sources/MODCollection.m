@@ -13,7 +13,7 @@
 @property (nonatomic, strong, readwrite) NSString *absoluteName;
 @property (nonatomic, assign, readwrite) BOOL dropped;
 
-- (bool)_commandSimpleWithCommand:(MODSortedMutableDictionary *)command readPreferences:(MODReadPreferences *)readPreferences reply:(MODSortedMutableDictionary **)reply error:(NSError **)error;
+- (bool)_commandSimpleWithCommand:(MODSortedDictionary *)command readPreferences:(MODReadPreferences *)readPreferences reply:(MODSortedDictionary **)reply error:(NSError **)error;
 
 @end
 
@@ -150,12 +150,12 @@
     return query;
 }
 
-- (MODQuery *)statsWithCallback:(void (^)(MODSortedMutableDictionary *stats, MODQuery *mongoQuery))callback
+- (MODQuery *)statsWithCallback:(void (^)(MODSortedDictionary *stats, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
-        MODSortedMutableDictionary *stats = nil;
+        MODSortedDictionary *stats = nil;
         bson_error_t error = BSON_NO_ERROR;
         
         if (!mongoQuery.isCanceled) {
@@ -175,11 +175,11 @@
     return query;
 }
 
-- (MODQuery *)findWithCriteria:(MODSortedMutableDictionary *)criteria
-                        fields:(MODSortedMutableDictionary *)fields
+- (MODQuery *)findWithCriteria:(MODSortedDictionary *)criteria
+                        fields:(MODSortedDictionary *)fields
                           skip:(int32_t)skip
                          limit:(int32_t)limit
-                          sort:(MODSortedMutableDictionary *)sort
+                          sort:(MODSortedDictionary *)sort
                       callback:(void (^)(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
@@ -192,7 +192,7 @@
         if (!mongoQuery.isCanceled) {
             NSData *bsonData;
             MODCursor *cursor;
-            MODSortedMutableDictionary *document;
+            MODSortedDictionary *document;
             
             documents = [[NSMutableArray alloc] initWithCapacity:limit];
             allBsonData = [[NSMutableArray alloc] initWithCapacity:limit];
@@ -213,11 +213,11 @@
     return query;
 }
 
-- (MODCursor *)cursorWithCriteria:(MODSortedMutableDictionary *)query
-                           fields:(MODSortedMutableDictionary *)fields
+- (MODCursor *)cursorWithCriteria:(MODSortedDictionary *)query
+                           fields:(MODSortedDictionary *)fields
                              skip:(int32_t)skip
                             limit:(int32_t)limit
-                             sort:(MODSortedMutableDictionary *)sort
+                             sort:(MODSortedDictionary *)sort
 {
     return [[[MODCursor alloc] initWithCollection:self
                                             query:query
@@ -227,7 +227,7 @@
                                              sort:sort] autorelease];
 }
 
-- (MODQuery *)countWithCriteria:(MODSortedMutableDictionary *)criteria readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback
+- (MODQuery *)countWithCriteria:(MODSortedDictionary *)criteria readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -294,7 +294,7 @@
                         error = [NSError errorWithDomain:error.domain code:error.code userInfo:userInfo];
                         [userInfo release];
                     }
-                } else if ([document isKindOfClass:[MODSortedMutableDictionary class]]) {
+                } else if ([document isKindOfClass:[MODSortedDictionary class]]) {
                     [[self.client class] appendObject:document toBson:&bson];
                 }
                 if (error) {
@@ -333,8 +333,8 @@
     return query;
 }
 
-- (MODQuery *)updateWithCriteria:(MODSortedMutableDictionary *)criteria
-                          update:(MODSortedMutableDictionary *)update
+- (MODQuery *)updateWithCriteria:(MODSortedDictionary *)criteria
+                          update:(MODSortedDictionary *)update
                           upsert:(BOOL)upsert
                      multiUpdate:(BOOL)multiUpdate
                     writeConcern:(MODWriteConcern *)writeConcern
@@ -377,7 +377,7 @@
     return query;
 }
 
-- (MODQuery *)saveWithDocument:(MODSortedMutableDictionary *)document callback:(void (^)(MODQuery *mongoQuery))callback
+- (MODQuery *)saveWithDocument:(MODSortedDictionary *)document callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     
@@ -420,7 +420,7 @@
                 if ([criteria length] > 0) {
                     [MODRagelJsonParser bsonFromJson:&bsonCriteria json:criteria error:&error];
                 }
-            } else if ([criteria isKindOfClass:[MODSortedMutableDictionary class]]) {
+            } else if ([criteria isKindOfClass:[MODSortedDictionary class]]) {
                 [[self.client class] appendObject:criteria toBson:&bsonCriteria];
             } else {
                 error = [self.client.class errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
@@ -449,9 +449,9 @@
 - (MODQuery *)indexListWithCallback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
-    MODSortedMutableDictionary *dictionary;
+    MODSortedDictionary *dictionary;
     
-    dictionary = [[MODSortedMutableDictionary alloc] initWithObjectsAndKeys:self.absoluteName, @"ns", nil];
+    dictionary = [[MODSortedDictionary alloc] initWithObjectsAndKeys:self.absoluteName, @"ns", nil];
     query = [self.database.systemIndexesCollection findWithCriteria:dictionary
                                                              fields:nil
                                                                skip:0
@@ -525,8 +525,8 @@
 }
 
 - (MODQuery *)aggregateWithFlags:(int)flags
-                        pipeline:(MODSortedMutableDictionary *)pipeline
-                         options:(MODSortedMutableDictionary *)options
+                        pipeline:(MODSortedDictionary *)pipeline
+                         options:(MODSortedDictionary *)options
                  readPreferences:(MODReadPreferences *)readPreferences
                         callback:(void (^)(MODQuery *mongoQuery, MODCursor *cursor))callback
 {
@@ -556,7 +556,7 @@
     return query;
 }
 
-- (bool)_commandSimpleWithCommand:(MODSortedMutableDictionary *)command readPreferences:(MODReadPreferences *)readPreferences reply:(MODSortedMutableDictionary **)reply error:(NSError **)error
+- (bool)_commandSimpleWithCommand:(MODSortedDictionary *)command readPreferences:(MODReadPreferences *)readPreferences reply:(MODSortedDictionary **)reply error:(NSError **)error
 {
     bson_t bsonCommand = BSON_INITIALIZER;
     bson_t bsonReply = BSON_INITIALIZER;
@@ -570,12 +570,12 @@
     return result;
 }
 
-- (MODQuery *)commandSimpleWithCommand:(MODSortedMutableDictionary *)command readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODQuery *query, MODSortedMutableDictionary *reply))callback
+- (MODQuery *)commandSimpleWithCommand:(MODSortedDictionary *)command readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODQuery *query, MODSortedDictionary *reply))callback
 {
     MODQuery *mongoQuery = nil;
     
     mongoQuery = [self.client addQueryInQueue:^(MODQuery *currentMongoQuery) {
-        MODSortedMutableDictionary *reply = nil;
+        MODSortedDictionary *reply = nil;
         NSError *error = nil;
         
         if (!currentMongoQuery.isCanceled) {
@@ -592,23 +592,23 @@
 
 - (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction
                         reduceFunction:(NSString *)reduceFunction
-                                 query:(MODSortedMutableDictionary *)query
-                                  sort:(MODSortedMutableDictionary *)sort
+                                 query:(MODSortedDictionary *)query
+                                  sort:(MODSortedDictionary *)sort
                                  limit:(int64_t)limit
-                                output:(MODSortedMutableDictionary *)output
+                                output:(MODSortedDictionary *)output
                               keepTemp:(BOOL)keepTemp
                       finalizeFunction:(NSString *)finalizeFunction
-                                 scope:(MODSortedMutableDictionary *)scope
+                                 scope:(MODSortedDictionary *)scope
                                 jsmode:(BOOL)jsmode
                                verbose:(BOOL)verbose
                        readPreferences:(MODReadPreferences *)readPreferences
-                              callback:(void (^)(MODQuery *mongoQuery, MODSortedMutableDictionary *documents))callback
+                              callback:(void (^)(MODQuery *mongoQuery, MODSortedDictionary *documents))callback
 {
     MODQuery *mongoQuery = nil;
     
     mongoQuery = [self.client addQueryInQueue:^(MODQuery *currentMongoQuery) {
         NSError *error = nil;
-        MODSortedMutableDictionary *reply = nil;
+        MODSortedDictionary *reply = nil;
         
         if (!currentMongoQuery.isCanceled) {
             MODSortedMutableDictionary *command;

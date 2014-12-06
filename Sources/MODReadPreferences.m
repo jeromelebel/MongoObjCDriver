@@ -10,7 +10,7 @@
 
 @interface MODReadPreferences ()
 @property (nonatomic, assign, readwrite) MODReadPreferencesReadMode readMode;
-@property (nonatomic, assign, readwrite) MODSortedMutableDictionary *tags;
+@property (nonatomic, assign, readwrite) MODSortedDictionary *tags;
 
 @end
 
@@ -23,7 +23,7 @@
     return [self readPreferencesWithReadMode:readMode tags:nil];
 }
 
-+ (MODReadPreferences *)readPreferencesWithReadMode:(MODReadPreferencesReadMode)readMode tags:(MODSortedMutableDictionary *)tags
++ (MODReadPreferences *)readPreferencesWithReadMode:(MODReadPreferencesReadMode)readMode tags:(MODSortedDictionary *)tags
 {
     MODReadPreferences *readPreferences;
     
@@ -57,7 +57,7 @@
     return self;
 }
 
-- (instancetype)initWithReadMode:(MODReadPreferencesReadMode)readMode tags:(MODSortedMutableDictionary *)tags
+- (instancetype)initWithReadMode:(MODReadPreferencesReadMode)readMode tags:(MODSortedDictionary *)tags
 {
     self = [self init];
     if (self) {
@@ -83,7 +83,7 @@
     mongoc_read_prefs_set_mode(self.mongocReadPreferences, (mongoc_read_mode_t)readMode);
 }
 
-- (MODSortedMutableDictionary *)tags
+- (MODSortedDictionary *)tags
 {
     const bson_t *tags;
     
@@ -91,7 +91,7 @@
     return [self.class objectFromBson:tags];
 }
 
-- (void)setTags:(MODSortedMutableDictionary *)tags
+- (void)setTags:(MODSortedDictionary *)tags
 {
     if (!tags) {
         mongoc_read_prefs_set_tags(self.mongocReadPreferences, NULL);

@@ -8,18 +8,18 @@
 
 #import <Foundation/Foundation.h>
 
-@class MODSortedMutableDictionary;
+@class MODSortedDictionary;
 
 @interface MODScopeFunction : NSObject
 {
     NSString *_function;
-    MODSortedMutableDictionary *_scope;
+    MODSortedDictionary *_scope;
 }
 
-- (instancetype)initWithFunction:(NSString *)function scope:(MODSortedMutableDictionary *)scope;
+- (instancetype)initWithFunction:(NSString *)function scope:(MODSortedDictionary *)scope;
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON jsonKeySortOrder:(MODJsonKeySortOrder)jsonKeySortOrder;
 
 @property (nonatomic, retain, readwrite) NSString *function;
-@property (nonatomic, retain, readwrite) MODSortedMutableDictionary *scope;
+@property (nonatomic, retain, readwrite) MODSortedDictionary *scope;
 
 @end

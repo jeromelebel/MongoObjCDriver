@@ -25,6 +25,6 @@
 @property (nonatomic, readonly, assign) MODClient *client;
 
 - (instancetype)initWithCollection:(MODCollection *)collection ordered:(BOOL)ordered writeConcern:(MODWriteConcern *)writeConcern;
-- (void)insert:(MODSortedMutableDictionary *)document;
+- (void)insert:(MODSortedDictionary *)document;
 
 @end

@@ -376,7 +376,7 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
                 NSString *function;
                 const uint8_t *scopeData = NULL;
                 uint32_t scopeDataLength;
-                MODSortedMutableDictionary *scope = nil;
+                MODSortedDictionary *scope = nil;
                 bson_t scopeBson;
                 
                 function = [[NSString alloc] initWithUTF8String:bson_iter_codewscope(iterator, NULL, &scopeDataLength, &scopeData)];
@@ -411,12 +411,12 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
     return result;
 }
 
-+ (MODSortedMutableDictionary *)objectFromBson:(const bson_t *)bsonObject
++ (MODSortedDictionary *)objectFromBson:(const bson_t *)bsonObject
 {
     MODSortedMutableDictionary *result = nil;
     bson_iter_t iterator;
     
-    result = [[MODSortedMutableDictionary alloc] init];
+    result = [MODSortedMutableDictionary sortedDictionary];
     bson_iter_init(&iterator, bsonObject);
     while (bson_iter_next(&iterator)) {
         NSString *key;
@@ -433,7 +433,7 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
             [result setObject:value forKey:key];
         }
     }
-    return [result autorelease];
+    return result;
 }
 
 + (void)appendValue:(id)value key:(NSString *)key toBson:(bson_t *)bson
@@ -449,7 +449,7 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
         const char *cStringValue = [value UTF8String];
         
         bson_append_utf8(bson, keyString, strlen(keyString), cStringValue, strlen(cStringValue));
-    } else if ([value isKindOfClass:[MODSortedMutableDictionary class]]) {
+    } else if ([value isKindOfClass:[MODSortedDictionary class]]) {
         bson_t childBson = BSON_INITIALIZER;
         
         bson_append_document_begin(bson, keyString, strlen(keyString), &childBson);
@@ -522,7 +522,7 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
     }
 }
 
-+ (void)appendObject:(MODSortedMutableDictionary *)object toBson:(bson_t *)bson
++ (void)appendObject:(MODSortedDictionary *)object toBson:(bson_t *)bson
 {
     NSParameterAssert(object != NULL);
     NSParameterAssert(bson != NULL);
@@ -547,7 +547,7 @@ static void addIdent(NSMutableString *result, int indent)
     }
 }
 
-static void convertDictionaryToJson(NSMutableString *result, int indent, MODSortedMutableDictionary *value, BOOL pretty, BOOL useStrictJSON, MODJsonKeySortOrder jsonKeySortOrder)
+static void convertDictionaryToJson(NSMutableString *result, int indent, MODSortedDictionary *value, BOOL pretty, BOOL useStrictJSON, MODJsonKeySortOrder jsonKeySortOrder)
 {
     BOOL first = YES;
     NSArray *keys;
@@ -633,7 +633,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         }
     } else if ([value isKindOfClass:[NSNull class]]) {
         [result appendString:@"null"];
-    } else if ([value isKindOfClass:[MODSortedMutableDictionary class]]) {
+    } else if ([value isKindOfClass:[MODSortedDictionary class]]) {
         convertDictionaryToJson(result, indent, value, pretty, useStrictJSON, jsonKeySortOrder);
     } else if ([value isKindOfClass:[NSArray class]]) {
         convertArrayToJson(result, indent, value, pretty, useStrictJSON, jsonKeySortOrder);
@@ -712,7 +712,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     return sortedKeys;
 }
 
-+ (NSString *)convertObjectToJson:(MODSortedMutableDictionary *)object pretty:(BOOL)pretty strictJson:(BOOL)strictJson jsonKeySortOrder:(MODJsonKeySortOrder)jsonKeySortOrder
++ (NSString *)convertObjectToJson:(MODSortedDictionary *)object pretty:(BOOL)pretty strictJson:(BOOL)strictJson jsonKeySortOrder:(MODJsonKeySortOrder)jsonKeySortOrder
 {
     NSMutableString *result;
     
@@ -858,7 +858,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
     return result;
 }
 
-+ (NSArray *)findAllDifferencesInSortedDictionary1:(MODSortedMutableDictionary *)dictionary1 sortedDictionary2:(MODSortedMutableDictionary *)dictionary2
++ (NSArray *)findAllDifferencesInSortedDictionary1:(MODSortedDictionary *)dictionary1 sortedDictionary2:(MODSortedDictionary *)dictionary2
 {
     NSMutableArray *result = NSMutableArray.array;
     
@@ -885,7 +885,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
 {
     if ([object1 isKindOfClass:NSArray.class] && [object2 isKindOfClass:NSArray.class]) {
         return [self findAllDifferencesInArray1:object1 array2:object2];
-    } else if ([object1 isKindOfClass:MODSortedMutableDictionary.class] && [object2 isKindOfClass:MODSortedMutableDictionary.class]) {
+    } else if ([object1 isKindOfClass:MODSortedDictionary.class] && [object2 isKindOfClass:MODSortedDictionary.class]) {
         return [self findAllDifferencesInSortedDictionary1:object1 sortedDictionary2:object2];
     } else if ([object1 isEqual:object2]) {
         return nil;

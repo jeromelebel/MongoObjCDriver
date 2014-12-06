@@ -10,12 +10,12 @@
 @interface MODCursor ()
 
 @property (nonatomic, strong, readwrite) MODCollection *collection;
-@property (nonatomic, strong, readwrite) MODSortedMutableDictionary *query;
-@property (nonatomic, strong, readwrite) MODSortedMutableDictionary *fields;
+@property (nonatomic, strong, readwrite) MODSortedDictionary *query;
+@property (nonatomic, strong, readwrite) MODSortedDictionary *fields;
 @property (nonatomic, assign, readwrite) uint32_t skip;
 @property (nonatomic, assign, readwrite) uint32_t limit;
 @property (nonatomic, assign, readwrite) uint32_t batchSize;
-@property (nonatomic, strong, readwrite) MODSortedMutableDictionary * sort;
+@property (nonatomic, strong, readwrite) MODSortedDictionary * sort;
 @property (nonatomic, assign, readwrite) mongoc_cursor_t *mongocCursor;
 @property (nonatomic, strong, readwrite) NSError *internalError;
 
@@ -53,11 +53,11 @@
 }
 
 - (instancetype)initWithCollection:(MODCollection *)collection
-                             query:(MODSortedMutableDictionary *)query
-                            fields:(MODSortedMutableDictionary *)fields
+                             query:(MODSortedDictionary *)query
+                            fields:(MODSortedDictionary *)fields
                               skip:(uint32_t)skip
                              limit:(uint32_t)limit
-                              sort:(MODSortedMutableDictionary *)sort
+                              sort:(MODSortedDictionary *)sort
 {
     if (self = [self initWithCollection:collection]) {
         self.query = query;
@@ -124,9 +124,9 @@
     bson_destroy(&bsonFields);
 }
 
-- (MODSortedMutableDictionary *)nextDocumentWithBsonData:(NSData **)bsonData error:(NSError **)error;
+- (MODSortedDictionary *)nextDocumentWithBsonData:(NSData **)bsonData error:(NSError **)error;
 {
-    MODSortedMutableDictionary *result = nil;
+    MODSortedDictionary *result = nil;
     
     NSAssert(error != NULL, @"please give a pointer to get the error back");
     *error = nil;
@@ -172,7 +172,7 @@
 }
 
 
-- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, MODSortedMutableDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback
+- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, MODSortedDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback
 {
     MODQuery *query = nil;
     
@@ -182,7 +182,7 @@
         NSError *error = nil;
         
         if (!mongoQuery.isCanceled) {
-            MODSortedMutableDictionary *document;
+            MODSortedDictionary *document;
             
             while (!cursorStopped) {
                 documentCount++;

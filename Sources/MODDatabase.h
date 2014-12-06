@@ -11,7 +11,7 @@
 @class MODDatabase;
 @class MODCollection;
 @class MODQuery;
-@class MODSortedMutableDictionary;
+@class MODSortedDictionary;
 
 #define MODDatabase_Dropped_Notification        @"MODDatabase_Dropped_Notification"
 
@@ -30,7 +30,7 @@
 @property (nonatomic, strong, readwrite) MODReadPreferences *readPreferences;
 @property (nonatomic, assign, readonly) BOOL dropped;
 
-- (MODQuery *)statsWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedMutableDictionary *databaseStats, MODQuery *mongoQuery))callback;
+- (MODQuery *)statsWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedDictionary *databaseStats, MODQuery *mongoQuery))callback;
 - (MODQuery *)collectionNamesWithCallback:(void (^)(NSArray *collectionList, MODQuery *mongoQuery))callback;
 
 - (MODQuery *)createCollectionWithName:(NSString *)collectionName callback:(void (^)(MODQuery *mongoQuery))callback;

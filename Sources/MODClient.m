@@ -211,14 +211,14 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
     [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:callbackBlock];
 }
 
-- (MODQuery *)serverStatusWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedMutableDictionary *serverStatus, MODQuery *mongoQuery))callback
+- (MODQuery *)serverStatusWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedDictionary *serverStatus, MODQuery *mongoQuery))callback
 {
     MODQuery *query;
     
     query = [self addQueryInQueue:^(MODQuery *mongoQuery){
         bson_t output = BSON_INITIALIZER;
         bson_error_t error = BSON_NO_ERROR;
-        MODSortedMutableDictionary *outputObjects = nil;
+        MODSortedDictionary *outputObjects = nil;
         
         if (!mongoQuery.isCanceled) {
             mongoc_client_get_server_status(self.mongocClient, readPreferences?readPreferences.mongocReadPreferences:NULL, &output, &error);

@@ -7,11 +7,11 @@
 //
 
 #import "MODDocumentComparator.h"
-#import "MODSortedMutableDictionary.h"
+#import "MODSortedDictionary.h"
 
 @interface MODDocumentComparator ()
-@property (nonatomic, readwrite, strong) MODSortedMutableDictionary *document1;
-@property (nonatomic, readwrite, strong) MODSortedMutableDictionary *document2;
+@property (nonatomic, readwrite, strong) MODSortedDictionary *document1;
+@property (nonatomic, readwrite, strong) MODSortedDictionary *document2;
 @property (nonatomic, readwrite, strong) NSMutableArray *differences;
 
 @end
@@ -22,7 +22,7 @@
 @synthesize document2 = _document2;
 @synthesize differences = _differences;
 
-- (instancetype)initWithDocument1:(MODSortedMutableDictionary *)document1 document2:(MODSortedMutableDictionary *)document2
+- (instancetype)initWithDocument1:(MODSortedDictionary *)document1 document2:(MODSortedDictionary *)document2
 {
     self = [self init];
     if (self) {
@@ -48,7 +48,7 @@
     if (![value1 isMemberOfClass:[value2 class]]) {
         [(NSMutableArray *)self.differences addObject:prefix];
         result = NO;
-    } else if ([value1 isKindOfClass:MODSortedMutableDictionary.class]) {
+    } else if ([value1 isKindOfClass:MODSortedDictionary.class]) {
         result = [self compareObject1:value1 withObject2:value2 prefix:prefix];
     } else if ([value1 isKindOfClass:NSArray.class]) {
         result = [self compareArray1:value1 withArray2:value2 prefix:prefix];
@@ -59,7 +59,7 @@
     return result;
 }
 
-- (BOOL)compareObject1:(MODSortedMutableDictionary *)object1 withObject2:(MODSortedMutableDictionary *)object2 prefix:(NSString *)prefix
+- (BOOL)compareObject1:(MODSortedDictionary *)object1 withObject2:(MODSortedDictionary *)object2 prefix:(NSString *)prefix
 {
     BOOL stillContinue = YES;
     BOOL result = YES;

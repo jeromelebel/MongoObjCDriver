@@ -8,20 +8,20 @@
 
 #import <Foundation/Foundation.h>
 
-@class MODSortedMutableDictionary;
+@class MODSortedDictionary;
 
 @interface MODDocumentComparator : NSObject
 {
-    MODSortedMutableDictionary            *_document1;
-    MODSortedMutableDictionary            *_document2;
+    MODSortedDictionary            *_document1;
+    MODSortedDictionary            *_document2;
     NSArray                                 *_differences;
 }
 
-@property (nonatomic, readonly, strong) MODSortedMutableDictionary *document1;
-@property (nonatomic, readonly, strong) MODSortedMutableDictionary *document2;
+@property (nonatomic, readonly, strong) MODSortedDictionary *document1;
+@property (nonatomic, readonly, strong) MODSortedDictionary *document2;
 @property (nonatomic, readonly, strong) NSArray *differences;
 
-- (instancetype)initWithDocument1:(MODSortedMutableDictionary *)document1 document2:(MODSortedMutableDictionary *)document2;
+- (instancetype)initWithDocument1:(MODSortedDictionary *)document1 document2:(MODSortedDictionary *)document2;
 - (BOOL)compare;
 
 @end

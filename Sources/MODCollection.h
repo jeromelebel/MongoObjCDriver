@@ -11,7 +11,7 @@
 @class MODCollection;
 @class MODQuery;
 @class MODCursor;
-@class MODSortedMutableDictionary;
+@class MODSortedDictionary;
 @class MODWriteConcern;
 
 enum MOD_INDEX_OPTIONS {
@@ -40,30 +40,30 @@ enum MOD_INDEX_OPTIONS {
 @property (nonatomic, strong, readwrite) MODReadPreferences *readPreferences;
 @property (nonatomic, assign, readonly) BOOL dropped;
 
-- (MODQuery *)commandSimpleWithCommand:(MODSortedMutableDictionary *)command readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODQuery *query, MODSortedMutableDictionary *reply))callback;
+- (MODQuery *)commandSimpleWithCommand:(MODSortedDictionary *)command readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODQuery *query, MODSortedDictionary *reply))callback;
 - (MODQuery *)renameWithNewDatabase:(MODDatabase *)newDatabase newCollectionName:(NSString *)newCollectionName dropTargetBeforeRenaming:(BOOL)dropTargetBeforeRenaming callback:(void (^)(MODQuery *mongoQuery))callback;
-- (MODQuery *)statsWithCallback:(void (^)(MODSortedMutableDictionary *stats, MODQuery *mongoQuery))callback;
-- (MODCursor *)cursorWithCriteria:(MODSortedMutableDictionary *)jsonCriteria
-                           fields:(MODSortedMutableDictionary *)fields
+- (MODQuery *)statsWithCallback:(void (^)(MODSortedDictionary *stats, MODQuery *mongoQuery))callback;
+- (MODCursor *)cursorWithCriteria:(MODSortedDictionary *)jsonCriteria
+                           fields:(MODSortedDictionary *)fields
                              skip:(int32_t)skip
                             limit:(int32_t)limit
-                             sort:(MODSortedMutableDictionary *)sort;
-- (MODQuery *)findWithCriteria:(MODSortedMutableDictionary *)criteria
-                        fields:(MODSortedMutableDictionary *)fields
+                             sort:(MODSortedDictionary *)sort;
+- (MODQuery *)findWithCriteria:(MODSortedDictionary *)criteria
+                        fields:(MODSortedDictionary *)fields
                           skip:(int32_t)skip
                          limit:(int32_t)limit
-                          sort:(MODSortedMutableDictionary *)sort
+                          sort:(MODSortedDictionary *)sort
                       callback:(void (^)(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery))callback;
-- (MODQuery *)countWithCriteria:(MODSortedMutableDictionary *)criteria readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback;
+- (MODQuery *)countWithCriteria:(MODSortedDictionary *)criteria readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback;
 - (MODQuery *)insertWithDocuments:(NSArray *)documents
                      writeConcern:(MODWriteConcern *)writeConcern
                          callback:(void (^)(MODQuery *mongoQuery))callback;
-- (MODQuery *)updateWithCriteria:(MODSortedMutableDictionary *)criteria
-                          update:(MODSortedMutableDictionary *)update
+- (MODQuery *)updateWithCriteria:(MODSortedDictionary *)criteria
+                          update:(MODSortedDictionary *)update
                           upsert:(BOOL)upsert
                      multiUpdate:(BOOL)multiUpdate
                     writeConcern:(MODWriteConcern *)writeConcern callback:(void (^)(MODQuery *mongoQuery))callback;
-- (MODQuery *)saveWithDocument:(MODSortedMutableDictionary *)document callback:(void (^)(MODQuery *mongoQuery))callback;
+- (MODQuery *)saveWithDocument:(MODSortedDictionary *)document callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)removeWithCriteria:(id)jsonCriteria callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)dropWithCallback:(void (^)(MODQuery *mongoQuery))callback;
 
@@ -72,22 +72,22 @@ enum MOD_INDEX_OPTIONS {
 - (MODQuery *)dropIndexName:(NSString *)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback;
 
 - (MODQuery *)aggregateWithFlags:(int)flags
-                        pipeline:(MODSortedMutableDictionary *)pipeline
-                         options:(MODSortedMutableDictionary *)options
+                        pipeline:(MODSortedDictionary *)pipeline
+                         options:(MODSortedDictionary *)options
                  readPreferences:(MODReadPreferences *)readPreferences
                         callback:(void (^)(MODQuery *mongoQuery, MODCursor *cursor))callback;
 - (MODQuery *)mapReduceWithMapFunction:(NSString *)mapFunction
                         reduceFunction:(NSString *)reduceFunction
-                                 query:(MODSortedMutableDictionary *)query
-                                  sort:(MODSortedMutableDictionary *)sort
+                                 query:(MODSortedDictionary *)query
+                                  sort:(MODSortedDictionary *)sort
                                  limit:(int64_t)limit
-                                output:(MODSortedMutableDictionary *)output
+                                output:(MODSortedDictionary *)output
                               keepTemp:(BOOL)keepTemp
                       finalizeFunction:(NSString *)finalizeFunction
-                                 scope:(MODSortedMutableDictionary *)scope
+                                 scope:(MODSortedDictionary *)scope
                                 jsmode:(BOOL)jsmode
                                verbose:(BOOL)verbose
                        readPreferences:(MODReadPreferences *)readPreferences
-                              callback:(void (^)(MODQuery *mongoQuery, MODSortedMutableDictionary *documents))callback;
+                              callback:(void (^)(MODQuery *mongoQuery, MODSortedDictionary *documents))callback;
 
 @end
