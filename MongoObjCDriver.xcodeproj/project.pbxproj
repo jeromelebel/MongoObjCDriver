@@ -233,6 +233,9 @@
 		02E6401D19DC07DB00FEFEFC /* MODDocumentCompatorTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E6401C19DC07DB00FEFEFC /* MODDocumentCompatorTestCase.m */; };
 		02E6401F19DC0AA900FEFEFC /* MODBsonComparatorTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E6401E19DC0AA900FEFEFC /* MODBsonComparatorTestCase.m */; };
 		02E6402119DC146300FEFEFC /* MODClientTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E6402019DC146300FEFEFC /* MODClientTestCase.m */; };
+		02F1D7CD1A3237C2009277EE /* MODSortedDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F1D7CB1A3237C2009277EE /* MODSortedDictionary.h */; };
+		02F1D7CE1A3237C2009277EE /* MODSortedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F1D7CC1A3237C2009277EE /* MODSortedDictionary.m */; };
+		02F1D7D01A3330D2009277EE /* MODSortedDictionary-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F1D7CF1A3330D2009277EE /* MODSortedDictionary-private.h */; };
 		02F4EA7D19F1ABF500BE9695 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F4EA7C19F1ABF500BE9695 /* main.m */; };
 		02F4EA8219F1ADB400BE9695 /* MongoObjCDriver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02ABA1C014103B37000417F4 /* MongoObjCDriver.framework */; };
 		02F4EA8719F1C39B00BE9695 /* MODBulkOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F4EA8519F1C39B00BE9695 /* MODBulkOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1452,6 +1455,9 @@
 		02E6401E19DC0AA900FEFEFC /* MODBsonComparatorTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODBsonComparatorTestCase.m; sourceTree = "<group>"; };
 		02E6402019DC146300FEFEFC /* MODClientTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODClientTestCase.m; sourceTree = "<group>"; };
 		02F121BF1410EF5200197811 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		02F1D7CB1A3237C2009277EE /* MODSortedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODSortedDictionary.h; sourceTree = "<group>"; };
+		02F1D7CC1A3237C2009277EE /* MODSortedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODSortedDictionary.m; sourceTree = "<group>"; };
+		02F1D7CF1A3330D2009277EE /* MODSortedDictionary-private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MODSortedDictionary-private.h"; sourceTree = "<group>"; };
 		02F4EA7A19F1ABF400BE9695 /* test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = test; sourceTree = BUILT_PRODUCTS_DIR; };
 		02F4EA7C19F1ABF500BE9695 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		02F4EA8519F1C39B00BE9695 /* MODBulkOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODBulkOperation.h; sourceTree = "<group>"; };
@@ -2968,6 +2974,9 @@
 				027A1D9F1767E91F0048AD60 /* MODMinKey.m */,
 				027A1DA01767E91F0048AD60 /* MODUndefined.h */,
 				027A1DA11767E91F0048AD60 /* MODUndefined.m */,
+				02F1D7CB1A3237C2009277EE /* MODSortedDictionary.h */,
+				02F1D7CF1A3330D2009277EE /* MODSortedDictionary-private.h */,
+				02F1D7CC1A3237C2009277EE /* MODSortedDictionary.m */,
 				02B24271147D1BD6008A15A3 /* MODSortedMutableDictionary.h */,
 				02B24272147D1BD6008A15A3 /* MODSortedMutableDictionary.m */,
 				02DB18AD172C8C9700B26EAE /* NSString+MODBase64.h */,
@@ -3095,10 +3104,12 @@
 				02D3D3261926661200925BE7 /* mongoc-matcher-op-private.h in Headers */,
 				02D3D3271926661200925BE7 /* mongoc-matcher-private.h in Headers */,
 				02D3D3281926661200925BE7 /* mongoc-matcher.h in Headers */,
+				02F1D7D01A3330D2009277EE /* MODSortedDictionary-private.h in Headers */,
 				02D3D3291926661200925BE7 /* mongoc-opcode.h in Headers */,
 				02D3D32A1926661200925BE7 /* mongoc-queue-private.h in Headers */,
 				026B2F5319AE13B200009719 /* MODWriteConcern-private.h in Headers */,
 				02D3D32B1926661200925BE7 /* mongoc-read-prefs-private.h in Headers */,
+				02F1D7CD1A3237C2009277EE /* MODSortedDictionary.h in Headers */,
 				02D3D32C1926661200925BE7 /* mongoc-read-prefs.h in Headers */,
 				02D3D32D1926661200925BE7 /* mongoc-rpc-private.h in Headers */,
 				02D3D32E1926661200925BE7 /* mongoc-sasl-private.h in Headers */,
@@ -3300,6 +3311,7 @@
 				02CF0E28191112CB008C822A /* bson-md5.c in Sources */,
 				02CF0E20191112CB008C822A /* bcon.c in Sources */,
 				02688DE31411C5010014ED51 /* MODCollection.m in Sources */,
+				02F1D7CE1A3237C2009277EE /* MODSortedDictionary.m in Sources */,
 				026B2F4F19ADC1C300009719 /* MODWriteConcern.m in Sources */,
 				02CF0E6E19111321008C822A /* mongoc-collection.c in Sources */,
 				02A85F5A14104184004F3FE9 /* MODQuery.m in Sources */,

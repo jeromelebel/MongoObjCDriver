@@ -22,6 +22,7 @@
 #import "MODSymbol.h"
 #import "MODMinKey.h"
 #import "MODMaxKey.h"
+#import "MODSortedDictionary.h"
 #import "MODSortedMutableDictionary.h"
 #import "MODUndefined.h"
 #import "MODBsonComparator.h"
