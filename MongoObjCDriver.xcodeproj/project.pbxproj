@@ -233,7 +233,7 @@
 		02E6401D19DC07DB00FEFEFC /* MODDocumentCompatorTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E6401C19DC07DB00FEFEFC /* MODDocumentCompatorTestCase.m */; };
 		02E6401F19DC0AA900FEFEFC /* MODBsonComparatorTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E6401E19DC0AA900FEFEFC /* MODBsonComparatorTestCase.m */; };
 		02E6402119DC146300FEFEFC /* MODClientTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 02E6402019DC146300FEFEFC /* MODClientTestCase.m */; };
-		02F1D7CD1A3237C2009277EE /* MODSortedDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F1D7CB1A3237C2009277EE /* MODSortedDictionary.h */; };
+		02F1D7CD1A3237C2009277EE /* MODSortedDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F1D7CB1A3237C2009277EE /* MODSortedDictionary.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02F1D7CE1A3237C2009277EE /* MODSortedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F1D7CC1A3237C2009277EE /* MODSortedDictionary.m */; };
 		02F1D7D01A3330D2009277EE /* MODSortedDictionary-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02F1D7CF1A3330D2009277EE /* MODSortedDictionary-private.h */; };
 		02F4EA7D19F1ABF500BE9695 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 02F4EA7C19F1ABF500BE9695 /* main.m */; };
