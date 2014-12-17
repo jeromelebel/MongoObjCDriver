@@ -464,9 +464,12 @@
     return query;
 }
 
-- (MODQuery *)createIndex:(id)indexDocument name:(NSString *)name options:(enum MOD_INDEX_OPTIONS)options callback:(void (^)(MODQuery *mongoQuery))callback
+- (MODQuery *)createIndex:(id)indexDocument indexOptions:(MODIndexOpt *)indexOptions callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
+    // Just in case the index options are changed before we add the index
+    // we need to make a copy of it
+    MODIndexOpt *indexOptionsCopy = [indexOptions copy];
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
@@ -474,21 +477,14 @@
         if (!mongoQuery.isCanceled) {
             bson_t index = BSON_INITIALIZER;
             bson_error_t bsonError = BSON_NO_ERROR;
-            mongoc_index_opt_t indexOptions;
             
-            memcpy(&indexOptions, mongoc_index_opt_get_default(), sizeof(indexOptions));
-            indexOptions.background = (options & MOD_INDEX_OPTIONS_BACKGROUND) == MOD_INDEX_OPTIONS_BACKGROUND;
-            indexOptions.unique = (options & MOD_INDEX_OPTIONS_UNIQUE) == MOD_INDEX_OPTIONS_UNIQUE;
-            indexOptions.sparse = (options & MOD_INDEX_OPTIONS_SPARSE) == MOD_INDEX_OPTIONS_SPARSE;
-            indexOptions.drop_dups = (options & MOD_INDEX_OPTIONS_DROP_DUPS) == MOD_INDEX_OPTIONS_DROP_DUPS;
-            indexOptions.name = name.UTF8String;
             if ([indexDocument isKindOfClass:[NSString class]]) {
                 [MODRagelJsonParser bsonFromJson:&index json:indexDocument error:&error];
             } else {
                 [[self.client class] appendObject:indexDocument toBson:&index];
             }
             if (!error) {
-                mongoc_collection_create_index(self.mongocCollection, &index, &indexOptions, &bsonError);
+                mongoc_collection_create_index(self.mongocCollection, &index, indexOptionsCopy.mongocIndexOpt, &bsonError);
                 error = [self.client.class errorFromBsonError:bsonError];
             }
             bson_destroy(&index);
@@ -498,7 +494,7 @@
                 callback(mongoQuery);
             }
         }];
-    } owner:self name:@"createindex" parameters:@{ @"index": indexDocument, @"name": name?name:[NSNull null], @"options": [NSNumber numberWithInt:options] }];
+    } owner:self name:@"createindex" parameters:@{ @"index": indexDocument, @"options": indexOptionsCopy }];
     return query;
 }
 
