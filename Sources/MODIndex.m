@@ -136,7 +136,12 @@
 
 - (void)dealloc
 {
-    self.mongocIndexOpt = NULL;
+    self.weights = nil;
+    self.name = nil;
+    self.defaultLanguage = nil;
+    self.geoOptions = nil;
+    self.languageOverride = nil;
+    free(_mongocIndexOpt);
     [super dealloc];
 }
 
@@ -149,11 +154,12 @@
 {
     NSParameterAssert(mongocIndexOpt);
     NSAssert(_mongocIndexOpt, @"need to have a pointer to _mongocIndexOpt");
-    if (((mongoc_index_opt_t *)_mongocIndexOpt)->default_language) free((void *)((mongoc_index_opt_t *)_mongocIndexOpt)->default_language);
-    if (((mongoc_index_opt_t *)_mongocIndexOpt)->geo_options) free(((mongoc_index_opt_t *)_mongocIndexOpt)->geo_options);
-    if (((mongoc_index_opt_t *)_mongocIndexOpt)->language_override) free((void *)((mongoc_index_opt_t *)_mongocIndexOpt)->language_override);
-    if (((mongoc_index_opt_t *)_mongocIndexOpt)->name) free((void *)((mongoc_index_opt_t *)_mongocIndexOpt)->name);
-    if (((mongoc_index_opt_t *)_mongocIndexOpt)->weights) bson_destroy((void *)((mongoc_index_opt_t *)_mongocIndexOpt)->weights);
+    
+    self.weights = nil;
+    self.name = nil;
+    self.defaultLanguage = nil;
+    self.geoOptions = nil;
+    self.languageOverride = nil;
     
     memcpy(_mongocIndexOpt, mongocIndexOpt, sizeof(*mongocIndexOpt));
     if (mongocIndexOpt->default_language) {
@@ -278,6 +284,7 @@
 {
     if (((mongoc_index_opt_t *)_mongocIndexOpt)->weights) {
         bson_destroy((bson_t *)((mongoc_index_opt_t *)_mongocIndexOpt)->weights);
+        ((mongoc_index_opt_t *)_mongocIndexOpt)->weights = NULL;
     }
     if (weights) {
         bson_t *bson;
