@@ -80,6 +80,9 @@
 		02BDC3E7141D6073000EF755 /* MODCursor.h in Headers */ = {isa = PBXBuildFile; fileRef = 02BDC3E5141D6073000EF755 /* MODCursor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02BDC3E8141D6073000EF755 /* MODCursor.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3E6141D6073000EF755 /* MODCursor.m */; };
 		02BDC3EC141D83A7000EF755 /* MODClient_utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BDC3EB141D83A7000EF755 /* MODClient_utils.m */; };
+		02C345251A40D51F004F0D2C /* MODIndex.h in Headers */ = {isa = PBXBuildFile; fileRef = 02C345231A40D51F004F0D2C /* MODIndex.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		02C345261A40D51F004F0D2C /* MODIndex.m in Sources */ = {isa = PBXBuildFile; fileRef = 02C345241A40D51F004F0D2C /* MODIndex.m */; };
+		02C345281A40DEC8004F0D2C /* MODIndex-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02C345271A40DEB5004F0D2C /* MODIndex-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02CCE7A0192A278800A9DB1B /* MODRagelJsonParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 0299B61117F39FA200FB40A2 /* MODRagelJsonParser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02CF0E20191112CB008C822A /* bcon.c in Sources */ = {isa = PBXBuildFile; fileRef = 0204505F190E5EB000A80BED /* bcon.c */; };
 		02CF0E21191112CB008C822A /* bson-atomic.c in Sources */ = {isa = PBXBuildFile; fileRef = 02045061190E5EB000A80BED /* bson-atomic.c */; };
@@ -1425,6 +1428,9 @@
 		02BDC3E5141D6073000EF755 /* MODCursor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODCursor.h; sourceTree = "<group>"; };
 		02BDC3E6141D6073000EF755 /* MODCursor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODCursor.m; sourceTree = "<group>"; };
 		02BDC3EB141D83A7000EF755 /* MODClient_utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODClient_utils.m; sourceTree = "<group>"; };
+		02C345231A40D51F004F0D2C /* MODIndex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODIndex.h; sourceTree = "<group>"; };
+		02C345241A40D51F004F0D2C /* MODIndex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODIndex.m; sourceTree = "<group>"; };
+		02C345271A40DEB5004F0D2C /* MODIndex-private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MODIndex-private.h"; sourceTree = "<group>"; };
 		02CF0EA01911326B008C822A /* mongoc-stream-apple-tls.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mongoc-stream-apple-tls.c"; sourceTree = "<group>"; };
 		02CF0EA519191117008C822A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		02CF0EA919192608008C822A /* libsasl2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsasl2.dylib; path = usr/lib/libsasl2.dylib; sourceTree = SDKROOT; };
@@ -2945,6 +2951,9 @@
 				02688DDB14119CF50014ED51 /* MODDatabase.m */,
 				02688DE01411C5010014ED51 /* MODCollection.h */,
 				02688DE11411C5010014ED51 /* MODCollection.m */,
+				02C345231A40D51F004F0D2C /* MODIndex.h */,
+				02C345271A40DEB5004F0D2C /* MODIndex-private.h */,
+				02C345241A40D51F004F0D2C /* MODIndex.m */,
 				02F4EA8519F1C39B00BE9695 /* MODBulkOperation.h */,
 				02F4EA8619F1C39B00BE9695 /* MODBulkOperation.m */,
 				02BDC3E5141D6073000EF755 /* MODCursor.h */,
@@ -3056,6 +3065,7 @@
 				027A1DA51767E91F0048AD60 /* MODMinKey.h in Headers */,
 				027A1DA81767E91F0048AD60 /* MODUndefined.h in Headers */,
 				02CCE7A0192A278800A9DB1B /* MODRagelJsonParser.h in Headers */,
+				02C345281A40DEC8004F0D2C /* MODIndex-private.h in Headers */,
 				02AB33AC194870D6008C06B9 /* MODReadPreferences.h in Headers */,
 				02A85F5D14104373004F3FE9 /* MongoObjCDriver-private.h in Headers */,
 				025410A819AA7FCE00CF437E /* MODSSLOptions.h in Headers */,
@@ -3128,6 +3138,7 @@
 				02D3D3381926661300925BE7 /* mongoc-stream.h in Headers */,
 				02D3D3391926661300925BE7 /* mongoc-thread-private.h in Headers */,
 				02D3D33A1926661300925BE7 /* mongoc-trace.h in Headers */,
+				02C345251A40D51F004F0D2C /* MODIndex.h in Headers */,
 				02D3D33B1926661300925BE7 /* mongoc-uri.h in Headers */,
 				02D3D33C1926661400925BE7 /* mongoc-util-private.h in Headers */,
 				02D3D33D1926661400925BE7 /* mongoc-write-command-private.h in Headers */,
@@ -3329,6 +3340,7 @@
 				025C56201433E7E40064B010 /* MODDBPointer.m in Sources */,
 				02CF0E7819111321008C822A /* mongoc-index.c in Sources */,
 				02B24274147D1BD6008A15A3 /* MODSortedMutableDictionary.m in Sources */,
+				02C345261A40D51F004F0D2C /* MODIndex.m in Sources */,
 				02CF0E9F19112271008C822A /* yajl_version.c in Sources */,
 				02B13FA81949C41000EFF763 /* MODFunction.m in Sources */,
 				023ECFFD14851BEE00185781 /* MODSymbol.m in Sources */,

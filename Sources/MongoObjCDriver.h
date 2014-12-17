@@ -14,6 +14,7 @@
 #import "MODReadPreferences.h"
 #import "MODWriteConcern.h"
 #import "MODBulkOperation.h"
+#import "MODIndex.h"
 
 #import "MODTimestamp.h"
 #import "MODObjectId.h"

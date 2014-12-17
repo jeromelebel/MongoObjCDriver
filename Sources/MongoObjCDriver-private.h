@@ -17,6 +17,7 @@
 #import "MODCursor-private.h"
 #import "MODDBPointer.h"
 #import "MODSortedDictionary-private.h"
+#import "MODIndex-private.h"
 
 #define BSON_NO_ERROR { 0, 0, 0 }
 
