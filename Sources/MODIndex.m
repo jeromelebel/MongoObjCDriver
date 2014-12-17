@@ -50,6 +50,11 @@
     return self;
 }
 
+- (instancetype)copy
+{
+    return [MODIndexOptGeo indexOptGeoWithMongocIndexOptGeo:self.mongocIndexOptGeo];
+}
+
 - (void)dealloc
 {
     if (self.mongocIndexOptGeo) free(self.mongocIndexOptGeo);
@@ -132,6 +137,12 @@
         self.mongocIndexOpt = mongocIndexOpt;
     }
     return self;
+}
+
+
+- (instancetype)copy
+{
+    return [MODIndexOpt indexOptWithMongocIndexOpt:self.mongocIndexOpt];
 }
 
 - (void)dealloc
