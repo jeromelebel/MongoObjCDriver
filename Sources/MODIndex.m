@@ -120,7 +120,8 @@
 - (instancetype)init
 {
     if (self = [super init]) {
-        self.mongocIndexOpt = mongoc_index_opt_get_default();
+        _mongocIndexOpt = malloc(sizeof(mongoc_index_opt_t));
+        mongoc_index_opt_geo_init(_mongocIndexOpt);
     }
     return self;
 }
@@ -146,15 +147,14 @@
 
 - (void)setMongocIndexOpt:(const mongoc_index_opt_t *)mongocIndexOpt
 {
-    if (_mongocIndexOpt) {
-        if (((mongoc_index_opt_t *)_mongocIndexOpt)->default_language) free((void *)((mongoc_index_opt_t *)_mongocIndexOpt)->default_language);
-        if (((mongoc_index_opt_t *)_mongocIndexOpt)->geo_options) free(((mongoc_index_opt_t *)_mongocIndexOpt)->geo_options);
-        if (((mongoc_index_opt_t *)_mongocIndexOpt)->language_override) free((void *)((mongoc_index_opt_t *)_mongocIndexOpt)->language_override);
-        if (((mongoc_index_opt_t *)_mongocIndexOpt)->name) free((void *)((mongoc_index_opt_t *)_mongocIndexOpt)->name);
-        if (((mongoc_index_opt_t *)_mongocIndexOpt)->weights) bson_destroy((void *)((mongoc_index_opt_t *)_mongocIndexOpt)->weights);
-    } else {
-        _mongocIndexOpt = malloc(sizeof(mongoc_index_opt_t));
-    }
+    NSParameterAssert(mongocIndexOpt);
+    NSAssert(_mongocIndexOpt, @"need to have a pointer to _mongocIndexOpt");
+    if (((mongoc_index_opt_t *)_mongocIndexOpt)->default_language) free((void *)((mongoc_index_opt_t *)_mongocIndexOpt)->default_language);
+    if (((mongoc_index_opt_t *)_mongocIndexOpt)->geo_options) free(((mongoc_index_opt_t *)_mongocIndexOpt)->geo_options);
+    if (((mongoc_index_opt_t *)_mongocIndexOpt)->language_override) free((void *)((mongoc_index_opt_t *)_mongocIndexOpt)->language_override);
+    if (((mongoc_index_opt_t *)_mongocIndexOpt)->name) free((void *)((mongoc_index_opt_t *)_mongocIndexOpt)->name);
+    if (((mongoc_index_opt_t *)_mongocIndexOpt)->weights) bson_destroy((void *)((mongoc_index_opt_t *)_mongocIndexOpt)->weights);
+    
     memcpy(_mongocIndexOpt, mongocIndexOpt, sizeof(*mongocIndexOpt));
     if (mongocIndexOpt->default_language) {
         ((mongoc_index_opt_t *)_mongocIndexOpt)->default_language = strdup(mongocIndexOpt->default_language);
@@ -169,8 +169,9 @@
         ((mongoc_index_opt_t *)_mongocIndexOpt)->weights = bson_copy(mongocIndexOpt->weights);
     }
     if (mongocIndexOpt->geo_options) {
-        ((mongoc_index_opt_t *)_mongocIndexOpt)->geo_options = malloc(sizeof(mongoc_index_opt_geo_t));
-        memcpy(((mongoc_index_opt_t *)_mongocIndexOpt)->geo_options, mongocIndexOpt->geo_options, sizeof(mongoc_index_opt_geo_t));
+        MODIndexOptGeo *indexOptGeo = [MODIndexOptGeo indexOptGeoWithMongocIndexOptGeo:mongocIndexOpt->geo_options];
+        
+        self.geoOptions = indexOptGeo;
     }
 }
 
@@ -266,12 +267,25 @@
 
 - (MODSortedDictionary *)weights
 {
-    return NULL;
+    if (((mongoc_index_opt_t *)_mongocIndexOpt)->weights) {
+        return [MODClient objectFromBson:((mongoc_index_opt_t *)_mongocIndexOpt)->weights];
+    } else {
+        return nil;
+    }
 }
 
 - (void)setWeights:(MODSortedDictionary *)weights
 {
-    
+    if (((mongoc_index_opt_t *)_mongocIndexOpt)->weights) {
+        bson_destroy((bson_t *)((mongoc_index_opt_t *)_mongocIndexOpt)->weights);
+    }
+    if (weights) {
+        bson_t *bson;
+        
+        bson = bson_new();
+        [MODClient appendObject:weights toBson:bson];
+        ((mongoc_index_opt_t *)_mongocIndexOpt)->weights = bson;
+    }
 }
 
 - (NSString *)defaultLanguage
