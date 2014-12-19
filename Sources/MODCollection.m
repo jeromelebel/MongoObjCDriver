@@ -464,7 +464,7 @@
     return query;
 }
 
-- (MODQuery *)createIndex:(id)indexDocument indexOptions:(MODIndexOpt *)indexOptions callback:(void (^)(MODQuery *mongoQuery))callback
+- (MODQuery *)createIndexWithKeys:(id)keys indexOptions:(MODIndexOpt *)indexOptions callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
     // Just in case the index options are changed before we add the index
@@ -478,10 +478,10 @@
             bson_t index = BSON_INITIALIZER;
             bson_error_t bsonError = BSON_NO_ERROR;
             
-            if ([indexDocument isKindOfClass:[NSString class]]) {
-                [MODRagelJsonParser bsonFromJson:&index json:indexDocument error:&error];
+            if ([keys isKindOfClass:[NSString class]]) {
+                [MODRagelJsonParser bsonFromJson:&index json:keys error:&error];
             } else {
-                [[self.client class] appendObject:indexDocument toBson:&index];
+                [[self.client class] appendObject:keys toBson:&index];
             }
             if (!error) {
                 mongoc_collection_create_index(self.mongocCollection, &index, indexOptionsCopy.mongocIndexOpt, &bsonError);
@@ -494,7 +494,7 @@
                 callback(mongoQuery);
             }
         }];
-    } owner:self name:@"createindex" parameters:@{ @"index": indexDocument, @"options": indexOptionsCopy }];
+    } owner:self name:@"createindex" parameters:@{ @"keys": keys, @"options": indexOptionsCopy }];
     return query;
 }
 

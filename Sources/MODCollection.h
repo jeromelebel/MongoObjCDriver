@@ -62,7 +62,7 @@
 - (MODQuery *)dropWithCallback:(void (^)(MODQuery *mongoQuery))callback;
 
 - (MODQuery *)indexListWithCallback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback;
-- (MODQuery *)createIndex:(id)indexDocument indexOptions:(MODIndexOpt *)indexOptions callback:(void (^)(MODQuery *mongoQuery))callback;
+- (MODQuery *)createIndexWithKeys:(id)keys indexOptions:(MODIndexOpt *)indexOptions callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)dropIndexName:(NSString *)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback;
 
 - (MODQuery *)aggregateWithFlags:(int)flags
