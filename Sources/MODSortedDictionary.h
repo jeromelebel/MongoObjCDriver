@@ -38,3 +38,7 @@
 - (id)tengenJsonEncodedObject;
 
 @end
+
+@interface MODSortedDictionary (NSFastEnumeration) <NSFastEnumeration>
+
+@end

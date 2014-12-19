@@ -231,3 +231,14 @@ static void getValuesAndKeys(id firstObject, va_list ap, NSMutableDictionary *va
 }
 
 @end
+
+@implementation MODSortedDictionary (NSFastEnumeration)
+
+- (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
+                                  objects:(id [])stackbuf
+                                    count:(NSUInteger)len
+{
+    return [self.sortedKeys countByEnumeratingWithState:state objects:stackbuf count:len];
+}
+
+@end
