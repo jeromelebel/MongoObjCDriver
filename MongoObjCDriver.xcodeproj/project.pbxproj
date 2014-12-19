@@ -39,6 +39,8 @@
 		02411ABA1432D02700A5FFCA /* MODBinary.m in Sources */ = {isa = PBXBuildFile; fileRef = 02411AB81432D02600A5FFCA /* MODBinary.m */; };
 		024B0C071887DFBF00B8DCE6 /* MODDocumentComparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 024B0C051887DFBF00B8DCE6 /* MODDocumentComparator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		024B0C081887DFBF00B8DCE6 /* MODDocumentComparator.m in Sources */ = {isa = PBXBuildFile; fileRef = 024B0C061887DFBF00B8DCE6 /* MODDocumentComparator.m */; };
+		024E1FDA1A44908700EF28A4 /* mongoc-cursor-transform-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 024E1FD81A44908700EF28A4 /* mongoc-cursor-transform-private.h */; };
+		024E1FDB1A44908700EF28A4 /* mongoc-cursor-transform.c in Sources */ = {isa = PBXBuildFile; fileRef = 024E1FD91A44908700EF28A4 /* mongoc-cursor-transform.c */; };
 		025410A819AA7FCE00CF437E /* MODSSLOptions.h in Headers */ = {isa = PBXBuildFile; fileRef = 025410A619AA7FCE00CF437E /* MODSSLOptions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		025410A919AA7FCE00CF437E /* MODSSLOptions.m in Sources */ = {isa = PBXBuildFile; fileRef = 025410A719AA7FCE00CF437E /* MODSSLOptions.m */; };
 		025C56201433E7E40064B010 /* MODDBPointer.m in Sources */ = {isa = PBXBuildFile; fileRef = 025C561E1433E7E40064B010 /* MODDBPointer.m */; };
@@ -1374,6 +1376,8 @@
 		02411AB81432D02600A5FFCA /* MODBinary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODBinary.m; sourceTree = "<group>"; };
 		024B0C051887DFBF00B8DCE6 /* MODDocumentComparator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODDocumentComparator.h; sourceTree = "<group>"; };
 		024B0C061887DFBF00B8DCE6 /* MODDocumentComparator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODDocumentComparator.m; sourceTree = "<group>"; };
+		024E1FD81A44908700EF28A4 /* mongoc-cursor-transform-private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mongoc-cursor-transform-private.h"; sourceTree = "<group>"; };
+		024E1FD91A44908700EF28A4 /* mongoc-cursor-transform.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mongoc-cursor-transform.c"; sourceTree = "<group>"; };
 		025410A619AA7FCE00CF437E /* MODSSLOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODSSLOptions.h; sourceTree = "<group>"; };
 		025410A719AA7FCE00CF437E /* MODSSLOptions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODSSLOptions.m; sourceTree = "<group>"; };
 		025C561E1433E7E40064B010 /* MODDBPointer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODDBPointer.m; sourceTree = "<group>"; };
@@ -2171,6 +2175,8 @@
 				02044EEF190E5E4E00A80BED /* mongoc-cursor-cursorid-private.h */,
 				02044EF0190E5E4E00A80BED /* mongoc-cursor-cursorid.c */,
 				02044EF1190E5E4E00A80BED /* mongoc-cursor-private.h */,
+				024E1FD81A44908700EF28A4 /* mongoc-cursor-transform-private.h */,
+				024E1FD91A44908700EF28A4 /* mongoc-cursor-transform.c */,
 				02044EF2190E5E4E00A80BED /* mongoc-cursor.c */,
 				02044EF3190E5E4E00A80BED /* mongoc-cursor.h */,
 				02044EF4190E5E4E00A80BED /* mongoc-database-private.h */,
@@ -3144,6 +3150,7 @@
 				02D3D33D1926661400925BE7 /* mongoc-write-command-private.h in Headers */,
 				02D3D33E1926661400925BE7 /* mongoc-write-concern-private.h in Headers */,
 				02D3D33F1926661400925BE7 /* mongoc-write-concern.h in Headers */,
+				024E1FDA1A44908700EF28A4 /* mongoc-cursor-transform-private.h in Headers */,
 				02D3D3401926661400925BE7 /* mongoc.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3320,6 +3327,7 @@
 				02CF0E8219111321008C822A /* mongoc-socket.c in Sources */,
 				02F4EA8819F1C39B00BE9695 /* MODBulkOperation.m in Sources */,
 				02CF0E28191112CB008C822A /* bson-md5.c in Sources */,
+				024E1FDB1A44908700EF28A4 /* mongoc-cursor-transform.c in Sources */,
 				02CF0E20191112CB008C822A /* bcon.c in Sources */,
 				02688DE31411C5010014ED51 /* MODCollection.m in Sources */,
 				02F1D7CE1A3237C2009277EE /* MODSortedDictionary.m in Sources */,
