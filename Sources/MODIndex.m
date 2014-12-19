@@ -126,7 +126,7 @@
 {
     if (self = [super init]) {
         _mongocIndexOpt = malloc(sizeof(mongoc_index_opt_t));
-        mongoc_index_opt_geo_init(_mongocIndexOpt);
+        mongoc_index_opt_init(_mongocIndexOpt);
     }
     return self;
 }
