@@ -17,6 +17,32 @@
 
 @end
 
+static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flags)
+{
+    switch(flags) {
+        case MODQueryFlagsNone:
+            return MONGOC_QUERY_NONE;
+        case MODQueryFlagsTailableCursor:
+            return MONGOC_QUERY_TAILABLE_CURSOR;
+        case MODQueryFlagsSlaveOk:
+            return MONGOC_QUERY_SLAVE_OK;
+        case MODQueryFlagsOplogReplay:
+            return MONGOC_QUERY_OPLOG_REPLAY;
+        case MODQueryFlagsNoCursorTimeout:
+            return MONGOC_QUERY_NO_CURSOR_TIMEOUT;
+        case MODQueryFlagsAwaitData:
+            return MONGOC_QUERY_AWAIT_DATA;
+        case MODQueryFlagsExhaust:
+            return MONGOC_QUERY_EXHAUST;
+        case MODQueryFlagsPartial:
+            return MONGOC_QUERY_PARTIAL;
+        default:
+            NSLog(@"unknow value %d", flags);
+            assert(NO);
+            return MONGOC_QUERY_NONE;
+    }
+}
+
 @implementation MODCollection
 
 @synthesize absoluteName = _absoluteName;
@@ -520,7 +546,7 @@
     return query;
 }
 
-- (MODQuery *)aggregateWithFlags:(int)flags
+- (MODQuery *)aggregateWithFlags:(MODQueryFlags)flags
                         pipeline:(MODSortedDictionary *)pipeline
                          options:(MODSortedDictionary *)options
                  readPreferences:(MODReadPreferences *)readPreferences
@@ -528,7 +554,6 @@
 {
     MODQuery *query = nil;
     
-    NSAssert(NO, @"not yet implemented. Need to convert mongoc cursor into a MODCursor");
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         MODCursor *cursor = nil;
         bson_error_t bsonError = BSON_NO_ERROR;
@@ -540,7 +565,7 @@
             
             [self.client.class appendObject:pipeline toBson:&bsonPipeline];
             [self.client.class appendObject:options toBson:&bsonOptions];
-            mongocCursor = mongoc_collection_aggregate(self.mongocCollection, flags, &bsonPipeline, &bsonOptions, readPreferences?readPreferences.mongocReadPreferences:NULL);
+            mongocCursor = mongoc_collection_aggregate(self.mongocCollection, mongocQueryFlagsFromMODQueryFlags(flags), &bsonPipeline, &bsonOptions, readPreferences?readPreferences.mongocReadPreferences:NULL);
             cursor = [[[MODCursor alloc] initWithCollection:self mongocCursor:mongocCursor] autorelease];
         }
         [self mongoQueryDidFinish:mongoQuery withBsonError:bsonError callbackBlock:^(void) {
@@ -548,7 +573,7 @@
                 callback(mongoQuery, cursor);
             }
         }];
-    } owner:self name:@"aggregate" parameters:nil];
+    } owner:self name:@"aggregate" parameters:@{ @"flags": @(flags), @"pipeline": pipeline, @"options": options, @"readPreferences": readPreferences }];
     return query;
 }
 

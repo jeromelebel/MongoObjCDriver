@@ -17,6 +17,17 @@
 
 #define MODCollection_Dropped_Notification        @"MODCollection_Dropped_Notification"
 
+typedef enum {
+    MODQueryFlagsNone              = 0,
+    MODQueryFlagsTailableCursor    = 1 << 1,
+    MODQueryFlagsSlaveOk           = 1 << 2,
+    MODQueryFlagsOplogReplay       = 1 << 3,
+    MODQueryFlagsNoCursorTimeout   = 1 << 4,
+    MODQueryFlagsAwaitData         = 1 << 5,
+    MODQueryFlagsExhaust           = 1 << 6,
+    MODQueryFlagsPartial           = 1 << 7,
+} MODQueryFlags;
+
 @interface MODCollection : NSObject
 {
     MODDatabase                         *_database;
@@ -65,7 +76,7 @@
 - (MODQuery *)createIndexWithKeys:(id)keys indexOptions:(MODIndexOpt *)indexOptions callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)dropIndexName:(NSString *)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback;
 
-- (MODQuery *)aggregateWithFlags:(int)flags
+- (MODQuery *)aggregateWithFlags:(MODQueryFlags)flags
                         pipeline:(MODSortedDictionary *)pipeline
                          options:(MODSortedDictionary *)options
                  readPreferences:(MODReadPreferences *)readPreferences
