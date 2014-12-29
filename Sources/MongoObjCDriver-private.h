@@ -18,6 +18,7 @@
 #import "MODDBPointer.h"
 #import "MODSortedDictionary-private.h"
 #import "MODIndex-private.h"
+#import "MODRagelJsonParser-private.h"
 
 #define BSON_NO_ERROR { 0, 0, 0 }
 
@@ -53,11 +54,6 @@ enum {
 @end
 
 @interface MODTimestamp ()
-@end
-
-@interface MODRagelJsonParser (private)
-+ (BOOL)bsonFromJson:(bson_t *)bsonResult json:(NSString *)json error:(NSError **)error;
-
 @end
 
 @interface MODBsonComparator (private)
