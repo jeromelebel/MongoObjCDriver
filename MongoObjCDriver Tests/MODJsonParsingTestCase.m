@@ -270,6 +270,13 @@
                         shouldEqual:[MODSortedDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:3.8365551715863071018e-13], @"number", nil]];
 }
 
+- (void)testPrecisionDoubleParsing4
+{
+    [self jsonTesterWithJsonToParse:@"{\"number\":8.26171875}"
+                       jsonExpected:nil
+                        shouldEqual:[MODSortedDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:8.26171875], @"number", nil]];
+}
+
 - (void)testBinaryParsing1
 {
     [self jsonTesterWithJsonToParse:@"{\"data\":{\"$binary\":\"AA==\",\"$type\":\"0\"}}"
