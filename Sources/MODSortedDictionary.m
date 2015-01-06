@@ -99,6 +99,7 @@ static void getValuesAndKeys(id firstObject, va_list ap, NSMutableDictionary *va
     NSMutableArray *keys = [NSMutableArray array];
     
     va_start(ap, firstObject);
+    getValuesAndKeys(firstObject, ap, values, keys);
     self = [self initWithDictionary:values sortedKeys:keys];
     va_end(ap);
     return self;
