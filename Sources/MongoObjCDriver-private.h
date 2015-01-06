@@ -40,6 +40,9 @@ enum {
 @interface MODQuery ()
 @property (nonatomic, readwrite, assign) NSBlockOperation *blockOperation;
 @property (nonatomic, readwrite, strong) NSError *error;
+@property (nonatomic, readwrite, strong) id result;
+@property (nonatomic, readwrite, strong) NSDate *startDate;
+@property (nonatomic, readwrite, strong) NSDate *endDate;
 
 - (void)starts;
 - (void)endsWithError:(NSError *)error;

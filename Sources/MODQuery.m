@@ -15,7 +15,15 @@
 
 @implementation MODQuery
 
-@synthesize owner = _owner, name = _name, parameters = _parameters, userInfo = _userInfo, startDate = _startDate, endDate = _endDate, error = _error, canceled = _canceled;
+@synthesize owner = _owner;
+@synthesize name = _name;
+@synthesize parameters = _parameters;
+@synthesize userInfo = _userInfo;
+@synthesize startDate = _startDate;
+@synthesize endDate = _endDate;
+@synthesize error = _error;
+@synthesize canceled = _canceled;
+@synthesize result = _result;
 
 - (instancetype)initWithOwner:(id<NSObject>)owner name:(NSString *)name parameters:(NSDictionary *)parameters;
 {
@@ -25,8 +33,7 @@
         self.owner = owner;
         self.name = name;
         self.parameters = parameters;
-        _userInfo = [[NSMutableDictionary alloc] init];
-        _callbackTargets = [[NSMutableArray alloc] init];
+        self.userInfo = [NSMutableDictionary dictionary];
     }
     return self;
 }
@@ -34,14 +41,14 @@
 - (void)dealloc
 {
     [self removeBlockOperation];
-    [_startDate release];
-    [_endDate release];
-    [_userInfo release];
-    [_callbackTargets release];
+    self.startDate = nil;
+    self.endDate = nil;
+    self.userInfo = nil;
     self.owner = nil;
     self.name = nil;
     self.parameters = nil;
     self.error = nil;
+    self.result = nil;
     [super dealloc];
 }
 
@@ -54,25 +61,22 @@
 
 - (void)starts
 {
-    NSAssert(_startDate == nil, @"already started");
-    NSAssert(_endDate == nil, @"weird");
-    _startDate = [[NSDate alloc] init];
+    NSAssert(self.startDate == nil, @"already started");
+    NSAssert(self.endDate == nil, @"weird");
+    self.startDate = [NSDate date];
 }
 
 - (void)endsWithError:(NSError *)error
 {
     if (!self.error) self.error = error;
-    NSAssert(_startDate != nil, @"needs to be started");
-    NSAssert(_endDate == nil, @"already ended");
-    _endDate = [[NSDate alloc] init];
-    for (id<MODQueryCallbackTarget> target in _callbackTargets) {
-        [target mongoQueryDidFinish:self];
-    }
+    NSAssert(self.startDate != nil, @"needs to be started");
+    NSAssert(self.endDate == nil, @"already ended");
+    self.endDate = [NSDate date];
 }
 
 - (NSTimeInterval)duration
 {
-    return [_endDate timeIntervalSinceDate:_startDate];
+    return [self.endDate timeIntervalSinceDate:self.startDate];
 }
 
 - (void)removeBlockOperation
@@ -110,11 +114,6 @@
     }
     [operation waitUntilFinished];
     [operation release];
-}
-
-- (void)addCallbackWithTarget:(id<MODQueryCallbackTarget>)target
-{
-    [_callbackTargets addObject:target];
 }
 
 @end
