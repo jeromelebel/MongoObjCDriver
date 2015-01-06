@@ -271,19 +271,16 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             if (error) {
                 mongoQuery.error = error;
             } else {
-                NSNumber *response;
                 bson_error_t bsonError;
                 
                 count = mongoc_collection_count(self.mongocCollection, 0, &bsonQuery, 0, 0, readPreferences?readPreferences.mongocReadPreferences:NULL, &bsonError);
                 if (count == -1) {
                     error = [self.client.class errorFromBsonError:bsonError];
-                } else {
-                    response = [[NSNumber alloc] initWithUnsignedLongLong:count];
-                    [response release];
                 }
             }
             bson_destroy(&bsonQuery);
         }
+        mongoQuery.result = [[NSNumber alloc] initWithUnsignedLongLong:count];
         [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(count, mongoQuery);
