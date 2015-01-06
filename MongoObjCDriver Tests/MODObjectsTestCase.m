@@ -102,4 +102,25 @@
     bson_destroy(&bsonObject);
 }
 
+- (void)testSortedDictionary
+{
+    MODSortedDictionary *dictionary;
+    NSArray *keys;
+    
+    dictionary = [MODSortedDictionary sortedDictionaryWithObjectsAndKeys:@1, @"1", @2, @"2", @3, @"3", nil];
+    XCTAssertEqual(dictionary.count, 3, @"wrong count");
+    keys = @[ @"1", @"2", @"3" ];
+    XCTAssertEqualObjects(dictionary.sortedKeys, keys, @"issue with the order");
+    for (NSString *key in keys) {
+        XCTAssertEqualObjects([dictionary objectForKey:key], @(key.integerValue));
+    }
+    dictionary = [MODSortedDictionary sortedDictionaryWithObjectsAndKeys:@1, @"1", @2, @"2", @4, @"3", @3, @"3", nil];
+    XCTAssertEqual(dictionary.count, 3, @"wrong count");
+    keys = @[ @"1", @"2", @"3" ];
+    XCTAssertEqualObjects(dictionary.sortedKeys, keys, @"issue with the order");
+    for (NSString *key in keys) {
+        XCTAssertEqualObjects([dictionary objectForKey:key], @(key.integerValue));
+    }
+}
+
 @end
