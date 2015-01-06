@@ -50,11 +50,11 @@
     MODSSLOptions *result;
     
     result = [[[MODSSLOptions alloc] init] autorelease];
-    result.pemFileName = [NSString stringWithUTF8String:sslOpt->pem_file];
-    result.pemPassword = [NSString stringWithUTF8String:sslOpt->pem_pwd];
-    result.caFileName = [NSString stringWithUTF8String:sslOpt->ca_file];
-    result.caDirectory = [NSString stringWithUTF8String:sslOpt->ca_dir];
-    result.crlFileName = [NSString stringWithUTF8String:sslOpt->crl_file];
+    if (sslOpt->pem_file) result.pemFileName = [NSString stringWithUTF8String:sslOpt->pem_file];
+    if (sslOpt->pem_pwd) result.pemPassword = [NSString stringWithUTF8String:sslOpt->pem_pwd];
+    if (sslOpt->ca_file) result.caFileName = [NSString stringWithUTF8String:sslOpt->ca_file];
+    if (sslOpt->ca_dir) result.caDirectory = [NSString stringWithUTF8String:sslOpt->ca_dir];
+    if (sslOpt->crl_file) result.crlFileName = [NSString stringWithUTF8String:sslOpt->crl_file];
     result.weakCertificate = @(sslOpt->weak_cert_validation);
     return result;
 }
