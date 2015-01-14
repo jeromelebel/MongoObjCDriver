@@ -32,3 +32,4 @@
 #import "MODScopeFunction.h"
 
 #import "MODDocumentComparator.h"
+#import "MODTools.h"
