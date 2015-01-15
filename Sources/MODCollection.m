@@ -571,17 +571,19 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             bson_t bsonOptions = BSON_INITIALIZER;
             mongoc_cursor_t *mongocCursor = nil;
             
-            [currentSelf.client.class appendArray:pipeline toBson:&bsonPipeline];
-            [currentSelf.client.class appendObject:options toBson:&bsonOptions];
+            if (pipeline) [currentSelf.client.class appendArray:pipeline toBson:&bsonPipeline];
+            if (options) [currentSelf.client.class appendObject:options toBson:&bsonOptions];
             mongocCursor = mongoc_collection_aggregate(currentSelf.mongocCollection, mongocQueryFlagsFromMODQueryFlags(flags), &bsonPipeline, &bsonOptions, readPreferences?readPreferences.mongocReadPreferences:NULL);
             cursor = MOD_AUTORELEASE([[MODCursor alloc] initWithCollection:currentSelf mongocCursor:mongocCursor]);
+            bson_destroy(&bsonPipeline);
+            bson_destroy(&bsonOptions);
         }
         [currentSelf mongoQueryDidFinish:mongoQuery withBsonError:bsonError callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(mongoQuery, cursor);
             }
         }];
-    } owner:self name:@"aggregate" parameters:@{ @"flags": @(flags), @"pipeline": pipeline, @"options": options, @"readPreferences": readPreferences }];
+    } owner:self name:@"aggregate" parameters:@{ @"flags": @(flags), @"pipeline": pipeline?pipeline:[NSNull null], @"options": options?options:[NSNull null], @"readPreferences": readPreferences?readPreferences:[NSNull null] }];
     return query;
 }
 
