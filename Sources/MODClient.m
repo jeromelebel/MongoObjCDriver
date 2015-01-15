@@ -214,7 +214,7 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
 - (MODQuery *)serverStatusWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedDictionary *serverStatus, MODQuery *mongoQuery))callback
 {
     MODQuery *query;
-    MODClient *currentSelf;
+    MODClient *currentSelf = self;
     
     query = [self addQueryInQueue:^(MODQuery *mongoQuery){
         bson_t output = BSON_INITIALIZER;
@@ -238,7 +238,7 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
 - (MODQuery *)databaseNamesWithCallback:(void (^)(NSArray *list, MODQuery *mongoQuery))callback;
 {
     MODQuery *query;
-    MODClient *currentSelf;
+    MODClient *currentSelf = self;
     
     query = [self addQueryInQueue:^(MODQuery *mongoQuery) {
         bson_t output = BSON_INITIALIZER;
