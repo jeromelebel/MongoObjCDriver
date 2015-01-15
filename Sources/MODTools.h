@@ -7,7 +7,11 @@
 //
 
 #if  __has_feature(objc_arc)
-#define RELEASE(x)
+#define MOD_RELEASE(x)
+#define MOD_AUTORELEASE(x)
+#define MOD_SUPER_DEALLOC()
 #else
-#define RELEASE(x) [x release]
+#define MOD_RELEASE(x)              [x release]
+#define MOD_AUTORELEASE(x)          [x autorelease]
+#define MOD_SUPER_DEALLOC()         [super dealloc]
 #endif
