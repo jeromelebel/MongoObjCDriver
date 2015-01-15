@@ -26,5 +26,6 @@
 //+ (NSError *)errorFromMongo:(mongoc_client_t *)mongo;
 + (MODSortedDictionary *)objectFromBson:(const bson_t *)bsonObject;
 + (void)appendObject:(MODSortedDictionary *)object toBson:(bson_t *)bson;
++ (void)appendArray:(NSArray *)array toBson:(bson_t *)bson;
 
 @end
