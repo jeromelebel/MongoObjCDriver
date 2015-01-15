@@ -5,7 +5,7 @@
 //  Created by Jérôme Lebel on 21/09/2011.
 //
 
-#import "MODObjectId.h"
+#import "MongoObjCDriver-private.h"
 #import "bson.h"
 
 #define valueFromHexa(value) ((value >= '1' && value <= '9')?(value - '1' + 1):((value >= 'a' && value <= 'f')?(value - 'a' + 10):((value >= 'A' && value <= 'F')?(value - 'A' + 10):0)))
@@ -76,7 +76,7 @@
 
 - (instancetype)copyWithZone:(NSZone *)zone
 {
-    return [self retain];
+    return MOD_RETAIN(self);
 }
 
 - (const unsigned char *)bytes

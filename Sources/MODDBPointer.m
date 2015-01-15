@@ -31,7 +31,7 @@
 {
     self.collectionName = nil;
     self.objectId = nil;
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON

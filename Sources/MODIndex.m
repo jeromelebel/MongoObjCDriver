@@ -14,7 +14,7 @@
 
 + (instancetype)indexOptGeoWithMongocIndexOptGeo:(const mongoc_index_opt_geo_t *)mongocIndexOptGeo
 {
-    return [[[[self class] alloc] initWithMongocIndexOptGeo:mongocIndexOptGeo] autorelease];
+    return MOD_AUTORELEASE([[[self class] alloc] initWithMongocIndexOptGeo:mongocIndexOptGeo]);
 }
 
 - (instancetype)init
@@ -58,7 +58,7 @@
 - (void)dealloc
 {
     if (self.mongocIndexOptGeo) free(self.mongocIndexOptGeo);
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 - (uint8_t)twodSphereVersion
@@ -119,7 +119,7 @@
 
 + (instancetype)indexOptWithMongocIndexOpt:(const mongoc_index_opt_t *)mongocIndexOpt
 {
-    return [[[[self class] alloc] initWithMongocIndexOpt:mongocIndexOpt] autorelease];
+    return MOD_AUTORELEASE([[[self class] alloc] initWithMongocIndexOpt:mongocIndexOpt]);
 }
 
 - (instancetype)init
@@ -153,7 +153,7 @@
     self.geoOptions = nil;
     self.languageOverride = nil;
     free(_mongocIndexOpt);
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 - (mongoc_index_opt_t *)mongocIndexOpt
@@ -353,8 +353,8 @@
 
 - (void)setGeoOptions:(MODIndexOptGeo *)geoOptions
 {
-    [_geoOptions release];
-    _geoOptions = [geoOptions retain];
+    MOD_RELEASE(_geoOptions);
+    _geoOptions = MOD_RETAIN(geoOptions);
     ((mongoc_index_opt_t *)_mongocIndexOpt)->geo_options = _geoOptions.mongocIndexOptGeo;
 }
 

@@ -56,7 +56,7 @@
     id result;
     
     result = [parser parseJson:source withError:error];
-    [parser release];
+    MOD_RELEASE(parser);
     return result;
 }
 
@@ -69,7 +69,7 @@
         if (length > 10) {
             length = 10;
         }
-        self.error = [NSError errorWithDomain:@"error" code:0 userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%@: \"%@\"", message, [[[NSString alloc] initWithBytes:position length:length encoding:NSUTF8StringEncoding] autorelease]] }];
+        self.error = [NSError errorWithDomain:@"error" code:0 userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat:@"%@: \"%@\"", message, MOD_AUTORELEASE([[NSString alloc] initWithBytes:position length:length encoding:NSUTF8StringEncoding])] }];
     }
 }
 
@@ -129,15 +129,15 @@
     }
 
     action parse_min_key {
-        *result = [[[MODMinKey alloc] init] autorelease];
+        *result = MOD_AUTORELEASE([[MODMinKey alloc] init]);
     }
 
     action parse_max_key {
-        *result = [[[MODMaxKey alloc] init] autorelease];
+        *result = MOD_AUTORELEASE([[MODMaxKey alloc] init]);
     }
     
     action parse_undefined {
-        *result = [[[MODUndefined alloc] init] autorelease];
+        *result = MOD_AUTORELEASE([[MODUndefined alloc] init]);
     }
     
     action parse_object_id {
@@ -313,7 +313,7 @@
         } else {
             *result = [NSNumber numberWithInt:buffer.intValue];
         }
-        [buffer release];
+        MOD_RELEASE(buffer);
         return p + 1;
     } else {
         return NULL;
@@ -486,15 +486,15 @@
             
             formater = [[NSDateFormatter alloc] init];
             [formater setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZZZ"];
-            *result = [[[formater dateFromString:[parameters objectAtIndex:0]] retain] autorelease];
-            [formater autorelease];
+            *result = MOD_AUTORELEASE(MOD_RETAIN([formater dateFromString:[parameters objectAtIndex:0]]));
+            MOD_RELEASE(formater);
         } else if (parameters.count == 1 && [[parameters objectAtIndex:0] isKindOfClass:NSNumber.class]) {
             *result = [NSDate dateWithTimeIntervalSince1970:[[parameters objectAtIndex:0] doubleValue] / 1000.0];
         }
     } else {
         *result = nil;
     }
-    [parameters release];
+    MOD_RELEASE(parameters);
     if (*result) {
         return p + 1;
     } else {
@@ -538,7 +538,7 @@
 
     dataValue = dataStringValue.mod_dataFromBase64;
     if (cs >= JSON_bin_data_first_final && dataValue && [MODBinary isValidDataType:typeValue.unsignedCharValue] ) {
-        *result = [[[MODBinary alloc] initWithData:dataValue binaryType:typeValue.unsignedCharValue] autorelease];
+        *result = MOD_AUTORELEASE([[MODBinary alloc] initWithData:dataValue binaryType:typeValue.unsignedCharValue]);
         return p + 1;
     } else {
         *result = nil;
@@ -572,7 +572,7 @@
     %% write exec;
 
     if (cs >= JSON_function_first_final && codeStringValue) {
-        *result = [[[MODFunction alloc] initWithFunction:codeStringValue] autorelease];
+        *result = MOD_AUTORELEASE([[MODFunction alloc] initWithFunction:codeStringValue]);
         return p + 1;
     } else {
         *result = nil;
@@ -602,7 +602,7 @@
             fbreak;
         } else {
             if ([MODObjectId isStringValid:string]) {
-                documentId = [[[MODObjectId alloc] initWithString:string] autorelease];
+                documentId = MOD_AUTORELEASE([[MODObjectId alloc] initWithString:string]);
             }
             fexec np;
         }
@@ -623,7 +623,7 @@
     %% write exec;
 
     if (cs >= JSON_dbref_first_final && collectionName && documentId) {
-        *result = [[[MODDBPointer alloc] initWithCollectionName:collectionName objectId:documentId] autorelease];
+        *result = MOD_AUTORELEASE([[MODDBPointer alloc] initWithCollectionName:collectionName objectId:documentId]);
         return p + 1;
     } else {
         *result = nil;
@@ -669,7 +669,7 @@
     %% write exec;
 
     if (cs >= JSON_scopefunction_first_final && codeStringValue) {
-        *result = [[[MODScopeFunction alloc] initWithFunction:codeStringValue scope:scopeValue] autorelease];
+        *result = MOD_AUTORELEASE([[MODScopeFunction alloc] initWithFunction:codeStringValue scope:scopeValue]);
         return p + 1;
     } else {
         *result = nil;
@@ -703,7 +703,7 @@
     %% write exec;
 
     if (cs >= JSON_object_id_first_final && [MODObjectId isStringValid:idStringValue]) {
-        *result = [[[MODObjectId alloc] initWithString:idStringValue] autorelease];
+        *result = MOD_AUTORELEASE([[MODObjectId alloc] initWithString:idStringValue]);
         return p + 1;
     } else {
         *result = nil;
@@ -739,9 +739,9 @@
         }
         options = [[NSString alloc] initWithBytes:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding];
         
-        *result = [[[MODRegex alloc] initWithPattern:buffer options:options] autorelease];
-        [buffer release];
-        [options release];
+        *result = MOD_AUTORELEASE([[MODRegex alloc] initWithPattern:buffer options:options]);
+        MOD_RELEASE(buffer);
+        MOD_RELEASE(options);
     } else {
         cursor = NULL;
         [self _makeErrorWithMessage:@"cannot find end of regex" atPosition:cursor];
@@ -822,7 +822,7 @@
     %% write exec;
     
     if (cs >= JSON_timestamp_first_final && timeNumber && incrementNumber) {
-        *result = [[[MODTimestamp alloc] initWithTValue:timeNumber.intValue iValue:incrementNumber.intValue] autorelease];
+        *result = MOD_AUTORELEASE([[MODTimestamp alloc] initWithTValue:timeNumber.intValue iValue:incrementNumber.intValue]);
         return p + 1; // why + 1 ???
     } else {
         *result = nil;
@@ -856,7 +856,7 @@
     %% write exec;
     
     if (cs >= JSON_symbol_first_final && symbol) {
-        *result = [[[MODSymbol alloc] initWithValue:symbol] autorelease];
+        *result = MOD_AUTORELEASE([[MODSymbol alloc] initWithValue:symbol]);
         return p + 1; // why + 1 ???
     } else {
         *result = nil;
@@ -880,7 +880,7 @@
     } else {
         buffer = [[NSString alloc] initWithBytes:(void *)string length:cursor - string encoding:NSUTF8StringEncoding];
         *result = buffer;
-        [buffer autorelease];
+        MOD_AUTORELEASE2(buffer);
     }
     return cursor;
 }
@@ -905,7 +905,7 @@
                 // if the string starts with a \, there is no need to add anything
                 buffer = [[NSString alloc] initWithBytes:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding];
                 [mutableResult appendString:buffer];
-                [buffer release];
+                MOD_RELEASE(buffer);
             }
             switch (*++cursor) {
                 case 'n':
@@ -939,7 +939,7 @@
             }
             buffer = [[NSString alloc] initWithBytes:(void *)unescape length:unescapeLength encoding:NSUTF8StringEncoding];
             [mutableResult appendString:buffer];
-            [buffer release];
+            MOD_RELEASE(buffer);
             bookmark = ++cursor;
         } else {
             cursor++;
@@ -948,8 +948,8 @@
     if (*cursor == quoteString) {
         buffer = [[NSString alloc] initWithBytes:(void *)bookmark length:cursor - bookmark encoding:NSUTF8StringEncoding];
         [mutableResult appendString:buffer];
-        [buffer release];
-        *result = [mutableResult autorelease];
+        MOD_RELEASE(buffer);
+        *result = MOD_AUTORELEASE(mutableResult);
         cursor++;
     } else {
         cursor = NULL;
@@ -992,7 +992,7 @@
     if (_maxNesting && _currentNesting > _maxNesting) {
         [self _makeErrorWithMessage:[NSString stringWithFormat:@"nesting of %d is too deep", _currentNesting] atPosition:p];
     }
-    *result = [[[NSMutableArray alloc] init] autorelease];
+    *result = MOD_AUTORELEASE([[NSMutableArray alloc] init]);
     
     %% write init;
     %% write exec;

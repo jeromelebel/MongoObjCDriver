@@ -55,7 +55,7 @@
 - (void)dealloc
 {
     self.binaryData = nil;
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON

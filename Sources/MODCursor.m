@@ -81,7 +81,7 @@
     self.fields = nil;
     self.sort = nil;
     self.collection = nil;
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withError:(NSError *)error callbackBlock:(void (^)(void))callbackBlock
@@ -142,7 +142,7 @@
                 const bson_t *bson;
                 
                 bson = mongoc_cursor_current(self.mongocCursor);
-                *bsonData = [[[NSData alloc] initWithBytes:bson_get_data(bson) length:bson->len] autorelease];
+                *bsonData = MOD_AUTORELEASE([[NSData alloc] initWithBytes:bson_get_data(bson) length:bson->len]);
             }
         } else {
             bson_error_t error = BSON_NO_ERROR;
@@ -175,6 +175,7 @@
 - (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, MODSortedDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback
 {
     MODQuery *query = nil;
+    MODCursor *currentSelf = self;
     
     query = [self.collection.client addQueryInQueue:^(MODQuery *mongoQuery) {
         uint64_t documentCount = 0;
@@ -186,7 +187,7 @@
             
             while (!cursorStopped) {
                 documentCount++;
-                document = [self nextDocumentWithBsonData:nil error:&error];
+                document = [currentSelf nextDocumentWithBsonData:nil error:&error];
                 mongoQuery.error = error;
                 if (!document) {
                     break;
@@ -200,7 +201,7 @@
                 }
             };
         }
-        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && endCallback) {
                 endCallback(documentCount, cursorStopped, mongoQuery);
             }

@@ -25,7 +25,7 @@
 - (void)dealloc
 {
     self.mongoQuery = nil;
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 @end
@@ -50,7 +50,7 @@
     
     mongoc_init();
     result = [[MODClient alloc] initWithURIString:urlString];
-    return [result autorelease];
+    return MOD_AUTORELEASE(result);
 }
 
 + (uint16_t)defaultPort
@@ -71,7 +71,7 @@
 - (instancetype)init
 {
     if ((self = [super init]) != nil) {
-        self.operationQueue = [[[NSOperationQueue alloc] init] autorelease];
+        self.operationQueue = MOD_AUTORELEASE([[NSOperationQueue alloc] init]);
         self.mongoQueries = [NSMutableArray array];
         [self.operationQueue setMaxConcurrentOperationCount:1];
     }
@@ -88,7 +88,7 @@
     if ((self = [self init]) != nil) {
         self.mongocClient = mongoc_client_new(urlCString);
         if (self.mongocClient == NULL) {
-            [self release];
+            MOD_RELEASE(self);
             self = nil;
         }
         [self setupMongocClient];
@@ -101,7 +101,7 @@
     if ((self = [self init]) != nil) {
         _mongocClient = mongoc_client_new_from_uri(uri);
         if (_mongocClient == NULL) {
-            [self release];
+            MOD_RELEASE(self);
             self = nil;
         }
         [self setupMongocClient];
@@ -118,7 +118,7 @@
     self.mongoQueries = nil;
     self.sshMapping = nil;
     mongoc_client_destroy(self.mongocClient);
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 - (instancetype)copy
@@ -134,7 +134,7 @@
 
 static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_host_list_t *host, void *user_data, bson_error_t *error)
 {
-    return [(MODClient *)user_data getStreamWithURI:uri host:host error:error];
+    return [(__bridge MODClient *)user_data getStreamWithURI:uri host:host error:error];
 }
 
 - (mongoc_stream_t *)getStreamWithURI:(const mongoc_uri_t *)uri host:(const mongoc_host_list_t *)host error:(bson_error_t *)error
@@ -162,7 +162,7 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
 {
     _defaultStreamInitiator = self.mongocClient->initiator;
     _defaultStreamInitiatorData = self.mongocClient->initiator_data;
-    mongoc_client_set_stream_initiator(self.mongocClient, stream_initiator, self);
+    mongoc_client_set_stream_initiator(self.mongocClient, stream_initiator, (__bridge void *)(self));
 }
 
 - (MODQuery *)addQueryInQueue:(void (^)(MODQuery *currentMongoQuery))block owner:(id<NSObject>)owner name:(NSString *)name parameters:(NSDictionary *)parameters
@@ -181,8 +181,8 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
     mongoQuery.blockOperation = blockOperation;
     [self.operationQueue addOperation:blockOperation];
     [self.mongoQueries addObject:mongoQuery];
-    [blockOperation release];
-    return [mongoQuery autorelease];
+    MOD_RELEASE(blockOperation);
+    return MOD_AUTORELEASE(mongoQuery);
 }
 
 - (void)cancelAllOperations
@@ -214,6 +214,7 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
 - (MODQuery *)serverStatusWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedDictionary *serverStatus, MODQuery *mongoQuery))callback
 {
     MODQuery *query;
+    MODClient *currentSelf;
     
     query = [self addQueryInQueue:^(MODQuery *mongoQuery){
         bson_t output = BSON_INITIALIZER;
@@ -221,10 +222,10 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
         MODSortedDictionary *outputObjects = nil;
         
         if (!mongoQuery.isCanceled) {
-            mongoc_client_get_server_status(self.mongocClient, readPreferences?readPreferences.mongocReadPreferences:NULL, &output, &error);
-            outputObjects = [self.class objectFromBson:&output];
+            mongoc_client_get_server_status(currentSelf.mongocClient, readPreferences?readPreferences.mongocReadPreferences:NULL, &output, &error);
+            outputObjects = [currentSelf.class objectFromBson:&output];
         }
-        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(outputObjects, mongoQuery);
             }
@@ -237,6 +238,7 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
 - (MODQuery *)databaseNamesWithCallback:(void (^)(NSArray *list, MODQuery *mongoQuery))callback;
 {
     MODQuery *query;
+    MODClient *currentSelf;
     
     query = [self addQueryInQueue:^(MODQuery *mongoQuery) {
         bson_t output = BSON_INITIALIZER;
@@ -246,7 +248,7 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
         if (!mongoQuery.isCanceled) {
             char **cStringName;
             
-            cStringName = mongoc_client_get_database_names(self.mongocClient, &error);
+            cStringName = mongoc_client_get_database_names(currentSelf.mongocClient, &error);
             if (cStringName) {
                 char **cursor = cStringName;
                 
@@ -267,7 +269,7 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
             }
 
         }
-        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(list, mongoQuery);
             }
@@ -281,7 +283,7 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
 {
     MODDatabase *result;
     
-    result = [[[MODDatabase alloc] initWithClient:self name:databaseName] autorelease];
+    result = MOD_AUTORELEASE([[MODDatabase alloc] initWithClient:self name:databaseName]);
     result.readPreferences = self.readPreferences;
     return result;
 }
@@ -311,8 +313,8 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
     mongoc_ssl_opt_t mongocSSLOptions = { NULL, NULL, NULL, NULL, NULL, false };
     
     [sslOptions getMongocSSLOpt:&mongocSSLOptions];
-    [_sslOptions release];
-    _sslOptions = [sslOptions retain];
+    MOD_RELEASE(_sslOptions);
+    _sslOptions = MOD_RETAIN(sslOptions);
     mongoc_client_set_ssl_opts(self.mongocClient, &mongocSSLOptions);
 }
 

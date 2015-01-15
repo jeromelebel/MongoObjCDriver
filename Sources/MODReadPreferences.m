@@ -27,7 +27,7 @@
 {
     MODReadPreferences *readPreferences;
     
-    readPreferences = [[[self alloc] init] autorelease];
+    readPreferences = MOD_AUTORELEASE([[self alloc] init]);
     readPreferences.readMode = readMode;
     readPreferences.tags = tags;
     return readPreferences;
@@ -35,7 +35,7 @@
 
 + (instancetype)readPreferencesWithMongocReadPreferences:(const mongoc_read_prefs_t *)readPreferences
 {
-    return [[[self alloc] initWithMongocReadPreferences:readPreferences] autorelease];
+    return MOD_AUTORELEASE([[self alloc] initWithMongocReadPreferences:readPreferences]);
 }
 
 - (instancetype)init
@@ -70,7 +70,7 @@
 - (void)dealloc
 {
     mongoc_read_prefs_destroy(self.mongocReadPreferences);
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 - (MODReadPreferencesReadMode)readMode

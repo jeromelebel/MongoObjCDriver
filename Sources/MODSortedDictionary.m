@@ -25,17 +25,17 @@
 
 + (id)sortedDictionary
 {
-    return [[[self alloc] init] autorelease];
+    return MOD_AUTORELEASE([[self alloc] init]);
 }
 
 + (id)sortedDictionaryWithObject:(id)object forKey:(id)key
 {
-    return [[[self alloc] initWithObjects:&object forKeys:&key count:1] autorelease];
+    return MOD_AUTORELEASE([[self alloc] initWithObjects:&object forKeys:&key count:1]);
 }
 
 + (id)sortedDictionaryWithObjects:(const id [])objects forKeys:(const id [])keys count:(NSUInteger)cnt
 {
-    return [[[self alloc] initWithObjects:objects forKeys:keys count:cnt] autorelease];
+    return MOD_AUTORELEASE([[self alloc] initWithObjects:objects forKeys:keys count:cnt]);
 }
 
 static void getValuesAndKeys(id firstObject, va_list ap, NSMutableDictionary *values, NSMutableArray *keys)
@@ -63,24 +63,24 @@ static void getValuesAndKeys(id firstObject, va_list ap, NSMutableDictionary *va
     
     va_start(ap, firstObject);
     getValuesAndKeys(firstObject, ap, values, keys);
-    result = [[[self alloc] initWithDictionary:values sortedKeys:keys] autorelease];
+    result = MOD_AUTORELEASE([[self alloc] initWithDictionary:values sortedKeys:keys]);
     va_end(ap);
     return result;
 }
 
 + (id)sortedDictionaryWithDictionary:(NSDictionary *)dict
 {
-    return [[[self alloc] initWithDictionary:dict] autorelease];
+    return MOD_AUTORELEASE([[self alloc] initWithDictionary:dict]);
 }
 
 + (id)sortedDictionaryWithDictionary:(NSDictionary *)dict sortedKeys:(NSArray *)sortedKeys
 {
-    return [[[self alloc] initWithDictionary:dict sortedKeys:sortedKeys] autorelease];
+    return MOD_AUTORELEASE([[self alloc] initWithDictionary:dict sortedKeys:sortedKeys]);
 }
 
 + (id)sortedDictionaryWithObjects:(NSArray *)objects forKeys:(NSArray *)keys
 {
-    return [[[self alloc] initWithObjects:objects forKeys:keys] autorelease];
+    return MOD_AUTORELEASE([[self alloc] initWithObjects:objects forKeys:keys]);
 }
 
 - (instancetype)initWithObjects:(const id [])objects forKeys:(const id [])keys count:(NSUInteger)cnt
@@ -140,7 +140,7 @@ static void getValuesAndKeys(id firstObject, va_list ap, NSMutableDictionary *va
 {
     self.content = nil;
     self.sortedKeys = nil;
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 - (id)objectForKey:(id)aKey
@@ -190,9 +190,9 @@ static void getValuesAndKeys(id firstObject, va_list ap, NSMutableDictionary *va
     } else {
         [hack setObject:@[] forKey:@"__sorted_keys__"];
     }
-    result = [[hack description] retain];
-    [hack release];
-    return [result autorelease];
+    result = MOD_RETAIN([hack description]);
+    MOD_RELEASE(hack);
+    return MOD_AUTORELEASE(result);
 }
 
 - (id)tengenJsonEncodedObject
@@ -228,7 +228,7 @@ static void getValuesAndKeys(id firstObject, va_list ap, NSMutableDictionary *va
             result = [[MODScopeFunction alloc] initWithFunction:[self objectForKey:@"$function"] scope:[self objectForKey:@"$scope"]];
         }
     }
-    return [result autorelease];
+    return MOD_AUTORELEASE(result);
 }
 
 @end
@@ -236,7 +236,7 @@ static void getValuesAndKeys(id firstObject, va_list ap, NSMutableDictionary *va
 @implementation MODSortedDictionary (NSFastEnumeration)
 
 - (NSUInteger)countByEnumeratingWithState:(NSFastEnumerationState *)state
-                                  objects:(id [])stackbuf
+                                  objects:(__unsafe_unretained id [])stackbuf
                                     count:(NSUInteger)len
 {
     return [self.sortedKeys countByEnumeratingWithState:state objects:stackbuf count:len];

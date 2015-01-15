@@ -49,7 +49,7 @@
     self.parameters = nil;
     self.error = nil;
     self.result = nil;
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 - (void)cancel
@@ -110,10 +110,10 @@
     NSBlockOperation *operation;
     
     @synchronized(self) {
-        operation = [_blockOperation retain];
+        operation = MOD_RETAIN(_blockOperation);
     }
     [operation waitUntilFinished];
-    [operation release];
+    MOD_RELEASE(operation);
 }
 
 @end

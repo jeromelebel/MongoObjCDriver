@@ -6,7 +6,7 @@
 //
 //
 
-#import "MODBsonComparator.h"
+#import "MongoObjCDriver-private.h"
 #import "bson.h"
 
 typedef struct __BsonComparatorStack {
@@ -75,7 +75,7 @@ typedef struct __BsonComparatorStack {
         bson_destroy(self.bson2ToDestroy);
     }
     self.differences = nil;
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 - (BOOL)compareValueWithStack:(BsonComparatorStack *)stack prefix:(NSString *)prefix

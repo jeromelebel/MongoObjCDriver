@@ -41,8 +41,8 @@
         mongoc_database_destroy(self.mongocDatabase);
         self.mongocDatabase = nil;
     }
-    [_systemIndexesCollection release];
-    [super dealloc];
+    MOD_RELEASE(_systemIndexesCollection);
+    MOD_SUPER_DEALLOC();
 }
 
 - (void)mongoQueryDidFinish:(MODQuery *)mongoQuery withBsonError:(bson_error_t)error callbackBlock:(void (^)(void))callbackBlock
@@ -58,6 +58,7 @@
 - (MODQuery *)statsWithReadPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODSortedDictionary *databaseStats, MODQuery *mongoQuery))callback;
 {
     MODQuery *query;
+    MODDatabase *currentSelf = self;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery){
         MODSortedDictionary *stats = nil;
@@ -69,13 +70,13 @@
             
             bson_init (&cmd);
             BSON_APPEND_INT32(&cmd, "dbstats", 1);
-            if (mongoc_database_command_simple(self.mongocDatabase, &cmd, readPreferences?readPreferences.mongocReadPreferences:NULL, &output, &error)) {
-                stats = [[self.client class] objectFromBson:&output];
+            if (mongoc_database_command_simple(currentSelf.mongocDatabase, &cmd, readPreferences?readPreferences.mongocReadPreferences:NULL, &output, &error)) {
+                stats = [[currentSelf.client class] objectFromBson:&output];
             }
             bson_destroy(&cmd);
             bson_destroy(&output);
         }
-        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(stats, mongoQuery);
             }
@@ -87,6 +88,7 @@
 - (MODQuery *)collectionNamesWithCallback:(void (^)(NSArray *collectionList, MODQuery *mongoQuery))callback;
 {
     MODQuery *query;
+    MODDatabase *currentSelf = self;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery){
         NSMutableArray *collections = nil;
@@ -95,7 +97,7 @@
         if (!mongoQuery.isCanceled) {
             char **cStringCollections;
             
-            cStringCollections = mongoc_database_get_collection_names(self.mongocDatabase, &error);
+            cStringCollections = mongoc_database_get_collection_names(currentSelf.mongocDatabase, &error);
             if (cStringCollections) {
                 char **cursor = cStringCollections;
                 
@@ -108,12 +110,12 @@
                 bson_free(cStringCollections);
             }
         }
-        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(collections, mongoQuery);
             }
         }];
-        [collections release];
+        MOD_RELEASE(collections);
     } owner:self name:@"collectionnames" parameters:nil];
     return query;
 }
@@ -122,7 +124,7 @@
 {
     MODCollection *result;
     
-    result = [[[MODCollection alloc] initWithName:name database:self] autorelease];
+    result = MOD_AUTORELEASE([[MODCollection alloc] initWithName:name database:self]);
     result.readPreferences = self.readPreferences;
     return result;
 }
@@ -130,14 +132,15 @@
 - (MODQuery *)createCollectionWithName:(NSString *)collectionName callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
+    MODDatabase *currentSelf = self;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery){
         bson_error_t error = BSON_NO_ERROR;
         
         if (!mongoQuery.isCanceled) {
-            mongoc_database_create_collection(self.mongocDatabase, collectionName.UTF8String, NULL, &error);
+            mongoc_database_create_collection(currentSelf.mongocDatabase, collectionName.UTF8String, NULL, &error);
         }
-        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(mongoQuery);
             }
@@ -171,23 +174,24 @@
 - (MODQuery *)dropWithCallback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query;
+    MODDatabase *currentSelf = self;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         bson_error_t error = BSON_NO_ERROR;
         BOOL droppedCalled = NO;
         
         if (!mongoQuery.isCanceled) {
-            mongoc_database_drop(self.mongocDatabase, &error);
+            mongoc_database_drop(currentSelf.mongocDatabase, &error);
             droppedCalled = YES;
         }
-        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             if (droppedCalled) {
                 if (callback) {
                     callback(mongoQuery);
                 }
                 if (!mongoQuery.error) {
-                    self.dropped = YES;
-                    [NSNotificationCenter.defaultCenter postNotificationName:MODDatabase_Dropped_Notification object:self];
+                    currentSelf.dropped = YES;
+                    [NSNotificationCenter.defaultCenter postNotificationName:MODDatabase_Dropped_Notification object:currentSelf];
                 }
             }
         }];
@@ -203,7 +207,7 @@
 - (MODCollection *)systemIndexesCollection
 {
     if (!_systemIndexesCollection) {
-        _systemIndexesCollection = [[self collectionForName:@"system.indexes"] retain];
+        _systemIndexesCollection = MOD_RETAIN([self collectionForName:@"system.indexes"]);
     }
     return _systemIndexesCollection;
 }
@@ -215,8 +219,8 @@
 
 - (void)setReadPreferences:(MODReadPreferences *)readPreferences
 {
-    [_readPreferences release];
-    _readPreferences = [readPreferences retain];
+    MOD_RELEASE(_readPreferences);
+    _readPreferences = MOD_RETAIN(readPreferences);
     if (self.mongocDatabase) {
         mongoc_database_set_read_prefs(self.mongocDatabase, self.mongocReadPreferences);
     }

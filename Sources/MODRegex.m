@@ -12,11 +12,11 @@
 - (instancetype)initWithPattern:(NSString *)pattern options:(NSString *)options
 {
     if (self = [self init]) {
-        _pattern = [pattern retain];
+        _pattern = MOD_RETAIN(pattern);
         if (options) {
-            _options = [options retain];
+            _options = MOD_RETAIN(options);
         } else {
-            _options = [@"" retain];
+            _options = MOD_RETAIN(@"");
         }
     }
     return self;
@@ -24,9 +24,9 @@
 
 - (void)dealloc
 {
-    [_pattern release];
-    [_options release];
-    [super dealloc];
+    MOD_RELEASE(_pattern);
+    MOD_RELEASE(_options);
+    MOD_SUPER_DEALLOC();
 }
 
 - (NSString *)pattern

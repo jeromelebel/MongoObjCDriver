@@ -305,15 +305,15 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
                 
                 bson_iter_binary(iterator, &subType, &length, &binary);
                 data = [[NSData alloc] initWithBytes:binary length:length];
-                result = [[[MODBinary alloc] initWithData:data binaryType:subType] autorelease];
-                [data release];
+                result = MOD_AUTORELEASE([[MODBinary alloc] initWithData:data binaryType:subType]);
+                MOD_RELEASE(data);
             }
             break;
         case BSON_TYPE_UNDEFINED:
-            result = [[[MODUndefined alloc] init] autorelease];
+            result = MOD_AUTORELEASE([[MODUndefined alloc] init]);
             break;
         case BSON_TYPE_OID:
-            result = [[[MODObjectId alloc] initWithOid:bson_iter_oid(iterator)] autorelease];
+            result = MOD_AUTORELEASE([[MODObjectId alloc] initWithOid:bson_iter_oid(iterator)]);
             break;
         case BSON_TYPE_BOOL:
             result = [NSNumber numberWithBool:bson_iter_bool(iterator) == true];
@@ -330,13 +330,11 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
                 NSString *pattern = nil;
                 NSString *options = nil;
                 
-                pattern = [[NSString alloc] initWithUTF8String:bson_iter_regex(iterator, &cStringOptions)];
+                pattern = [NSString stringWithUTF8String:bson_iter_regex(iterator, &cStringOptions)];
                 if (cStringOptions) {
-                    options = [[NSString alloc] initWithUTF8String:cStringOptions];
+                    options = [NSString stringWithUTF8String:cStringOptions];
                 }
-                result = [[[MODRegex alloc] initWithPattern:pattern options:options] autorelease];
-                [pattern release];
-                [options release];
+                result = MOD_AUTORELEASE([[MODRegex alloc] initWithPattern:pattern options:options]);
             }
             break;
         case BSON_TYPE_DBPOINTER:
@@ -348,27 +346,25 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
                 MODObjectId *objectId;
                 
                 bson_iter_dbpointer(iterator, &collectionLength, &collectionCString, &oid);
-                collection = [[[NSString alloc] initWithBytes:collectionCString length:collectionLength encoding:NSUTF8StringEncoding] autorelease];
-                objectId = [[[MODObjectId alloc] initWithOid:oid] autorelease];
-                result = [[[MODDBPointer alloc] initWithCollectionName:collection objectId:objectId] autorelease];
+                collection = MOD_AUTORELEASE([[NSString alloc] initWithBytes:collectionCString length:collectionLength encoding:NSUTF8StringEncoding]);
+                objectId = MOD_AUTORELEASE([[MODObjectId alloc] initWithOid:oid]);
+                result = MOD_AUTORELEASE([[MODDBPointer alloc] initWithCollectionName:collection objectId:objectId]);
             }
             break;
         case BSON_TYPE_CODE:
             {
                 NSString *value;
                 
-                value = [[NSString alloc] initWithUTF8String:bson_iter_code(iterator, NULL)];
-                result = [[[MODFunction alloc] initWithFunction:value] autorelease];
-                [value release];
+                value = [NSString stringWithUTF8String:bson_iter_code(iterator, NULL)];
+                result = MOD_AUTORELEASE([[MODFunction alloc] initWithFunction:value]);
             }
             break;
         case BSON_TYPE_SYMBOL:
             {
                 NSString *value;
                 
-                value = [[NSString alloc] initWithUTF8String:bson_iter_symbol(iterator, NULL)];
-                result = [[[MODSymbol alloc] initWithValue:value] autorelease];
-                [value release];
+                value = [NSString stringWithUTF8String:bson_iter_symbol(iterator, NULL)];
+                result = MOD_AUTORELEASE([[MODSymbol alloc] initWithValue:value]);
             }
             break;
         case BSON_TYPE_CODEWSCOPE:
@@ -382,8 +378,8 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
                 function = [[NSString alloc] initWithUTF8String:bson_iter_codewscope(iterator, NULL, &scopeDataLength, &scopeData)];
                 NSAssert(bson_init_static(&scopeBson, scopeData, scopeDataLength), @"problem to decode bson %@", [NSData dataWithBytes:scopeData length:scopeDataLength]);
                 scope = [self objectFromBson:&scopeBson];
-                result = [[[MODScopeFunction alloc] initWithFunction:function scope:scope] autorelease];
-                [function release];
+                result = MOD_AUTORELEASE([[MODScopeFunction alloc] initWithFunction:function scope:scope]);
+                MOD_RELEASE(function);
                 bson_destroy(&scopeBson);
             }
             break;
@@ -395,17 +391,17 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
                 uint32_t timestamp, increment;
                 
                 bson_iter_timestamp(iterator, &timestamp, &increment);
-                result = [[[MODTimestamp alloc] initWithTValue:timestamp iValue:increment] autorelease];
+                result = MOD_AUTORELEASE([[MODTimestamp alloc] initWithTValue:timestamp iValue:increment]);
             }
             break;
         case BSON_TYPE_INT64:
             result = [NSNumber numberWithLongLong:bson_iter_int64(iterator)];
             break;
         case BSON_TYPE_MINKEY:
-            result = [[[MODMinKey alloc] init] autorelease];
+            result = MOD_AUTORELEASE([[MODMinKey alloc] init]);
             break;
         case BSON_TYPE_MAXKEY:
-            result = [[[MODMaxKey alloc] init] autorelease];
+            result = MOD_AUTORELEASE([[MODMaxKey alloc] init]);
             break;
     }
     return result;
@@ -463,9 +459,8 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
         for (id arrayValue in value) {
             NSString *arrayKey;
             
-            arrayKey = [[NSString alloc] initWithFormat:@"%ld", ii];
+            arrayKey = [NSString stringWithFormat:@"%ld", ii];
             [self appendValue:arrayValue key:arrayKey toBson:&childBson];
-            [arrayKey release];
             ii++;
         }
         bson_append_array_end(bson, &childBson);
@@ -542,9 +537,8 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
     for (id arrayValue in array) {
         NSString *arrayKey;
         
-        arrayKey = [[NSString alloc] initWithFormat:@"%ld", ii];
+        arrayKey = [NSString stringWithFormat:@"%ld", ii];
         [self appendValue:arrayValue key:arrayKey toBson:&childBson];
-        [arrayKey release];
         ii++;
     }
     bson_append_array_end(bson, &childBson);
@@ -644,7 +638,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
             
             [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ssZZZ"];
             [result appendFormat:@"new Date(\"%@\")", [formatter stringFromDate:value]];
-            [formatter release];
+            MOD_RELEASE(formatter);
         } else {
             [result appendFormat:@"new Date(%lld)", llround([value timeIntervalSince1970] * 1000.0)];
         }
@@ -767,7 +761,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         }
         ii++;
     }
-    return [result autorelease];
+    return MOD_AUTORELEASE(result);
 }
 
 + (NSString *)escapeSlashesForString:(NSString *)string
@@ -799,14 +793,14 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         }
         ii++;
     }
-    return [result autorelease];
+    return MOD_AUTORELEASE(result);
 }
 
 + (BOOL)isEqualWithJson:(NSString *)json toBsonData:(NSData *)document info:(NSDictionary **)info
 {
     bson_t jsonBsonDocument = BSON_INITIALIZER;
     BOOL result;
-    NSMutableDictionary *context = [[[NSMutableDictionary alloc] init] autorelease];
+    NSMutableDictionary *context = [NSMutableDictionary dictionary];
     NSError *error;
     
     if (info) {
@@ -824,7 +818,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
         comparator = [[MODBsonComparator alloc] initWithBson1:&jsonBsonDocument bson2:originalBson];
         result = [comparator compare];
         [context setObject:comparator.differences forKey:@"differences"];
-        [comparator release];
+        MOD_RELEASE(comparator);
         bson_destroy(originalBson);
     }
     bson_destroy(&jsonBsonDocument);
@@ -913,7 +907,7 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
 
 + (void)setLogCallback:(void (^)(MODLogLevel level, const char *domain, const char *message))callback
 {
-    [logCallback release];
+    MOD_RELEASE(logCallback);
     logCallback = [callback copy];
 }
 

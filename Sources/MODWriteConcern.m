@@ -6,8 +6,7 @@
 //
 //
 
-#import "MODWriteConcern.h"
-#import "MODWriteConcern-private.h"
+#import "MongoObjCDriver-private.h"
 
 @interface MODWriteConcern ()
 @property (nonatomic, assign, readwrite) BOOL fileSync;
@@ -24,7 +23,7 @@
 
 + (instancetype)writeConcernWithMongocWriteConcern:(const mongoc_write_concern_t *)mongocWriteConcern
 {
-    return [[[self alloc] initWithMongocWriteConcern:mongocWriteConcern] autorelease];
+    return MOD_AUTORELEASE([[self alloc] initWithMongocWriteConcern:mongocWriteConcern]);
 }
 
 - (instancetype)init
@@ -61,7 +60,7 @@
 - (void)dealloc
 {
     mongoc_write_concern_destroy(self.mongocWriteConcern);
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 - (BOOL)fileSync

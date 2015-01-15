@@ -6,8 +6,7 @@
 //
 //
 
-#import "MODDocumentComparator.h"
-#import "MODSortedDictionary.h"
+#import "MongoObjCDriver-private.h"
 
 @interface MODDocumentComparator ()
 @property (nonatomic, readwrite, strong) MODSortedDictionary *document1;
@@ -38,7 +37,7 @@
     self.document1 = nil;
     self.document2 = nil;
     self.differences = nil;
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 - (BOOL)compareValue1:(id)value1 withValue2:(id)value2 prefix:(NSString *)prefix

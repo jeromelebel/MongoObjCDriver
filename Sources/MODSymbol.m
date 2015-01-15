@@ -15,15 +15,15 @@
 - (instancetype)initWithValue:(NSString *)value
 {
     if (self = [self init]) {
-        _value = [value retain];
+        _value = MOD_RETAIN(value);
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [_value release];
-    [super dealloc];
+    MOD_RELEASE(_value);
+    MOD_SUPER_DEALLOC();
 }
 
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON

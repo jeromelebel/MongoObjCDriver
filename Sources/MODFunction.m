@@ -23,7 +23,7 @@
 - (void)dealloc
 {
     self.function = nil;
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON

@@ -25,7 +25,7 @@
 {
     self.function = nil;
     self.scope = nil;
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON jsonKeySortOrder:(MODJsonKeySortOrder)jsonKeySortOrder

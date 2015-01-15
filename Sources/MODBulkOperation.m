@@ -35,7 +35,7 @@
     self.collection = nil;
     self.writeConcern = nil;
     mongoc_bulk_operation_destroy(_mongocBulkOperation);
-    [super dealloc];
+    MOD_SUPER_DEALLOC();
 }
 
 - (void)insert:(MODSortedDictionary *)document

@@ -69,9 +69,9 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
     }
     self.absoluteName = nil;
     self.readPreferences = nil;
-    [_database release];
-    [_name release];
-    [super dealloc];
+    MOD_RELEASE(_database);
+    MOD_RELEASE(_name);
+    MOD_SUPER_DEALLOC();
 }
 
 - (void)updateAbsoluteName
@@ -83,8 +83,8 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
 {
     if (database != _database) {
         [self willChangeValueForKey:@"database"];
-        [_database release];
-        _database = [database retain];
+        MOD_RELEASE(_database);
+        _database = MOD_RETAIN(database);
         [self updateAbsoluteName];
         [self didChangeValueForKey:@"database"];
     }
@@ -113,8 +113,8 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
 {
     if (name != _name) {
         [self willChangeValueForKey:@"name"];
-        [_name release];
-        _name = [name retain];
+        MOD_RELEASE(_name);
+        _name = MOD_RETAIN(name);
         [self updateAbsoluteName];
         [self didChangeValueForKey:@"name"];
     }
@@ -139,6 +139,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
 {
     MODQuery *query = nil;
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    MODCollection *currentSelf = self;
     
     NSParameterAssert(newCollectionName);
     if (newDatabase == self.database) {
@@ -155,17 +156,17 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
         BOOL renameCalled = NO;
         
         if (!mongoQuery.isCanceled) {
-            mongoc_collection_rename(self.mongocCollection, newDatabase.name.UTF8String, newCollectionName.UTF8String, dropTargetBeforeRenaming, &error);
+            mongoc_collection_rename(currentSelf.mongocCollection, newDatabase.name.UTF8String, newCollectionName.UTF8String, dropTargetBeforeRenaming, &error);
             renameCalled = YES;
         }
-        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^{
+        [currentSelf mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^{
             if (renameCalled) {
                 if (!mongoQuery.error) {
-                    self.name = newCollectionName;
+                    currentSelf.name = newCollectionName;
                     if (newDatabase) {
-                        self.database = newDatabase;
+                        currentSelf.database = newDatabase;
                     }
-                    self.absoluteName = [NSString stringWithFormat:@"%@.%@", self.database.name, self.name];
+                    currentSelf.absoluteName = [NSString stringWithFormat:@"%@.%@", currentSelf.database.name, currentSelf.name];
                 }
                 if (callback) {
                     callback(mongoQuery);
@@ -179,6 +180,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
 - (MODQuery *)statsWithCallback:(void (^)(MODSortedDictionary *stats, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
+    MODCollection *currentSelf = self;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         MODSortedDictionary *stats = nil;
@@ -187,12 +189,12 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
         if (!mongoQuery.isCanceled) {
             bson_t output = BSON_INITIALIZER;
             
-            if (mongoc_collection_stats(self.mongocCollection, NULL, &output, &error)) {
-                stats = [[self.client class] objectFromBson:&output];
+            if (mongoc_collection_stats(currentSelf.mongocCollection, NULL, &output, &error)) {
+                stats = [[currentSelf.client class] objectFromBson:&output];
             }
             bson_destroy(&output);
         }
-        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(stats, mongoQuery);
             }
@@ -209,6 +211,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
                       callback:(void (^)(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
+    MODCollection *currentSelf = self;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
@@ -222,19 +225,19 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             
             documents = [[NSMutableArray alloc] initWithCapacity:limit];
             allBsonData = [[NSMutableArray alloc] initWithCapacity:limit];
-            cursor = [self cursorWithCriteria:criteria fields:fields skip:skip limit:limit sort:sort];
+            cursor = [currentSelf cursorWithCriteria:criteria fields:fields skip:skip limit:limit sort:sort];
             while ((document = [cursor nextDocumentWithBsonData:&bsonData error:&error]) != nil) {
                 [documents addObject:document];
                 [allBsonData addObject:bsonData];
             }
         }
-        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(documents, allBsonData, mongoQuery);
             }
         }];
-        [documents release];
-        [allBsonData release];
+        MOD_RELEASE(documents);
+        MOD_RELEASE(allBsonData);
     } owner:self name:@"find" parameters:@{ @"criteria": criteria?criteria:[NSNull null], @"fields": fields?fields:[NSNull null], @"skip": [NSNumber numberWithUnsignedInteger:skip], @"limit": [NSNumber numberWithUnsignedInteger:limit], @"sort": sort?sort:[NSNull null] }];
     return query;
 }
@@ -245,17 +248,18 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
                             limit:(int32_t)limit
                              sort:(MODSortedDictionary *)sort
 {
-    return [[[MODCursor alloc] initWithCollection:self
-                                            query:query
-                                           fields:fields
-                                             skip:skip
-                                            limit:limit
-                                             sort:sort] autorelease];
+    return MOD_AUTORELEASE([[MODCursor alloc] initWithCollection:self
+                                                           query:query
+                                                          fields:fields
+                                                            skip:skip
+                                                           limit:limit
+                                                            sort:sort]);
 }
 
 - (MODQuery *)countWithCriteria:(MODSortedDictionary *)criteria readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(int64_t count, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
+    MODCollection *currentSelf = self;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         int64_t count = 0;
@@ -265,7 +269,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             bson_t bsonQuery = BSON_INITIALIZER;
             
             if (criteria && criteria.count > 0) {
-                [self.client.class appendObject:criteria toBson:&bsonQuery];
+                [currentSelf.client.class appendObject:criteria toBson:&bsonQuery];
             }
             
             if (error) {
@@ -273,15 +277,15 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             } else {
                 bson_error_t bsonError;
                 
-                count = mongoc_collection_count(self.mongocCollection, 0, &bsonQuery, 0, 0, readPreferences?readPreferences.mongocReadPreferences:NULL, &bsonError);
+                count = mongoc_collection_count(currentSelf.mongocCollection, 0, &bsonQuery, 0, 0, readPreferences?readPreferences.mongocReadPreferences:NULL, &bsonError);
                 if (count == -1) {
-                    error = [self.client.class errorFromBsonError:bsonError];
+                    error = [currentSelf.client.class errorFromBsonError:bsonError];
                 }
             }
             bson_destroy(&bsonQuery);
         }
         mongoQuery.result = [[NSNumber alloc] initWithUnsignedLongLong:count];
-        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(count, mongoQuery);
             }
@@ -295,6 +299,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
                          callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
+    MODCollection *currentSelf = self;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
@@ -303,7 +308,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             NSInteger ii = 0;
             mongoc_bulk_operation_t *bulk;
             
-            bulk = mongoc_collection_create_bulk_operation(self.mongocCollection, false, NULL);
+            bulk = mongoc_collection_create_bulk_operation(currentSelf.mongocCollection, false, NULL);
             for (id document in documents) {
                 bson_t bson = BSON_INITIALIZER;
                 
@@ -315,10 +320,10 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
                         userInfo = error.userInfo.mutableCopy;
                         [userInfo setObject:[NSNumber numberWithInteger:ii] forKey:@"documentIndex"];
                         error = [NSError errorWithDomain:error.domain code:error.code userInfo:userInfo];
-                        [userInfo release];
+                        MOD_RELEASE(userInfo);
                     }
                 } else if ([document isKindOfClass:[MODSortedDictionary class]]) {
-                    [[self.client class] appendObject:document toBson:&bson];
+                    [[currentSelf.client class] appendObject:document toBson:&bson];
                 }
                 if (error) {
                     break;
@@ -330,24 +335,24 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
                     
                     ii = 0;
                     mongoc_bulk_operation_execute(bulk, NULL, &bsonError);
-                    error = [self.client.class errorFromBsonError:bsonError];
+                    error = [currentSelf.client.class errorFromBsonError:bsonError];
                     if (error) {
                         break;
                     }
                     mongoc_bulk_operation_destroy(bulk);
-                    bulk = mongoc_collection_create_bulk_operation(self.mongocCollection, false, writeConcern.mongocWriteConcern);
+                    bulk = mongoc_collection_create_bulk_operation(currentSelf.mongocCollection, false, writeConcern.mongocWriteConcern);
                 }
             }
             if (!error && ii > 0) {
                 bson_error_t bsonError = BSON_NO_ERROR;
                 
                 mongoc_bulk_operation_execute(bulk, NULL, &bsonError);
-                error = [self.client.class errorFromBsonError:bsonError];
+                error = [currentSelf.client.class errorFromBsonError:bsonError];
             }
             mongoc_bulk_operation_destroy(bulk);
             mongoQuery.error = error;
         }
-        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(mongoQuery);
             }
@@ -364,6 +369,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
                         callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
+    MODCollection *currentSelf = self;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
@@ -373,16 +379,16 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             bson_t bsonUpdate = BSON_INITIALIZER;
             
             if (criteria && criteria.count > 0) {
-                [self.client.class appendObject:criteria toBson:&bsonCriteria];
+                [currentSelf.client.class appendObject:criteria toBson:&bsonCriteria];
             }
             if (update && update.count > 0) {
-                [self.client.class appendObject:update toBson:&bsonUpdate];
+                [currentSelf.client.class appendObject:update toBson:&bsonUpdate];
             }
             if (error == nil) {
                 bson_error_t bsonError = BSON_NO_ERROR;
                 
-                if (!mongoc_collection_update(self.mongocCollection, (upsert?MONGOC_UPDATE_UPSERT:0) | (multiUpdate?MONGOC_UPDATE_MULTI_UPDATE:0), &bsonCriteria, &bsonUpdate, writeConcern.mongocWriteConcern, &bsonError)) {
-                    error = [self.client.class errorFromBsonError:bsonError];
+                if (!mongoc_collection_update(currentSelf.mongocCollection, (upsert?MONGOC_UPDATE_UPSERT:0) | (multiUpdate?MONGOC_UPDATE_MULTI_UPDATE:0), &bsonCriteria, &bsonUpdate, writeConcern.mongocWriteConcern, &bsonError)) {
+                    error = [currentSelf.client.class errorFromBsonError:bsonError];
                     mongoQuery.error = error;
                 }
             } else {
@@ -391,7 +397,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             bson_destroy(&bsonCriteria);
             bson_destroy(&bsonUpdate);
         }
-        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(mongoQuery);
             }
@@ -403,6 +409,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
 - (MODQuery *)saveWithDocument:(MODSortedDictionary *)document callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
+    MODCollection *currentSelf = self;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
@@ -411,14 +418,14 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             bson_t bsonDocument = BSON_INITIALIZER;
             bson_error_t bsonError = BSON_NO_ERROR;
             
-            [self.client.class appendObject:document toBson:&bsonDocument];
-            if (!mongoc_collection_save(self.mongocCollection, &bsonDocument, NULL, &bsonError)) {
-                error = [self.client.class errorFromBsonError:bsonError];
+            [currentSelf.client.class appendObject:document toBson:&bsonDocument];
+            if (!mongoc_collection_save(currentSelf.mongocCollection, &bsonDocument, NULL, &bsonError)) {
+                error = [currentSelf.client.class errorFromBsonError:bsonError];
                 mongoQuery.error = error;
             }
             bson_destroy(&bsonDocument);
         }
-        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(mongoQuery);
             }
@@ -430,6 +437,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
 - (MODQuery *)removeWithCriteria:(id)criteria callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
+    MODCollection *currentSelf = self;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
@@ -444,15 +452,15 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
                     [MODRagelJsonParser bsonFromJson:&bsonCriteria json:criteria error:&error];
                 }
             } else if ([criteria isKindOfClass:[MODSortedDictionary class]]) {
-                [[self.client class] appendObject:criteria toBson:&bsonCriteria];
+                [[currentSelf.client class] appendObject:criteria toBson:&bsonCriteria];
             } else {
-                error = [self.client.class errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
+                error = [currentSelf.client.class errorWithErrorDomain:MODJsonParserErrorDomain code:JSON_PARSER_ERROR_EXPECTED_END descriptionDetails:nil];
             }
             if (error == nil) {
                 bson_error_t bsonError = BSON_NO_ERROR;
                 
-                if (!mongoc_collection_remove(self.mongocCollection, MONGOC_DELETE_NONE, &bsonCriteria, NULL, &bsonError)) {
-                    error = [self.client.class errorFromBsonError:bsonError];
+                if (!mongoc_collection_remove(currentSelf.mongocCollection, MONGOC_DELETE_NONE, &bsonCriteria, NULL, &bsonError)) {
+                    error = [currentSelf.client.class errorFromBsonError:bsonError];
                     mongoQuery.error = error;
                 }
             } else {
@@ -460,7 +468,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             }
             bson_destroy(&bsonCriteria);
         }
-        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(mongoQuery);
             }
@@ -483,7 +491,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
                                                            callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
         callback(documents, mongoQuery);
     }];
-    [dictionary release];
+    MOD_RELEASE(dictionary);
     return query;
 }
 
@@ -493,6 +501,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
     // Just in case the index options are changed before we add the index
     // we need to make a copy of it
     MODIndexOpt *indexOptionsCopy = [indexOptions copy];
+    MODCollection *currentSelf = self;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
@@ -504,15 +513,15 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             if ([keys isKindOfClass:[NSString class]]) {
                 [MODRagelJsonParser bsonFromJson:&index json:keys error:&error];
             } else {
-                [[self.client class] appendObject:keys toBson:&index];
+                [[currentSelf.client class] appendObject:keys toBson:&index];
             }
             if (!error) {
-                mongoc_collection_create_index(self.mongocCollection, &index, indexOptionsCopy.mongocIndexOpt, &bsonError);
-                error = [self.client.class errorFromBsonError:bsonError];
+                mongoc_collection_create_index(currentSelf.mongocCollection, &index, indexOptionsCopy.mongocIndexOpt, &bsonError);
+                error = [currentSelf.client.class errorFromBsonError:bsonError];
             }
             bson_destroy(&index);
         }
-        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(mongoQuery);
             }
@@ -524,6 +533,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
 - (MODQuery *)dropIndexName:(NSString *)name callback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
+    MODCollection *currentSelf = self;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         NSError *error = nil;
@@ -531,10 +541,10 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
         if (!mongoQuery.isCanceled) {
             bson_error_t bsonError = BSON_NO_ERROR;
             
-            mongoc_collection_drop_index(self.mongocCollection, name.UTF8String, &bsonError);
-            error = [self.client.class errorFromBsonError:bsonError];
+            mongoc_collection_drop_index(currentSelf.mongocCollection, name.UTF8String, &bsonError);
+            error = [currentSelf.client.class errorFromBsonError:bsonError];
         }
-        [self mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(mongoQuery);
             }
@@ -550,6 +560,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
                         callback:(void (^)(MODQuery *mongoQuery, MODCursor *cursor))callback
 {
     MODQuery *query = nil;
+    MODCollection *currentSelf = self;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         MODCursor *cursor = nil;
@@ -560,12 +571,12 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             bson_t bsonOptions = BSON_INITIALIZER;
             mongoc_cursor_t *mongocCursor = nil;
             
-            [self.client.class appendArray:pipeline toBson:&bsonPipeline];
-            [self.client.class appendObject:options toBson:&bsonOptions];
-            mongocCursor = mongoc_collection_aggregate(self.mongocCollection, mongocQueryFlagsFromMODQueryFlags(flags), &bsonPipeline, &bsonOptions, readPreferences?readPreferences.mongocReadPreferences:NULL);
-            cursor = [[[MODCursor alloc] initWithCollection:self mongocCursor:mongocCursor] autorelease];
+            [currentSelf.client.class appendArray:pipeline toBson:&bsonPipeline];
+            [currentSelf.client.class appendObject:options toBson:&bsonOptions];
+            mongocCursor = mongoc_collection_aggregate(currentSelf.mongocCollection, mongocQueryFlagsFromMODQueryFlags(flags), &bsonPipeline, &bsonOptions, readPreferences?readPreferences.mongocReadPreferences:NULL);
+            cursor = MOD_AUTORELEASE([[MODCursor alloc] initWithCollection:currentSelf mongocCursor:mongocCursor]);
         }
-        [self mongoQueryDidFinish:mongoQuery withBsonError:bsonError callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withBsonError:bsonError callbackBlock:^(void) {
             if (!mongoQuery.isCanceled && callback) {
                 callback(mongoQuery, cursor);
             }
@@ -591,15 +602,16 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
 - (MODQuery *)commandSimpleWithCommand:(MODSortedDictionary *)command readPreferences:(MODReadPreferences *)readPreferences callback:(void (^)(MODQuery *query, MODSortedDictionary *reply))callback
 {
     MODQuery *mongoQuery = nil;
+    MODCollection *currentSelf = self;
     
     mongoQuery = [self.client addQueryInQueue:^(MODQuery *currentMongoQuery) {
         MODSortedDictionary *reply = nil;
         NSError *error = nil;
         
         if (!currentMongoQuery.isCanceled) {
-            [self _commandSimpleWithCommand:command readPreferences:readPreferences reply:&reply error:&error];
+            [currentSelf _commandSimpleWithCommand:command readPreferences:readPreferences reply:&reply error:&error];
         }
-        [self mongoQueryDidFinish:currentMongoQuery withError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:currentMongoQuery withError:error callbackBlock:^(void) {
             if (!currentMongoQuery.isCanceled && callback) {
                 callback(currentMongoQuery, reply);
             }
@@ -623,6 +635,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
                               callback:(void (^)(MODQuery *mongoQuery, MODSortedDictionary *documents))callback
 {
     MODQuery *mongoQuery = nil;
+    MODCollection *currentSelf = self;
     
     mongoQuery = [self.client addQueryInQueue:^(MODQuery *currentMongoQuery) {
         NSError *error = nil;
@@ -632,7 +645,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             MODSortedMutableDictionary *command;
             
             command = [MODSortedMutableDictionary sortedDictionary];
-            [command setObject:self.name forKey:@"mapreduce"];
+            [command setObject:currentSelf.name forKey:@"mapreduce"];
             [command setObject:mapFunction forKey:@"map"];
             [command setObject:reduceFunction forKey:@"reduce"];
             if (query && query.count > 0) [command setObject:query forKey:@"query"];
@@ -646,9 +659,9 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             [command setObject:[NSNumber numberWithBool:jsmode] forKey:@"jsmode"];
             [command setObject:[NSNumber numberWithBool:verbose] forKey:@"verbose"];
 
-            [self _commandSimpleWithCommand:command readPreferences:readPreferences reply:&reply error:&error];
+            [currentSelf _commandSimpleWithCommand:command readPreferences:readPreferences reply:&reply error:&error];
         }
-        [self mongoQueryDidFinish:currentMongoQuery withError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:currentMongoQuery withError:error callbackBlock:^(void) {
             if (!currentMongoQuery.isCanceled && callback) {
                 callback(currentMongoQuery, reply);
             }
@@ -660,23 +673,24 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
 - (MODQuery *)dropWithCallback:(void (^)(MODQuery *mongoQuery))callback
 {
     MODQuery *query;
+    MODCollection *currentSelf = self;
     
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         bson_error_t error = BSON_NO_ERROR;
         BOOL droppedCalled = NO;
         
         if (!mongoQuery.isCanceled) {
-            mongoc_collection_drop(self.mongocCollection, &error);
+            mongoc_collection_drop(currentSelf.mongocCollection, &error);
             droppedCalled = YES;
         }
-        [self mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
+        [currentSelf mongoQueryDidFinish:mongoQuery withBsonError:error callbackBlock:^(void) {
             if (droppedCalled) {
                 if (callback) {
                     callback(mongoQuery);
                 }
                 if (!mongoQuery.error) {
-                    self.dropped = YES;
-                    [NSNotificationCenter.defaultCenter postNotificationName:MODCollection_Dropped_Notification object:self];
+                    currentSelf.dropped = YES;
+                    [NSNotificationCenter.defaultCenter postNotificationName:MODCollection_Dropped_Notification object:currentSelf];
                 }
             }
         }];
@@ -706,8 +720,8 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
 
 - (void)setReadPreferences:(MODReadPreferences *)readPreferences
 {
-    [_readPreferences release];
-    _readPreferences = [readPreferences retain];
+    MOD_RELEASE(_readPreferences);
+    _readPreferences = MOD_RETAIN(readPreferences);
     if (self.mongocCollection) {
         mongoc_collection_set_read_prefs(self.mongocCollection, self.mongocReadPreferences);
     }

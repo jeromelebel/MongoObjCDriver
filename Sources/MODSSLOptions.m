@@ -6,7 +6,7 @@
 //
 //
 
-#import "MODSSLOptions.h"
+#import "MongoObjCDriver-private.h"
 #include "mongoc-ssl.h"
 
 @interface MODSSLOptions ()
@@ -49,7 +49,7 @@
 {
     MODSSLOptions *result;
     
-    result = [[[MODSSLOptions alloc] init] autorelease];
+    result = MOD_AUTORELEASE([[MODSSLOptions alloc] init]);
     if (sslOpt->pem_file) result.pemFileName = [NSString stringWithUTF8String:sslOpt->pem_file];
     if (sslOpt->pem_pwd) result.pemPassword = [NSString stringWithUTF8String:sslOpt->pem_pwd];
     if (sslOpt->ca_file) result.caFileName = [NSString stringWithUTF8String:sslOpt->ca_file];
