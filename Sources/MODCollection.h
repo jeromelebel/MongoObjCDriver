@@ -77,7 +77,7 @@ typedef enum {
 - (MODQuery *)dropIndexName:(NSString *)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback;
 
 - (MODQuery *)aggregateWithFlags:(MODQueryFlags)flags
-                        pipeline:(MODSortedDictionary *)pipeline
+                        pipeline:(NSArray *)pipeline
                          options:(MODSortedDictionary *)options
                  readPreferences:(MODReadPreferences *)readPreferences
                         callback:(void (^)(MODQuery *mongoQuery, MODCursor *cursor))callback;

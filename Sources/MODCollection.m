@@ -544,7 +544,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
 }
 
 - (MODQuery *)aggregateWithFlags:(MODQueryFlags)flags
-                        pipeline:(MODSortedDictionary *)pipeline
+                        pipeline:(NSArray *)pipeline
                          options:(MODSortedDictionary *)options
                  readPreferences:(MODReadPreferences *)readPreferences
                         callback:(void (^)(MODQuery *mongoQuery, MODCursor *cursor))callback
@@ -560,7 +560,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             bson_t bsonOptions = BSON_INITIALIZER;
             mongoc_cursor_t *mongocCursor = nil;
             
-            [self.client.class appendObject:pipeline toBson:&bsonPipeline];
+            [self.client.class appendArray:pipeline toBson:&bsonPipeline];
             [self.client.class appendObject:options toBson:&bsonOptions];
             mongocCursor = mongoc_collection_aggregate(self.mongocCollection, mongocQueryFlagsFromMODQueryFlags(flags), &bsonPipeline, &bsonOptions, readPreferences?readPreferences.mongocReadPreferences:NULL);
             cursor = [[[MODCursor alloc] initWithCollection:self mongocCursor:mongocCursor] autorelease];
