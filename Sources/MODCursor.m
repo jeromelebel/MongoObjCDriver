@@ -172,7 +172,8 @@
 }
 
 
-- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, MODSortedDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback
+- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, MODSortedDictionary *document, NSData *data))documentCallback
+                                              endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback
 {
     MODQuery *query = nil;
     MODCursor *currentSelf = self;
@@ -183,11 +184,12 @@
         NSError *error = nil;
         
         if (!mongoQuery.isCanceled) {
-            MODSortedDictionary *document;
-            
             while (!cursorStopped) {
+                MODSortedDictionary *document;
+                NSData *documentData = nil;
+                
                 documentCount++;
-                document = [currentSelf nextDocumentWithBsonData:nil error:&error];
+                document = [currentSelf nextDocumentWithBsonData:&documentData error:&error];
                 mongoQuery.error = error;
                 if (!document) {
                     break;
@@ -196,7 +198,7 @@
                     BOOL *cursorStoppedPtr = &cursorStopped;
                     
                     dispatch_sync(dispatch_get_main_queue(), ^(void) {
-                        *cursorStoppedPtr = !documentCallback(documentCount, document);
+                        *cursorStoppedPtr = !documentCallback(documentCount, document, documentData);
                     });
                 }
             };

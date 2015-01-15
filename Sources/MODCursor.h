@@ -27,7 +27,8 @@
 
 @property (nonatomic, readonly, strong) NSError *error;
 
-- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, MODSortedDictionary *document))documentCallback endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback;
+- (MODQuery *)forEachDocumentWithCallbackDocumentCallback:(BOOL (^)(uint64_t index, MODSortedDictionary *document, NSData *data))documentCallback
+                                              endCallback:(void (^)(uint64_t documentCounts, BOOL cursorStopped, MODQuery *mongoQuery))endCallback;
 
 @property(nonatomic, strong, readonly) MODCollection *collection;
 @property(nonatomic, strong, readonly) MODSortedDictionary *query;
