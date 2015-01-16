@@ -3523,7 +3523,7 @@
 					"-DMONGOC_COMPILATION",
 					"-DBSON_COMPILATION",
 				);
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -3551,7 +3551,7 @@
 					"-DMONGOC_COMPILATION",
 					"-DBSON_COMPILATION",
 				);
-				SDKROOT = macosx10.9;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
