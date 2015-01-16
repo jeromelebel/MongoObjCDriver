@@ -3519,7 +3519,7 @@
 					"$(SRCROOT)/Libraries/mongo-c-driver/src/libbson/src/bson",
 					"$(SRCROOT)/Libraries/mongo-c-driver/src/libbson/src",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_CFLAGS = (
 					"-DMONGOC_COMPILATION",
 					"-DBSON_COMPILATION",
@@ -3548,7 +3548,7 @@
 					"$(SRCROOT)/Libraries/mongo-c-driver/src/libbson/src/bson",
 					"$(SRCROOT)/Libraries/mongo-c-driver/src/libbson/src",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				OTHER_CFLAGS = (
 					"-DMONGOC_COMPILATION",
 					"-DBSON_COMPILATION",
