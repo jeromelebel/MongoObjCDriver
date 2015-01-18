@@ -2302,8 +2302,8 @@ _again:
         MOD_RELEASE(buffer);
         MOD_RELEASE(options);
     } else {
-        cursor = NULL;
         [self _makeErrorWithMessage:@"cannot find end of regex" atPosition:cursor];
+        cursor = NULL;
     }
     return cursor;
 }
