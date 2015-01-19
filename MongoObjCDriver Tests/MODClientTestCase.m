@@ -156,7 +156,7 @@
         [self logMongoQuery:mongoQuery];
     }];
     cursor = [mongoCollection cursorWithCriteria:nil fields:nil skip:0 limit:0 sort:nil];
-    [cursor forEachDocumentWithCallbackDocumentCallback:^(uint64_t index, MODSortedDictionary *document) {
+    [cursor forEachDocumentWithCallbackDocumentCallback:^(uint64_t index, MODSortedDictionary *document, NSData *data) {
         return YES;
     } endCallback:^(uint64_t count, BOOL stopped, MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
