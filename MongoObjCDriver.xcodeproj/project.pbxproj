@@ -32,6 +32,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		021EF1851A7AF8720057BFA4 /* mongoc-b64.c in Sources */ = {isa = PBXBuildFile; fileRef = 021EF1841A7AF8720057BFA4 /* mongoc-b64.c */; };
 		023ECFFC14851BEE00185781 /* MODSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 023ECFFA14851BEE00185781 /* MODSymbol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		023ECFFD14851BEE00185781 /* MODSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 023ECFFB14851BEE00185781 /* MODSymbol.m */; };
 		02411AB51432B8FA00A5FFCA /* MongoObjCDriver.h in Headers */ = {isa = PBXBuildFile; fileRef = 02411AB41432B8F900A5FFCA /* MongoObjCDriver.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1371,6 +1372,7 @@
 		0204511B190E834600A80BED /* bson-version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "bson-version.h"; sourceTree = "<group>"; };
 		0204511C190E834600A80BED /* mongoc-config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mongoc-config.h"; sourceTree = "<group>"; };
 		0204511D190E834600A80BED /* mongoc-version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mongoc-version.h"; sourceTree = "<group>"; };
+		021EF1841A7AF8720057BFA4 /* mongoc-b64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "mongoc-b64.c"; sourceTree = "<group>"; };
 		023ECFFA14851BEE00185781 /* MODSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODSymbol.h; sourceTree = "<group>"; };
 		023ECFFB14851BEE00185781 /* MODSymbol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODSymbol.m; sourceTree = "<group>"; };
 		02411AB41432B8F900A5FFCA /* MongoObjCDriver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MongoObjCDriver.h; sourceTree = "<group>"; };
@@ -2144,6 +2146,7 @@
 		02044ED4190E5E4E00A80BED /* mongoc */ = {
 			isa = PBXGroup;
 			children = (
+				021EF1841A7AF8720057BFA4 /* mongoc-b64.c */,
 				02044ED5190E5E4E00A80BED /* .gitignore */,
 				02044ED6190E5E4E00A80BED /* indent */,
 				02044ED7190E5E4E00A80BED /* Makefile.am */,
@@ -3348,6 +3351,7 @@
 				02CF0E2E191112CB008C822A /* bson-value.c in Sources */,
 				02BDC3EC141D83A7000EF755 /* MODClient_utils.m in Sources */,
 				02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */,
+				021EF1851A7AF8720057BFA4 /* mongoc-b64.c in Sources */,
 				028CE606142E10BE0099B1F7 /* MODTimestamp.m in Sources */,
 				02CF87EA142F8AA3000C4C7F /* MODRegex.m in Sources */,
 				02411ABA1432D02700A5FFCA /* MODBinary.m in Sources */,
