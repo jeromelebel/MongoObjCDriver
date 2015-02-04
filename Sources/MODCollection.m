@@ -562,6 +562,8 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
     MODQuery *query = nil;
     MODCollection *currentSelf = self;
     
+    NSParameterAssert(pipeline == nil || [pipeline isKindOfClass:[NSArray class]]);
+    NSParameterAssert(options == nil || [options isKindOfClass:[MODSortedDictionary class]]);
     query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
         MODCursor *cursor = nil;
         bson_error_t bsonError = BSON_NO_ERROR;
