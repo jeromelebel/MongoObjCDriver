@@ -531,17 +531,16 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
 + (void)appendArray:(NSArray *)array toBson:(bson_t *)bson
 {
     size_t ii = 0;
-    bson_t childBson = BSON_INITIALIZER;
     
-    bson_append_array_begin(bson, NULL, 0, &childBson);
+    NSParameterAssert(array);
+    NSParameterAssert(bson);
     for (id arrayValue in array) {
         NSString *arrayKey;
         
         arrayKey = [NSString stringWithFormat:@"%ld", ii];
-        [self appendValue:arrayValue key:arrayKey toBson:&childBson];
+        [self appendValue:arrayValue key:arrayKey toBson:bson];
         ii++;
     }
-    bson_append_array_end(bson, &childBson);
 }
 
 @end
