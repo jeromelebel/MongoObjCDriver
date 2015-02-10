@@ -9,14 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface MODSSLOptions : NSObject
-{
-    NSString                    *_pemFileName;
-    NSString                    *_pemPassword;
-    NSString                    *_caFileName;
-    NSString                    *_caDirectory;
-    NSString                    *_crlFileName;
-    BOOL                        _weakCertificate;
-}
 
 @property (nonatomic, readonly, strong) NSString *pemFileName;
 @property (nonatomic, readonly, strong) NSString *pemPassword;

@@ -16,14 +16,7 @@
 #define MODDatabase_Dropped_Notification        @"MODDatabase_Dropped_Notification"
 
 @interface MODDatabase : NSObject
-{
-    MODClient                           *_client;
-    NSString                            *_name;
-    void                                *_mongocDatabase;
-    MODCollection                       *_systemIndexesCollection;
-    MODReadPreferences                  *_readPreferences;
-    BOOL                                _dropped;
-}
+
 @property (nonatomic, strong, readonly) MODClient *client;
 @property (nonatomic, copy, readonly) NSString *name;
 @property (nonatomic, strong, readonly) MODCollection *systemIndexesCollection;

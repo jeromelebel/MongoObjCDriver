@@ -11,11 +11,6 @@
 @class MODSortedDictionary;
 
 @interface MODDocumentComparator : NSObject
-{
-    MODSortedDictionary            *_document1;
-    MODSortedDictionary            *_document2;
-    NSArray                                 *_differences;
-}
 
 @property (nonatomic, readonly, strong) MODSortedDictionary *document1;
 @property (nonatomic, readonly, strong) MODSortedDictionary *document2;

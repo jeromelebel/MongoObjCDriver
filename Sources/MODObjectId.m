@@ -11,6 +11,9 @@
 #define valueFromHexa(value) ((value >= '1' && value <= '9')?(value - '1' + 1):((value >= 'a' && value <= 'f')?(value - 'a' + 10):((value >= 'A' && value <= 'F')?(value - 'A' + 10):0)))
 
 @implementation MODObjectId
+{
+    const unsigned char _bytes[12];
+}
 
 + (BOOL)isCStringValid:(const char *)cString
 {

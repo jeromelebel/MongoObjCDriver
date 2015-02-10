@@ -20,8 +20,6 @@
 @class MODSSLOptions;
 @class MODWriteConcern;
 
-typedef struct mongo_replset            *mongo_replset_ptr;
-
 typedef enum
 {
     MODLogLevelError,
@@ -41,20 +39,7 @@ typedef enum
 } MODJsonKeySortOrder;
 
 @interface MODClient : NSObject
-{
-    mongo_replset_ptr                   _replicaSet;
-    void                                *_mongocClient;
-    // we have to keept ssl options so the char * parameters are kept alive
-    MODSSLOptions                       *_sslOptions;
-    NSDictionary                        *_sshMapping;
-    void                                *_defaultStreamInitiator;
-    void                                *_defaultStreamInitiatorData;
-    
-    BOOL                                _connected;
-    NSOperationQueue                    *_operationQueue;
-    NSMutableArray                      *_mongoQueries;
-    NSMutableDictionary                 *_databases;
-}
+
 @property (nonatomic, assign, readonly, getter = isConnected) BOOL connected;
 @property (nonatomic, strong, readwrite) MODReadPreferences *readPreferences;
 @property (nonatomic, strong, readwrite) MODSSLOptions *sslOptions;

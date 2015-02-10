@@ -8,12 +8,9 @@
 #import <Foundation/Foundation.h>
 
 @interface MODRegex : NSObject
-{
-    NSString *_pattern;
-    NSString *_options;
-}
-@property (nonatomic, strong, readonly) NSString *pattern;
-@property (nonatomic, strong, readonly) NSString *options;
+
+@property (nonatomic, copy, readonly) NSString *pattern;
+@property (nonatomic, copy, readonly) NSString *options;
 
 - (instancetype)initWithPattern:(NSString *)pattern options:(NSString *)options;
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;

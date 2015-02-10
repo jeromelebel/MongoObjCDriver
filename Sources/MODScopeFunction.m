@@ -8,9 +8,14 @@
 
 #import "MongoObjCDriver-private.h"
 
-@implementation MODScopeFunction
+@interface MODScopeFunction ()
 
-@synthesize function = _function, scope = _scope;
+@property (nonatomic, copy, readwrite) NSString *function;
+@property (nonatomic, copy, readwrite) MODSortedDictionary *scope;
+
+@end
+
+@implementation MODScopeFunction
 
 - (instancetype)initWithFunction:(NSString *)function scope:(MODSortedDictionary *)scope
 {

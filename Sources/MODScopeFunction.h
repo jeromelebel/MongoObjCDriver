@@ -11,15 +11,11 @@
 @class MODSortedDictionary;
 
 @interface MODScopeFunction : NSObject
-{
-    NSString *_function;
-    MODSortedDictionary *_scope;
-}
 
 - (instancetype)initWithFunction:(NSString *)function scope:(MODSortedDictionary *)scope;
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON jsonKeySortOrder:(MODJsonKeySortOrder)jsonKeySortOrder;
 
-@property (nonatomic, retain, readwrite) NSString *function;
-@property (nonatomic, retain, readwrite) MODSortedDictionary *scope;
+@property (nonatomic, copy, readonly) NSString *function;
+@property (nonatomic, copy, readonly) MODSortedDictionary *scope;
 
 @end

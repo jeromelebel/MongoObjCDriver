@@ -14,18 +14,6 @@
 @end
 
 @interface MODQuery : NSObject
-{
-    id<NSObject>        _owner;
-    NSString            *_name;
-    NSDictionary        *_parameters;
-    id                  _result;
-    NSBlockOperation    *_blockOperation;
-    NSError             *_error;
-    NSMutableDictionary *_userInfo;
-    NSDate              *_startDate;
-    NSDate              *_endDate;
-    BOOL                _canceled;
-}
 
 - (instancetype)initWithOwner:(id<NSObject>)owner name:(NSString *)name parameters:(NSDictionary *)parameters;
 - (void)waitUntilFinished;

@@ -10,9 +10,6 @@
 
 @implementation MODSortedDictionary
 
-@synthesize content = _content;
-@synthesize sortedKeys = _sortedKeys;
-
 + (Class)contentDictionaryClass
 {
     return NSDictionary.class;
@@ -36,6 +33,11 @@
 + (id)sortedDictionaryWithObjects:(const id [])objects forKeys:(const id [])keys count:(NSUInteger)cnt
 {
     return MOD_AUTORELEASE([[self alloc] initWithObjects:objects forKeys:keys count:cnt]);
+}
+
++ (instancetype)sortedDictionaryWithSortedDictionary:(MODSortedDictionary *)sortedDictionary
+{
+    return MOD_AUTORELEASE([[self alloc] initWithSortedDictionary:sortedDictionary]);
 }
 
 static void getValuesAndKeys(id firstObject, va_list ap, NSMutableDictionary *values, NSMutableArray *keys)
@@ -129,11 +131,27 @@ static void getValuesAndKeys(id firstObject, va_list ap, NSMutableDictionary *va
     return self;
 }
 
+- (instancetype)initWithSortedDictionary:(MODSortedDictionary *)sortedDictionary
+{
+    self = [self initWithDictionary:sortedDictionary.content sortedKeys:sortedDictionary.sortedKeys];
+    return self;
+}
+
 - (instancetype)init
 {
     if (self = [super init]) {
     }
     return self;
+}
+
+- (instancetype)copy
+{
+    return MOD_RETAIN(self);
+}
+
+- (instancetype)copyWithZone:(NSZone *)zone
+{
+    return MOD_RETAIN(self);
 }
 
 - (void)dealloc

@@ -9,13 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface MODBsonComparator : NSObject
-{
-    NSArray                 *_differences;
-    void                    *_bson1;
-    void                    *_bson2;
-    void                    *_bson1ToDestroy;
-    void                    *_bson2ToDestroy;
-}
 
 @property (nonatomic, readonly, strong) NSArray *differences;
 

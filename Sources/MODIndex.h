@@ -30,10 +30,7 @@
 @end
 
 @interface MODIndexOpt : NSObject
-{
-    MODIndexOptGeo              *_geoOptions;
-    void                        *_mongocIndexOpt;
-}
+
 @property (nonatomic, readwrite, assign) BOOL isInitialized;
 @property (nonatomic, readwrite, assign) BOOL background;
 @property (nonatomic, readwrite, assign) BOOL unique;

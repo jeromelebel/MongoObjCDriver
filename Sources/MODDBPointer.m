@@ -8,15 +8,12 @@
 #import "MongoObjCDriver-private.h"
 
 @interface MODDBPointer ()
-@property (nonatomic, readwrite, strong) NSString *collectionName;
-@property (nonatomic, readwrite, strong) MODObjectId *objectId;
+@property (nonatomic, copy, readwrite) NSString *collectionName;
+@property (nonatomic, strong, readwrite) MODObjectId *objectId;
 
 @end
 
 @implementation MODDBPointer
-
-@synthesize collectionName = _collectionName;
-@synthesize objectId = _objectId;
 
 - (instancetype)initWithCollectionName:(NSString *)collectionName objectId:(MODObjectId *)objectId;
 {

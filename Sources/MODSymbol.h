@@ -9,9 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface MODSymbol : NSObject
-{
-    NSString *_value;
-}
+
 @property (nonatomic, strong, readwrite) NSString *value;
 
 - (instancetype)initWithValue:(NSString *)value;

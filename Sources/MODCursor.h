@@ -11,19 +11,6 @@
 @class MODSortedDictionary;
 
 @interface MODCursor : NSObject
-{
-    MODCollection                       *_collection;
-    MODSortedDictionary          *_query;
-    MODSortedDictionary          *_fields;
-    uint32_t                            _skip;
-    uint32_t                            _limit;
-    uint32_t                            _batchSize;
-    MODSortedDictionary          *_sort;
-    NSError                             *_internalError;
-
-    void                                *_mongocCursor;
-    BOOL                                _tailable;
-}
 
 @property (nonatomic, readonly, strong) NSError *error;
 

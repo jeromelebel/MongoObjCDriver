@@ -44,11 +44,11 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
 }
 
 @implementation MODCollection
-
-@synthesize absoluteName = _absoluteName;
-@synthesize mongocCollection = _mongocCollection;
-@synthesize readPreferences = _readPreferences;
-@synthesize dropped = _dropped;
+{
+    MODDatabase                 *_database;
+    NSString                    *_name;
+    BOOL                        _dropped;
+}
 
 - (instancetype)initWithName:(NSString *)name database:(MODDatabase *)database
 {

@@ -10,13 +10,9 @@
 @class MODObjectId;
 
 @interface MODDBPointer : NSObject
-{
-    NSString                    *_collectionName;
-    MODObjectId                 *_objectId;
 
-}
-@property (nonatomic, readonly, strong) NSString *collectionName;
-@property (nonatomic, readonly, strong) MODObjectId *objectId;
+@property (nonatomic, copy, readonly) NSString *collectionName;
+@property (nonatomic, strong, readonly) MODObjectId *objectId;
 
 - (instancetype)initWithCollectionName:(NSString *)collectionName objectId:(MODObjectId *)objectId;
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;

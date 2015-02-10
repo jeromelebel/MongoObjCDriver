@@ -8,14 +8,12 @@
 #import "MongoObjCDriver-private.h"
 
 @interface MODBinary ()
-@property(nonatomic, readwrite, assign) char binaryType;
-@property(nonatomic, readwrite, strong) NSData *binaryData;
+@property(nonatomic, assign, readwrite) char binaryType;
+@property(nonatomic, copy, readwrite) NSData *binaryData;
 
 @end
 
 @implementation MODBinary
-
-@synthesize binaryData = _binaryData, binaryType = _binaryType;
 
 + (BOOL)isValidDataType:(unsigned char)dataType
 {

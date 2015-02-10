@@ -9,15 +9,12 @@
 #import "MongoObjCDriver-private.h"
 
 @interface MODBulkOperation ()
-@property (nonatomic, readwrite, assign) BOOL ordered;
+@property (nonatomic, assign, readwrite) BOOL ordered;
+@property (nonatomic, assign, readwrite) mongoc_bulk_operation_t *mongocBulkOperation;
 
 @end
 
 @implementation MODBulkOperation
-
-@synthesize collection = _collection;
-@synthesize ordered = _ordered;
-@synthesize writeConcern = _writeConcern;
 
 - (instancetype)initWithCollection:(MODCollection *)collection ordered:(BOOL)ordered writeConcern:(MODWriteConcern *)writeConcern
 {
@@ -25,7 +22,7 @@
         self.collection = collection;
         self.ordered = ordered;
         self.writeConcern = writeConcern;
-        _mongocBulkOperation = mongoc_collection_create_bulk_operation(self.collection.mongocCollection, self.ordered, self.writeConcern.mongocWriteConcern);
+        self.mongocBulkOperation = mongoc_collection_create_bulk_operation(self.collection.mongocCollection, self.ordered, self.writeConcern.mongocWriteConcern);
     }
     return self;
 }
@@ -34,7 +31,7 @@
 {
     self.collection = nil;
     self.writeConcern = nil;
-    mongoc_bulk_operation_destroy(_mongocBulkOperation);
+    mongoc_bulk_operation_destroy(self.mongocBulkOperation);
     MOD_SUPER_DEALLOC();
 }
 
@@ -43,7 +40,7 @@
     bson_t bson = BSON_INITIALIZER;
     
     [MODClient appendObject:document toBson:&bson];
-    mongoc_bulk_operation_insert(_mongocBulkOperation, &bson);
+    mongoc_bulk_operation_insert(self.mongocBulkOperation, &bson);
     bson_destroy(&bson);
 }
 
@@ -68,7 +65,7 @@
         MODSortedDictionary *result = nil;
         
         if (!mongoQuery.isCanceled) {
-            mongoc_bulk_operation_execute(_mongocBulkOperation, &reply, &bsonError);
+            mongoc_bulk_operation_execute(self.mongocBulkOperation, &reply, &bsonError);
             result = [self.client.class objectFromBson:&reply];
             bson_destroy(&reply);
         }

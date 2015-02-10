@@ -14,16 +14,9 @@
 @end
 
 @implementation MODQuery
-
-@synthesize owner = _owner;
-@synthesize name = _name;
-@synthesize parameters = _parameters;
-@synthesize userInfo = _userInfo;
-@synthesize startDate = _startDate;
-@synthesize endDate = _endDate;
-@synthesize error = _error;
-@synthesize canceled = _canceled;
-@synthesize result = _result;
+{
+    NSBlockOperation    *_blockOperation;
+}
 
 - (instancetype)initWithOwner:(id<NSObject>)owner name:(NSString *)name parameters:(NSDictionary *)parameters;
 {

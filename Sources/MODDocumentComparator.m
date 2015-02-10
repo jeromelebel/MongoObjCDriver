@@ -17,10 +17,6 @@
 
 @implementation MODDocumentComparator
 
-@synthesize document1 = _document1;
-@synthesize document2 = _document2;
-@synthesize differences = _differences;
-
 - (instancetype)initWithDocument1:(MODSortedDictionary *)document1 document2:(MODSortedDictionary *)document2
 {
     self = [self init];

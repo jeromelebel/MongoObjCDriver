@@ -16,8 +16,6 @@
 
 @implementation MODReadPreferences
 
-@synthesize mongocReadPreferences = _mongocReadPreferences;
-
 + (MODReadPreferences *)readPreferencesWithReadMode:(MODReadPreferencesReadMode)readMode
 {
     return [self readPreferencesWithReadMode:readMode tags:nil];

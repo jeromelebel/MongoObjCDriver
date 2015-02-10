@@ -25,17 +25,6 @@
 
 @implementation MODCursor
 
-@synthesize collection = _collection;
-@synthesize query = _query;
-@synthesize fields = _fields;
-@synthesize skip = _skip;
-@synthesize limit = _limit;
-@synthesize sort = _sort;
-@synthesize mongocCursor = _mongocCursor;
-@synthesize tailable = _tailable;
-@synthesize batchSize = _batchSize;
-@synthesize internalError = _internalError;
-
 - (instancetype)initWithCollection:(MODCollection *)collection
 {
     if (self = [self init]) {

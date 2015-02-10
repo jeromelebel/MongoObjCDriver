@@ -10,9 +10,7 @@
 #define OBJECT_ID_SIZE 12
 
 @interface MODObjectId : NSObject
-{
-    const unsigned char _bytes[12];
-}
+
 + (BOOL)isCStringValid:(const char *)cString;
 + (BOOL)isStringValid:(NSString *)string;
 

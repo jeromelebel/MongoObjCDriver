@@ -15,12 +15,9 @@
 @end
 
 @implementation MODDatabase
-
-@synthesize client = _client;
-@synthesize name = _name;
-@synthesize mongocDatabase = _mongocDatabase;
-@synthesize readPreferences = _readPreferences;
-@synthesize dropped = _dropped;
+{
+    MODCollection                       *_systemIndexesCollection;
+}
 
 - (instancetype)initWithClient:(MODClient *)client name:(NSString *)name
 {

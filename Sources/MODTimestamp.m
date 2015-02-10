@@ -7,15 +7,20 @@
 
 #import "MongoObjCDriver-private.h"
 
-@implementation MODTimestamp
+@interface MODTimestamp ()
 
-@synthesize tValue = _tValue, iValue = _iValue;
+@property(nonatomic, assign, readwrite) uint32_t tValue;
+@property(nonatomic, assign, readwrite) uint32_t iValue;
+
+@end
+
+@implementation MODTimestamp
 
 - (instancetype)initWithTValue:(uint32_t)tValue iValue:(uint32_t)iValue
 {
     if (self = [self init]) {
-        _iValue = iValue;
-        _tValue = tValue;
+        self.iValue = iValue;
+        self.tValue = tValue;
     }
     return self;
 }
@@ -23,30 +28,30 @@
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
 {
     if (!strictJSON) {
-        return [NSString stringWithFormat:@"Timestamp(%d, %d)", _tValue, _iValue];
+        return [NSString stringWithFormat:@"Timestamp(%d, %d)", self.tValue, self.iValue];
     } else if (pretty) {
-        return [NSString stringWithFormat:@"{ \"$timestamp\" : [ %d, %d ] }", _tValue, _iValue];
+        return [NSString stringWithFormat:@"{ \"$timestamp\" : [ %d, %d ] }", self.tValue, self.iValue];
     } else {
-        return [NSString stringWithFormat:@"{\"$timestamp\":[%d,%d]}", _tValue, _iValue];
+        return [NSString stringWithFormat:@"{\"$timestamp\":[%d,%d]}", self.tValue, self.iValue];
     }
 }
 
 - (NSDate *)dateValue
 {
-    return [NSDate dateWithTimeIntervalSince1970:_tValue];
+    return [NSDate dateWithTimeIntervalSince1970:self.tValue];
 }
 
 - (BOOL)isEqual:(id)object
 {
     if ([object isKindOfClass:[self class]]) {
-        return _tValue == [object tValue] && _iValue == [object iValue];
+        return self.tValue == [object tValue] && self.iValue == [object iValue];
     }
     return NO;
 }
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"<%@: %p, (%d, %d)>", self.class, self, _tValue, _iValue];
+    return [NSString stringWithFormat:@"<%@: %p, (%d, %d)>", self.class, self, self.tValue, self.iValue];
 }
 
 @end

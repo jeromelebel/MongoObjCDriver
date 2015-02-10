@@ -10,8 +10,6 @@
 
 @implementation MODFunction
 
-@synthesize function = _function;
-
 - (instancetype)initWithFunction:(NSString *)function
 {
     if (self = [self init]) {

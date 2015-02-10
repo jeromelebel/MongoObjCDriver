@@ -10,6 +10,7 @@
 
 
 @interface MODClient ()
+
 @property (nonatomic, readwrite, assign, getter=isConnected) BOOL connected;
 @property (nonatomic, readwrite, assign) mongoc_client_t *mongocClient;
 @property (nonatomic, readonly, assign) mongoc_read_prefs_t *mongocReadPreferences;

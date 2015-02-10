@@ -8,12 +8,9 @@
 #import <Foundation/Foundation.h>
 
 @interface MODBinary : NSObject
-{
-    NSData              *_binaryData;
-    char                _binaryType;
-}
-@property(nonatomic, readonly, assign) char binaryType;
-@property(nonatomic, readonly, strong) NSData *binaryData;
+
+@property(nonatomic, assign, readonly) char binaryType;
+@property(nonatomic, copy, readonly) NSData *binaryData;
 
 + (BOOL)isValidDataType:(unsigned char)dataType;
 

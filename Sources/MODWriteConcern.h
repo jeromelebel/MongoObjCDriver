@@ -15,9 +15,7 @@
  */
 
 @interface MODWriteConcern : NSObject
-{
-    void                                *_mongocWriteConcern;
-}
+
 @property (nonatomic, assign, readonly) BOOL fileSync;
 @property (nonatomic, assign, readonly) BOOL journal;
 @property (nonatomic, assign, readonly) int32_t w;

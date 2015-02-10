@@ -20,13 +20,6 @@
 
 @implementation MODSSLOptions
 
-@synthesize pemFileName = _pemFileName;
-@synthesize pemPassword = _pemPassword;
-@synthesize caFileName = _caFileName;
-@synthesize caDirectory = _caDirectory;
-@synthesize crlFileName = _crlFileName;
-@synthesize weakCertificate = _weakCertificate;
-
 - (instancetype)initWithPemFileName:(NSString *)pemFileName pemPassword:(NSString *)pemPassword caFileName:(NSString *)caFileName caDirectory:(NSString *)caDirectory crlFileName:(NSString *)crlFileName weakCertificate:(BOOL)weakCertificate
 {
     self = [self init];

@@ -34,15 +34,19 @@
 @property (nonatomic, strong, readwrite) NSOperationQueue *operationQueue;
 @property (nonatomic, strong, readwrite) NSMutableArray *mongoQueries;
 
+// Save the stream initiator set by default when creating a new mongoc_client_t
+// put our stream initiator and call the previous if needed
+// our stream initiator is used to convert ips according to the ssh tunneling, if needed
+@property (nonatomic, assign, readwrite) mongoc_stream_initiator_t defaultStreamInitiator;
+@property (nonatomic, assign, readwrite) void *defaultStreamInitiatorData;
+
 @end
 
 @implementation MODClient
-
-@synthesize connected = _connected;
-@synthesize mongocClient = _mongocClient;
-@synthesize operationQueue = _operationQueue;
-@synthesize mongoQueries = _mongoQueries;
-@synthesize sshMapping = _sshMapping;
+{
+    // we have to keep ssl options so the char * parameters are kept alive
+    MODSSLOptions                       *_sslOptions;
+}
 
 + (instancetype)clientWihtURLString:(NSString *)urlString
 {
@@ -99,8 +103,8 @@
 - (instancetype)initWithMongoURI:(const mongoc_uri_t *)uri
 {
     if ((self = [self init]) != nil) {
-        _mongocClient = mongoc_client_new_from_uri(uri);
-        if (_mongocClient == NULL) {
+        self.mongocClient = mongoc_client_new_from_uri(uri);
+        if (self.mongocClient == NULL) {
             MOD_RELEASE(self);
             self = nil;
         }
@@ -143,7 +147,7 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
     NSNumber *sshBindedPort = self.sshMapping[hostPortString];
     
     if (!sshBindedPort) {
-        return ((mongoc_stream_initiator_t)_defaultStreamInitiator)(uri, host, _defaultStreamInitiatorData, error);
+        return self.defaultStreamInitiator(uri, host, self.defaultStreamInitiatorData, error);
     } else {
         mongoc_host_list_t mappedHost;
         NSArray *components = [hostPortString componentsSeparatedByString:@":"];
@@ -154,14 +158,14 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
         sprintf(mappedHost.host, "127.0.0.1");
         mappedHost.port = sshBindedPort.integerValue;
         [self.class logWithLevel:MODLogLevelDebug domain:"mapping" message:[NSString stringWithFormat:@"%s -> %s", host->host_and_port, mappedHost.host_and_port].UTF8String];
-        return ((mongoc_stream_initiator_t)_defaultStreamInitiator)(uri, &mappedHost, _defaultStreamInitiatorData, error);
+        return self.defaultStreamInitiator(uri, &mappedHost, self.defaultStreamInitiatorData, error);
     }
 }
 
 - (void)setupMongocClient
 {
-    _defaultStreamInitiator = self.mongocClient->initiator;
-    _defaultStreamInitiatorData = self.mongocClient->initiator_data;
+    self.defaultStreamInitiator = self.mongocClient->initiator;
+    self.defaultStreamInitiatorData = self.mongocClient->initiator_data;
     mongoc_client_set_stream_initiator(self.mongocClient, stream_initiator, (__bridge void *)(self));
 }
 

@@ -29,14 +29,6 @@ typedef enum {
 } MODQueryFlags;
 
 @interface MODCollection : NSObject
-{
-    MODDatabase                         *_database;
-    NSString                            *_absoluteName;
-    NSString                            *_name;
-    void                                *_mongocCollection;
-    MODReadPreferences                  *_readPreferences;
-    BOOL                                _dropped;
-}
 
 @property (nonatomic, strong, readonly) MODClient *client;
 @property (nonatomic, strong, readonly) MODDatabase *database;

@@ -10,8 +10,6 @@
 
 @implementation MODSymbol
 
-@synthesize value = _value;
-
 - (instancetype)initWithValue:(NSString *)value
 {
     if (self = [self init]) {

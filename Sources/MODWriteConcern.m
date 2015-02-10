@@ -19,8 +19,6 @@
 
 @implementation MODWriteConcern
 
-@synthesize mongocWriteConcern = _mongocWriteConcern;
-
 + (instancetype)writeConcernWithMongocWriteConcern:(const mongoc_write_concern_t *)mongocWriteConcern
 {
     return MOD_AUTORELEASE([[self alloc] initWithMongocWriteConcern:mongocWriteConcern]);

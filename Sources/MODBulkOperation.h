@@ -13,12 +13,7 @@
 @class MODClient;
 
 @interface MODBulkOperation : NSObject
-{
-    MODCollection                   *_collection;
-    BOOL                            _ordered;
-    MODWriteConcern                 *_writeConcern;
-    void                            *_mongocBulkOperation;
-}
+
 @property (nonatomic, readwrite, strong) MODCollection *collection;
 @property (nonatomic, readonly, assign) BOOL ordered;
 @property (nonatomic, readwrite, strong) MODWriteConcern *writeConcern;

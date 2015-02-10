@@ -9,9 +9,6 @@
 #import <Foundation/Foundation.h>
 
 @interface MODFunction : NSObject
-{
-    NSString *_function;
-}
 
 - (instancetype)initWithFunction:(NSString *)function;
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON;

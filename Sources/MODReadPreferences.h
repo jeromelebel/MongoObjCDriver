@@ -26,9 +26,7 @@ typedef enum
 */
 
 @interface MODReadPreferences : NSObject
-{
-    void                                *_mongocReadPreferences;
-}
+
 @property (nonatomic, assign, readonly) MODReadPreferencesReadMode readMode;
 @property (nonatomic, assign, readonly) MODSortedDictionary *tags;
 

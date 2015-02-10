@@ -10,8 +10,6 @@
 
 @implementation MODIndexOptGeo
 
-@synthesize mongocIndexOptGeo = _mongocIndexOptGeo;
-
 + (instancetype)indexOptGeoWithMongocIndexOptGeo:(const mongoc_index_opt_geo_t *)mongocIndexOptGeo
 {
     return MOD_AUTORELEASE([[[self class] alloc] initWithMongocIndexOptGeo:mongocIndexOptGeo]);
@@ -116,6 +114,10 @@
 
 
 @implementation MODIndexOpt
+{
+    MODIndexOptGeo                              *_geoOptions;
+    mongoc_index_opt_t                          *_mongocIndexOpt;
+}
 
 + (instancetype)indexOptWithMongocIndexOpt:(const mongoc_index_opt_t *)mongocIndexOpt
 {
@@ -174,16 +176,16 @@
     
     memcpy(_mongocIndexOpt, mongocIndexOpt, sizeof(*mongocIndexOpt));
     if (mongocIndexOpt->default_language) {
-        ((mongoc_index_opt_t *)_mongocIndexOpt)->default_language = strdup(mongocIndexOpt->default_language);
+        _mongocIndexOpt->default_language = strdup(mongocIndexOpt->default_language);
     }
     if (mongocIndexOpt->language_override) {
-        ((mongoc_index_opt_t *)_mongocIndexOpt)->language_override = strdup(mongocIndexOpt->language_override);
+        _mongocIndexOpt->language_override = strdup(mongocIndexOpt->language_override);
     }
     if (mongocIndexOpt->name) {
-        ((mongoc_index_opt_t *)_mongocIndexOpt)->name = strdup(mongocIndexOpt->name);
+        _mongocIndexOpt->name = strdup(mongocIndexOpt->name);
     }
     if (mongocIndexOpt->weights) {
-        ((mongoc_index_opt_t *)_mongocIndexOpt)->weights = bson_copy(mongocIndexOpt->weights);
+        _mongocIndexOpt->weights = bson_copy(mongocIndexOpt->weights);
     }
     if (mongocIndexOpt->geo_options) {
         MODIndexOptGeo *indexOptGeo = [MODIndexOptGeo indexOptGeoWithMongocIndexOptGeo:mongocIndexOpt->geo_options];
@@ -194,38 +196,38 @@
 
 - (BOOL)isInitialized
 {
-    return ((mongoc_index_opt_t *)_mongocIndexOpt)->is_initialized;
+    return _mongocIndexOpt->is_initialized;
 }
 
 - (void)setIsInitialized:(BOOL)isInitialized
 {
-    ((mongoc_index_opt_t *)_mongocIndexOpt)->is_initialized = isInitialized;
+    _mongocIndexOpt->is_initialized = isInitialized;
 }
 
 - (BOOL)background
 {
-    return ((mongoc_index_opt_t *)_mongocIndexOpt)->background;
+    return _mongocIndexOpt->background;
 }
 
 - (void)setBackground:(BOOL)background
 {
-    ((mongoc_index_opt_t *)_mongocIndexOpt)->background = background;
+    _mongocIndexOpt->background = background;
 }
 
 - (BOOL)unique
 {
-    return ((mongoc_index_opt_t *)_mongocIndexOpt)->unique;
+    return _mongocIndexOpt->unique;
 }
 
 - (void)setUnique:(BOOL)unique
 {
-    ((mongoc_index_opt_t *)_mongocIndexOpt)->unique = unique;
+    _mongocIndexOpt->unique = unique;
 }
 
 - (NSString *)name
 {
-    if (((mongoc_index_opt_t *)_mongocIndexOpt)->name) {
-        return [NSString stringWithUTF8String:((mongoc_index_opt_t *)_mongocIndexOpt)->name];
+    if (_mongocIndexOpt->name) {
+        return [NSString stringWithUTF8String:_mongocIndexOpt->name];
     } else {
         return nil;
     }
@@ -233,59 +235,59 @@
 
 - (void)setName:(NSString *)name
 {
-    if (((mongoc_index_opt_t *)_mongocIndexOpt)->name) {
-        free((void *)((mongoc_index_opt_t *)_mongocIndexOpt)->name);
-        ((mongoc_index_opt_t *)_mongocIndexOpt)->name = NULL;
+    if (_mongocIndexOpt->name) {
+        free((void *)_mongocIndexOpt->name);
+        _mongocIndexOpt->name = NULL;
     }
     if (name) {
-        ((mongoc_index_opt_t *)_mongocIndexOpt)->name = strdup(name.UTF8String);
+        _mongocIndexOpt->name = strdup(name.UTF8String);
     }
 }
 
 - (BOOL)dropDups
 {
-    return ((mongoc_index_opt_t *)_mongocIndexOpt)->drop_dups;
+    return _mongocIndexOpt->drop_dups;
 }
 
 - (void)setDropDups:(BOOL)dropDups
 {
-    ((mongoc_index_opt_t *)_mongocIndexOpt)->drop_dups = dropDups;
+    _mongocIndexOpt->drop_dups = dropDups;
 }
 
 - (BOOL)sparse
 {
-    return ((mongoc_index_opt_t *)_mongocIndexOpt)->sparse;
+    return _mongocIndexOpt->sparse;
 }
 
 - (void)setSparse:(BOOL)sparse
 {
-    ((mongoc_index_opt_t *)_mongocIndexOpt)->sparse = sparse;
+    _mongocIndexOpt->sparse = sparse;
 }
 
 - (int32_t)expireAfterSeconds
 {
-    return ((mongoc_index_opt_t *)_mongocIndexOpt)->expire_after_seconds;
+    return _mongocIndexOpt->expire_after_seconds;
 }
 
 - (void)setExpireAfterSeconds:(int32_t)expireAfterSeconds
 {
-    ((mongoc_index_opt_t *)_mongocIndexOpt)->expire_after_seconds = expireAfterSeconds;
+    _mongocIndexOpt->expire_after_seconds = expireAfterSeconds;
 }
 
 - (int32_t)v
 {
-    return ((mongoc_index_opt_t *)_mongocIndexOpt)->v;
+    return _mongocIndexOpt->v;
 }
 
 - (void)setV:(int32_t)v
 {
-    ((mongoc_index_opt_t *)_mongocIndexOpt)->v = v;
+    _mongocIndexOpt->v = v;
 }
 
 - (MODSortedDictionary *)weights
 {
-    if (((mongoc_index_opt_t *)_mongocIndexOpt)->weights) {
-        return [MODClient objectFromBson:((mongoc_index_opt_t *)_mongocIndexOpt)->weights];
+    if (_mongocIndexOpt->weights) {
+        return [MODClient objectFromBson:_mongocIndexOpt->weights];
     } else {
         return nil;
     }
@@ -293,23 +295,23 @@
 
 - (void)setWeights:(MODSortedDictionary *)weights
 {
-    if (((mongoc_index_opt_t *)_mongocIndexOpt)->weights) {
-        bson_destroy((bson_t *)((mongoc_index_opt_t *)_mongocIndexOpt)->weights);
-        ((mongoc_index_opt_t *)_mongocIndexOpt)->weights = NULL;
+    if (_mongocIndexOpt->weights) {
+        bson_destroy((bson_t *)_mongocIndexOpt->weights);
+        _mongocIndexOpt->weights = NULL;
     }
     if (weights) {
         bson_t *bson;
         
         bson = bson_new();
         [MODClient appendObject:weights toBson:bson];
-        ((mongoc_index_opt_t *)_mongocIndexOpt)->weights = bson;
+        _mongocIndexOpt->weights = bson;
     }
 }
 
 - (NSString *)defaultLanguage
 {
-    if (((mongoc_index_opt_t *)_mongocIndexOpt)->default_language) {
-        return [NSString stringWithUTF8String:((mongoc_index_opt_t *)_mongocIndexOpt)->default_language];
+    if (_mongocIndexOpt->default_language) {
+        return [NSString stringWithUTF8String:_mongocIndexOpt->default_language];
     } else {
         return NULL;
     }
@@ -317,19 +319,19 @@
 
 - (void)setDefaultLanguage:(NSString *)defaultLanguage
 {
-    if (((mongoc_index_opt_t *)_mongocIndexOpt)->default_language) {
-        free((void *)((mongoc_index_opt_t *)_mongocIndexOpt)->default_language);
-        ((mongoc_index_opt_t *)_mongocIndexOpt)->default_language = NULL;
+    if (_mongocIndexOpt->default_language) {
+        free((void *)_mongocIndexOpt->default_language);
+        _mongocIndexOpt->default_language = NULL;
     }
     if (defaultLanguage) {
-        ((mongoc_index_opt_t *)_mongocIndexOpt)->default_language = strdup(defaultLanguage.UTF8String);
+        _mongocIndexOpt->default_language = strdup(defaultLanguage.UTF8String);
     }
 }
 
 - (NSString *)languageOverride
 {
-    if (((mongoc_index_opt_t *)_mongocIndexOpt)->language_override) {
-        return [NSString stringWithUTF8String:((mongoc_index_opt_t *)_mongocIndexOpt)->language_override];
+    if (_mongocIndexOpt->language_override) {
+        return [NSString stringWithUTF8String:_mongocIndexOpt->language_override];
     } else {
         return NULL;
     }
@@ -337,12 +339,12 @@
 
 - (void)setLanguageOverride:(NSString *)languageOverride
 {
-    if (((mongoc_index_opt_t *)_mongocIndexOpt)->language_override) {
-        free((void *)((mongoc_index_opt_t *)_mongocIndexOpt)->language_override);
-        ((mongoc_index_opt_t *)_mongocIndexOpt)->language_override = NULL;
+    if (_mongocIndexOpt->language_override) {
+        free((void *)_mongocIndexOpt->language_override);
+        _mongocIndexOpt->language_override = NULL;
     }
     if (languageOverride) {
-        ((mongoc_index_opt_t *)_mongocIndexOpt)->language_override = strdup(languageOverride.UTF8String);
+        _mongocIndexOpt->language_override = strdup(languageOverride.UTF8String);
     }
 }
 
@@ -355,7 +357,7 @@
 {
     MOD_RELEASE(_geoOptions);
     _geoOptions = MOD_RETAIN(geoOptions);
-    ((mongoc_index_opt_t *)_mongocIndexOpt)->geo_options = _geoOptions.mongocIndexOptGeo;
+    _mongocIndexOpt->geo_options = _geoOptions.mongocIndexOptGeo;
 }
 
 @end

@@ -24,13 +24,23 @@
     return NSMutableArray.class;
 }
 
-- (id)init
+- (instancetype)init
 {
     if (self = [super init]) {
-        self.content = [NSMutableDictionary dictionary];
-        self.sortedKeys = [NSMutableArray array];
+        self.content = [[self.class contentDictionaryClass] dictionary];
+        self.sortedKeys = [[self.class keyArrayClass] array];
     }
     return self;
+}
+
+- (instancetype)copy
+{
+    return [[[self class] alloc] initWithSortedDictionary:self];
+}
+
+- (instancetype)copyWithZone:(NSZone *)zone
+{
+    return [[[self class] alloc] initWithSortedDictionary:self];
 }
 
 - (NSMutableDictionary *)mutableContent

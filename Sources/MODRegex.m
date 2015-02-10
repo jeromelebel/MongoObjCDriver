@@ -7,16 +7,22 @@
 
 #import "MongoObjCDriver-private.h"
 
+@interface MODRegex ()
+@property (nonatomic, copy, readwrite) NSString *pattern;
+@property (nonatomic, copy, readwrite) NSString *options;
+
+@end
+
 @implementation MODRegex
 
 - (instancetype)initWithPattern:(NSString *)pattern options:(NSString *)options
 {
     if (self = [self init]) {
-        _pattern = MOD_RETAIN(pattern);
+        self.pattern = pattern;
         if (options) {
-            _options = MOD_RETAIN(options);
+            self.options = options;
         } else {
-            _options = MOD_RETAIN(@"");
+            self.options = @"";
         }
     }
     return self;
@@ -24,40 +30,30 @@
 
 - (void)dealloc
 {
-    MOD_RELEASE(_pattern);
-    MOD_RELEASE(_options);
+    self.pattern = nil;
+    self.options = nil;
     MOD_SUPER_DEALLOC();
-}
-
-- (NSString *)pattern
-{
-    return _pattern;
-}
-
-- (NSString *)options
-{
-    return _options;
 }
 
 - (NSString *)jsonValueWithPretty:(BOOL)pretty strictJSON:(BOOL)strictJSON
 {
     if (!strictJSON) {
-        return [NSString stringWithFormat:@"/%@/%@", [MODClient escapeSlashesForString:_pattern], [MODClient escapeSlashesForString:_options]];
-    } else if (pretty && _options && [_options length] > 0) {
-        return [NSString stringWithFormat:@"{ \"$regex\": \"%@\", \"$options\": \"%@\" }", [MODClient escapeQuotesForString:_pattern], [MODClient escapeQuotesForString:_options]];
+        return [NSString stringWithFormat:@"/%@/%@", [MODClient escapeSlashesForString:self.pattern], [MODClient escapeSlashesForString:self.options]];
+    } else if (pretty && self.options && [self.options length] > 0) {
+        return [NSString stringWithFormat:@"{ \"$regex\": \"%@\", \"$options\": \"%@\" }", [MODClient escapeQuotesForString:self.pattern], [MODClient escapeQuotesForString:self.options]];
     } else if (pretty) {
-        return [NSString stringWithFormat:@"{ \"$regex\": \"%@\" }", [MODClient escapeQuotesForString:_pattern]];
-    } else if (_options && [_options length] > 0) {
-        return [NSString stringWithFormat:@"{\"$regex\":\"%@\",\"$options\":\"%@\"}", [MODClient escapeQuotesForString:_pattern], [MODClient escapeQuotesForString:_options]];
+        return [NSString stringWithFormat:@"{ \"$regex\": \"%@\" }", [MODClient escapeQuotesForString:self.pattern]];
+    } else if (self.options && [self.options length] > 0) {
+        return [NSString stringWithFormat:@"{\"$regex\":\"%@\",\"$options\":\"%@\"}", [MODClient escapeQuotesForString:self.pattern], [MODClient escapeQuotesForString:self.options]];
     } else {
-        return [NSString stringWithFormat:@"{\"$regex\":\"%@\"}", [MODClient escapeQuotesForString:_pattern]];
+        return [NSString stringWithFormat:@"{\"$regex\":\"%@\"}", [MODClient escapeQuotesForString:self.pattern]];
     }
 }
 
 - (BOOL)isEqual:(id)object
 {
     if ([object isKindOfClass:[self class]]) {
-        return [[object pattern] isEqual:_pattern] && [[(MODRegex *)object options] isEqual:_options];
+        return [[object pattern] isEqual:self.pattern] && [[(MODRegex *)object options] isEqual:self.options];
     }
     return NO;
 }

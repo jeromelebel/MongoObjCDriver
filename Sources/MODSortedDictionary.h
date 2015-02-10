@@ -9,28 +9,26 @@
 #import <Foundation/Foundation.h>
 
 @interface MODSortedDictionary : NSObject
-{
-    NSDictionary                        *_content;
-    NSArray                             *_sortedKeys;
-}
 
-@property (nonatomic, readonly, strong) NSDictionary *content;
-@property (nonatomic, readonly, strong) NSArray *sortedKeys;
-@property (nonatomic, readonly, assign) NSUInteger count;
+@property (nonatomic, strong, readonly) NSDictionary *content;
+@property (nonatomic, strong, readonly) NSArray *sortedKeys;
+@property (nonatomic, assign, readonly) NSUInteger count;
 
-+ (id)sortedDictionary;
-+ (id)sortedDictionaryWithObject:(id)object forKey:(id)key;
-+ (id)sortedDictionaryWithObjects:(const id [])objects forKeys:(const id [])keys count:(NSUInteger)cnt;
-+ (id)sortedDictionaryWithObjectsAndKeys:(id)firstObject, ... NS_REQUIRES_NIL_TERMINATION;
-+ (id)sortedDictionaryWithDictionary:(NSDictionary *)dict;
-+ (id)sortedDictionaryWithDictionary:(NSDictionary *)dict sortedKeys:(NSArray *)sortedKeys;
-+ (id)sortedDictionaryWithObjects:(NSArray *)objects forKeys:(NSArray *)keys;
++ (instancetype)sortedDictionary;
++ (instancetype)sortedDictionaryWithObject:(id)object forKey:(id)key;
++ (instancetype)sortedDictionaryWithObjects:(const id [])objects forKeys:(const id [])keys count:(NSUInteger)cnt;
++ (instancetype)sortedDictionaryWithObjectsAndKeys:(id)firstObject, ... NS_REQUIRES_NIL_TERMINATION;
++ (instancetype)sortedDictionaryWithDictionary:(NSDictionary *)dict;
++ (instancetype)sortedDictionaryWithDictionary:(NSDictionary *)dict sortedKeys:(NSArray *)sortedKeys;
++ (instancetype)sortedDictionaryWithObjects:(NSArray *)objects forKeys:(NSArray *)keys;
++ (instancetype)sortedDictionaryWithSortedDictionary:(MODSortedDictionary *)sortedDictionary;
 
 - (instancetype)initWithObjects:(const id [])objects forKeys:(const id [])keys count:(NSUInteger)cnt;
 - (instancetype)initWithObjectsAndKeys:(id)firstObject, ... NS_REQUIRES_NIL_TERMINATION;
 - (instancetype)initWithDictionary:(NSDictionary *)otherDictionary;
 - (instancetype)initWithDictionary:(NSDictionary *)otherDictionary sortedKeys:(NSArray *)sortedKeys;
 - (instancetype)initWithObjects:(NSArray *)objects forKeys:(NSArray *)keys;
+- (instancetype)initWithSortedDictionary:(MODSortedDictionary *)sortedDictionary;
 
 - (id)objectForKey:(id)aKey;
 - (NSEnumerator *)keyEnumerator;
