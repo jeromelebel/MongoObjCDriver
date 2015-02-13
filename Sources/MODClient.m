@@ -121,7 +121,9 @@
     self.operationQueue = nil;
     self.mongoQueries = nil;
     self.sshMapping = nil;
-    mongoc_client_destroy(self.mongocClient);
+    if (self.mongocClient) {
+        mongoc_client_destroy(self.mongocClient);
+    }
     MOD_SUPER_DEALLOC();
 }
 
@@ -304,7 +306,9 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
 
 - (void)setReadPreferences:(MODReadPreferences *)readPreferences
 {
-    mongoc_client_set_read_prefs(self.mongocClient, self.mongocReadPreferences);
+    if (self.mongocClient) {
+        mongoc_client_set_read_prefs(self.mongocClient, self.mongocReadPreferences);
+    }
 }
 
 - (MODSSLOptions *)sslOptions
@@ -319,7 +323,9 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
     [sslOptions getMongocSSLOpt:&mongocSSLOptions];
     MOD_RELEASE(_sslOptions);
     _sslOptions = MOD_RETAIN(sslOptions);
-    mongoc_client_set_ssl_opts(self.mongocClient, &mongocSSLOptions);
+    if (self.mongocClient != NULL) {
+        mongoc_client_set_ssl_opts(self.mongocClient, &mongocSSLOptions);
+    }
 }
 
 - (MODWriteConcern *)writeConcern
@@ -329,7 +335,9 @@ static mongoc_stream_t *stream_initiator(const mongoc_uri_t *uri, const mongoc_h
 
 - (void)setWriteConcern:(MODWriteConcern *)writeConcern
 {
-    mongoc_client_set_write_concern(self.mongocClient, writeConcern.mongocWriteConcern);
+    if (self.mongocClient != NULL) {
+        mongoc_client_set_write_concern(self.mongocClient, writeConcern.mongocWriteConcern);
+    }
 }
 
 @end
