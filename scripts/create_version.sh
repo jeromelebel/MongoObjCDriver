@@ -16,7 +16,7 @@ git tag -a "$VERSION" -m "version $VERSION"
 git push --tags
 
 cd ../..
-git submodule status | awk '{ print $1 }' | sed 's/^.//' > src/libbson.sha1
+git submodule status | sed 's/^.//' | awk '{ print $1 }' > src/libbson.sha1
 git commit -m "version $VERSION" .
 git push
 git tag -a "$VERSION" -m "version $VERSION"
@@ -24,7 +24,7 @@ git push --tags
 
 cd ../..
 
-git submodule status | awk '{ print $1 }' | sed 's/^.//' > Libraries/mongo-c-driver.sha1
+git submodule status | sed 's/^.//' | awk '{ print $1 }' > Libraries/mongo-c-driver.sha1
 git commit -m "version $VERSION" .
 git push
 git tag -a "$VERSION" -m "version $VERSION"
