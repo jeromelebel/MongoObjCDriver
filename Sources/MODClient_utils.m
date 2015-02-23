@@ -129,6 +129,12 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
         case MONGOC_ERROR_COLLECTION:
             domain = @"MONGOC_ERROR_COLLECTION";
             break;
+        case MONGOC_ERROR_GRIDFS:
+            domain = @"MONGOC_ERROR_GRIDFS";
+            break;
+        case MONGOC_ERROR_SCRAM:
+            domain = @"MONGOC_ERROR_SCRAM";
+            break;
     }
     if (domain == nil) {
         NSLog(@"no domain");
@@ -214,7 +220,6 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
         case MONGOC_ERROR_COLLECTION_INSERT_FAILED:
             errorMessage = @"MONGOC_ERROR_COLLECTION_INSERT_FAILED";
             break;
-        
         case MONGOC_ERROR_COLLECTION_DOES_NOT_EXIST:
             errorMessage = @"MONGOC_ERROR_COLLECTION_DOES_NOT_EXIST";
             break;
@@ -226,7 +231,6 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
         case MONGOC_ERROR_SCRAM_NOT_DONE:
             errorMessage = @"MONGOC_ERROR_SCRAM_NOT_DONE";
             break;
-        
         case MONGOC_ERROR_SCRAM_PROTOCOL_ERROR:
             errorMessage = @"MONGOC_ERROR_SCRAM_PROTOCOL_ERROR";
             break;
@@ -234,7 +238,6 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
         case MONGOC_ERROR_QUERY_COMMAND_NOT_FOUND:
             errorMessage = @"MONGOC_ERROR_QUERY_COMMAND_NOT_FOUND";
             break;
-            
         case MONGOC_ERROR_QUERY_NOT_TAILABLE:
             errorMessage = @"MONGOC_ERROR_QUERY_NOT_TAILABLE";
             break;
