@@ -137,7 +137,8 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
             break;
     }
     if (domain == nil) {
-        NSLog(@"no domain");
+        NSLog(@"no domain for %d", error.domain);
+        domain = [NSString stringWithFormat:@"Unknown Domain %d", error.domain];
     }
     NSAssert(domain != nil, @"no domain found %d", error.domain);
     switch ((mongoc_error_code_t)error.code) {
