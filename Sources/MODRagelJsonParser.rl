@@ -96,7 +96,7 @@
     begin_array         = '[';
     end_array           = ']';
     begin_string        = '"' | '\'';
-    begin_name          = begin_string | [a-z] | [A-Z] | '$' | '_' | '#';
+    begin_name          = begin_string | [a-z] | [A-Z] | '$' | '_' | '#' | [0-9];
     begin_number        = digit | '-';
     begin_regexp        = '/';
     begin_object_id     = 'O';
@@ -886,9 +886,11 @@
     NSString *buffer;
     const char *cursor;
     NSCharacterSet *wordCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890_$#"];
+    NSCharacterSet *numberCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"1234567890"];
+    BOOL digitOnly = [numberCharacterSet characterIsMember:string[0]];
     
     cursor = string;
-    while (cursor < stringEnd && [wordCharacterSet characterIsMember:cursor[0]]) {
+    while (cursor < stringEnd && ((digitOnly && [numberCharacterSet characterIsMember:cursor[0]]) || (!digitOnly && [wordCharacterSet characterIsMember:cursor[0]]))) {
         cursor++;
     }
     if (cursor == string) {
