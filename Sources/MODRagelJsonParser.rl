@@ -86,8 +86,11 @@
     Vtrue               = 'true';
     VMinKey             = 'MinKey';
     VMaxKey             = 'MaxKey';
+    VNumberPosInfinity  = 'Number.POSITIVE_INFINITY';
+    VNumberNegInfinity  = 'Number.NEGATIVE_INFINITY';
+    VNumberNan          = 'Number.NaN';
     new_keyword         = 'new';
-    begin_value         = [/unftTMFBOSD'\"\-\[\{NI] | digit;
+    begin_value         = [/unftTMFBOSDN'\"\-\[\{] | digit;
     begin_object        = '{';
     end_object          = '}';
     begin_array         = '[';
@@ -98,7 +101,6 @@
     begin_regexp        = '/';
     begin_object_id     = 'O';
     object_id_keyword   = 'ObjectId';
-    begin_numberlong    = 'N';
     numberlong_keyword  = 'NumberLong';
     begin_timestamp     = 'T';
     timestamp_keyword   = 'Timestamp';
@@ -138,6 +140,18 @@
     
     action parse_undefined {
         *result = MOD_AUTORELEASE([[MODUndefined alloc] init]);
+    }
+    
+    action parse_number_positive_infinity {
+        *result = [NSNumber numberWithDouble:INFINITY];
+    }
+    
+    action parse_number_negative_infinity {
+        *result = [NSNumber numberWithDouble:-INFINITY];
+    }
+    
+    action parse_number_nan {
+        *result = [NSNumber numberWithDouble:NAN];
     }
     
     action parse_object_id {
@@ -181,7 +195,7 @@
     }
     
     action parse_numberlong {
-        const char *np = [self _parseNumberLongWithPointer:fpc endPointer:pe result:result];
+        const char *np = [self _parseNumberLongWithPointer:fpc - strlen("NumberLong") + 1 endPointer:pe result:result];
         if (np == NULL) { fhold; fbreak; } else fexec np;
     }
     
@@ -253,13 +267,16 @@
         VMinKey @parse_min_key |
         VMaxKey @parse_max_key |
         Vundefined @parse_undefined |
+        VNumberPosInfinity @parse_number_positive_infinity |
+        VNumberNegInfinity @parse_number_negative_infinity |
+        VNumberNan @parse_number_nan |
         begin_object_id >parse_object_id |
         begin_number >parse_number |
         begin_string >parse_string |
         begin_array >parse_array |
         begin_object >parse_object |
         begin_regexp >parse_regexp |
-        begin_numberlong >parse_numberlong |
+        numberlong_keyword @parse_numberlong |
         begin_timestamp >parse_timestamp |
         begin_bindata >parse_bin_data |
         scopefunction_keyword @parse_scopefunction |

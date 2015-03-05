@@ -659,14 +659,23 @@ static void convertValueToJson(NSMutableString *result, int indent, id value, NS
                 [result appendString:@"false"];
             }
         } else if (strcmp([value objCType], @encode(double)) == 0 || strcmp([value objCType], @encode(float)) == 0) {
-          NSMutableString *stringValue;
+            NSString *stringValue;
           
-          // make sure a double always ends with .0 (at least)
-          stringValue = [NSMutableString stringWithFormat:@"%.20g", [value doubleValue]];
-          if ([stringValue rangeOfString:@"."].location == NSNotFound) {
-              [stringValue appendString:@".0"];
-          }
-          [result appendString:stringValue];
+            if ([value doubleValue] == INFINITY) {
+                stringValue = @"Number.POSITIVE_INFINITY";
+            } else if ([value doubleValue] == -INFINITY) {
+                stringValue = @"Number.NEGATIVE_INFINITY";
+            } else if (isnan([value doubleValue])) {
+                stringValue = @"Number.NaN";
+            } else {
+                // make sure a double always ends with .0 (at least)
+                NSMutableString *mutableStringValue = [NSMutableString stringWithFormat:@"%.20g", [value doubleValue]];
+                if ([mutableStringValue rangeOfString:@"."].location == NSNotFound) {
+                    [mutableStringValue appendString:@".0"];
+                }
+                stringValue = mutableStringValue;
+            }
+            [result appendString:stringValue];
         } else if (strcmp([value objCType], @encode(long long)) == 0 || strcmp([value objCType], @encode(unsigned long long)) == 0) {
             [result appendFormat:@"NumberLong(%@)", [value description]];
         } else {

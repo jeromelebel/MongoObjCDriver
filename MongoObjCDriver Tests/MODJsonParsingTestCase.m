@@ -368,4 +368,11 @@
                         shouldEqual:[MODSortedDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithBool:NO], @"false", [NSNumber numberWithBool:YES], @"true", nil]];
 }
 
+- (void)testInfinityAndNaN
+{
+    [self jsonTesterWithJsonToParse:@"{\"infinity\":Number.POSITIVE_INFINITY,\"-infinity\":Number.NEGATIVE_INFINITY,\"NaN\":Number.NaN}"
+                       jsonExpected:nil
+                        shouldEqual:[MODSortedDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:INFINITY], @"infinity", [NSNumber numberWithDouble:-INFINITY], @"-infinity", [NSNumber numberWithDouble:-NAN], @"NaN", nil]];
+}
+
 @end
