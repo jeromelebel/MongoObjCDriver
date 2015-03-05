@@ -95,6 +95,15 @@
     }
 }
 
+- (void)jsonTesterErrorWithJsonToParse:(NSString *)jsonToParse
+{
+    NSError *error;
+    bson_t bsonResult = BSON_INITIALIZER;
+    
+    [MODRagelJsonParser bsonFromJson:&bsonResult json:jsonToParse error:&error];
+    XCTAssertNotNil(error, @"Should have an error with %@", jsonToParse);
+}
+
 - (void)testBackslashScopeFunctionParsing
 {
     [self jsonTesterWithJsonToParse:@"{\"scopefunction\":{\"$function\":\"\\\"javascript function\\\"\",\"$scope\":{\"x\":\"\\\"\"}}}"
@@ -373,6 +382,20 @@
     [self jsonTesterWithJsonToParse:@"{\"infinity\":Number.POSITIVE_INFINITY,\"-infinity\":Number.NEGATIVE_INFINITY,\"NaN\":Number.NaN}"
                        jsonExpected:nil
                         shouldEqual:[MODSortedDictionary sortedDictionaryWithObjectsAndKeys:[NSNumber numberWithDouble:INFINITY], @"infinity", [NSNumber numberWithDouble:-INFINITY], @"-infinity", [NSNumber numberWithDouble:-NAN], @"NaN", nil]];
+}
+
+- (void)testKeyWithoutQuotes
+{
+    [self jsonTesterWithJsonToParse:@"{abc:\"abc\"}"
+                       jsonExpected:@"{\"abc\":\"abc\"}"
+                        shouldEqual:[MODSortedDictionary sortedDictionaryWithObjectsAndKeys:@"abc", @"abc", nil]];
+    [self jsonTesterWithJsonToParse:@"{abc123:\"abc\"}"
+                       jsonExpected:@"{\"abc123\":\"abc\"}"
+                        shouldEqual:[MODSortedDictionary sortedDictionaryWithObjectsAndKeys:@"abc", @"abc123", nil]];
+    [self jsonTesterWithJsonToParse:@"{123:\"abc\"}"
+                       jsonExpected:@"{\"123\":\"abc\"}"
+                        shouldEqual:[MODSortedDictionary sortedDictionaryWithObjectsAndKeys:@"abc", @"123", nil]];
+    [self jsonTesterErrorWithJsonToParse:@"{123abc:\"abc\"}"];
 }
 
 @end
