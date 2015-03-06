@@ -70,6 +70,7 @@
 		02A85F5914104184004F3FE9 /* MODQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5714104184004F3FE9 /* MODQuery.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02A85F5A14104184004F3FE9 /* MODQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A85F5814104184004F3FE9 /* MODQuery.m */; };
 		02A85F5D14104373004F3FE9 /* MongoObjCDriver-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A85F5B14104373004F3FE9 /* MongoObjCDriver-private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02AA448C1AA9CA7E0073D861 /* mongoc-client-pool-private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AA448B1AA9CA7E0073D861 /* mongoc-client-pool-private.h */; };
 		02AB057614296F9000B7CD19 /* MODObjectId.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB057414296F9000B7CD19 /* MODObjectId.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
 		02AB33AC194870D6008C06B9 /* MODReadPreferences.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB33AA194870D6008C06B9 /* MODReadPreferences.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1415,6 +1416,7 @@
 		02A85F5B14104373004F3FE9 /* MongoObjCDriver-private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MongoObjCDriver-private.h"; sourceTree = "<group>"; };
 		02A9B23B19E5947D002A73E4 /* MODClient-private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MODClient-private.h"; sourceTree = "<group>"; };
 		02A9B23C19E596E5002A73E4 /* MODDatabase-private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MODDatabase-private.h"; sourceTree = "<group>"; };
+		02AA448B1AA9CA7E0073D861 /* mongoc-client-pool-private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mongoc-client-pool-private.h"; sourceTree = "<group>"; };
 		02AB057414296F9000B7CD19 /* MODObjectId.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODObjectId.h; sourceTree = "<group>"; };
 		02AB057514296F9000B7CD19 /* MODObjectId.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODObjectId.m; sourceTree = "<group>"; };
 		02AB33AA194870D6008C06B9 /* MODReadPreferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODReadPreferences.h; sourceTree = "<group>"; };
@@ -2159,6 +2161,7 @@
 				02044EDE190E5E4E00A80BED /* mongoc-bulk-operation.h */,
 				02044EDF190E5E4E00A80BED /* mongoc-client-pool.c */,
 				02044EE0190E5E4E00A80BED /* mongoc-client-pool.h */,
+				02AA448B1AA9CA7E0073D861 /* mongoc-client-pool-private.h */,
 				02044EE1190E5E4E00A80BED /* mongoc-client-private.h */,
 				02044EE2190E5E4E00A80BED /* mongoc-client.c */,
 				02044EE3190E5E4E00A80BED /* mongoc-client.h */,
@@ -3104,6 +3107,7 @@
 				02D3D3101926661100925BE7 /* mongoc-cursor-private.h in Headers */,
 				0245E7CC1A50265D00FB8914 /* MODRagelJsonParser-private.h in Headers */,
 				02D3D3111926661100925BE7 /* mongoc-cursor.h in Headers */,
+				02AA448C1AA9CA7E0073D861 /* mongoc-client-pool-private.h in Headers */,
 				02D3D3121926661100925BE7 /* mongoc-database-private.h in Headers */,
 				02D3D3131926661100925BE7 /* mongoc-database.h in Headers */,
 				02D3D3141926661100925BE7 /* mongoc-errno-private.h in Headers */,
