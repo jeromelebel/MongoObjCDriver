@@ -3,7 +3,7 @@
 set -eux
 
 COMMENT="$1"
-if [ "$COMMENT" = "" ] ; then
+if [ "${COMMENT}" = "" ] ; then
   echo "Usage: $(basename $0) COMMENT"
   exit 1
 fi
