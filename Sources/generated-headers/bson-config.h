@@ -63,7 +63,7 @@
 
 
 /*
- * Define to 1 if you have strnlen available on your platform.
+ * Define to 1 if you have snprintf available on your platform.
  */
 #define BSON_HAVE_SNPRINTF 1
 #if BSON_HAVE_SNPRINTF != 1

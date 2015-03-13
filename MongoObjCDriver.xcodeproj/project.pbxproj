@@ -75,6 +75,12 @@
 		02AB057714296F9000B7CD19 /* MODObjectId.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB057514296F9000B7CD19 /* MODObjectId.m */; };
 		02AB33AC194870D6008C06B9 /* MODReadPreferences.h in Headers */ = {isa = PBXBuildFile; fileRef = 02AB33AA194870D6008C06B9 /* MODReadPreferences.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02AB33AD194870D6008C06B9 /* MODReadPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = 02AB33AB194870D6008C06B9 /* MODReadPreferences.m */; };
+		02AC79A71AB2726E00CA783B /* autogen.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02AC79A11AB2726E00CA783B /* autogen.sh */; };
+		02AC79A81AB2726E00CA783B /* commit_libraries.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02AC79A21AB2726E00CA783B /* commit_libraries.sh */; };
+		02AC79A91AB2726E00CA783B /* create_version.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02AC79A31AB2726E00CA783B /* create_version.sh */; };
+		02AC79AA1AB2726E00CA783B /* git_fetch.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02AC79A41AB2726E00CA783B /* git_fetch.sh */; };
+		02AC79AB1AB2726E00CA783B /* git_test.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02AC79A51AB2726E00CA783B /* git_test.sh */; };
+		02AC79AC1AB2726E00CA783B /* update_submodule.sh in Resources */ = {isa = PBXBuildFile; fileRef = 02AC79A61AB2726E00CA783B /* update_submodule.sh */; };
 		02B13FA71949C41000EFF763 /* MODFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B13FA31949C41000EFF763 /* MODFunction.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02B13FA81949C41000EFF763 /* MODFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B13FA41949C41000EFF763 /* MODFunction.m */; };
 		02B13FA91949C41000EFF763 /* MODScopeFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B13FA51949C41000EFF763 /* MODScopeFunction.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1030,7 +1036,6 @@
 		02044FA9190E5EB000A80BED /* SetupAutomake.m4 */ = {isa = PBXFileReference; lastKnownFileType = text; path = SetupAutomake.m4; sourceTree = "<group>"; };
 		02044FAA190E5EB000A80BED /* SetupLibtool.m4 */ = {isa = PBXFileReference; lastKnownFileType = text; path = SetupLibtool.m4; sourceTree = "<group>"; };
 		02044FAB190E5EB000A80BED /* Versions.m4 */ = {isa = PBXFileReference; lastKnownFileType = text; path = Versions.m4; sourceTree = "<group>"; };
-		02044FAE190E5EB000A80BED /* bson-stdint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "bson-stdint.h"; sourceTree = "<group>"; };
 		02044FAF190E5EB000A80BED /* libbson.def */ = {isa = PBXFileReference; lastKnownFileType = text; path = libbson.def; sourceTree = "<group>"; };
 		02044FB0190E5EB000A80BED /* Makefile.am */ = {isa = PBXFileReference; lastKnownFileType = text; path = Makefile.am; sourceTree = "<group>"; };
 		02044FB1190E5EB000A80BED /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
@@ -1428,6 +1433,12 @@
 		02ABA1C814103B37000417F4 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02ABA1CB14103B37000417F4 /* MongoObjCDriver-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "MongoObjCDriver-Info.plist"; sourceTree = "<group>"; };
 		02ABA1CD14103B37000417F4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		02AC79A11AB2726E00CA783B /* autogen.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = autogen.sh; sourceTree = "<group>"; };
+		02AC79A21AB2726E00CA783B /* commit_libraries.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = commit_libraries.sh; sourceTree = "<group>"; };
+		02AC79A31AB2726E00CA783B /* create_version.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = create_version.sh; sourceTree = "<group>"; };
+		02AC79A41AB2726E00CA783B /* git_fetch.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = git_fetch.sh; sourceTree = "<group>"; };
+		02AC79A51AB2726E00CA783B /* git_test.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = git_test.sh; sourceTree = "<group>"; };
+		02AC79A61AB2726E00CA783B /* update_submodule.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; path = update_submodule.sh; sourceTree = "<group>"; };
 		02B13FA31949C41000EFF763 /* MODFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODFunction.h; sourceTree = "<group>"; };
 		02B13FA41949C41000EFF763 /* MODFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODFunction.m; sourceTree = "<group>"; };
 		02B13FA51949C41000EFF763 /* MODScopeFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODScopeFunction.h; sourceTree = "<group>"; };
@@ -2443,7 +2454,6 @@
 		02044FAD190E5EB000A80BED /* bson */ = {
 			isa = PBXGroup;
 			children = (
-				02044FAE190E5EB000A80BED /* bson-stdint.h */,
 			);
 			path = bson;
 			sourceTree = "<group>";
@@ -2894,6 +2904,7 @@
 		02ABA1B414103B36000417F4 = {
 			isa = PBXGroup;
 			children = (
+				02AC79A01AB2724800CA783B /* scripts */,
 				02E3ECF619AD74E400F7F06E /* MongoObjCDriver.podspec */,
 				02E3ECF719AD74EF00F7F06E /* README */,
 				02ABA1C914103B37000417F4 /* Sources */,
@@ -3022,6 +3033,19 @@
 				02ABA1CC14103B37000417F4 /* InfoPlist.strings */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		02AC79A01AB2724800CA783B /* scripts */ = {
+			isa = PBXGroup;
+			children = (
+				02AC79A11AB2726E00CA783B /* autogen.sh */,
+				02AC79A21AB2726E00CA783B /* commit_libraries.sh */,
+				02AC79A31AB2726E00CA783B /* create_version.sh */,
+				02AC79A41AB2726E00CA783B /* git_fetch.sh */,
+				02AC79A51AB2726E00CA783B /* git_test.sh */,
+				02AC79A61AB2726E00CA783B /* update_submodule.sh */,
+			);
+			path = scripts;
 			sourceTree = "<group>";
 		};
 		02E6400D19DB68F900FEFEFC /* MongoObjCDriver Tests */ = {
@@ -3271,6 +3295,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				02AC79AC1AB2726E00CA783B /* update_submodule.sh in Resources */,
+				02AC79AB1AB2726E00CA783B /* git_test.sh in Resources */,
+				02AC79A71AB2726E00CA783B /* autogen.sh in Resources */,
+				02AC79A91AB2726E00CA783B /* create_version.sh in Resources */,
+				02AC79AA1AB2726E00CA783B /* git_fetch.sh in Resources */,
+				02AC79A81AB2726E00CA783B /* commit_libraries.sh in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
