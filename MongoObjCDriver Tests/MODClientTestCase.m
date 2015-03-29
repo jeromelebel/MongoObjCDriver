@@ -67,13 +67,13 @@
     [self.client databaseNamesWithCallback:^(NSArray *list, MODQuery *mongoQuery) {
         [self logMongoQuery:mongoQuery];
         if ([list indexOfObject:DATABASE_NAME_TEST1] != NSNotFound) {
-            [[self.client databaseForName:DATABASE_NAME_TEST1] dropWithCallback:^(MODQuery *mongoQuery) {
-                [self logMongoQuery:mongoQuery];
+            [[self.client databaseForName:DATABASE_NAME_TEST1] dropWithCallback:^(MODQuery *dropQuery) {
+                [self logMongoQuery:dropQuery];
             }];
         }
         if ([list indexOfObject:DATABASE_NAME_TEST2] != NSNotFound) {
-            [[self.client databaseForName:DATABASE_NAME_TEST2] dropWithCallback:^(MODQuery *mongoQuery) {
-                [self logMongoQuery:mongoQuery];
+            [[self.client databaseForName:DATABASE_NAME_TEST2] dropWithCallback:^(MODQuery *dropQuery) {
+                [self logMongoQuery:dropQuery];
             }];
         }
         CFRunLoopStop(CFRunLoopGetCurrent());
@@ -271,8 +271,8 @@
                             skip:0
                            limit:100
                             sort:nil
-                        callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
-        XCTAssertEqual(documentCountToInsert, documents.count, @"problem to get big documents");
+                        callback:^(NSArray *findDocuments, NSArray *bsonData, MODQuery *findQuery) {
+        XCTAssertEqual(documentCountToInsert, findDocuments.count, @"problem to get big documents");
         CFRunLoopStop(CFRunLoopGetCurrent());
     }];
     CFRunLoopRun();
@@ -288,23 +288,23 @@
         MODCollection *collection;
         
         collection = [mongoDatabase1 collectionForName:@"first"];
-        [collection renameWithNewDatabase:nil newCollectionName:@"second" dropTargetBeforeRenaming:NO callback:^(MODQuery *mongoQuery) {
+        [collection renameWithNewDatabase:nil newCollectionName:@"second" dropTargetBeforeRenaming:NO callback:^(MODQuery *renameQuery) {
             XCTAssertEqualObjects(collection.name, @"second", @"name should have been updated");
         }];
-        [mongoDatabase1 collectionNamesWithCallback:^(NSArray *collectionList, MODQuery *mongoQuery) {
+        [mongoDatabase1 collectionNamesWithCallback:^(NSArray *collectionList, MODQuery *namesQuery) {
             XCTAssertEqual([collectionList indexOfObject:@"first"], NSNotFound, @"should not find first anymore");
             XCTAssertNotEqual([collectionList indexOfObject:@"second"], NSNotFound, @"should find second anymore");
         }];
-        [collection renameWithNewDatabase:mongoDatabase2 newCollectionName:@"first" dropTargetBeforeRenaming:NO callback:^(MODQuery *mongoQuery) {
+        [collection renameWithNewDatabase:mongoDatabase2 newCollectionName:@"first" dropTargetBeforeRenaming:NO callback:^(MODQuery *renameQuery) {
             XCTAssertEqualObjects(collection.name, @"first", @"name should have been updated");
             XCTAssertEqual(collection.database, mongoDatabase2, @"should give the same instance");
             CFRunLoopStop(CFRunLoopGetCurrent());
         }];
-        [mongoDatabase1 collectionNamesWithCallback:^(NSArray *collectionList, MODQuery *mongoQuery) {
+        [mongoDatabase1 collectionNamesWithCallback:^(NSArray *collectionList, MODQuery *nameQuery) {
             XCTAssertEqual([collectionList indexOfObject:@"first"], NSNotFound, @"should not find first anymore");
             XCTAssertEqual([collectionList indexOfObject:@"second"], NSNotFound, @"should not find second anymore");
         }];
-        [mongoDatabase2 collectionNamesWithCallback:^(NSArray *collectionList, MODQuery *mongoQuery) {
+        [mongoDatabase2 collectionNamesWithCallback:^(NSArray *collectionList, MODQuery *nameQuery) {
             XCTAssertNotEqual([collectionList indexOfObject:@"first"], NSNotFound, @"should not find first anymore");
         }];
     }];
@@ -331,11 +331,11 @@
                 [document setObject:@(jj + batchSize * ii) forKey:@"index"];
                 [documents addObject:document];
             }
-            [collection insertWithDocuments:documents writeConcern:nil callback:^(MODQuery *mongoQuery) {
-                XCTAssert(mongoQuery.error == nil, @"should have no error %@", mongoQuery.error);
+            [collection insertWithDocuments:documents writeConcern:nil callback:^(MODQuery *insertQuery) {
+                XCTAssert(insertQuery.error == nil, @"should have no error %@", insertQuery.error);
             }];
         }
-        [collection countWithCriteria:nil readPreferences:nil callback:^(int64_t count, MODQuery *mongoQuery) {
+        [collection countWithCriteria:nil readPreferences:nil callback:^(int64_t count, MODQuery *countQuery) {
             XCTAssertEqual(count, batchSize * batchCount);
             CFRunLoopStop(CFRunLoopGetCurrent());
         }];
