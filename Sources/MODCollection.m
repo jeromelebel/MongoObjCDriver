@@ -459,7 +459,7 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
             if (error == nil) {
                 bson_error_t bsonError = BSON_NO_ERROR;
                 
-                if (!mongoc_collection_remove(currentSelf.mongocCollection, MONGOC_DELETE_NONE, &bsonCriteria, NULL, &bsonError)) {
+                if (!mongoc_collection_remove(currentSelf.mongocCollection, MONGOC_REMOVE_NONE, &bsonCriteria, NULL, &bsonError)) {
                     error = [currentSelf.client.class errorFromBsonError:bsonError];
                     mongoQuery.error = error;
                 }

@@ -128,16 +128,16 @@
         } else if (mongoc_cursor_next(self.mongocCursor, &bson)) {
             result = [self.collection.client.class objectFromBson:bson];
             if (bsonData) {
-                const bson_t *bson;
+                const bson_t *currentBson;
                 
-                bson = mongoc_cursor_current(self.mongocCursor);
-                *bsonData = MOD_AUTORELEASE([[NSData alloc] initWithBytes:bson_get_data(bson) length:bson->len]);
+                currentBson = mongoc_cursor_current(self.mongocCursor);
+                *bsonData = MOD_AUTORELEASE([[NSData alloc] initWithBytes:bson_get_data(currentBson) length:currentBson->len]);
             }
         } else {
-            bson_error_t error = BSON_NO_ERROR;
+            bson_error_t bsonError = BSON_NO_ERROR;
             
-            mongoc_cursor_error(self.mongocCursor, &error);
-            self.internalError = [self.collection.client.class errorFromBsonError:error];
+            mongoc_cursor_error(self.mongocCursor, &bsonError);
+            self.internalError = [self.collection.client.class errorFromBsonError:bsonError];
         }
     }
     return result;

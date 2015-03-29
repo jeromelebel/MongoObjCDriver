@@ -48,7 +48,7 @@
     if (sslOpt->ca_file) result.caFileName = [NSString stringWithUTF8String:sslOpt->ca_file];
     if (sslOpt->ca_dir) result.caDirectory = [NSString stringWithUTF8String:sslOpt->ca_dir];
     if (sslOpt->crl_file) result.crlFileName = [NSString stringWithUTF8String:sslOpt->crl_file];
-    result.weakCertificate = @(sslOpt->weak_cert_validation);
+    result.weakCertificate = sslOpt->weak_cert_validation;
     return result;
 }
 

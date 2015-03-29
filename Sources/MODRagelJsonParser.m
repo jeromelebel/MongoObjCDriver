@@ -982,7 +982,7 @@ static const int JSON_object_en_main = 1;
 - (const char *)_parseObjectWithPointer:(const char *)p endPointer:(const char *)pe result:(MODSortedDictionary **)result
 {
     int cs = 0;
-    NSString *lastName;
+    NSString *lastName = nil;
     MODSortedMutableDictionary *dictionary;
 
     if (_maxNesting && _currentNesting > _maxNesting) {
