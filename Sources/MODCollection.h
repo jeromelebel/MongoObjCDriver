@@ -64,7 +64,7 @@ typedef enum {
 - (MODQuery *)removeWithCriteria:(id)jsonCriteria callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)dropWithCallback:(void (^)(MODQuery *mongoQuery))callback;
 
-- (MODQuery *)indexListWithCallback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback;
+- (MODQuery *)findIndexesWithCallback:(void (^)(NSArray *indexes, MODQuery *mongoQuery))callback;
 - (MODQuery *)createIndexWithKeys:(id)keys indexOptions:(MODIndexOpt *)indexOptions callback:(void (^)(MODQuery *mongoQuery))callback;
 - (MODQuery *)dropIndexName:(NSString *)indexDocument callback:(void (^)(MODQuery *mongoQuery))callback;
 

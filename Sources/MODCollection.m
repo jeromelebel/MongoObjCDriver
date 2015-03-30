@@ -477,21 +477,40 @@ static mongoc_query_flags_t mongocQueryFlagsFromMODQueryFlags(MODQueryFlags flag
     return query;
 }
 
-- (MODQuery *)indexListWithCallback:(void (^)(NSArray *documents, MODQuery *mongoQuery))callback
+- (MODQuery *)findIndexesWithCallback:(void (^)(NSArray *indexes, MODQuery *mongoQuery))callback
 {
     MODQuery *query = nil;
-    MODSortedDictionary *dictionary;
+    MODCollection *retainedSelf = self;
     
-    dictionary = [[MODSortedDictionary alloc] initWithObjectsAndKeys:self.absoluteName, @"ns", nil];
-    query = [self.database.systemIndexesCollection findWithCriteria:dictionary
-                                                             fields:nil
-                                                               skip:0
-                                                              limit:0
-                                                               sort:nil
-                                                           callback:^(NSArray *documents, NSArray *bsonData, MODQuery *mongoQuery) {
-        callback(documents, mongoQuery);
-    }];
-    MOD_RELEASE(dictionary);
+    query = [self.client addQueryInQueue:^(MODQuery *mongoQuery) {
+        NSMutableArray *indexes = nil;
+        NSError *error = nil;
+        
+        if (!mongoQuery.isCanceled) {
+            bson_error_t bsonError = BSON_NO_ERROR;
+            mongoc_cursor_t *mongoCursor = nil;
+            
+            indexes = [NSMutableArray array];
+            mongoCursor = mongoc_collection_find_indexes(self.mongocCollection, &bsonError);
+            if (mongoCursor == NULL) {
+                error = [retainedSelf.client.class errorFromBsonError:bsonError];
+            } else {
+                MODCursor *cursor = nil;
+                MODSortedDictionary *document;
+                
+                cursor = [[MODCursor alloc] initWithCollection:retainedSelf mongocCursor:mongoCursor];
+                while ((document = [cursor nextDocumentWithBsonData:nil error:&error]) != nil) {
+                    [indexes addObject:document];
+                }
+                MOD_RELEASE(cursor);
+            }
+        }
+        [retainedSelf mongoQueryDidFinish:mongoQuery withError:error callbackBlock:^{
+            if (!mongoQuery.isCanceled && callback) {
+                callback(indexes, mongoQuery);
+            }
+        }];
+    } owner:self name:@"indexlist" parameters:nil];
     return query;
 }
 
