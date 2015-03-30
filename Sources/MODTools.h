@@ -19,3 +19,6 @@
 #define MOD_RELEASE(x)              [x release]
 #define MOD_SUPER_DEALLOC()         [super dealloc]
 #endif
+
+
+#define DEBUG_LOG(s...)                NSLog(@"%s[%@ %@] %@, %s:%d", (self == [self class])?"+":"-", [self class], NSStringFromSelector(_cmd), [NSString stringWithFormat:s], __FILE__, __LINE__)
