@@ -496,7 +496,7 @@ static void defaultLogCallback(mongoc_log_level_t  log_level,
     } else if ([value isKindOfClass:[MODUndefined class]]) {
         bson_append_undefined(bson, keyString, strlen(keyString));
     } else if ([value isKindOfClass:[MODSymbol class]]) {
-        bson_append_symbol(bson, keyString, strlen(keyString), [value value].UTF8String, strlen([value value].UTF8String));
+        bson_append_symbol(bson, keyString, strlen(keyString), [[value value] UTF8String], strlen([[value value] UTF8String]));
     } else if ([value isKindOfClass:[MODUndefined class]]) {
         bson_append_undefined(bson, keyString, strlen(keyString));
     } else if ([value isKindOfClass:[MODMinKey class]]) {
