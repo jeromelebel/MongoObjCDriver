@@ -177,12 +177,12 @@
                 MODSortedDictionary *document;
                 NSData *documentData = nil;
                 
-                documentCount++;
                 document = [currentSelf nextDocumentWithBsonData:&documentData error:&error];
                 mongoQuery.error = error;
                 if (!document) {
                     break;
                 }
+                documentCount++;
                 if (documentCallback) {
                     BOOL *cursorStoppedPtr = &cursorStopped;
                     
