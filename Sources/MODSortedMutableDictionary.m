@@ -3,7 +3,6 @@
 //  MongoObjCDriver
 //
 //  Created by Jérôme Lebel on 23/11/2011.
-//  Copyright (c) 2011 Fotonauts. All rights reserved.
 //
 
 #import "MongoObjCDriver-private.h"
